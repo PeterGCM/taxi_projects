@@ -6,7 +6,7 @@ import platform, sys
 plf = platform.platform()
 if plf.startswith('Linux'):
     # This would be the server
-    prefix = '/home/ckhan/taxi'
+    prefix = '/home/ckhan/taxi_data'
     py_vinfo = sys.version_info
     if py_vinfo.major == 2 and py_vinfo.minor == 7:
         sys.path.append('/home/ckhan/local/lib/python2.7/site-packages')
@@ -17,11 +17,11 @@ if plf.startswith('Linux'):
     #
 elif plf.startswith('Darwin'):
     # This is my Macbook Pro
-    prefix = '/Users/JerryHan88/taxi'
+    prefix = '/Users/JerryHan88/taxi_data'
 else:
     # TODO
 #     assert False, 'Windows?'
-    prefix = 'C:\Users/ckhan.2015/taxi'
+    prefix = 'C:\Users/ckhan.2015/taxi_data'
 assert prefix
 #
 ap_poly_info = '../airport_polygons'
