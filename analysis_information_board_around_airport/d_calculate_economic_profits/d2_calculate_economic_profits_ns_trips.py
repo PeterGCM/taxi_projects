@@ -69,6 +69,8 @@ def process_file(fn):
                 k = (st_dt.year, st_dt.month, st_dt.day, st_dt.hour)
                 if k in omitted_timeslots:
                     continue
+                if st_dt.hour < 19:
+                    continue 
                 qt = eval(row[hid['ns-queue-time']])
                 if qt < Q_LIMIT_MIN:
                     qt = 0
