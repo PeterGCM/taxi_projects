@@ -1,5 +1,5 @@
 from __future__ import division
-# Add the root path for packages I made
+#
 import os, sys  
 sys.path.append(os.getcwd() + '/..')
 #

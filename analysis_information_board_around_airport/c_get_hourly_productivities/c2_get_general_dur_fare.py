@@ -34,15 +34,15 @@ def process_files(yymm):
     old_time = time.time()
     print 'handle the file; %s' % yymm
     logging_msg('handle the file; %s' % yymm)
-    begin_timestamp = datetime.datetime(2009, 1, 1, 0) 
-    last_timestamp = datetime.datetime(2011, 2, 1, 0)
+    begin_datetime = datetime.datetime(2009, 1, 1, 0)
+    last_datetime = datetime.datetime(2011, 2, 1, 0)
     hourly_total, time_period_order = {}, []
-    while begin_timestamp < last_timestamp:
-        yyyy, mm, dd, hh = begin_timestamp.year, begin_timestamp.month, begin_timestamp.day, begin_timestamp.hour
+    while begin_datetime < last_datetime:
+        yyyy, mm, dd, hh = begin_datetime.year, begin_datetime.month, begin_datetime.day, begin_datetime.hour
         k = (yyyy, mm, dd, hh)
         hourly_total[k] = [0 for _ in range(len([GEN_DUR, GEN_FARE]))]
         time_period_order.append(k)
-        begin_timestamp += datetime.timedelta(hours=1)
+        begin_datetime += datetime.timedelta(hours=1)
     #
     st_label, et_label, dur_label, fare_label = 'start-time', 'end-time', 'duration', 'fare'
     # Productive duration

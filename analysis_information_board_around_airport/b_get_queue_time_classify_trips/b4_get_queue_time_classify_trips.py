@@ -6,7 +6,10 @@ sys.path.append(os.getcwd() + '/..')
 import csv
 from bisect import bisect
 #
-from supports._setting import airport_trips_dir, nightsafari_trips_dir, trips_dir, logs_dir
+from supports._setting import airport_trips_dir, ap_trip_prefix
+from supports._setting import nightsafari_trips_dir, ns_trip_prefix
+from supports._setting import logs_dir
+from supports._setting import trips_dir, trip_prefix
 from supports._setting import DInAP_PInAP, DOutAP_PInAP
 from supports._setting import DInNS_PInNS, DOutNS_PInNS
 from supports.handling_pkl import load_picle_file
@@ -16,7 +19,7 @@ from supports.multiprocess import init_multiprocessor, put_task, end_multiproces
 
 def run():
     remove_creat_dir(airport_trips_dir); remove_creat_dir(nightsafari_trips_dir)
-    csv_files = get_all_files(trips_dir, 'whole-trip-', '.csv')
+    csv_files = get_all_files(trips_dir, trip_prefix, '.csv')
     init_multiprocessor()
     count_num_jobs = 0
     for fn in csv_files:
@@ -80,7 +83,7 @@ def process_file(fn):
                     continue
                 ap_join_queue_time = ap_crossing_times[vid][i - 1] if i != 0 else ap_crossing_times[vid][0]
             if is_ap_trip:
-                with open('%s/airport-trip-%s.csv' % (airport_trips_dir, yymm), 'a') as w_csvfile:
+                with open('%s/%s%s.csv' % (airport_trips_dir, ap_trip_prefix, yymm), 'a') as w_csvfile:
                     writer = csv.writer(w_csvfile)
                     ap_queue_time = st - ap_join_queue_time
                     new_row = [tid, vid, did, st, et, duration, fare, prev_tet,
@@ -99,7 +102,7 @@ def process_file(fn):
                     continue
                 ns_join_queue_time = ns_crossing_times[vid][i - 1] if i != 0 else ns_crossing_times[vid][0]
             if is_ns_trip:
-                with open('%s/nightsafari-trip-%s.csv' % (nightsafari_trips_dir, yymm), 'a') as w_csvfile:
+                with open('%s/%s%s.csv' % (nightsafari_trips_dir, ns_trip_prefix, yymm), 'a') as w_csvfile:
                     writer = csv.writer(w_csvfile)
                     ns_queue_time = st - ns_join_queue_time
                     new_row = [tid, vid, did, st, et, duration, fare, prev_tet,
@@ -109,7 +112,7 @@ def process_file(fn):
     logging_msg('end the file; %s' % yymm)
 
 def init_csv_files(yymm):
-    with open('%s/airport-trip-%s.csv' % (airport_trips_dir, yymm), 'wt') as w_csvfile:
+    with open('%s/%s%s.csv' % (airport_trips_dir, ap_trip_prefix, yymm), 'wt') as w_csvfile:
             writer = csv.writer(w_csvfile)
             new_headers = ['tid', 'vid', 'did',
                            'start-time', 'end-time', 'duration',
@@ -117,7 +120,7 @@ def init_csv_files(yymm):
                            'ap-trip-mode', 'ap-join-queue-time', 'ap-queue-time', ]
             writer.writerow(new_headers)
     #
-    with open('%s/nightsafari-trip-%s.csv' % (nightsafari_trips_dir, yymm), 'wt') as w_csvfile:
+    with open('%s/%s%s.csv' % (nightsafari_trips_dir, ns_trip_prefix, yymm), 'wt') as w_csvfile:
             writer = csv.writer(w_csvfile)
             new_headers = ['tid', 'vid', 'did',
                            'start-time', 'end-time', 'duration',

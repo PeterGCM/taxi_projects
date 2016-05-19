@@ -24,65 +24,99 @@ else:
     prefix = 'C:\Users/ckhan.2015/taxi_data'
 assert prefix
 #
-ap_poly_info = '../airport_polygons'
-IN_AP, OUT_AP = 'O', 'X'
-ns_poly_info = '../night_safari_polygon'
-IN_NS, OUT_NS = 'O', 'X'
+# trips(_merged)
 #
-DInAP_PInAP, DInAP_POutAP, DOutAP_PInAP, DOutAP_POutAP = range(4)
-DInNS_PInNS, DInNS_POutNS, DOutNS_PInNS, DOutNS_POutNS = range(4)
+merged_trip_dir = prefix + '/trips_merged'
+trips_dir, trip_prefix = prefix + '/trips', 'whole-trip-'
+airport_trips_dir, ap_trip_prefix = trips_dir + '/airport_trips', 'airport-trip-'
+nightsafari_trips_dir, ns_trip_prefix = trips_dir + '/nightsafari_trips', 'nightsafari-trip-'
 #
-HOUR, MINUTE = 60 * 60, 60
-CENT = 100
-Q_LIMIT_MIN, Q_LIMIT_MAX = 0, HOUR * 3
-MAX_DURATION = HOUR 
-PROD_LIMIT = 65 / HOUR * CENT
-#
-sh_prefix, trip_prefix, ap_trip_prefix, ns_trip_prefix = 'shift-all-', 'whole-trip-', 'airport-trip-', 'nightsafari-trip-'
-shift_pro_dur_prefix = 'shift-pro-dur-'
-general_dur_fare_prefix, ap_dur_fare_q_time_prefix, ns_dur_fare_q_time_prefix = 'gdf-', 'adfqt-', 'ndfqt-'
-#
-shifts_dir = prefix + '/shifts'
-shift_pro_dur_dir = shifts_dir + '/shift_pro_dur'
-full_shift_dir = shifts_dir + '/full_time_drivers' 
+# logs
 #
 logs_dir = prefix + '/logs'
 log_last_day_dir = logs_dir + '/logs_last_day'
 #
-merged_trip_dir = prefix + '/trips_merged'
-trips_dir = prefix + '/trips'
-for_learning_dir = prefix + '/for_learning'
-for_full_driver_dir = prefix + '/full_drivers_trips_q_comparision'
-airport_trips_dir = trips_dir + '/airport_trips'
-ap_op_eco_prof_dir = airport_trips_dir + '/ap_op_eco_prof' 
-nightsafari_trips_dir = trips_dir + '/nightsafari_trips'
-ns_op_eco_prof_dir = nightsafari_trips_dir + '/ns_op_eco_prof'
-hourly_summary = trips_dir + '/hourly_summary'
+# shifts
+#
+shifts_dir, shifts_prefix = prefix + '/shifts', 'shift-hour-state-'
+shift_pro_dur_dir, shift_pro_dur_prefix = shifts_dir + '/shift_pro_dur', 'shift-pro-dur-'
+#
+# hourly_productivities
 #
 hourly_productivities_dir = prefix + '/hourly_productivities'
-general_dur_fare_dir = hourly_productivities_dir + '/general_dur_fare'
-ap_dur_fare_q_time_dir = hourly_productivities_dir + '/ap_dur_fare_q_time'
-ns_dur_fare_q_time_dir = hourly_productivities_dir + '/ns_dur_fare_q_time'
+general_dur_fare_dir, general_dur_fare_prefix = hourly_productivities_dir + '/general_dur_fare', 'gdf-'
+ap_dur_fare_q_time_dir, ap_dur_fare_q_time_prefix = hourly_productivities_dir + '/ap_dur_fare_q_time', 'adfqt-'
+ns_dur_fare_q_time_dir, ns_dur_fare_q_time_prefix = hourly_productivities_dir + '/ns_dur_fare_q_time', 'ndfqt-'
 #
-# Labeling for zero duration
+# summary
 #
-GENERAL, AIRPORT, NIGHTSAFARI = 'G', 'A', 'N'
+summary_dir = prefix + '/summary'
+hourly_productivities = summary_dir + '/hourly-productivities.csv'
+zero_duration_time_slots = summary_dir + '/zero-duration-time-slots.pkl'
+#
+# ap_trips_economic_profits_dir
+#
+ap_trips_economic_profits_dir = prefix + '/ap_trips_economic_profits'
+ap_trips_ecoprof_prefix = 'ap-trip-ecoprof-'
+#
+# ns_trips_economic_profits_dir
+#
+ns_trips_economic_profits_dir = prefix + '/ns_trips_economic_profits'
+ns_trips_ecoprof_prefix = 'ns-trip-ecoprof-'
+#
+
+full_shift_dir = shifts_dir + '/full_time_drivers' 
+
+
+
+
+
+for_learning_dir = prefix + '/for_learning'
+for_full_driver_dir = prefix + '/full_drivers_trips_q_comparision'
+
+ 
+
+
+hourly_summary = trips_dir + '/hourly_summary'
+
+
 #
 # For Q-learning
 #
 DAY_OF_WEEK = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 TIME_SLOTS = range(24)
-#
-TIME_ALARM = MINUTE * 5
-#
-# Summary
-#
-summary_dir = prefix + '/summary'
-hourly_productivities = summary_dir + '/hourly-productivities.csv'
-zero_duration_time_slots = summary_dir + '/zero-duration-time-slots.pkl'
 
 
 monthly_fare_summary = summary_dir + '/monthly-summary.pkl'
 driver_monthly_fare_ap_trips = summary_dir + '/driver-monthly-fare-ap-trips.pkl'
 individual_dir = prefix + '/individual-summary'
 individual_detail_dir = prefix + '/individual-detail-summary'
+
+
+#
+ap_poly_info = '../_src/airport_polygons'
+IN_AP, OUT_AP = 'O', 'X'
+ns_poly_info = '../_src/night_safari_polygon'
+IN_NS, OUT_NS = 'O', 'X'
+#
+# trip modes
+#
+DInAP_PInAP, DInAP_POutAP, DOutAP_PInAP, DOutAP_POutAP = range(4)
+DInNS_PInNS, DInNS_POutNS, DOutNS_PInNS, DOutNS_POutNS = range(4)
+#
+# units
+#
+HOUR, MINUTE = 60 * 60, 60
+CENT = 100
+#
+#
+#
+Q_LIMIT_MIN, Q_LIMIT_MAX = 0, HOUR * 3
+MAX_DURATION = HOUR 
+PROD_LIMIT = 65 / HOUR * CENT
+#
+# Labeling for zero duration
+#
+GENERAL, AIRPORT, NIGHTSAFARI = 'G', 'A', 'N'
+#
+TIME_ALARM = MINUTE * 5
