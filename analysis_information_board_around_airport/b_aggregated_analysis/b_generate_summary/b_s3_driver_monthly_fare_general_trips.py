@@ -1,7 +1,7 @@
 from __future__ import division
 #
 import os, sys
-sys.path.append(os.getcwd()+'/..')
+sys.path.append(os.getcwd() + '/../..')
 #
 from supports._setting import trips_dir, trip_prefix
 from supports._setting import summary_dir, driver_monthly_fare_gt

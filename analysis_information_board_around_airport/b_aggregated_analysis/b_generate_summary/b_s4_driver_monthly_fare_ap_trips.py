@@ -1,7 +1,7 @@
 from __future__ import division
 #
 import os, sys
-sys.path.append(os.getcwd() + '/..')
+sys.path.append(os.getcwd() + '/../..')
 #
 from supports.etc_functions import check_dir_create
 from supports._setting import Y09_ap_trips, Y10_ap_trips
