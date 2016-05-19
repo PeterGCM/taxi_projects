@@ -1,7 +1,7 @@
 from __future__ import division
 #
 import os, sys  
-sys.path.append(os.getcwd() + '/..')
+sys.path.append(os.getcwd() + '/../..')
 #
 from supports._setting import general_dur_fare_dir, ap_dur_fare_q_time_dir, ns_dur_fare_q_time_dir
 from supports._setting import general_dur_fare_prefix, ap_dur_fare_q_time_prefix, ns_dur_fare_q_time_prefix

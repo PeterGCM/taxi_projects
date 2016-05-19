@@ -1,27 +1,26 @@
 from __future__ import division
-# Add the root path for packages I made
+#
 import os, sys  
 sys.path.append(os.getcwd() + '/../..')
 #
 from supports._setting import DInAP_PInAP, DInAP_POutAP, DOutAP_PInAP, DOutAP_POutAP
 from supports._setting import DInNS_PInNS, DInNS_POutNS, DOutNS_PInNS, DOutNS_POutNS
-from supports._setting import trips_dir
+from supports._setting import trips_dir, trip_prefix
+from supports._setting import summary_dir, ap_tm_num_dur_fare_fn, ns_tm_num_dur_fare_fn
+from supports.etc_functions import check_dir_create
 from supports.logger import logging_msg
 #
 import datetime, time, csv
 import pandas as pd
 #
-trip_prefix = 'whole-trip-'
-ap_fn = '%s/whole-ap-tm-num-dur-fare.csv' % (trips_dir)
-ns_fn = '%s/whole-ns-tm-num-dur-fare.csv' % (trips_dir)
-#
 def run():
-    with open(ap_fn, 'wt') as csvFile:
+    check_dir_create(summary_dir)
+    with open(ap_tm_num_dur_fare_fn, 'wt') as csvFile:
         writer = csv.writer(csvFile)
         header = ['yy', 'mm', 'dd', 'hh', 'day-of-week', 'ap-trip-mode', 'num-tm', 'total-dur', 'total-fare']
         writer.writerow(header)
     
-    with open(ns_fn, 'wt') as csvFile:
+    with open(ns_tm_num_dur_fare_fn, 'wt') as csvFile:
         writer = csv.writer(csvFile)
         header = ['yy', 'mm', 'dd', 'hh', 'day-of-week', 'ns-trip-mode', 'num-tm', 'total-dur', 'total-fare']
         writer.writerow(header)
@@ -73,7 +72,7 @@ def process_files(yymm):
         tm_fare_df = gp_f_trip.sum()[fare_label].to_frame('total_tm_fare').reset_index()
         for tm, fare in tm_fare_df.values:
             tm_num_totalDuration_totalFare[tm][3] += fare
-        save_as_csv(ap_fn, yymm, dd, hh, tm_num_totalDuration_totalFare)
+        save_as_csv(ap_tm_num_dur_fare_fn, yymm, dd, hh, tm_num_totalDuration_totalFare)
         #
         gp_f_trip = filtered_trip.groupby([ns_tm_lable])
         tm_num_totalDuration_totalFare = [[tm, 0, 0, 0] for tm in ns_tm]
@@ -86,7 +85,7 @@ def process_files(yymm):
         tm_fare_df = gp_f_trip.sum()[fare_label].to_frame('total_tm_fare').reset_index()
         for tm, fare in tm_fare_df.values:
             tm_num_totalDuration_totalFare[tm][3] += fare
-        save_as_csv(ns_fn, yymm, dd, hh, tm_num_totalDuration_totalFare)
+        save_as_csv(ns_tm_num_dur_fare_fn, yymm, dd, hh, tm_num_totalDuration_totalFare)
         #
         cur_day_time = next_day_time
     print 'handle the file; %s' % yymm

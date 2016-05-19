@@ -51,8 +51,11 @@ ns_dur_fare_q_time_dir, ns_dur_fare_q_time_prefix = hourly_productivities_dir + 
 # summary
 #
 summary_dir = prefix + '/summary'
+ap_tm_num_dur_fare_fn = summary_dir +'/ap-tm-num-dur-fare.csv' 
+ns_tm_num_dur_fare_fn = summary_dir +'/ns-tm-num-dur-fare.csv'
 hourly_productivities = summary_dir + '/hourly-productivities.csv'
 zero_duration_time_slots = summary_dir + '/zero-duration-time-slots.pkl'
+
 #
 # ap_trips_economic_profits_dir
 #

@@ -1,7 +1,7 @@
 from __future__ import division
-# Add the root path for packages I made
+#
 import os, sys  
-sys.path.append(os.getcwd() + '/..')
+sys.path.append(os.getcwd() + '/../..')
 #
 from supports.etc_functions import remove_creat_dir
 from supports._setting import Q_LIMIT_MIN, HOUR

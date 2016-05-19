@@ -1,7 +1,7 @@
 from __future__ import division
 #
 import os, sys  
-sys.path.append(os.getcwd() + '/..')
+sys.path.append(os.getcwd() + '/../..')
 #
 from supports._setting import hourly_productivities, zero_duration_time_slots
 from supports._setting import GENERAL

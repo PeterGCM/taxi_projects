@@ -1,14 +1,13 @@
 from __future__ import division
-# Add the root path for packages I made
+#
 import os, sys  
 sys.path.append(os.getcwd() + '/..')
 #
 import csv
-from time import time, strftime
+from time import time
 #
 from supports.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
-_log_txt = 'log.txt'
 _stout = sys.stdout
 _fix_time = time()
 PERIOD = 30
@@ -34,8 +33,6 @@ def combine_trip_data_with_multi():
     
     Also, this function uses the multiprocess library in Python.
     '''
-    
-    logging_on_txt('Start combine!!', gen_txt=True)
     init_multiprocessor()
     print 'Start combine'
     for y in YEARS:
@@ -48,54 +45,31 @@ def combine_trip_data_with_multi():
 
 def read_write_a_trip(nf, ef):
     target_period = nf.split('/')[-1].split('-')[1]
-    logging_on_txt('Handling trip-%s' % target_period)
-    process_start_time = time()
     # Read data from files
-    logging_on_txt('Read normal data-%s' % target_period)
     normal_data = csv_read_whole(nf)
     if normal_data == None:
         return None 
     #
-    logging_on_txt('Read ext data-%s' % target_period)
     ext_data = csv_read_whole(ef)
     #
     assert len(normal_data) == len(ext_data), (target_period, len(normal_data), len(ext_data)) 
     # Write a combined file
     combined_file = USER_HOME + '/trips_merged/trips-%s.csv' % (target_period)
-    logging_on_txt('Write a combined file-%s' % target_period)
     with open(combined_file, 'wt') as csvfile:
         writer = csv.writer(csvfile)
         for i in xrange(len(normal_data)):
             writer.writerow(normal_data[i] + ext_data[i])
     del normal_data, ext_data  
-    logging_on_txt('Finish handiling trip-%s; t: %.2f' % (target_period, time() - process_start_time)) 
             
 def csv_read_whole(fn):
     rv = []
-    try:
-        with open(fn, 'rt') as csvfile:
-            reader = csv.reader(csvfile)
-            i = 0 
-            for row in reader:
-                rv.append(row)
-                i += 1
-    except IOError:
-        with open(_log_txt, 'w') as f:
-            f.write(strftime("%a, %d %b %Y %H:%M:%S---") + '%s dese not exist' % fn + '\n')
-            return None
+    with open(fn, 'rt') as csvfile:
+        reader = csv.reader(csvfile)
+        i = 0 
+        for row in reader:
+            rv.append(row)
+            i += 1
     return rv
-
-def logging_on_txt(s, gen_txt=False):
-    global X_LOGGING
-    if X_LOGGING:
-        return
-    if gen_txt:
-        if os.path.exists(_log_txt): os.remove(_log_txt)
-        with open(_log_txt, 'w') as f:
-            f.write(strftime("%a, %d %b %Y %H:%M:%S---") + s + '\n')
-    else:
-        with open(_log_txt, 'a') as f:
-            f.write(strftime("%a, %d %b %Y %H:%M:%S---") + s + '\n')
 
 def test_single_run():
     normal_file = TAXI_HOME + '/2009/01/trips/trips-0901-normal.csv'

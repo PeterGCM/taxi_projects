@@ -1,7 +1,7 @@
 from __future__ import division
 # Add the root path for packages I made
 import os, sys  
-sys.path.append(os.getcwd() + '/..')
+sys.path.append(os.getcwd() + '/../..')
 #
 import datetime, time, csv
 from traceback import format_exc

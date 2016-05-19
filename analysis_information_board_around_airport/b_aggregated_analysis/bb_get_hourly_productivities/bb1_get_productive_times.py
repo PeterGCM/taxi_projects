@@ -1,7 +1,7 @@
 from __future__ import division
-# Add the root path for packages I made
+#
 import os, sys  
-sys.path.append(os.getcwd() + '/..')
+sys.path.append(os.getcwd() + '/../..')
 #
 from supports.etc_functions import remove_creat_dir, get_all_files
 from supports._setting import shifts_dir, shifts_prefix
