@@ -80,6 +80,7 @@ def process_file(fn):
                                  dur, fare,
                                  row[hid['ap-trip-mode']], qt,
                                  eco_profit])
+    #
     print 'end the file; %s' % yymm
     
 if __name__ == '__main__':
