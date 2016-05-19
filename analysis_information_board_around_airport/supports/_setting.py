@@ -48,6 +48,16 @@ general_dur_fare_dir, general_dur_fare_prefix = hourly_productivities_dir + '/ge
 ap_dur_fare_q_time_dir, ap_dur_fare_q_time_prefix = hourly_productivities_dir + '/ap_dur_fare_q_time', 'adfqt-'
 ns_dur_fare_q_time_dir, ns_dur_fare_q_time_prefix = hourly_productivities_dir + '/ns_dur_fare_q_time', 'ndfqt-'
 #
+# ap_trips_economic_profits_dir
+#
+ap_trips_economic_profits_dir = prefix + '/ap_trips_economic_profits'
+ap_trips_ecoprof_prefix = 'ap-trip-ecoprof-'
+#
+# ns_trips_economic_profits_dir
+#
+ns_trips_economic_profits_dir = prefix + '/ns_trips_economic_profits'
+ns_trips_ecoprof_prefix = 'ns-trip-ecoprof-'
+#
 # summary
 #
 summary_dir = prefix + '/summary'
@@ -59,16 +69,9 @@ Y09_ap_trips = summary_dir + '/Y09-ap-trips.csv'
 Y10_ap_trips = summary_dir + '/Y10-ap-trips.csv'
 Y09_ns_trips = summary_dir + '/Y09-ns-trips.csv'
 Y10_ns_trips = summary_dir + '/Y10-ns-trips.csv'
-#
-# ap_trips_economic_profits_dir
-#
-ap_trips_economic_profits_dir = prefix + '/ap_trips_economic_profits'
-ap_trips_ecoprof_prefix = 'ap-trip-ecoprof-'
-#
-# ns_trips_economic_profits_dir
-#
-ns_trips_economic_profits_dir = prefix + '/ns_trips_economic_profits'
-ns_trips_ecoprof_prefix = 'ns-trip-ecoprof-'
+driver_monthly_fare_gt = summary_dir + '/driver-monthly-fare-gt.pkl'
+driver_monthly_fare_at = summary_dir + '/driver-monthly-fare-at.pkl'
+driver_monthly_fare_nt = summary_dir + '/driver-monthly-fare-nt.pkl'
 #
 
 full_shift_dir = shifts_dir + '/full_time_drivers' 
@@ -93,8 +96,7 @@ DAY_OF_WEEK = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 TIME_SLOTS = range(24)
 
 
-monthly_fare_summary = summary_dir + '/monthly-summary.pkl'
-driver_monthly_fare_ap_trips = summary_dir + '/driver-monthly-fare-ap-trips.pkl'
+
 individual_dir = prefix + '/individual-summary'
 individual_detail_dir = prefix + '/individual-detail-summary'
 
