@@ -65,10 +65,8 @@ def csv_read_whole(fn):
     rv = []
     with open(fn, 'rt') as csvfile:
         reader = csv.reader(csvfile)
-        i = 0 
         for row in reader:
             rv.append(row)
-            i += 1
     return rv
 
 def test_single_run():

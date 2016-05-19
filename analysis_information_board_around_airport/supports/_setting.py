@@ -55,7 +55,10 @@ ap_tm_num_dur_fare_fn = summary_dir +'/ap-tm-num-dur-fare.csv'
 ns_tm_num_dur_fare_fn = summary_dir +'/ns-tm-num-dur-fare.csv'
 hourly_productivities = summary_dir + '/hourly-productivities.csv'
 zero_duration_time_slots = summary_dir + '/zero-duration-time-slots.pkl'
-
+Y09_ap_trips = summary_dir + '/Y09-ap-trips.csv'
+Y10_ap_trips = summary_dir + '/Y10-ap-trips.csv'
+Y09_ns_trips = summary_dir + '/Y09-ns-trips.csv'
+Y10_ns_trips = summary_dir + '/Y10-ns-trips.csv'
 #
 # ap_trips_economic_profits_dir
 #
