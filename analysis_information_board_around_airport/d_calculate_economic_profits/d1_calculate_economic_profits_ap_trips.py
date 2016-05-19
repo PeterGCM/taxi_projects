@@ -48,7 +48,6 @@ def process_file(fn):
     with open('%s/%s' % (airport_trips_dir, fn), 'rb') as r_csvfile:
         reader = csv.reader(r_csvfile)
         headers = reader.next()
-        print headers
         hid = {h : i for i, h in enumerate(headers)}
         with open('%s/%s%s.csv' % (ap_trips_economic_profits_dir, ap_trips_ecoprof_prefix, yymm), 'wt') as w_csvfile:
             writer = csv.writer(w_csvfile) 
