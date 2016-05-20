@@ -6,7 +6,8 @@ sys.path.append(os.getcwd() + '/../..')
 from supports.etc_functions import remove_creat_dir, get_all_files
 from supports._setting import shifts_dir, shifts_prefix
 from supports._setting import shift_pro_dur_dir, shift_pro_dur_prefix
-from supports.handling_pkl import save_pickle_file
+from supports._setting import vehicle_drivers_dir, vehicle_drivers_prefix
+from supports.etc_functions import save_pickle_file
 from supports.logger import logging_msg
 from supports.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
@@ -26,7 +27,7 @@ def process_file(fn):
     print 'handle the file; %s' % yymm
     logging_msg('handle the file; %s' % yymm)
     #        
-    driver_vehicle = {}
+    vehicle_drivers = {}
     productive_state = ['dur%d' % x for x in [0, 3, 4, 5, 6, 7, 8, 9, 10]]
     with open('%s/%s' % (shifts_dir, fn), 'rt') as r_csvfile:
         reader = csv.reader(r_csvfile)
@@ -41,8 +42,10 @@ def process_file(fn):
                 productive_duration = sum(int(row[hid[dur]]) for dur in productive_state)
                 writer.writerow([row[hid['year']][-2:], row[hid['month']], row[hid['day']], row[hid['hour']],
                                  vid, did, productive_duration])
-                driver_vehicle.setdefault(vid, set()).add(did)
-    save_pickle_file('%s/driver-vehicle-%s.pkl' % (shifts_dir, yymm), driver_vehicle)
+                vehicle_drivers.setdefault(vid, set()).add(did)
+    save_pickle_file('%s/%s%s.pkl' % (vehicle_drivers_dir, vehicle_drivers_prefix, yymm), vehicle_drivers)
+    
+    
     print 'end the file; %s' % yymm
     logging_msg('end the file; %s' % yymm)
     

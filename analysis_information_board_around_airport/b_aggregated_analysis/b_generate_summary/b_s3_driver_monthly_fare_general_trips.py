@@ -7,7 +7,7 @@ from supports._setting import trips_dir, trip_prefix
 from supports._setting import summary_dir, driver_monthly_fare_gt
 from supports.etc_functions import check_dir_create
 from supports._setting import CENT
-from supports.handling_pkl import save_pickle_file
+from supports.etc_functions import save_pickle_file
 #
 import pandas as pd
 #

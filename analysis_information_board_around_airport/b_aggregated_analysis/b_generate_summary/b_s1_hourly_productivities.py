@@ -8,7 +8,7 @@ from supports._setting import general_dur_fare_prefix, ap_dur_fare_q_time_prefix
 from supports._setting import summary_dir, hourly_productivities, zero_duration_time_slots
 from supports._setting import GENERAL, AIRPORT, NIGHTSAFARI
 from supports.etc_functions import check_dir_create, get_all_files
-from supports.handling_pkl import save_pickle_file
+from supports.etc_functions import save_pickle_file
 #
 import datetime, csv
 #

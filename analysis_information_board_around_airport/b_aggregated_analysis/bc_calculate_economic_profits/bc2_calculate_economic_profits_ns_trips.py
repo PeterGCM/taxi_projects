@@ -9,7 +9,7 @@ from supports._setting import Q_LIMIT_MIN
 from supports._setting import nightsafari_trips_dir, ns_trip_prefix
 from supports._setting import ns_trips_economic_profits_dir, ns_trips_ecoprof_prefix
 from supports.etc_functions import get_all_files, remove_creat_dir
-from supports.handling_pkl import load_picle_file
+from supports.etc_functions import load_picle_file
 from supports.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
 import csv, datetime

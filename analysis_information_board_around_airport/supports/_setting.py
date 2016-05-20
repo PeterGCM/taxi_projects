@@ -40,6 +40,8 @@ log_last_day_dir = logs_dir + '/logs_last_day'
 #
 shifts_dir, shifts_prefix = prefix + '/shifts', 'shift-hour-state-'
 shift_pro_dur_dir, shift_pro_dur_prefix = shifts_dir + '/shift_pro_dur', 'shift-pro-dur-'
+vehicle_drivers_dir, vehicle_drivers_prefix = shifts_dir + '/vehicle_drivers', 'vehicle-drivers-'
+full_time_drivers_shift_dir, full_time_drivers_shift_prefix = shifts_dir + '/full_time_drivers_shift', 'full-time-drivers-shift-'  
 #
 # hourly_productivities
 #
@@ -74,7 +76,7 @@ driver_monthly_fare_at = summary_dir + '/driver-monthly-fare-at.pkl'
 driver_monthly_fare_nt = summary_dir + '/driver-monthly-fare-nt.pkl'
 #
 
-full_shift_dir = shifts_dir + '/full_time_drivers' 
+ 
 
 
 

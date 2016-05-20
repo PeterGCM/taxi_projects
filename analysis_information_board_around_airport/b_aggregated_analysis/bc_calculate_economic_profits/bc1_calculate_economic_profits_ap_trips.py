@@ -9,7 +9,7 @@ from supports._setting import Q_LIMIT_MIN
 from supports._setting import airport_trips_dir, ap_trip_prefix
 from supports._setting import ap_trips_economic_profits_dir, ap_trips_ecoprof_prefix
 from supports.etc_functions import get_all_files, remove_creat_dir
-from supports.handling_pkl import load_picle_file
+from supports.etc_functions import load_picle_file
 from supports.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
 import csv, datetime

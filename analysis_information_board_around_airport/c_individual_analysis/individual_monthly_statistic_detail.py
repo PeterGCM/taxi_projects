@@ -6,7 +6,7 @@ sys.path.append(os.getcwd() + '/..')
 from supports._setting import full_shift_dir, trips_dir, airport_trips_dir, individual_detail_dir
 from supports._setting import DInAP_PInAP, DOutAP_PInAP
 from supports.etc_functions import remove_creat_dir
-from supports.handling_pkl import load_picle_file
+from supports.etc_functions import load_picle_file
 from supports.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 from supports.logger import logging_msg
 #
