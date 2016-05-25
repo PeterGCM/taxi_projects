@@ -41,7 +41,8 @@ log_last_day_dir = logs_dir + '/logs_last_day'
 shifts_dir, shifts_prefix = prefix + '/shifts', 'shift-hour-state-'
 shift_pro_dur_dir, shift_pro_dur_prefix = shifts_dir + '/shift_pro_dur', 'shift-pro-dur-'
 vehicle_drivers_dir, vehicle_drivers_prefix = shifts_dir + '/vehicle_drivers', 'vehicle-drivers-'
-full_time_drivers_shift_dir, full_time_drivers_shift_prefix = shifts_dir + '/full_time_drivers_shift', 'full-time-drivers-shift-'  
+full_time_drivers_shift_dir = shifts_dir + '/full_time_drivers_shift'
+full_time_drivers_shift_prefix, full_time_drivers_prefix = 'full-time-drivers-shift-', 'full-time-drivers-'
 #
 # hourly_productivities
 #
@@ -57,6 +58,11 @@ ap_trips_economic_profits_dir = economic_profits_dir + '/ap_trips_economic_profi
 ap_trips_ecoprof_prefix = 'ap-trip-ecoprof-'
 ns_trips_economic_profits_dir = economic_profits_dir + '/ns_trips_economic_profits'
 ns_trips_ecoprof_prefix = 'ns-trip-ecoprof-'
+#
+# full time drivers' trips
+#
+full_drivers_trips_dir, full_drivers_trips_prefix = prefix + '/full_drivers_trips', 'full-drivers-trips-' 
+
 #
 # individual
 #

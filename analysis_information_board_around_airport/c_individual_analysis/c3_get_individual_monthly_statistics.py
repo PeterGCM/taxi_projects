@@ -3,7 +3,11 @@ from __future__ import division
 import os, sys  
 sys.path.append(os.getcwd() + '/..')
 #
-from supports._setting import full_shift_dir, trips_dir, airport_trips_dir, individual_detail_dir
+from supports._setting import trips_dir, airport_trips_dir, individual_detail_dir
+
+from supports._setting import full_time_drivers_shift_dir
+from supports._setting import full_time_drivers_shift_prefix, full_time_drivers_prefix
+
 from supports._setting import DInAP_PInAP, DOutAP_PInAP
 from supports.etc_functions import remove_creat_dir
 from supports.etc_functions import load_picle_file
@@ -14,7 +18,8 @@ import csv
 import pandas as pd
 from traceback import format_exc
 #
-sh_full_prefix, trip_prefix, ap_trip_op_ep_prefix = 'shift-full-time-', 'whole-trip-', 'ap-trip-op-ep-'
+
+trip_prefix, ap_trip_op_ep_prefix = 'whole-trip-', 'ap-trip-op-ep-'
 monthly_full_did_prefix = 'full-time-drivers-'
 general_prefix, prev_in_ap_prefix, prev_out_ap_prefix = 'individual-general-', 'individual-prev-in-ap-', 'individual-prev-out-ap-'
 #
@@ -44,16 +49,19 @@ def process_files(yymm):
     #
     init_csv_files(yymm)
     #
-    full_dids = sorted([eval(x) for x in load_picle_file('%s/%s%s.pkl' % (full_shift_dir, monthly_full_did_prefix, yymm))])
-    s_df = pd.read_csv('%s/%s%s.csv' % (full_shift_dir, sh_full_prefix, yymm))
+    full_dids = sorted([eval(x) for x in load_picle_file('%s/%s%s.pkl' % (full_time_drivers_shift_dir, full_time_drivers_prefix, yymm))])
+    s_df = pd.read_csv('%s/%s%s.csv' % (full_time_drivers_shift_dir, full_time_drivers_shift_prefix, yymm))
     trip_df = pd.read_csv('%s/%s%s.csv' % (trips_dir, trip_prefix, yymm))
     ap_trip_df = pd.read_csv('%s/%s%s.csv' % (airport_trips_dir, ap_trip_op_ep_prefix, yymm))
     #
     yy, mm = int(yymm[:2]), int(yymm[2:])
     for did in full_dids:
         # General
-        did_sh = s_df[(s_df['driver-id'] == did)]
-        pro_dur = sum(did_sh['productive-duration']) * SEC
+        did_sh = s_df[(s_df['did'] == did)]
+        pro_dur = sum(did_sh['pro-dur']) * SEC
+        
+        
+        
         did_wt = trip_df[(trip_df['did'] == did)]
         total_fare = sum(did_wt['fare'])
         if pro_dur > 0 and total_fare != 0:
