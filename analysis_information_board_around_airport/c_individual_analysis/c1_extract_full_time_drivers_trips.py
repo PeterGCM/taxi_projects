@@ -10,6 +10,7 @@ from supports._setting import GENERAL
 from supports._setting import trips_dir, trip_prefix
 from supports.etc_functions import load_picle_file
 from supports.etc_functions import remove_creat_dir
+from supports.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
 import csv, datetime
 #
@@ -21,24 +22,21 @@ for l, ts in load_picle_file(zero_duration_time_slots):
 
 def run():
     remove_creat_dir(full_drivers_trips_dir)
-#     init_multiprocessor()
+    init_multiprocessor()
     count_num_jobs = 0
     for y in xrange(9, 11):
         for m in xrange(1, 13):
             yymm = '%02d%02d' % (y, m) 
             if yymm in ['0912', '1010']:
                 continue
-            process_files(yymm)
-#             put_task(process_files, [yymm])
+#             process_files(yymm)
+            put_task(process_files, [yymm])
             count_num_jobs += 1
-#     end_multiprocessor(count_num_jobs)
+    end_multiprocessor(count_num_jobs)
 
 def process_files(yymm):
     print 'handle the file; %s' % yymm
     full_dids = sorted([int(eval(x)) for x in load_picle_file('%s/%s%s.pkl' % (full_time_drivers_shift_dir, full_time_drivers_prefix, yymm))])
-    print full_dids
-    
-    assert False
     with open('%s/%s%s.csv' % (trips_dir, trip_prefix, yymm), 'rb') as r_csvfile:
         reader = csv.reader(r_csvfile)
         headers = reader.next()
@@ -65,6 +63,7 @@ def process_files(yymm):
                                  row[hid['start-time']],
                                  row[hid['duration']],
                                  row[hid['fare']]])
+    print 'end the file; %s' % yymm
                         
 if __name__ == '__main__':
     run()
