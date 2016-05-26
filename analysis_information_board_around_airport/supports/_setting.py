@@ -59,7 +59,7 @@ ns_trips_ecoprof_prefix = 'ns-trip-ecoprof-'
 #
 # full time drivers data
 #
-full_time_drivers_dir = prefix + '/full_drivers'
+full_time_drivers_dir = prefix + '/full_time_drivers'
 ftd_shift_dir = full_time_drivers_dir + '/full_time_drivers_shift'
 ftd_shift_prefix, full_time_drivers_prefix = 'full-time-drivers-shift-', 'full-time-drivers-'
 ftd_trips_dir, ftd_trips_prefix = full_time_drivers_dir + '/full_time_drivers_trips', 'full-time-drivers-trips-'
