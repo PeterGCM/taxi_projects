@@ -41,8 +41,6 @@ log_last_day_dir = logs_dir + '/logs_last_day'
 shifts_dir, shifts_prefix = prefix + '/shifts', 'shift-hour-state-'
 shift_pro_dur_dir, shift_pro_dur_prefix = shifts_dir + '/shift_pro_dur', 'shift-pro-dur-'
 vehicle_drivers_dir, vehicle_drivers_prefix = shifts_dir + '/vehicle_drivers', 'vehicle-drivers-'
-full_time_drivers_shift_dir = shifts_dir + '/full_time_drivers_shift'
-full_time_drivers_shift_prefix, full_time_drivers_prefix = 'full-time-drivers-shift-', 'full-time-drivers-'
 #
 # hourly_productivities
 #
@@ -59,23 +57,28 @@ ap_trips_ecoprof_prefix = 'ap-trip-ecoprof-'
 ns_trips_economic_profits_dir = economic_profits_dir + '/ns_trips_economic_profits'
 ns_trips_ecoprof_prefix = 'ns-trip-ecoprof-'
 #
-# full time drivers' trips
+# full time drivers data
 #
-full_drivers_trips_dir, full_drivers_trips_prefix = prefix + '/full_drivers_trips', 'full-drivers-trips-' 
-
-#
-# individual
-#
-individual_dir = prefix + '/individual'
-
-individual_detail_dir = prefix + '/individual-detail-summary'
-
+full_time_drivers_dir = prefix + '/full_drivers'
+ftd_shift_dir = full_time_drivers_dir + '/full_time_drivers_shift'
+ftd_shift_prefix, full_time_drivers_prefix = 'full-time-drivers-shift-', 'full-time-drivers-'
+ftd_trips_dir, ftd_trips_prefix = full_time_drivers_dir + '/full_time_drivers_trips', 'full-time-drivers-trips-'
+ftd_general_stat_dir, ftd_general_stat_prefix = \
+             full_time_drivers_dir + '/full_time_drivers_general_stat', 'full-time-drivers-general-stat-'
+ftd_prev_in_ap_stat_dir, ftd_prev_in_ap_stat_prefix = \
+             full_time_drivers_dir + '/full_time_drivers_prev_in_ap_stat_stat', 'full-time-drivers-prev-in-ap-stat-'
+ftd_prev_out_ap_stat_dir, ftd_prev_out_ap_stat_prefix = \
+             full_time_drivers_dir + '/full_time_drivers_prev_out_ap_stat', 'full-time-drivers-prev-out-ap-stat-'
+ftd_prev_in_ns_stat_dir, ftd_prev_in_ns_stat_prefix = \
+             full_time_drivers_dir + '/full_time_drivers_prev_in_ns_stat_stat', 'full-time-drivers-prev-in-ns-stat-'
+ftd_prev_out_ns_stat_dir, ftd_prev_out_ns_stat_prefix = \
+             full_time_drivers_dir + '/full_time_drivers_prev_out_ns_stat', 'full-time-drivers-prev-out-ns-stat-'
 #
 # summary
 #
 summary_dir = prefix + '/summary'
-ap_tm_num_dur_fare_fn = summary_dir +'/ap-tm-num-dur-fare.csv' 
-ns_tm_num_dur_fare_fn = summary_dir +'/ns-tm-num-dur-fare.csv'
+ap_tm_num_dur_fare_fn = summary_dir + '/ap-tm-num-dur-fare.csv' 
+ns_tm_num_dur_fare_fn = summary_dir + '/ns-tm-num-dur-fare.csv'
 hourly_productivities = summary_dir + '/hourly-productivities.csv'
 zero_duration_time_slots = summary_dir + '/zero-duration-time-slots.pkl'
 Y09_ap_trips = summary_dir + '/Y09-ap-trips.csv'
@@ -91,6 +94,11 @@ driver_monthly_fare_nt = summary_dir + '/driver-monthly-fare-nt.pkl'
 
 
 
+#
+# individual
+#
+individual_dir = prefix + '/individual'
+individual_detail_dir = prefix + '/individual-detail-summary'
 
 
 for_learning_dir = prefix + '/for_learning'

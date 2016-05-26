@@ -3,9 +3,9 @@ from __future__ import division
 import os, sys  
 sys.path.append(os.getcwd() + '/..')
 #
-from supports._setting import full_drivers_trips_dir, full_drivers_trips_prefix
+from supports._setting import ftd_trips_dir, ftd_trips_prefix
 from supports._setting import zero_duration_time_slots
-from supports._setting import full_time_drivers_shift_dir, full_time_drivers_prefix
+from supports._setting import ftd_shift_dir, full_time_drivers_prefix
 from supports._setting import GENERAL
 from supports._setting import trips_dir, trip_prefix
 from supports.etc_functions import load_picle_file
@@ -21,7 +21,7 @@ for l, ts in load_picle_file(zero_duration_time_slots):
         omitted_timeslots.append((yyyy, mm, dd, hh))
 
 def run():
-    remove_creat_dir(full_drivers_trips_dir)
+    remove_creat_dir(ftd_trips_dir)
     init_multiprocessor()
     count_num_jobs = 0
     for y in xrange(9, 11):
@@ -36,12 +36,12 @@ def run():
 
 def process_files(yymm):
     print 'handle the file; %s' % yymm
-    full_dids = sorted([int(eval(x)) for x in load_picle_file('%s/%s%s.pkl' % (full_time_drivers_shift_dir, full_time_drivers_prefix, yymm))])
+    full_dids = sorted([int(eval(x)) for x in load_picle_file('%s/%s%s.pkl' % (ftd_shift_dir, full_time_drivers_prefix, yymm))])
     with open('%s/%s%s.csv' % (trips_dir, trip_prefix, yymm), 'rb') as r_csvfile:
         reader = csv.reader(r_csvfile)
         headers = reader.next()
         hid = {h : i for i, h in enumerate(headers)}
-        with open('%s/%s%s.csv' % (full_drivers_trips_dir, full_drivers_trips_prefix, yymm), 'wt') as w_csvfile:
+        with open('%s/%s%s.csv' % (ftd_trips_dir, ftd_trips_prefix, yymm), 'wt') as w_csvfile:
             writer = csv.writer(w_csvfile)
             new_headers = ['did', 'start-time', 'duration', 'fare']
             writer.writerow(new_headers)
