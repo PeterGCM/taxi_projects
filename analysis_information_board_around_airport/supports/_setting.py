@@ -66,19 +66,21 @@ ftd_trips_dir, ftd_trips_prefix = full_time_drivers_dir + '/full_time_drivers_tr
 ftd_general_stat_dir, ftd_general_stat_prefix = \
              full_time_drivers_dir + '/full_time_drivers_general_stat', 'full-time-drivers-general-stat-'
 ftd_prev_in_ap_stat_dir, ftd_prev_in_ap_stat_prefix = \
-             full_time_drivers_dir + '/full_time_drivers_prev_in_ap_stat_stat', 'full-time-drivers-prev-in-ap-stat-'
+             full_time_drivers_dir + '/full_time_drivers_prev_in_ap_stat', 'full-time-drivers-prev-in-ap-stat-'
 ftd_prev_out_ap_stat_dir, ftd_prev_out_ap_stat_prefix = \
              full_time_drivers_dir + '/full_time_drivers_prev_out_ap_stat', 'full-time-drivers-prev-out-ap-stat-'
 ftd_prev_in_ns_stat_dir, ftd_prev_in_ns_stat_prefix = \
-             full_time_drivers_dir + '/full_time_drivers_prev_in_ns_stat_stat', 'full-time-drivers-prev-in-ns-stat-'
+             full_time_drivers_dir + '/full_time_drivers_prev_in_ns_stat', 'full-time-drivers-prev-in-ns-stat-'
 ftd_prev_out_ns_stat_dir, ftd_prev_out_ns_stat_prefix = \
              full_time_drivers_dir + '/full_time_drivers_prev_out_ns_stat', 'full-time-drivers-prev-out-ns-stat-'
 #
 # summary
 #
 summary_dir = prefix + '/summary'
+# overall
 ap_tm_num_dur_fare_fn = summary_dir + '/ap-tm-num-dur-fare.csv' 
 ns_tm_num_dur_fare_fn = summary_dir + '/ns-tm-num-dur-fare.csv'
+#
 hourly_productivities = summary_dir + '/hourly-productivities.csv'
 zero_duration_time_slots = summary_dir + '/zero-duration-time-slots.pkl'
 Y09_ap_trips = summary_dir + '/Y09-ap-trips.csv'
@@ -88,10 +90,17 @@ Y10_ns_trips = summary_dir + '/Y10-ns-trips.csv'
 driver_monthly_fare_gt = summary_dir + '/driver-monthly-fare-gt.pkl'
 driver_monthly_fare_at = summary_dir + '/driver-monthly-fare-at.pkl'
 driver_monthly_fare_nt = summary_dir + '/driver-monthly-fare-nt.pkl'
-#
-
- 
-
+# individual
+Y09_ftd_general_stat = summary_dir + '/Y09-ftd-general-stat.csv'
+Y10_ftd_general_stat = summary_dir + '/Y10-ftd-general-stat.csv'
+Y09_ftd_prev_in_ap_stat = summary_dir + '/Y09-ftd-prev-in-ap-stat.csv'
+Y10_ftd_prev_in_ap_stat = summary_dir + '/Y10-ftd-prev-in-ap-stat.csv'
+Y09_ftd_prev_in_ns_stat = summary_dir + '/Y09-ftd-prev-in-ns-stat.csv'
+Y10_ftd_prev_in_ns_stat = summary_dir + '/Y10-ftd-prev-in-ns-stat.csv'
+Y09_ftd_prev_out_ap_stat = summary_dir + '/Y09-ftd-prev-out-ap-stat.csv'
+Y10_ftd_prev_out_ap_stat = summary_dir + '/Y10-ftd-prev-out-ap-stat.csv'
+Y09_ftd_prev_out_ns_stat = summary_dir + '/Y09-ftd-prev-out-ns-stat.csv'
+Y10_ftd_prev_out_ns_stat = summary_dir + '/Y10-ftd-prev-out-ns-stat.csv'
 
 
 #
