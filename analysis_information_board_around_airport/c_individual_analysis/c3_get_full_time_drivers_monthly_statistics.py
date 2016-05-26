@@ -88,7 +88,7 @@ def process_files(yymm):
             #
             # prev out ap trip
             #
-            ap_qu, ap_dur = sum(prev_out_ap_trip['queue-time']), sum(prev_out_ap_trip['duration'])
+            ap_qu, ap_dur = sum(prev_out_ap_trip['ap-queue-time']), sum(prev_out_ap_trip['duration'])
             ap_fare = sum(prev_out_ap_trip['fare'])
             ap_eco_profit = sum(prev_out_ap_trip['economic-profit'])
             if ap_qu + ap_dur > 0 and ap_fare != 0:
@@ -118,7 +118,7 @@ def process_files(yymm):
             #
             # prev out ns trip
             #
-            ns_qu, ns_dur = sum(prev_out_ns_trip['queue-time']), sum(prev_out_ns_trip['duration'])
+            ns_qu, ns_dur = sum(prev_out_ns_trip['ns-queue-time']), sum(prev_out_ns_trip['duration'])
             ns_fare = sum(prev_out_ns_trip['fare'])
             ns_eco_profit = sum(prev_out_ns_trip['economic-profit'])
             if ns_qu + ns_dur > 0 and ns_fare != 0:
