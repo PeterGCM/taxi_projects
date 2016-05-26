@@ -51,3 +51,6 @@ def process_files(yymm):
                 writer = csv.writer(csvFile)
                 for row in reader:
                     writer.writerow(row)
+
+if __name__ == '__main__':
+    run()

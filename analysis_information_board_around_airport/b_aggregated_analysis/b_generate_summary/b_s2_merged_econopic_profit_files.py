@@ -50,5 +50,6 @@ def process_files(yymm):
                 writer.writerow(row)
     #
     print 'finish the file; %s' % yymm
+    
 if __name__ == '__main__':
     run()
