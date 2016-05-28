@@ -96,8 +96,7 @@ def process_files(yymm):
 def save_as_csv(fn, yymm, dd, hh, _data):
     yy, mm = yymm[:2], yymm[2:]
     yyyy = 2000 + int(yy)
-    print yyyy, eval(mm), dd, hh
-    cur_datetime = datetime.datetime(yyyy, eval(mm), dd, hh)
+    cur_datetime = datetime.datetime(yyyy, int(mm), dd, hh)
     dow = cur_datetime.strftime("%a") 
     with open(fn, 'a') as csvFile:
         writer = csv.writer(csvFile)
