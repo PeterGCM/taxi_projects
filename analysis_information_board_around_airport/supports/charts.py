@@ -7,6 +7,8 @@ from matplotlib.path import Path
 import matplotlib.patches as patches
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.ticker as tkr
+from supports._setting import charts_dir
+from supports.etc_functions import check_dir_create, write_text_file
 
 _rgb = lambda r, g, b: (r / 255, g / 255, b / 255)
 
@@ -50,8 +52,29 @@ mlists = (
 'D',  #    diamond
 '8',  #    octagon
           )
+#
+check_dir_create(charts_dir)
+#
 
-save_dir = '/Users/JerryHan88/Desktop/'
+class simple_barchart(object):
+    def __init__(self, x_ticks, y_label, _data, save_fn=None) :
+        fig = plt.figure(figsize=(6, 6))
+        ax = fig.add_subplot(111)
+        ind = np.arange(len(_data))
+        width = 0.5  # the width of the bars
+        ax.bar(ind, _data, width, color='blue')
+        ax.set_xlim(-width, len(ind))
+        ax.set_ylabel(y_label)
+        plt.xticks(ind + width / 2, x_ticks)
+        if save_fn:
+            chart_path_fn = '%s/%s.pdf' % (charts_dir, save_fn)
+            plt.savefig(chart_path_fn)
+            #
+            txt_path_fn = '%s/%s.txt' % (charts_dir, save_fn)
+            write_text_file(txt_path_fn, 'Init', True)
+            for i in xrange(len(x_ticks)):
+                write_text_file(txt_path_fn,'%s: %f' %(str(x_ticks[i]), _data[i]))
+        plt.show()
 
 class one_histogram(object):
     def __init__(self, _title, x_label, y_label, num_bin, x_data, save_fn=None):
@@ -64,12 +87,100 @@ class one_histogram(object):
         plt.xlabel(x_label); plt.ylabel(y_label)
         plt.title(r'$\mathrm{%s}\ \mu=%.2f,\ \sigma=%.2f$' % (_title, x_mean, x_std))
         if save_fn:
-            plt.savefig('%s/%s.pdf' % (save_dir, save_fn))
+            chart_path_fn = '%s/%s.pdf' % (charts_dir, save_fn)
+            plt.savefig(chart_path_fn)
+            #
+            txt_path_fn = '%s/%s.txt' % (charts_dir, save_fn)
+            self.saving_histo_data(txt_path_fn, num_bin, x_data)
+    def saving_histo_data(self, txt_path_fn, num_bin, x_data):
+        write_text_file(txt_path_fn, 'Init', True)
+        num_data = len(x_data)
+        sorted_data = sorted(x_data)
+        min_v, max_v = sorted_data[0], sorted_data[-1]
+        intervals = []
+        interval = float(max_v - min_v) / num_bin
+        bins = [[] for _ in xrange(num_bin)]
+        for v in sorted_data[:-1]:
+            i = int((v - min_v) / interval)
+            lower_bound, upper_bound = min_v + i * interval, min_v + (i + 1) * interval
+            bins[i].append(v)
+            if (not intervals) or (intervals[-1] != [lower_bound, upper_bound]):
+                intervals.append([lower_bound, upper_bound])
+        bins[-1].append(max_v)
+        #
+        write_text_file(txt_path_fn, '-----lower bound, upper bound')
+        for lower_bound, upper_bound in intervals:
+            write_text_file(txt_path_fn,
+                            '%f, %f' % (lower_bound, upper_bound))
+        write_text_file(txt_path_fn, '-----Proportion')
+        for p in [float(len(_bin)) / num_data for _bin in bins]:
+            write_text_file(txt_path_fn, str(p))
+        write_text_file(txt_path_fn, '')
         plt.show()
+
+class histo_cumulative(object):
+    def __init__(self, _title, x_label, y_label, num_bin, xs_data, _legend, save_fn=None):
+        assert len(xs_data) == len(_legend)
+        plt.figure(figsize=(6, 6))
+        x_means, x_stds = [], []
+        _xmax = -1e400
+        for i, x_data in enumerate(xs_data):
+            _xmax = max(_xmax, max(x_data))
+            _, bins, _ = plt.hist(x_data, num_bin, normed=1,
+                                    histtype='step', cumulative=True, color=clists[i])
+            x_mean, x_std = np.mean(x_data), np.std(x_data)
+            x_means.append(x_mean); x_stds.append(x_std)
+            #
+            y = mlab.normpdf(bins, x_mean, x_std).cumsum()
+            y /= y[-1]
+        plt.legend(_legend, ncol=1, loc='upper left', fontsize=10)
+        #
+        plt.xlabel(x_label); plt.ylabel(y_label)
+        plt.xlim(xmax = _xmax)
+        plt.ylim(ymax = 1.0)
+        
+        s = r'  '.join(['$\mathrm{%s}\ \mu=%.2f,\ \sigma=%.2f$' % (_legend[i], x_means[i], x_stds[i]) for i in xrange(len(_legend))])
+        plt.title(s)
+        
+        if save_fn:
+            chart_path_fn = '%s/%s.pdf' % (charts_dir, save_fn)
+            plt.savefig(chart_path_fn)
+            #
+            txt_path_fn = '%s/%s.txt' % (charts_dir, save_fn)
+            self.saving_histo_cumulative_data(txt_path_fn, num_bin, x_data)
+        plt.show()
+    def saving_histo_cumulative_data(self, txt_path_fn, num_bin, x_data):
+        write_text_file(txt_path_fn, 'Init', True)
+        num_data = len(x_data)
+        sorted_data = sorted(x_data)
+        min_v, max_v = sorted_data[0], sorted_data[-1]
+        intervals = []
+        interval = float(max_v - min_v) / num_bin
+        bins = [[] for _ in xrange(num_bin)]
+        for v in sorted_data[:-1]:
+            i = int((v - min_v) / interval)
+            lower_bound, upper_bound = min_v + i * interval, min_v + (i + 1) * interval
+            try:
+                bins[i].append(v)
+            except IndexError:
+                bins[-1].append(v)
+            if (not intervals) or (intervals[-1] != [lower_bound, upper_bound]):
+                intervals.append([lower_bound, upper_bound])
+        #
+        write_text_file(txt_path_fn, '-----lower bound, upper bound')
+        for lower_bound, upper_bound in intervals:
+            write_text_file(txt_path_fn,
+                            '%f, %f' % (lower_bound, upper_bound))
+        write_text_file(txt_path_fn, '-----Proportion')
+        cumulated_prob = 0
+        for p in [float(len(_bin)) / num_data for _bin in bins]:
+            cumulated_prob += p
+            write_text_file(txt_path_fn, str(cumulated_prob))
+        write_text_file(txt_path_fn, '')
 
 class multiple_line_chart(object):
     def __init__(self, _figsize, _title, _xlabel, _ylabel, xticks_info, multi_y_data, y_legend_labels, legend_pos, save_fn=None):
-        assert len(multi_y_data) == len(y_legend_labels),multi_y_data 
+        assert len(multi_y_data) == len(y_legend_labels), multi_y_data
         fig = plt.figure(figsize=_figsize)
         ax = fig.add_subplot(111)
         ax.set_title(_title)
@@ -90,8 +201,81 @@ class multiple_line_chart(object):
         ax.set_ybound(upper=ymax * 1.05)
         ax.yaxis.set_major_formatter(tkr.FuncFormatter(comma_formating))  # set formatter to needed axis
         if save_fn:
-            plt.savefig('%s/%s.pdf' % (save_dir, save_fn))
+            chart_path_fn = '%s/%s.pdf' % (charts_dir, save_fn)
+            plt.savefig(chart_path_fn)
+            #
+            txt_path_fn = '%s/%s.txt' % (charts_dir, save_fn)
+            write_text_file(txt_path_fn, 'Init', True)
+            write_text_file(txt_path_fn, 'x-asix: %s' % str(_xticks))
+            for i, ys in enumerate(multi_y_data):
+                write_text_file(txt_path_fn, '%s: %s' %(y_legend_labels[i], str(ys)))
+            write_text_file(txt_path_fn, '')
         plt.show()  
+
+class x_twin_chart(object):
+    def __init__(self, _figsize, _title, x_info, y_info1, y_info2, save_fn=None):
+        _xlabel, _xticks, _rotation = x_info
+        _ylabel1, multi_y_data1, bounds1, y_legend_labels1, legend_pos1 = y_info1
+        _ylabel2, multi_y_data2, bounds2, y_legend_labels2, legend_pos2 = y_info2
+        assert len(multi_y_data1) == len(y_legend_labels1)
+        assert len(multi_y_data2) == len(y_legend_labels2)
+        assert len(multi_y_data1[0]) == len(multi_y_data2[0])
+        #
+        fig = plt.figure(figsize=_figsize)
+        #
+        ax1 = fig.add_subplot(111)
+        #
+        ymax = 0
+        for i, y_data in enumerate(multi_y_data1):
+            plt.plot(range(len(y_data)), y_data, linewidth=1, color=clists[i], marker=mlists[i])
+            ymax1 = max(y_data)
+            if ymax < ymax1:
+                ymax = ymax1
+        plt.legend(y_legend_labels1, ncol=1, loc=legend_pos1, fontsize=12)
+        if bounds1:
+            ax1.set_ybound(lower=bounds1[0], upper=bounds1[1])
+        else:
+            ax1.set_ybound(upper=ymax * 1.05)
+        ax1.yaxis.set_major_formatter(tkr.FuncFormatter(comma_formating))  # set formatter to needed axis
+        #
+        ax2 = ax1.twinx()
+        ymax = 0
+        for i, y_data in enumerate(multi_y_data2):
+            plt.plot(range(len(y_data)), y_data, '--', linewidth=1, color=clists[-(i + 1)], marker=mlists[-(i + 1)])
+            ymax1 = max(y_data)
+            if ymax < ymax1:
+                ymax = ymax1
+        plt.legend(y_legend_labels2, ncol=1, loc=legend_pos2, fontsize=12)
+        if bounds2:
+            ax2.set_ybound(lower=bounds2[0], upper=bounds2[1])
+        else:
+            ax2.set_ybound(upper=ymax * 1.05) 
+        ax2.yaxis.set_major_formatter(tkr.FuncFormatter(comma_formating))  # set formatter to needed axis
+        #
+        plt.xticks(range(len(_xticks)), _xticks, rotation=_rotation)
+        ax1.set_xbound(lower=0, upper=range(len(_xticks))[-1])
+        #
+        ax1.set_title(_title)
+        ax1.set_xlabel(_xlabel)
+        ax1.set_ylabel(_ylabel1)
+        ax2.set_ylabel(_ylabel2)
+        #
+        if save_fn:
+            chart_path_fn = '%s/%s.pdf' % (charts_dir, save_fn)
+            plt.savefig(chart_path_fn)
+            #
+            txt_path_fn = '%s/%s.txt' % (charts_dir, save_fn)
+            write_text_file(txt_path_fn, 'Init', True)
+            write_text_file(txt_path_fn, 'x-asix: %s' % str(_xticks))
+            write_text_file(txt_path_fn, '-----------------------y1-asix')
+            for i, ys in enumerate(multi_y_data1):
+                write_text_file(txt_path_fn, '%s: %s' %(y_legend_labels1[i], str(ys)))
+            write_text_file(txt_path_fn, '-----------------------y2-asix')
+            for i, ys in enumerate(multi_y_data2):
+                write_text_file(txt_path_fn, '%s: %s' %(y_legend_labels2[i], str(ys)))    
+            write_text_file(txt_path_fn, '')
+            
+        plt.show()
 
 class line_3D(object):
     def __init__(self, _figsize, _title, _xlabel, _ylabel, _zlabel, _data):
@@ -134,7 +318,7 @@ class bar_table(object):
         plt.xticks([])
         plt.title(_title)
         if save_fn:
-            plt.savefig('%s/%s.pdf' % (save_dir, save_fn))
+            plt.savefig('%s/%s.pdf' % (charts_dir, save_fn))
         plt.show()
 
 class one_pie_chart(object):
@@ -148,7 +332,7 @@ class one_pie_chart(object):
         plt.legend(labels, fontsize='x-small')
         ax.set_title(_title)
         if save_fn:
-            plt.savefig('%s/%s.pdf' % (save_dir, save_fn))
+            plt.savefig('%s/%s.pdf' % (charts_dir, save_fn))
         plt.show()
 
 class two_pie_chart(object):
@@ -169,34 +353,8 @@ class two_pie_chart(object):
         plt.legend(labels, fontsize='x-small')
         ax.set_title(title2)
         if save_fn:
-            plt.savefig('%s/%s.pdf' % (save_dir, save_fn))
+            plt.savefig('%s/%s.pdf' % (charts_dir, save_fn))
         plt.show()
-
-class histo_cumulative(object):
-    def __init__(self, _title, x_label, y_label, num_bin, xs_data, _legend, save_fn=None):
-        assert len(xs_data) == len(_legend)
-        plt.figure(figsize=(6, 6))
-        x_means, x_stds = [], []
-        for i, x_data in enumerate(xs_data):
-            _, bins, _ = plt.hist(x_data, num_bin, normed=1,
-                                    histtype='step', cumulative=True, color=clists[i])
-            x_mean, x_std = np.mean(x_data), np.std(x_data)
-            x_means.append(x_mean); x_stds.append(x_std)
-            #
-            y = mlab.normpdf(bins, x_mean, x_std).cumsum()
-            y /= y[-1]
-#             plt.plot(bins, y, 'k--', linewidth=1.5)
-        plt.legend(_legend, ncol=1, loc='upper left', fontsize=10)
-        #
-        plt.xlabel(x_label); plt.ylabel(y_label)
-        
-        s = r'  '.join(['$\mathrm{%s}\ \mu=%.2f,\ \sigma=%.2f$' % (_legend[i], x_means[i], x_stds[i]) for i in xrange(len(_legend))])
-        plt.title(s)
-        
-        if save_fn:
-            plt.savefig('%s/%s.pdf' % (save_dir, save_fn))
-        plt.show()
-
 
 class histograms(object):
     def __init__(self, _figsize, chart_info):
@@ -382,7 +540,7 @@ class one_grid_chart(object):
             verts = self.gen_rect_coord_by_center(x, y)
             paths.append(Path(verts, grid_charts.codes))
             color_choices.append(c)
-        colors_set = set([0,1])
+        colors_set = set([0, 1])
 
         labeled = [False for _ in xrange(len(colors_set))]
         ax = fig.add_subplot(1, 1, 1)
@@ -408,7 +566,7 @@ class one_grid_chart(object):
         plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
            ncol=2, mode="expand", borderaxespad=0., framealpha=0.0)
         if save_fn:
-            plt.savefig('%s/%s.pdf' % (save_dir, save_fn))
+            plt.savefig('%s/%s.pdf' % (charts_dir, save_fn))
         plt.show()
                 
     def gen_rect_coord_by_center(self, x, y):
@@ -433,58 +591,6 @@ def comma_formating(x, pos):  # formatter function takes tick label and tick pos
         groups.append(s[-3:])
         s = s[:-3]
     return s + ','.join(reversed(groups))
-
-class x_twin_chart(object):
-    def __init__(self, _figsize, _title, x_info, y_info1, y_info2, save_fn=None):
-        _xlabel, _xticks, _rotation = x_info
-        _ylabel1, multi_y_data1, bounds1, y_legend_labels1, legend_pos1 = y_info1
-        _ylabel2, multi_y_data2, bounds2, y_legend_labels2, legend_pos2 = y_info2
-        assert len(multi_y_data1) == len(y_legend_labels1)
-        assert len(multi_y_data2) == len(y_legend_labels2)
-        assert len(multi_y_data1[0]) == len(multi_y_data2[0])
-        #
-        fig = plt.figure(figsize=_figsize)
-        #
-        ax1 = fig.add_subplot(111)
-        #
-        ymax = 0
-        for i, y_data in enumerate(multi_y_data1):
-            plt.plot(range(len(y_data)), y_data, linewidth=1, color=clists[i], marker=mlists[i])
-            ymax1 = max(y_data)
-            if ymax < ymax1:
-                ymax = ymax1
-        plt.legend(y_legend_labels1, ncol=1, loc=legend_pos1, fontsize=12)
-        if bounds1:
-            ax1.set_ybound(lower=bounds1[0], upper=bounds1[1])
-        else:
-            ax1.set_ybound(upper=ymax * 1.05)
-        ax1.yaxis.set_major_formatter(tkr.FuncFormatter(comma_formating))  # set formatter to needed axis
-        #
-        ax2 = ax1.twinx()
-        ymax = 0
-        for i, y_data in enumerate(multi_y_data2):
-            plt.plot(range(len(y_data)), y_data, '--', linewidth=1, color=clists[-(i + 1)], marker=mlists[-(i+1)])
-            ymax1 = max(y_data)
-            if ymax < ymax1:
-                ymax = ymax1
-        plt.legend(y_legend_labels2, ncol=1, loc=legend_pos2, fontsize=12)
-        if bounds2:
-            ax2.set_ybound(lower=bounds2[0], upper=bounds2[1])
-        else:
-            ax2.set_ybound(upper=ymax * 1.05) 
-        ax2.yaxis.set_major_formatter(tkr.FuncFormatter(comma_formating))  # set formatter to needed axis
-        #
-        plt.xticks(range(len(_xticks)), _xticks, rotation=_rotation)
-        ax1.set_xbound(lower=0, upper=range(len(_xticks))[-1])
-        #
-        ax1.set_title(_title)
-        ax1.set_xlabel(_xlabel)
-        ax1.set_ylabel(_ylabel1)
-        ax2.set_ylabel(_ylabel2)
-        #
-        if save_fn:
-            plt.savefig('%s/%s.pdf' % (save_dir, save_fn))
-        plt.show()
 
 def test():
 #     n_bins = 50

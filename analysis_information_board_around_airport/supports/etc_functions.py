@@ -3,6 +3,14 @@ import os, shutil
 import datetime
 import pickle
 #
+def write_text_file(path, msg, is_first=False):
+    if is_first:
+        with open(path, 'w') as f:
+            f.write(msg + '\n')
+    else:
+        with open(path, 'a') as f:
+            f.write(msg + '\n')
+#
 def save_pickle_file(path, _objects):
     with open(path, 'wb') as fp:
         pickle.dump(_objects, fp)

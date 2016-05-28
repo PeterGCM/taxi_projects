@@ -79,7 +79,7 @@ ftd_prev_out_ns_stat_dir, ftd_prev_out_ns_stat_prefix = \
 summary_dir = prefix + '/summary'
 # overall
 ap_tm_num_dur_fare_fn = summary_dir + '/ap-tm-num-dur-fare.csv' 
-ns_tm_num_dur_fare_fn = summary_dir + '/ns-tm-num-dur-fare.csv'
+ns_tm_num_dur_fare_fn = summary_dir + '/ns-tm-num-dur-fare.csv' 
 #
 hourly_productivities = summary_dir + '/hourly-productivities.csv'
 zero_duration_time_slots = summary_dir + '/zero-duration-time-slots.pkl'
@@ -101,8 +101,14 @@ Y09_ftd_prev_out_ap_stat = summary_dir + '/Y09-ftd-prev-out-ap-stat.csv'
 Y10_ftd_prev_out_ap_stat = summary_dir + '/Y10-ftd-prev-out-ap-stat.csv'
 Y09_ftd_prev_out_ns_stat = summary_dir + '/Y09-ftd-prev-out-ns-stat.csv'
 Y10_ftd_prev_out_ns_stat = summary_dir + '/Y10-ftd-prev-out-ns-stat.csv'
-
-
+#
+# path for chart saving
+#
+charts_dir = prefix +'/charts'
+row_data_a_a1 = charts_dir + '/fare_duration_per_trip.txt'
+row_data_a_a2 = charts_dir + '/statistics_timeslots.txt'
+row_data_b_a1 = charts_dir + '/drivers_monthly_fares.txt'
+row_data_b_a3 = charts_dir + '/queue_time.txt'
 #
 # individual
 #
