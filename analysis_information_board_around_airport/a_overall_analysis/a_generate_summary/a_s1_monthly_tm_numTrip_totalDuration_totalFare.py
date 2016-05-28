@@ -25,12 +25,14 @@ def run():
         header = ['yy', 'mm', 'dd', 'hh', 'day-of-week', 'ns-trip-mode', 'num-tm', 'total-dur', 'total-fare']
         writer.writerow(header)
     
-    for y in xrange(9, 11):
-        for m in xrange(1, 13):
-            yymm = '%02d%02d' % (y, m) 
-            if yymm in ['0912', '1010']:
-                continue
-            process_files(yymm)
+    process_files('0908')
+    
+#     for y in xrange(9, 11):
+#         for m in xrange(1, 13):
+#             yymm = '%02d%02d' % (y, m) 
+#             if yymm in ['0912', '1010']:
+#                 continue
+#             process_files(yymm)
     
 def process_files(yymm):
     print 'handle the file; %s' % yymm
