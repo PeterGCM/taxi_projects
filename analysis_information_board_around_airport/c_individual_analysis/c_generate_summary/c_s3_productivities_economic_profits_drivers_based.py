@@ -43,7 +43,7 @@ def general_productivities():
     drivers_hourly_producities = []
     for i in [Y09_GEN, Y10_GEN]:
         df_gb = dfs[i].groupby(['did'])
-        drivers_avg_productivities = df_gb.mean()['total-prod'].to_frame('avg_total_prod').reset_index()
+        drivers_avg_productivities = df_gb.mean()['prod'].to_frame('avg_prod').reset_index()
         drivers_hourly_producities.append(
                   {did : total_prod * SEC3600 / CENT for did, total_prod in drivers_avg_productivities.values})
     return drivers_hourly_producities 
