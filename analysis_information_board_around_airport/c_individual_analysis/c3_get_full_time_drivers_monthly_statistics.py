@@ -115,9 +115,9 @@ def calc_drivers_monthly_eco_profit(yymm, yy, mm, did, df_dir_path_prefix):
         eco_profit = sum(df['economic-profit'])
         if qu + dur > 0 and fare != 0:
             prod = fare / (qu + dur)
-        with open('%s/%s%s.csv' % (dir_path, fn_prefix, yymm), 'a') as w_csvfile:
-            writer = csv.writer(w_csvfile)
-            writer.writerow([yy, mm, did, qu, dur, fare, prod, eco_profit])
+            with open('%s/%s%s.csv' % (dir_path, fn_prefix, yymm), 'a') as w_csvfile:
+                writer = csv.writer(w_csvfile)
+                writer.writerow([yy, mm, did, qu, dur, fare, prod, eco_profit])
 
 if __name__ == '__main__':
     run()
