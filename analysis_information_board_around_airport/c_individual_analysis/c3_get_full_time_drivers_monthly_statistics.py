@@ -25,6 +25,9 @@ import pandas as pd
 #
 SEC = 60
 #
+
+# TODO   simplify!!!
+
 def run():
     for dn in [ftd_general_stat_dir, ftd_prev_in_ap_stat_dir, ftd_prev_out_ap_stat_dir, ftd_prev_in_ns_stat_dir, ftd_prev_out_ns_stat_dir]:
         remove_creat_dir(dn)
@@ -44,7 +47,22 @@ def run():
 def process_files(yymm):
     print 'handle the file; %s' % yymm
     #
-    init_csv_files(yymm)
+    # initialize csv_files
+    #
+    # general productivities
+    with open('%s/%s%s.csv' % (ftd_general_stat_dir, ftd_general_stat_prefix, yymm), 'wt') as w_csvfile:
+        writer = csv.writer(w_csvfile)
+        headers = ['yy', 'mm', 'did', 'dur', 'fare', 'prod']
+        writer.writerow(headers)
+    # airport and night safari productivities
+    for dn, fn_prefix in [(ftd_prev_in_ap_stat_dir, ftd_prev_in_ap_stat_prefix),
+                          (ftd_prev_out_ap_stat_dir, ftd_prev_out_ap_stat_prefix),
+                          (ftd_prev_in_ns_stat_dir, ftd_prev_in_ns_stat_prefix),
+                          (ftd_prev_out_ns_stat_dir, ftd_prev_out_ns_stat_prefix)]:
+        with open('%s/%s%s.csv' % (dn, fn_prefix, yymm), 'wt') as w_csvfile:
+            writer = csv.writer(w_csvfile)
+            headers = ['yy', 'mm', 'did', 'queue-time', 'dur', 'fare', 'prod', 'eco-profit']
+            writer.writerow(headers)
     #
     full_dids = sorted([eval(x) for x in load_picle_file('%s/%s%s.pkl' % (ftd_shift_dir, full_time_drivers_prefix, yymm))])
     s_df = pd.read_csv('%s/%s%s.csv' % (ftd_shift_dir, ftd_shift_prefix, yymm))
@@ -74,28 +92,9 @@ def process_files(yymm):
         prev_out_ap_trip = did_ap[(did_ap['ap-trip-mode'] == DOutAP_PInAP)]
         #
         if len(did_ap) != 0:
-            #
-            # prev in ap trip
-            #
-            ap_qu, ap_dur = sum(prev_in_ap_trip['ap-queue-time']), sum(prev_in_ap_trip['duration'])
-            ap_fare = sum(prev_in_ap_trip['fare'])
-            ap_eco_profit = sum(prev_in_ap_trip['economic-profit'])
-            if ap_qu + ap_dur > 0 and ap_fare != 0:
-                ap_prod = ap_fare / (ap_qu + ap_dur)
-                with open('%s/%s%s.csv' % (ftd_prev_in_ap_stat_dir, ftd_prev_in_ap_stat_prefix, yymm), 'a') as w_csvfile:
-                    writer = csv.writer(w_csvfile)
-                    writer.writerow([yy, mm, did, ap_qu, ap_dur, ap_fare, ap_prod, ap_eco_profit])
-            #
-            # prev out ap trip
-            #
-            ap_qu, ap_dur = sum(prev_out_ap_trip['ap-queue-time']), sum(prev_out_ap_trip['duration'])
-            ap_fare = sum(prev_out_ap_trip['fare'])
-            ap_eco_profit = sum(prev_out_ap_trip['economic-profit'])
-            if ap_qu + ap_dur > 0 and ap_fare != 0:
-                ap_prod = ap_fare / (ap_qu + ap_dur)
-                with open('%s/%s%s.csv' % (ftd_prev_out_ap_stat_dir, ftd_prev_out_ap_stat_prefix, yymm), 'a') as w_csvfile:
-                    writer = csv.writer(w_csvfile)
-                    writer.writerow([yy, mm, did, ap_qu, ap_dur, ap_fare, ap_prod, ap_eco_profit])    
+            df_dir_path_prefix = [('ap', prev_in_ap_trip, ftd_prev_in_ap_stat_dir, ftd_prev_in_ap_stat_prefix),
+                                  ('ap', prev_out_ap_trip,ftd_prev_out_ap_stat_dir, ftd_prev_out_ap_stat_prefix)]
+            calc_drivers_monthly_eco_profit(yymm, yy, mm, did, df_dir_path_prefix)
         #
         # night safari trips
         #
@@ -104,47 +103,21 @@ def process_files(yymm):
         prev_out_ns_trip = did_ns[(did_ns['ns-trip-mode'] == DOutNS_PInNS)]
         #
         if len(did_ns) != 0:
-            #
-            # prev in ns trip
-            #
-            ns_qu, ns_dur = sum(prev_in_ns_trip['ns-queue-time']), sum(prev_in_ns_trip['duration'])
-            ns_fare = sum(prev_in_ns_trip['fare'])
-            ns_eco_profit = sum(prev_in_ns_trip['economic-profit'])
-            if ns_qu + ns_dur > 0 and ns_fare != 0:
-                ns_prod = ns_fare / (ns_qu + ns_dur)
-                with open('%s/%s%s.csv' % (ftd_prev_in_ns_stat_dir, ftd_prev_in_ns_stat_prefix, yymm), 'a') as w_csvfile:
-                    writer = csv.writer(w_csvfile)
-                    writer.writerow([yy, mm, did, ns_qu, ns_dur, ns_fare, ns_prod, ns_eco_profit])
-            #
-            # prev out ns trip
-            #
-            ns_qu, ns_dur = sum(prev_out_ns_trip['ns-queue-time']), sum(prev_out_ns_trip['duration'])
-            ns_fare = sum(prev_out_ns_trip['fare'])
-            ns_eco_profit = sum(prev_out_ns_trip['economic-profit'])
-            if ns_qu + ns_dur > 0 and ns_fare != 0:
-                ns_prod = ns_fare / (ns_qu + ns_dur)
-                with open('%s/%s%s.csv' % (ftd_prev_out_ns_stat_dir, ftd_prev_out_ns_stat_prefix, yymm), 'a') as w_csvfile:
-                    writer = csv.writer(w_csvfile)
-                    writer.writerow([yy, mm, did, ns_qu, ns_dur, ns_fare, ns_prod, ns_eco_profit])
+            df_dir_path_prefix = [('ns', prev_in_ns_trip, ftd_prev_in_ns_stat_dir, ftd_prev_in_ns_stat_prefix),
+                                  ('ns', prev_out_ns_trip,ftd_prev_out_ns_stat_dir, ftd_prev_out_ns_stat_prefix)]
+            calc_drivers_monthly_eco_profit(yymm, yy, mm, did, df_dir_path_prefix)
     print 'End the file; %s' % yymm
 
-def init_csv_files(yymm):
-    with open('%s/%s%s.csv' % (ftd_general_stat_dir, ftd_general_stat_prefix, yymm), 'wt') as w_csvfile:
-        writer = csv.writer(w_csvfile)
-        headers = ['yy', 'mm', 'did', 'total-pro-dur', 'total-fare', 'total-prod']
-        writer.writerow(headers)
-    #
-    for dn, fn_prefix in [(ftd_prev_in_ap_stat_dir, ftd_prev_in_ap_stat_prefix), (ftd_prev_out_ap_stat_dir, ftd_prev_in_ap_stat_prefix)]:
-        with open('%s/%s%s.csv' % (dn, fn_prefix, yymm), 'wt') as w_csvfile:
+def calc_drivers_monthly_eco_profit(yymm, yy, mm, did, df_dir_path_prefix):
+    for loc, df, dir_path, fn_prefix in df_dir_path_prefix:
+        qu, dur = sum(df['%s-queue-time' % loc]), sum(df['duration'])
+        fare = sum(df['fare'])
+        eco_profit = sum(df['economic-profit'])
+        if qu + dur > 0 and fare != 0:
+            prod = fare / (qu + dur)
+        with open('%s/%s%s.csv' % (dir_path, fn_prefix, yymm), 'a') as w_csvfile:
             writer = csv.writer(w_csvfile)
-            headers = ['yy', 'mm', 'did', 'ap-queue-time', 'ap-dur', 'ap-fare', 'ap-prod', 'ap-eco-profit']
-            writer.writerow(headers)
-    #
-    for dn, fn_prefix in [(ftd_prev_in_ns_stat_dir, ftd_prev_in_ns_stat_prefix), (ftd_prev_out_ns_stat_dir, ftd_prev_in_ns_stat_prefix)]:
-        with open('%s/%s%s.csv' % (dn, fn_prefix, yymm), 'wt') as w_csvfile:
-            writer = csv.writer(w_csvfile)
-            headers = ['yy', 'mm', 'did', 'ns-queue-time', 'ns-dur', 'ns-fare', 'ns-prod', 'ns-eco-profit']
-            writer.writerow(headers)
+            writer.writerow([yy, mm, did, qu, dur, fare, prod, eco_profit])
 
 if __name__ == '__main__':
     run()
