@@ -78,7 +78,7 @@ def get_month_average(full_drivers, df_indices):
         prod_sec_mb = gb_df.mean()['prod'].to_frame('avg_prod').reset_index()
         eco_prof_cent_mb = gb_df.mean()['eco-profit'].to_frame('avg_eco_pro').reset_index()
         month_prod_eco_prof.append([[prod * SEC3600 / CENT for _, prod in prod_sec_mb.values], 
-                                    [prod * SEC3600 / CENT for _, prod in eco_prof_cent_mb.values]])
+                                    [eco_pro / CENT for _, eco_pro in eco_prof_cent_mb.values]])
     return month_prod_eco_prof
 
 if __name__ == '__main__':
