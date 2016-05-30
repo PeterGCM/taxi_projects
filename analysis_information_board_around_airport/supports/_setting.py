@@ -101,9 +101,12 @@ Y09_ftd_prev_out_ap_stat = summary_dir + '/Y09-ftd-prev-out-ap-stat.csv'
 Y10_ftd_prev_out_ap_stat = summary_dir + '/Y10-ftd-prev-out-ap-stat.csv'
 Y09_ftd_prev_out_ns_stat = summary_dir + '/Y09-ftd-prev-out-ns-stat.csv'
 Y10_ftd_prev_out_ns_stat = summary_dir + '/Y10-ftd-prev-out-ns-stat.csv'
-ftd_general_prod = summary_dir + '/ftd-general-prod.pkl'
-ftd_ap_prod_eco_prof = summary_dir + '/ftd-ap-prod-eco-prof.pkl'
-ftd_ns_prod_eco_prof = summary_dir + '/ftd-ns-prod-eco-prof.pkl'
+ftd_general_prod_mb = summary_dir + '/ftd-general-prod-months-based.pkl'
+ftd_ap_prod_eco_prof_mb = summary_dir + '/ftd-ap-prod-eco-prof-months-based.pkl'
+ftd_ns_prod_eco_prof_mb =summary_dir + '/ftd-ns-prod-eco-prof-months-based.pkl'
+ftd_general_prod_db = summary_dir + '/ftd-general-prod-drivers-based.pkl'
+ftd_ap_prod_eco_prof_db = summary_dir + '/ftd-ap-prod-eco-prof-drivers-based.pkl'
+ftd_ns_prod_eco_prof_db = summary_dir + '/ftd-ns-prod-eco-prof-drivers-based.pkl'
 #
 # path for chart saving
 #

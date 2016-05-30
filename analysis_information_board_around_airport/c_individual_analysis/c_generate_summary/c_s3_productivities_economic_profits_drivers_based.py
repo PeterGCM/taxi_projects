@@ -3,6 +3,8 @@ from __future__ import division
 import os, sys
 sys.path.append(os.getcwd() + '/../..')
 #
+from supports._setting import summary_dir
+from supports.etc_functions import check_dir_create, remove_file
 from supports._setting import Y09_ftd_general_stat, Y10_ftd_general_stat
 from supports._setting import Y09_ftd_prev_in_ap_stat, Y10_ftd_prev_in_ap_stat
 from supports._setting import Y09_ftd_prev_in_ns_stat, Y10_ftd_prev_in_ns_stat
@@ -11,7 +13,7 @@ from supports._setting import Y09_ftd_prev_out_ns_stat, Y10_ftd_prev_out_ns_stat
 from supports._setting import SEC3600, CENT
 from supports.etc_functions import save_pickle_file
 #
-from supports._setting import ftd_general_prod, ftd_ap_prod_eco_prof, ftd_ns_prod_eco_prof
+from supports._setting import ftd_general_prod_db, ftd_ap_prod_eco_prof_db, ftd_ns_prod_eco_prof_db
 #
 import pandas as pd
 #
@@ -28,11 +30,15 @@ Y09_PINS, Y10_PINS, \
 Y09_PONS, Y10_PONS = range(10)
  
 def run():
+    check_dir_create(summary_dir)
+    for path in [ftd_general_prod_db, ftd_ap_prod_eco_prof_db, ftd_ns_prod_eco_prof_db]:
+        remove_file(path)
+    #
     dfs = [pd.read_csv(path_fn) for path_fn in _package]
     #
-    save_pickle_file(ftd_general_prod , general_productivities(dfs))
-    save_pickle_file(ftd_ap_prod_eco_prof, ap_productivities_economical_profits(dfs))
-    save_pickle_file(ftd_ns_prod_eco_prof, ns_productivities_economical_profits(dfs))
+    save_pickle_file(ftd_general_prod_db , general_productivities(dfs))
+    save_pickle_file(ftd_ap_prod_eco_prof_db, ap_productivities_economical_profits(dfs))
+    save_pickle_file(ftd_ns_prod_eco_prof_db, ns_productivities_economical_profits(dfs))
 
 def general_productivities(dfs):
     drivers_hourly_producities = []

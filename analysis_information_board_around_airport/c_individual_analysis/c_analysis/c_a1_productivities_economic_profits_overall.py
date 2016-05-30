@@ -14,85 +14,85 @@ from prettytable import PrettyTable
 
 def run():
 
-    Y09_general = pd.read_csv('%s/Y09-individual-general.csv' % (individual_detail_dir))
-    Y10_general = pd.read_csv('%s/Y10-individual-general.csv' % (individual_detail_dir))
-#
-Y09_prev_in = pd.read_csv('%s/Y09-individual-prev-in-ap.csv' % (individual_detail_dir))
-Y10_prev_in = pd.read_csv('%s/Y10-individual-prev-in-ap.csv' % (individual_detail_dir))
-Y09_prev_out = pd.read_csv('%s/Y09-individual-prev-out-ap.csv' % (individual_detail_dir))
-Y10_prev_out = pd.read_csv('%s/Y10-individual-prev-out-ap.csv' % (individual_detail_dir))
-
-
-# In[3]:
-
-# Filtering
-HOUR, CENT = 60*60, 100
-PROD_LIMIT = 65 / HOUR * CENT
-#
-Y09_general = Y09_general[(Y09_general['total-prod']  < PROD_LIMIT)]
-Y10_general = Y10_general[(Y10_general['total-prod']  < PROD_LIMIT)]
-#
-Y09_prev_in = Y09_prev_in[(Y09_prev_in['ap-prod'] < PROD_LIMIT)]
-Y09_prev_in = Y09_prev_in[(0 < Y09_prev_in['op-cost'])]
-Y10_prev_in = Y10_prev_in[(Y10_prev_in['ap-prod'] < PROD_LIMIT)]
-Y10_prev_in = Y10_prev_in[(0 < Y10_prev_in['op-cost'])]
-#
-Y09_prev_out = Y09_prev_out[(Y09_prev_out['ap-prod'] < PROD_LIMIT)]
-Y09_prev_out = Y09_prev_out[(0 < Y09_prev_out['op-cost'])]
-Y10_prev_out = Y10_prev_out[(Y10_prev_out['ap-prod'] < PROD_LIMIT)]
-Y10_prev_out = Y10_prev_out[(0 < Y10_prev_out['op-cost'])]
-
-
-# In[4]:
-
-# both years
-Y09_did, Y10_did = set(Y09_general['did']), set(Y10_general['did'])
-both_years_full_drivers = list(Y09_did.intersection(Y10_did))
-#
-Y09_general = Y09_general[Y09_general['did'].isin(both_years_full_drivers)]
-Y10_general = Y10_general[Y10_general['did'].isin(both_years_full_drivers)]
-#
-Y09_prev_in = Y09_prev_in[Y09_prev_in['did'].isin(both_years_full_drivers)]
-Y10_prev_in = Y10_prev_in[Y10_prev_in['did'].isin(both_years_full_drivers)]
-#
-Y09_prev_out = Y09_prev_out[Y09_prev_out['did'].isin(both_years_full_drivers)]
-Y10_prev_out = Y10_prev_out[Y10_prev_out['did'].isin(both_years_full_drivers)]
-
-
-# In[5]:
-
-Y09_general_gb, Y10_general_gb = Y09_general.groupby(['mm']), Y10_general.groupby(['mm'])
-Y09_driver_general_prod = Y09_general_gb.mean()['total-prod'].to_frame('avg_total_prod').reset_index()
-Y10_driver_general_prod = Y10_general_gb.mean()['total-prod'].to_frame('avg_total_prod').reset_index()
-#
-Y09_prev_in_gb, Y10_prev_in_gb = Y09_prev_in.groupby(['mm']), Y10_prev_in.groupby(['mm'])
-Y09_prev_in_mm_ap_prod = Y09_prev_in_gb.mean()['ap-prod'].to_frame('avg_ap_prod').reset_index()
-Y10_prev_in_mm_ap_prod = Y10_prev_in_gb.mean()['ap-prod'].to_frame('avg_ap_prod').reset_index()
-Y09_prev_in_mm_eco_pro = Y09_prev_in_gb.mean()['ap-eco-profit'].to_frame('avg_eco_pro').reset_index()
-Y10_prev_in_mm_eco_pro = Y10_prev_in_gb.mean()['ap-eco-profit'].to_frame('avg_eco_pro').reset_index()
-#
-Y09_prev_out_gb, Y10_prev_out_gb = Y09_prev_out.groupby(['mm']), Y10_prev_out.groupby(['mm'])
-Y09_prev_out_mm_ap_prod = Y09_prev_out_gb.mean()['ap-prod'].to_frame('avg_ap_prod').reset_index()
-Y10_prev_out_mm_ap_prod = Y10_prev_out_gb.mean()['ap-prod'].to_frame('avg_ap_prod').reset_index()
-Y09_prev_out_mm_eco_pro = Y09_prev_out_gb.mean()['ap-eco-profit'].to_frame('avg_eco_pro').reset_index()
-Y10_prev_out_mm_eco_pro = Y10_prev_out_gb.mean()['ap-eco-profit'].to_frame('avg_eco_pro').reset_index()
-
-
-# In[6]:
-
-measure_year_data = {('General prod.','Y09'): [prod * HOUR / CENT for _, prod in Y09_driver_general_prod.values],
-                     ('General prod.','Y10'): [prod * HOUR / CENT for _, prod in Y10_driver_general_prod.values],
-                     #
-                     ('AP in prod.','Y09'): [prod * HOUR / CENT for _, prod in Y09_prev_in_mm_ap_prod.values],
-                     ('AP in prod.','Y10'): [prod * HOUR / CENT for _, prod in Y10_prev_in_mm_ap_prod.values],
-                     ('AP out prod.','Y09'): [prod * HOUR / CENT for _, prod in Y09_prev_out_mm_ap_prod.values],
-                     ('AP out prod.','Y10'): [prod * HOUR / CENT for _, prod in Y10_prev_out_mm_ap_prod.values],
-                     #
-                     ('AP in eco.','Y09'): [eco / CENT for _, eco in Y09_prev_in_mm_eco_pro.values],
-                     ('AP in eco.','Y10'): [eco / CENT for _, eco in Y10_prev_in_mm_eco_pro.values],
-                     ('AP out eco.','Y09'): [eco / CENT for _, eco in Y09_prev_out_mm_eco_pro.values],
-                     ('AP out eco.','Y10'): [eco / CENT for _, eco in Y10_prev_out_mm_eco_pro.values],
-                    }
+#     Y09_general = pd.read_csv('%s/Y09-individual-general.csv' % (individual_detail_dir))
+#     Y10_general = pd.read_csv('%s/Y10-individual-general.csv' % (individual_detail_dir))
+# #
+# Y09_prev_in = pd.read_csv('%s/Y09-individual-prev-in-ap.csv' % (individual_detail_dir))
+# Y10_prev_in = pd.read_csv('%s/Y10-individual-prev-in-ap.csv' % (individual_detail_dir))
+# Y09_prev_out = pd.read_csv('%s/Y09-individual-prev-out-ap.csv' % (individual_detail_dir))
+# Y10_prev_out = pd.read_csv('%s/Y10-individual-prev-out-ap.csv' % (individual_detail_dir))
+# 
+# 
+# # In[3]:
+# 
+# # Filtering
+# HOUR, CENT = 60*60, 100
+# PROD_LIMIT = 65 / HOUR * CENT
+# #
+# Y09_general = Y09_general[(Y09_general['total-prod']  < PROD_LIMIT)]
+# Y10_general = Y10_general[(Y10_general['total-prod']  < PROD_LIMIT)]
+# #
+# Y09_prev_in = Y09_prev_in[(Y09_prev_in['ap-prod'] < PROD_LIMIT)]
+# Y09_prev_in = Y09_prev_in[(0 < Y09_prev_in['op-cost'])]
+# Y10_prev_in = Y10_prev_in[(Y10_prev_in['ap-prod'] < PROD_LIMIT)]
+# Y10_prev_in = Y10_prev_in[(0 < Y10_prev_in['op-cost'])]
+# #
+# Y09_prev_out = Y09_prev_out[(Y09_prev_out['ap-prod'] < PROD_LIMIT)]
+# Y09_prev_out = Y09_prev_out[(0 < Y09_prev_out['op-cost'])]
+# Y10_prev_out = Y10_prev_out[(Y10_prev_out['ap-prod'] < PROD_LIMIT)]
+# Y10_prev_out = Y10_prev_out[(0 < Y10_prev_out['op-cost'])]
+# 
+# 
+# # In[4]:
+# 
+# # both years
+# Y09_did, Y10_did = set(Y09_general['did']), set(Y10_general['did'])
+# both_years_full_drivers = list(Y09_did.intersection(Y10_did))
+# #
+# Y09_general = Y09_general[Y09_general['did'].isin(both_years_full_drivers)]
+# Y10_general = Y10_general[Y10_general['did'].isin(both_years_full_drivers)]
+# #
+# Y09_prev_in = Y09_prev_in[Y09_prev_in['did'].isin(both_years_full_drivers)]
+# Y10_prev_in = Y10_prev_in[Y10_prev_in['did'].isin(both_years_full_drivers)]
+# #
+# Y09_prev_out = Y09_prev_out[Y09_prev_out['did'].isin(both_years_full_drivers)]
+# Y10_prev_out = Y10_prev_out[Y10_prev_out['did'].isin(both_years_full_drivers)]
+# 
+# 
+# # In[5]:
+# 
+# Y09_general_gb, Y10_general_gb = Y09_general.groupby(['mm']), Y10_general.groupby(['mm'])
+# Y09_driver_general_prod = Y09_general_gb.mean()['total-prod'].to_frame('avg_total_prod').reset_index()
+# Y10_driver_general_prod = Y10_general_gb.mean()['total-prod'].to_frame('avg_total_prod').reset_index()
+# #
+# Y09_prev_in_gb, Y10_prev_in_gb = Y09_prev_in.groupby(['mm']), Y10_prev_in.groupby(['mm'])
+# Y09_prev_in_mm_ap_prod = Y09_prev_in_gb.mean()['ap-prod'].to_frame('avg_ap_prod').reset_index()
+# Y10_prev_in_mm_ap_prod = Y10_prev_in_gb.mean()['ap-prod'].to_frame('avg_ap_prod').reset_index()
+# Y09_prev_in_mm_eco_pro = Y09_prev_in_gb.mean()['ap-eco-profit'].to_frame('avg_eco_pro').reset_index()
+# Y10_prev_in_mm_eco_pro = Y10_prev_in_gb.mean()['ap-eco-profit'].to_frame('avg_eco_pro').reset_index()
+# #
+# Y09_prev_out_gb, Y10_prev_out_gb = Y09_prev_out.groupby(['mm']), Y10_prev_out.groupby(['mm'])
+# Y09_prev_out_mm_ap_prod = Y09_prev_out_gb.mean()['ap-prod'].to_frame('avg_ap_prod').reset_index()
+# Y10_prev_out_mm_ap_prod = Y10_prev_out_gb.mean()['ap-prod'].to_frame('avg_ap_prod').reset_index()
+# Y09_prev_out_mm_eco_pro = Y09_prev_out_gb.mean()['ap-eco-profit'].to_frame('avg_eco_pro').reset_index()
+# Y10_prev_out_mm_eco_pro = Y10_prev_out_gb.mean()['ap-eco-profit'].to_frame('avg_eco_pro').reset_index()
+# 
+# 
+# # In[6]:
+# 
+# measure_year_data = {('General prod.','Y09'): [prod * HOUR / CENT for _, prod in Y09_driver_general_prod.values],
+#                      ('General prod.','Y10'): [prod * HOUR / CENT for _, prod in Y10_driver_general_prod.values],
+#                      #
+#                      ('AP in prod.','Y09'): [prod * HOUR / CENT for _, prod in Y09_prev_in_mm_ap_prod.values],
+#                      ('AP in prod.','Y10'): [prod * HOUR / CENT for _, prod in Y10_prev_in_mm_ap_prod.values],
+#                      ('AP out prod.','Y09'): [prod * HOUR / CENT for _, prod in Y09_prev_out_mm_ap_prod.values],
+#                      ('AP out prod.','Y10'): [prod * HOUR / CENT for _, prod in Y10_prev_out_mm_ap_prod.values],
+#                      #
+#                      ('AP in eco.','Y09'): [eco / CENT for _, eco in Y09_prev_in_mm_eco_pro.values],
+#                      ('AP in eco.','Y10'): [eco / CENT for _, eco in Y10_prev_in_mm_eco_pro.values],
+#                      ('AP out eco.','Y09'): [eco / CENT for _, eco in Y09_prev_out_mm_eco_pro.values],
+#                      ('AP out eco.','Y10'): [eco / CENT for _, eco in Y10_prev_out_mm_eco_pro.values],
+#                     }
 
 
 # In[7]:
