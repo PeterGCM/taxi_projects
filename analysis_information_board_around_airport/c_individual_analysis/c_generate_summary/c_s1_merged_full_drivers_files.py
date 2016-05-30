@@ -3,7 +3,7 @@ from __future__ import division
 import os, sys  
 sys.path.append(os.getcwd() + '/../..')
 #
-from supports.etc_functions import check_dir_create
+from supports.etc_functions import check_dir_create, remove_file
 from supports._setting import summary_dir
 from supports._setting import ftd_general_stat_dir, ftd_general_stat_prefix
 from supports._setting import ftd_prev_in_ap_stat_dir, ftd_prev_in_ap_stat_prefix
@@ -20,14 +20,17 @@ from supports._setting import Y09_ftd_prev_out_ns_stat, Y10_ftd_prev_out_ns_stat
 import csv
 #
 _package = [
-             (ftd_general_stat_dir, ftd_general_stat_prefix, Y09_ftd_general_stat, Y10_ftd_general_stat),
+            (ftd_general_stat_dir, ftd_general_stat_prefix, Y09_ftd_general_stat, Y10_ftd_general_stat),
             (ftd_prev_in_ap_stat_dir, ftd_prev_in_ap_stat_prefix, Y09_ftd_prev_in_ap_stat, Y10_ftd_prev_in_ap_stat),
-           (ftd_prev_out_ap_stat_dir, ftd_prev_out_ap_stat_prefix, Y09_ftd_prev_in_ns_stat, Y10_ftd_prev_in_ns_stat),
+            (ftd_prev_out_ap_stat_dir, ftd_prev_out_ap_stat_prefix, Y09_ftd_prev_in_ns_stat, Y10_ftd_prev_in_ns_stat),
             (ftd_prev_in_ns_stat_dir, ftd_prev_in_ns_stat_prefix, Y09_ftd_prev_out_ap_stat, Y10_ftd_prev_out_ap_stat),
-           (ftd_prev_out_ns_stat_dir, ftd_prev_out_ns_stat_prefix, Y09_ftd_prev_out_ns_stat, Y10_ftd_prev_out_ns_stat)]
+            (ftd_prev_out_ns_stat_dir, ftd_prev_out_ns_stat_prefix, Y09_ftd_prev_out_ns_stat, Y10_ftd_prev_out_ns_stat)]
 
 def run():
     check_dir_create(summary_dir)
+    for _, _, Y09, Y10 in _package:
+        remove_file(Y09)
+        remove_file(Y10)
     #
     for y in xrange(9, 11):
         for m in xrange(1, 13):
