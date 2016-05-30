@@ -4,7 +4,7 @@ import os, sys
 sys.path.append(os.getcwd() + '/../..')
 #
 from supports.etc_functions import remove_creat_dir
-from supports._setting import Q_LIMIT_MIN, HOUR
+from supports._setting import Q_LIMIT_MIN, SEC3600
 from supports._setting import TIME_ALARM
 from supports._setting import ap_trip_prefix
 from supports._setting import airport_trips_dir
@@ -84,9 +84,9 @@ def process_files(yymm):
                         hourly_total[(et_dt.year, et_dt.month,
                               et_dt.day, et_dt.hour)][AP_FARE] += fare * prop      
                         break
-                    prop = HOUR / dur
+                    prop = SEC3600 / dur
                     hourly_total[(tg_dt.year, tg_dt.month,
-                              tg_dt.day, tg_dt.hour)][AP_DUR] += HOUR
+                              tg_dt.day, tg_dt.SEC3600)][AP_DUR] += SEC3600
                     hourly_total[(tg_dt.year, tg_dt.month,
                               tg_dt.day, tg_dt.hour)][AP_DUR] += fare * prop
                     tg_dt += datetime.timedelta(hours=1)
@@ -113,7 +113,7 @@ def process_files(yymm):
                               st_dt.day, st_dt.hour)][AP_QUEUE] += st_ts - tg_ts
                         break
                     hourly_total[(tg_dt.year, tg_dt.month,
-                              tg_dt.day, tg_dt.hour)][AP_QUEUE] += HOUR
+                              tg_dt.day, tg_dt.SEC3600)][AP_QUEUE] += SEC3600
                     tg_dt += datetime.timedelta(hours=1)
             if (time.time() - old_time) > TIME_ALARM == 0:
                 old_time = time.time()

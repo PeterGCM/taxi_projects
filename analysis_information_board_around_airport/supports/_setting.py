@@ -80,7 +80,7 @@ summary_dir = prefix + '/summary'
 # overall
 ap_tm_num_dur_fare_fn = summary_dir + '/ap-tm-num-dur-fare.csv' 
 ns_tm_num_dur_fare_fn = summary_dir + '/ns-tm-num-dur-fare.csv' 
-#
+# aggregated
 hourly_productivities = summary_dir + '/hourly-productivities.csv'
 zero_duration_time_slots = summary_dir + '/zero-duration-time-slots.pkl'
 Y09_ap_trips = summary_dir + '/Y09-ap-trips.csv'
@@ -101,6 +101,9 @@ Y09_ftd_prev_out_ap_stat = summary_dir + '/Y09-ftd-prev-out-ap-stat.csv'
 Y10_ftd_prev_out_ap_stat = summary_dir + '/Y10-ftd-prev-out-ap-stat.csv'
 Y09_ftd_prev_out_ns_stat = summary_dir + '/Y09-ftd-prev-out-ns-stat.csv'
 Y10_ftd_prev_out_ns_stat = summary_dir + '/Y10-ftd-prev-out-ns-stat.csv'
+ftd_general_prod = summary_dir + '/ftd-general-prod.pkl'
+ftd_ap_prod_eco_prof = summary_dir + '/ftd-ap-prod-eco-prof.pkl'
+ftd_ns_prod_eco_prof = summary_dir + '/ftd-ns-prod-eco-prof.pkl'
 #
 # path for chart saving
 #
@@ -149,17 +152,17 @@ DInNS_PInNS, DInNS_POutNS, DOutNS_PInNS, DOutNS_POutNS = range(4)
 #
 # units
 #
-HOUR, MINUTE = 60 * 60, 60
+SEC3600, SEC60 = 60 * 60, 60
 CENT = 100
 #
 #
 #
-Q_LIMIT_MIN, Q_LIMIT_MAX = 0, HOUR * 3
-MAX_DURATION = HOUR 
-PROD_LIMIT = 65 / HOUR * CENT
+Q_LIMIT_MIN, Q_LIMIT_MAX = 0, SEC3600 * 3
+MAX_DURATION = SEC3600 
+PROD_LIMIT = 65 / SEC3600 * CENT
 #
 # Labeling for zero duration
 #
 GENERAL, AIRPORT, NIGHTSAFARI = 'G', 'A', 'N'
 #
-TIME_ALARM = MINUTE * 5
+TIME_ALARM = SEC60 * 5

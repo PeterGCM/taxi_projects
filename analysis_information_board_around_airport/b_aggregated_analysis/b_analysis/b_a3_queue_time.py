@@ -4,7 +4,7 @@ import os, sys
 sys.path.append(os.getcwd() + '/../..')
 #
 from supports._setting import Y09_ap_trips, Y10_ap_trips, Y09_ns_trips, Y10_ns_trips
-from supports._setting import MINUTE
+from supports._setting import SEC60
 from supports._setting import DInAP_PInAP, DOutAP_PInAP
 from supports._setting import DInNS_PInNS, DOutNS_PInNS
 from supports._setting import TIME_SLOTS
@@ -27,14 +27,14 @@ def ap_analysis():
     #
     Y09_in_hourly_gb, Y10_in_hourly_gb = Y09_prev_in.groupby(['hh']), Y10_prev_in.groupby(['hh'])
     Y09_out_hourly_gb, Y10_out_hourly_gb = Y09_prev_out.groupby(['hh']), Y10_prev_out.groupby(['hh'])
-    Y09_in_hourly_qt = [ x / MINUTE for x in Y09_in_hourly_gb.mean()['ap-queue-time']]
-    Y10_in_hourly_qt = [ x / MINUTE for x in Y10_in_hourly_gb.mean()['ap-queue-time']]
+    Y09_in_hourly_qt = [ x / SEC60 for x in Y09_in_hourly_gb.mean()['ap-queue-time']]
+    Y10_in_hourly_qt = [ x / SEC60 for x in Y10_in_hourly_gb.mean()['ap-queue-time']]
     in_diff = [Y09_in_hourly_qt[i] - Y10_in_hourly_qt[i] for i in xrange(len(Y09_in_hourly_qt))]
     Y09_in_hourly_num = [ x for x in Y09_in_hourly_gb.count()['ap-queue-time']]
     Y10_in_hourly_num = [ x for x in Y10_in_hourly_gb.count()['ap-queue-time']]
     in_num = [Y10_in_hourly_num[i] + Y09_in_hourly_num[i] for i in xrange(len(Y09_in_hourly_num))]
-    Y09_out_hourly_qt = [ x / MINUTE for x in Y09_out_hourly_gb.mean()['ap-queue-time']]
-    Y10_out_hourly_qt = [ x / MINUTE for x in Y10_out_hourly_gb.mean()['ap-queue-time']]
+    Y09_out_hourly_qt = [ x / SEC60 for x in Y09_out_hourly_gb.mean()['ap-queue-time']]
+    Y10_out_hourly_qt = [ x / SEC60 for x in Y10_out_hourly_gb.mean()['ap-queue-time']]
     out_diff = [Y09_out_hourly_qt[i] - Y10_out_hourly_qt[i] for i in xrange(len(Y09_out_hourly_qt))]
     Y09_out_hourly_num = [ x for x in Y09_out_hourly_gb.count()['ap-queue-time']]
     Y10_out_hourly_num = [ x for x in Y10_out_hourly_gb.count()['ap-queue-time']]
@@ -63,14 +63,14 @@ def ns_analysis():
     #
     Y09_in_hourly_gb, Y10_in_hourly_gb = Y09_prev_in.groupby(['hh']), Y10_prev_in.groupby(['hh'])
     Y09_out_hourly_gb, Y10_out_hourly_gb = Y09_prev_out.groupby(['hh']), Y10_prev_out.groupby(['hh'])
-    Y09_in_hourly_qt = [ x / MINUTE for x in Y09_in_hourly_gb.mean()['ns-queue-time']]
-    Y10_in_hourly_qt = [ x / MINUTE for x in Y10_in_hourly_gb.mean()['ns-queue-time']]
+    Y09_in_hourly_qt = [ x / SEC60 for x in Y09_in_hourly_gb.mean()['ns-queue-time']]
+    Y10_in_hourly_qt = [ x / SEC60 for x in Y10_in_hourly_gb.mean()['ns-queue-time']]
     in_diff = [Y09_in_hourly_qt[i] - Y10_in_hourly_qt[i] for i in xrange(len(Y09_in_hourly_qt))]
     Y09_in_hourly_num = [ x for x in Y09_in_hourly_gb.count()['ns-queue-time']]
     Y10_in_hourly_num = [ x for x in Y10_in_hourly_gb.count()['ns-queue-time']]
     in_num = [Y10_in_hourly_num[i] + Y09_in_hourly_num[i] for i in xrange(len(Y09_in_hourly_num))]
-    Y09_out_hourly_qt = [ x / MINUTE for x in Y09_out_hourly_gb.mean()['ns-queue-time']]
-    Y10_out_hourly_qt = [ x / MINUTE for x in Y10_out_hourly_gb.mean()['ns-queue-time']]
+    Y09_out_hourly_qt = [ x / SEC60 for x in Y09_out_hourly_gb.mean()['ns-queue-time']]
+    Y10_out_hourly_qt = [ x / SEC60 for x in Y10_out_hourly_gb.mean()['ns-queue-time']]
     out_diff = [Y09_out_hourly_qt[i] - Y10_out_hourly_qt[i] for i in xrange(len(Y09_out_hourly_qt))]
     Y09_out_hourly_num = [ x for x in Y09_out_hourly_gb.count()['ns-queue-time']]
     Y10_out_hourly_num = [ x for x in Y10_out_hourly_gb.count()['ns-queue-time']]
@@ -90,7 +90,7 @@ def ns_analysis():
     print 't statistics %.3f, p-value %.3f' % (stats.ttest_rel(Y09_out_hourly_qt, Y10_out_hourly_qt))
 
 def draw_cumulative_histogram(location, Y09, Y10):
-    temp_Y09, temp_Y10 = [ x / MINUTE for x in Y09['%s-queue-time' % location]], [ x / MINUTE for x in Y10['%s-queue-time' % location]]
+    temp_Y09, temp_Y10 = [ x / SEC60 for x in Y09['%s-queue-time' % location]], [ x / SEC60 for x in Y10['%s-queue-time' % location]]
     filtering_boundary = 120
     x1, x2 = [x for x in temp_Y09 if x < filtering_boundary], [x for x in temp_Y10 if x < filtering_boundary]
     print '----------------------the number of filtered data (%s)' % location

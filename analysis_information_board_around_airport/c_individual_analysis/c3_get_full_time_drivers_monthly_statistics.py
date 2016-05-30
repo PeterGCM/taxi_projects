@@ -16,6 +16,7 @@ from supports._setting import ftd_prev_in_ns_stat_dir, ftd_prev_in_ns_stat_prefi
 from supports._setting import ftd_prev_out_ns_stat_dir, ftd_prev_out_ns_stat_prefix
 from supports._setting import DInAP_PInAP, DOutAP_PInAP
 from supports._setting import DInNS_PInNS, DOutNS_PInNS
+from supports._setting import SEC60
 from supports.etc_functions import remove_creat_dir
 from supports.etc_functions import load_picle_file
 from supports.multiprocess import init_multiprocessor, put_task, end_multiprocessor
@@ -23,11 +24,6 @@ from supports.multiprocess import init_multiprocessor, put_task, end_multiproces
 import csv
 import pandas as pd
 #
-SEC = 60
-#
-
-# TODO   simplify!!!
-
 def run():
     for dn in [ftd_general_stat_dir, ftd_prev_in_ap_stat_dir, ftd_prev_out_ap_stat_dir, ftd_prev_in_ns_stat_dir, ftd_prev_out_ns_stat_dir]:
         remove_creat_dir(dn)
@@ -76,7 +72,7 @@ def process_files(yymm):
         # General
         #
         did_sh = s_df[(s_df['did'] == did)]
-        pro_dur = sum(did_sh['pro-dur']) * SEC
+        pro_dur = sum(did_sh['pro-dur']) * SEC60
         did_wt = trip_df[(trip_df['did'] == did)]
         total_fare = sum(did_wt['fare'])
         if pro_dur > 0 and total_fare != 0:

@@ -5,7 +5,7 @@ sys.path.append(os.getcwd() + '/../..')
 #
 from supports.etc_functions import remove_creat_dir
 from supports._setting import TIME_ALARM
-from supports._setting import HOUR
+from supports._setting import SEC3600
 from supports._setting import shift_pro_dur_prefix, trip_prefix
 from supports._setting import shift_pro_dur_dir, trips_dir 
 from supports._setting import general_dur_fare_dir, general_dur_fare_prefix
@@ -87,7 +87,7 @@ def process_files(yymm):
                         hourly_total[(et_dt.year, et_dt.month,
                               et_dt.day, et_dt.hour)][GEN_FARE] += fare * prop
                         break
-                    prop = HOUR / dur
+                    prop = SEC3600 / dur
                     hourly_total[(tg_dt.year, tg_dt.month,
                               tg_dt.day, tg_dt.hour)][GEN_FARE] += fare * prop
                     tg_dt += datetime.timedelta(hours=1)

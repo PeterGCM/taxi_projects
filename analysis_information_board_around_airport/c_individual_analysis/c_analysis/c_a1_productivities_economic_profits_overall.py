@@ -1,30 +1,21 @@
-
-# coding: utf-8
-
-# In[1]:
-
 from __future__ import division
 #
 import os, sys
-sys.path.append(os.getcwd()+'/..')
+sys.path.append(os.getcwd()+'/../..')
+#
+from supports._setting import ftd_monthly_general_prod, ftd_ap_prod_eco_prof, ftd_ns_prod_eco_prof
+from supports.etc_functions import load_picle_file
+from supports.charts import x_twin_chart
 #
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
-#
-from supports._setting import individual_detail_dir
-from supports.charts import multiple_line_chart
-from supports.charts import x_twin_chart
-from prettytable import PrettyTable
 import scipy.stats as stats
-#
-get_ipython().magic(u'pylab inline')
+from prettytable import PrettyTable
 
+def run():
 
-# In[2]:
-
-Y09_general = pd.read_csv('%s/Y09-individual-general.csv' % (individual_detail_dir))
-Y10_general = pd.read_csv('%s/Y10-individual-general.csv' % (individual_detail_dir))
+    Y09_general = pd.read_csv('%s/Y09-individual-general.csv' % (individual_detail_dir))
+    Y10_general = pd.read_csv('%s/Y10-individual-general.csv' % (individual_detail_dir))
 #
 Y09_prev_in = pd.read_csv('%s/Y09-individual-prev-in-ap.csv' % (individual_detail_dir))
 Y10_prev_in = pd.read_csv('%s/Y10-individual-prev-in-ap.csv' % (individual_detail_dir))
@@ -150,11 +141,3 @@ y_info1 = ('Minute', multi_y_data1, (20,30), ['General productivity', 'Prev. in 
 y_info2 = ('', multi_y_data2, (0,120), ['Prev. in AP economic profit.', 'Prev. out AP economic profit'], 'upper right') 
 
 x_twin_chart((12, 6), '', x_info, y_info1, y_info2, 'temp')
-
-multiple_line_chart((12,6),'', '', 'S$/Hour', (months,0), multi_y_data1, y_legends1, 'upper left', None)
-
-
-# In[ ]:
-
-
-
