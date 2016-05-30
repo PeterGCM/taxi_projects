@@ -19,10 +19,11 @@ from supports._setting import Y09_ftd_prev_out_ns_stat, Y10_ftd_prev_out_ns_stat
 #
 import csv
 #
-_package = [(ftd_general_stat_dir, ftd_general_stat_prefix, Y09_ftd_general_stat, Y10_ftd_general_stat),
-           (ftd_prev_in_ap_stat_dir, ftd_prev_in_ap_stat_prefix, Y09_ftd_prev_in_ap_stat, Y10_ftd_prev_in_ap_stat),
+_package = [
+#             (ftd_general_stat_dir, ftd_general_stat_prefix, Y09_ftd_general_stat, Y10_ftd_general_stat),
+#            (ftd_prev_in_ap_stat_dir, ftd_prev_in_ap_stat_prefix, Y09_ftd_prev_in_ap_stat, Y10_ftd_prev_in_ap_stat),
            (ftd_prev_out_ap_stat_dir, ftd_prev_out_ap_stat_prefix, Y09_ftd_prev_in_ns_stat, Y10_ftd_prev_in_ns_stat),
-           (ftd_prev_in_ns_stat_dir, ftd_prev_in_ns_stat_prefix, Y09_ftd_prev_out_ap_stat, Y10_ftd_prev_out_ap_stat),
+#            (ftd_prev_in_ns_stat_dir, ftd_prev_in_ns_stat_prefix, Y09_ftd_prev_out_ap_stat, Y10_ftd_prev_out_ap_stat),
            (ftd_prev_out_ns_stat_dir, ftd_prev_out_ns_stat_prefix, Y09_ftd_prev_out_ns_stat, Y10_ftd_prev_out_ns_stat)]
 
 def run():
