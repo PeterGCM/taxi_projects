@@ -37,7 +37,7 @@ def run():
     #
     save_pickle_file(ftd_general_prod_mb , general_productivities())
     save_pickle_file(ftd_ap_prod_eco_prof_mb, ap_productivities_economical_profits())
-    save_pickle_file(ftd_ns_prod_eco_prof_mb, ns_productivities_economical_profits(dfs))
+    save_pickle_file(ftd_ns_prod_eco_prof_mb, ns_productivities_economical_profits())
     
 def general_productivities():
     drivers_month_productivities = []
