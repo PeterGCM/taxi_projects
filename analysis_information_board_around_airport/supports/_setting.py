@@ -117,19 +117,12 @@ row_data_a_a2 = charts_dir + '/statistics_timeslots.txt'
 row_data_b_a1 = charts_dir + '/drivers_monthly_fares.txt'
 row_data_b_a3 = charts_dir + '/queue_time.txt'
 #
-# individual
+# path for table saving
 #
-individual_dir = prefix + '/individual'
-individual_detail_dir = prefix + '/individual-detail-summary'
+tables_dir = prefix +'/tables'
+ftd_overall_analysis = tables_dir + '/ftd-overall-analysis.txt'
+ftd_group_analysis = tables_dir + '/ftd-group-analysis.txt' 
 
-
-for_learning_dir = prefix + '/for_learning'
-for_full_driver_dir = prefix + '/full_drivers_trips_q_comparision'
-
- 
-
-
-hourly_summary = trips_dir + '/hourly_summary'
 
 
 #
@@ -137,12 +130,6 @@ hourly_summary = trips_dir + '/hourly_summary'
 #
 DAY_OF_WEEK = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 TIME_SLOTS = range(24)
-
-
-
-
-
-
 #
 ap_poly_info = '../_src/airport_polygons'
 IN_AP, OUT_AP = 'O', 'X'

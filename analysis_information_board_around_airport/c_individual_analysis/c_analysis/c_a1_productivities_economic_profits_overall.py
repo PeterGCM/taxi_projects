@@ -4,7 +4,8 @@ import os, sys
 sys.path.append(os.getcwd() + '/../..')
 #
 from supports._setting import ftd_general_prod_mb, ftd_ap_prod_eco_prof_mb, ftd_ns_prod_eco_prof_mb
-from supports.etc_functions import load_picle_file
+from supports._setting import tables_dir, ftd_overall_analysis
+from supports.etc_functions import check_dir_create, load_picle_file, write_text_file
 from supports.charts import x_twin_chart
 #
 import numpy as np
@@ -17,6 +18,8 @@ mean_t_test = lambda l1, l2: ("{:.2f}".format(np.mean(l1)), "{:.2f}".format(np.m
                               "{:.2e}".format(stats.ttest_ind(l1, l2)[1]))
 
 def run():
+    check_dir_create(tables_dir)
+    write_text_file(ftd_overall_analysis, 'Init', True)
     #
     # Load data
     #
@@ -70,7 +73,7 @@ def both_year_comparison(my_d):
     arg1, arg2, arg3, arg4, arg5 = \
                     mean_t_test(my_d[(measure, 'Y09')], my_d[(measure, 'Y10')])
     gen_table.add_row([measure, arg1, arg2, arg3, arg4, arg5])
-    print gen_table
+    write_text_file(ftd_overall_analysis, gen_table.get_string())
     #
     # Aiport trips
     #
@@ -79,7 +82,7 @@ def both_year_comparison(my_d):
         arg1, arg2, arg3, arg4, arg5 = \
                         mean_t_test(my_d[(measure, 'Y09')], my_d[(measure, 'Y10')])
         ap_table.add_row([measure, arg1, arg2, arg3, arg4, arg5])
-    print ap_table
+    write_text_file(ftd_overall_analysis, ap_table.get_string())
     #
     # Night safari trips
     #
@@ -88,7 +91,7 @@ def both_year_comparison(my_d):
         arg1, arg2, arg3, arg4, arg5 = \
                         mean_t_test(my_d[(measure, 'Y09')], my_d[(measure, 'Y10')])
         ns_table.add_row([measure, arg1, arg2, arg3, arg4, arg5])
-    print ns_table
+    write_text_file(ftd_overall_analysis, ns_table.get_string())
 
 def draw_month_change(my_d): 
     months = ['0901', '0902', '0903', '0904', '0905', '0906', '0907', '0908', '0909', '0910', '0911',
