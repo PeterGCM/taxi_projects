@@ -13,7 +13,8 @@ from supports._setting import Y09_ftd_prev_out_ns_stat, Y10_ftd_prev_out_ns_stat
 from supports._setting import SEC3600, CENT
 from supports.etc_functions import save_pickle_file
 #
-from supports._setting import ftd_general_prod_db, ftd_ap_prod_eco_prof_db, ftd_ns_prod_eco_prof_db
+from supports._setting import ftd_general_prod_db_for_ap, ftd_ap_prod_eco_prof_db
+from supports._setting import ftd_general_prod_db_for_ns, ftd_ns_prod_eco_prof_db
 #
 import pandas as pd
 #
@@ -32,17 +33,18 @@ Y09_PONS, Y10_PONS = range(10)
  
 def run():
     check_dir_create(summary_dir)
-    for path in [ftd_general_prod_db, ftd_ap_prod_eco_prof_db, ftd_ns_prod_eco_prof_db]:
+    for path in [ftd_general_prod_db_for_ap, ftd_general_prod_db_for_ns, ftd_ap_prod_eco_prof_db, ftd_ns_prod_eco_prof_db]:
         remove_file(path)
     #
-    save_pickle_file(ftd_general_prod_db , general_productivities())
-    save_pickle_file(ftd_ap_prod_eco_prof_db, ap_productivities_economical_profits())
-    save_pickle_file(ftd_ns_prod_eco_prof_db, ns_productivities_economical_profits())
+    ap_productivities_economical_profits()
+    ns_productivities_economical_profits()
 
-def general_productivities():
+def general_productivities(full_drivers):
     drivers_hourly_producities = []
     for i in [Y09_GEN, Y10_GEN]:
-        df_gb = dfs[i].groupby(['did'])
+        df = dfs[i]
+        df = df[df['did'].isin(full_drivers)]
+        df_gb = df.groupby(['did'])
         drivers_avg_productivities = df_gb.mean()['prod'].to_frame('avg_prod').reset_index()
         drivers_hourly_producities.append(
                   {did : total_prod * SEC3600 / CENT for did, total_prod in drivers_avg_productivities.values})
@@ -56,7 +58,9 @@ def ap_productivities_economical_profits():
     for i in [Y10_PIAP, Y09_POAP, Y10_POAP]:
         ap_full_drivers = ap_full_drivers.intersection(set(dfs[i]['did']))
     #
-    return get_driver_average(ap_full_drivers, [Y09_PIAP, Y10_PIAP, Y09_POAP, Y10_POAP])
+    save_pickle_file(ftd_general_prod_db_for_ap, general_productivities(ap_full_drivers))
+    save_pickle_file(ftd_ap_prod_eco_prof_db, get_driver_average(ap_full_drivers, [Y09_PIAP, Y10_PIAP, Y09_POAP, Y10_POAP]))
+    
     
 def ns_productivities_economical_profits():
     #
@@ -66,7 +70,8 @@ def ns_productivities_economical_profits():
     for i in [Y10_PINS, Y09_PONS, Y10_PONS]:
         ns_full_drivers = ns_full_drivers.intersection(set(dfs[i]['did']))
     #
-    return get_driver_average(ns_full_drivers, [Y09_PINS, Y10_PINS, Y09_PONS, Y10_PONS])
+    save_pickle_file(ftd_general_prod_db_for_ns, general_productivities(ns_full_drivers))
+    save_pickle_file(ftd_ns_prod_eco_prof_db, get_driver_average(ns_full_drivers, [Y09_PINS, Y10_PINS, Y09_PONS, Y10_PONS]))
 
 def get_driver_average(full_drivers, df_indices):
     #
