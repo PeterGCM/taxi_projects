@@ -25,14 +25,6 @@ def run():
                 continue
             process_files(yymm)
 
-def read_whole(fn):
-    rv = []
-    with open(fn, 'rt') as csvfile:
-        reader = csv.reader(csvfile)
-        for row in reader:
-            rv.append(row)
-    return rv
-
 def process_files(yymm):
     yy, mm = yymm[:2], yymm[-2:]
     yyyy = str(2000 + int(yy))
@@ -92,6 +84,14 @@ def process_files(yymm):
             writer.writerow(new_row)
             #
             vehicle_prev_trip_position_time[vid] = (c_end_ter, c_el_ns, et_ts)
+
+def read_whole(fn):
+    rv = []
+    with open(fn, 'rt') as csvfile:
+        reader = csv.reader(csvfile)
+        for row in reader:
+            rv.append(row)
+    return rv
             
 if __name__ == '__main__':
     run()
