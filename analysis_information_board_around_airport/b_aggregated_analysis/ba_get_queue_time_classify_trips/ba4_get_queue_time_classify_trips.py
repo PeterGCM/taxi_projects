@@ -14,7 +14,6 @@ from supports._setting import DInAP_PInAP, DOutAP_PInAP
 from supports._setting import DInNS_PInNS, DOutNS_PInNS
 from supports.etc_functions import load_picle_file
 from supports.etc_functions import get_all_files, remove_creat_dir
-from supports.logger import logging_msg
 from supports.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 
 def run():
@@ -31,7 +30,6 @@ def run():
 def process_file(fn):
     _, _, yymm = fn[:-len('.csv')].split('-')
     print 'handle the file; %s' % yymm 
-    logging_msg('handle the file; %s' % yymm)
     #
     ap_pkl_files = get_all_files(logs_dir, 'ap-crossing-time-', '.pkl')
     ap_pkl_file_path = None
@@ -79,7 +77,7 @@ def process_file(fn):
                 try:
                     i = bisect(ap_crossing_times[vid], st)
                 except KeyError:
-                    logging_msg('%s-tid-%s' % (yymm, row[header_id['tid']]))
+                    print '%s-tid-%s' % (yymm, row[header_id['tid']])
                     continue
                 ap_join_queue_time = ap_crossing_times[vid][i - 1] if i != 0 else ap_crossing_times[vid][0]
             if is_ap_trip:
@@ -98,7 +96,7 @@ def process_file(fn):
                 try:
                     i = bisect(ns_crossing_times[vid], st)
                 except KeyError:
-                    logging_msg('%s-tid-%s' % (yymm, row[header_id['tid']]))
+                    print '%s-tid-%s' % (yymm, row[header_id['tid']])
                     continue
                 ns_join_queue_time = ns_crossing_times[vid][i - 1] if i != 0 else ns_crossing_times[vid][0]
             if is_ns_trip:
@@ -109,7 +107,6 @@ def process_file(fn):
                                 ns_tm, ns_join_queue_time, ns_queue_time]
                     writer.writerow(new_row)        
     print 'end the file; %s' % yymm 
-    logging_msg('end the file; %s' % yymm)
 
 def init_csv_files(yymm):
     with open('%s/%s%s.csv' % (airport_trips_dir, ap_trip_prefix, yymm), 'wt') as w_csvfile:

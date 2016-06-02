@@ -28,6 +28,11 @@ assert prefix
 #
 taxi_home = '/home/taxi'
 #
+# path for polygons' information
+#
+ap_poly_info = '../src/airport_polygons'
+ns_poly_info = '../src/night_safari_polygon'
+#
 # trips(_merged)
 #
 merged_trip_dir = prefix + '/trips_merged'
@@ -126,38 +131,31 @@ row_data_b_a3 = charts_dir + '/queue_time.txt'
 tables_dir = prefix +'/tables'
 ftd_overall_analysis = tables_dir + '/ftd-overall-analysis.txt'
 ftd_group_analysis = tables_dir + '/ftd-group-analysis.txt' 
-
-
-
-#
-# For Q-learning
-#
-DAY_OF_WEEK = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-TIME_SLOTS = range(24)
-#
-ap_poly_info = '../_src/airport_polygons'
-IN_AP, OUT_AP = 'O', 'X'
-ns_poly_info = '../_src/night_safari_polygon'
-IN_NS, OUT_NS = 'O', 'X'
 #
 # trip modes
 #
 DInAP_PInAP, DInAP_POutAP, DOutAP_PInAP, DOutAP_POutAP = range(4)
 DInNS_PInNS, DInNS_POutNS, DOutNS_PInNS, DOutNS_POutNS = range(4)
 #
+# for checking logs' location
+#
+IN_AP, OUT_AP = 'O', 'X'
+IN_NS, OUT_NS = 'O', 'X'
+#
 # units
 #
 SEC3600, SEC60 = 60 * 60, 60
 CENT = 100
 #
-#
-#
-Q_LIMIT_MIN, Q_LIMIT_MAX = 0, SEC3600 * 3
-MAX_DURATION = SEC3600 
-PROD_LIMIT = 65 / SEC3600 * CENT
-#
 # Labeling for zero duration
 #
 GENERAL, AIRPORT, NIGHTSAFARI = 'G', 'A', 'N'
 #
+# etc.
+#
+DAY_OF_WEEK = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+TIME_SLOTS = range(24)
+Q_LIMIT_MIN = 0
 TIME_ALARM = SEC60 * 5
+
+

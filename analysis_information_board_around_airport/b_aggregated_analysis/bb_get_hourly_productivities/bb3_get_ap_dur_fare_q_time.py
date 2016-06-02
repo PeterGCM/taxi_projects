@@ -9,7 +9,6 @@ from supports._setting import TIME_ALARM
 from supports._setting import ap_trip_prefix
 from supports._setting import airport_trips_dir
 from supports._setting import ap_dur_fare_q_time_dir, ap_dur_fare_q_time_prefix 
-from supports.logger import logging_msg
 from supports.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
 import csv, datetime, time
@@ -33,7 +32,6 @@ def run():
 def process_files(yymm):
     old_time = time.time()
     print 'handle the file; %s' % yymm
-    logging_msg('handle the file; %s' % yymm)
     begin_datetime = datetime.datetime(2009, 1, 1, 0) 
     last_datetime = datetime.datetime(2011, 2, 1, 0)
     hourly_total, time_period_order = {}, []
@@ -118,7 +116,6 @@ def process_files(yymm):
             if (time.time() - old_time) > TIME_ALARM == 0:
                 old_time = time.time()
                 print 'handling; %s' % yymm
-                logging_msg('handling; %s' % yymm)
     with open('%s/%s%s.csv' % (ap_dur_fare_q_time_dir, ap_dur_fare_q_time_prefix, yymm), 'wt') as w_csvfile:
         writer = csv.writer(w_csvfile)
         header = ['yy', 'mm', 'dd', 'hh', 'ap-duration', 'ap-fare', 'ap-queue-time']
@@ -127,7 +124,6 @@ def process_files(yymm):
             ap_dur, ap_fare, ap_qt = hourly_total[(yyyy, mm, dd, hh)] 
             writer.writerow([yyyy - 2000, mm, dd, hh, ap_dur, ap_fare, ap_qt])
     print 'end the file; %s' % yymm
-    logging_msg('end the file; %s' % yymm)
 
 if __name__ == '__main__':
     run()

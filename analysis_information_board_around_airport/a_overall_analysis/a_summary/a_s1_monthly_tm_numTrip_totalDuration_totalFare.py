@@ -8,7 +8,6 @@ from supports._setting import DInNS_PInNS, DInNS_POutNS, DOutNS_PInNS, DOutNS_PO
 from supports._setting import trips_dir, trip_prefix
 from supports._setting import summary_dir, ap_tm_num_dur_fare_fn, ns_tm_num_dur_fare_fn
 from supports.etc_functions import check_dir_create
-from supports.logger import logging_msg
 #
 import datetime, time, csv
 import pandas as pd
@@ -34,7 +33,6 @@ def run():
     
 def process_files(yymm):
     print 'handle the file; %s' % yymm
-    logging_msg('handle the file; %s' % yymm)
     trip_df = pd.read_csv('%s/%s%s.csv' % (trips_dir, trip_prefix, yymm))
     #
     yyyy, mm = 2000 + int(yymm[:2]), int(yymm[2:])
@@ -89,7 +87,6 @@ def process_files(yymm):
         #
         cur_day_time = next_day_time
     print 'handle the file; %s' % yymm
-    logging_msg('handle the file; %s' % yymm)
 
 def save_as_csv(fn, yymm, dd, hh, _data):
     yy, mm = yymm[:2], yymm[2:]

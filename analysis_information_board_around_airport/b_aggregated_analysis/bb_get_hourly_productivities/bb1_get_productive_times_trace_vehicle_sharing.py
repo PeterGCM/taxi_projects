@@ -8,7 +8,6 @@ from supports._setting import shifts_dir, shifts_prefix
 from supports._setting import shift_pro_dur_dir, shift_pro_dur_prefix
 from supports._setting import vehicle_drivers_dir, vehicle_drivers_prefix
 from supports.etc_functions import save_pickle_file
-from supports.logger import logging_msg
 from supports.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
 import csv
@@ -25,7 +24,6 @@ def run():
 def process_file(fn):
     _, _, _, yymm = fn[:-len('.csv')].split('-')
     print 'handle the file; %s' % yymm
-    logging_msg('handle the file; %s' % yymm)
     #        
     vehicle_drivers = {}
     productive_state = ['dur%d' % x for x in [0, 3, 4, 5, 6, 7, 8, 9, 10]]
@@ -44,10 +42,7 @@ def process_file(fn):
                                  vid, did, productive_duration])
                 vehicle_drivers.setdefault(vid, set()).add(did)
     save_pickle_file('%s/%s%s.pkl' % (vehicle_drivers_dir, vehicle_drivers_prefix, yymm), vehicle_drivers)
-    
-    
     print 'end the file; %s' % yymm
-    logging_msg('end the file; %s' % yymm)
     
 if __name__ == '__main__':
     run()

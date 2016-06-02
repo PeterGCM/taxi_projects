@@ -9,7 +9,6 @@ from traceback import format_exc
 from supports._setting import logs_dir, log_last_day_dir
 from supports.etc_functions import get_all_files
 from supports.etc_functions import save_pickle_file
-from supports.logger import logging_msg
 from supports.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 from supports._setting import IN_AP, OUT_AP
 from supports._setting import IN_NS, OUT_NS
@@ -20,12 +19,8 @@ def run():
     init_multiprocessor()
     count_num_jobs = 0
     for fn in csv_files:
-        try:
-#             process_file(fn)
-            put_task(process_file, [fn])
-        except Exception as _:
-            logging_msg('Algorithm runtime exception (%s)\n' % (fn) + format_exc())
-            raise
+#         process_file(fn)
+        put_task(process_file, [fn])
         count_num_jobs += 1
     end_multiprocessor(count_num_jobs)
 
@@ -33,7 +28,6 @@ def process_file(fn):
     _, yymm = fn[:-len('.csv')].split('-')
     #
     print 'handle the file; %s' % yymm
-    logging_msg('handle the file; %s' % yymm)
     vehicle_ap_crossing_time_from_out_to_in, vehicle_last_log_ap_or_not = {}, {}
     vehicle_ns_crossing_time_from_out_to_in, vehicle_last_log_ns_or_not = {}, {}
     if yymm not in ['0901', '1001', '1011']:
@@ -60,7 +54,6 @@ def process_file(fn):
     save_pickle_file('%s/ap-crossing-time-%s.pkl' % (logs_dir, yymm), vehicle_ap_crossing_time_from_out_to_in)
     save_pickle_file('%s/ns-crossing-time-%s.pkl' % (logs_dir, yymm), vehicle_ns_crossing_time_from_out_to_in)
     print 'end the file; %s' % yymm
-    logging_msg('end the file; %s' % yymm)
     
 def record_crossing_time(path_to_csv_file, vehicle_ap_crossing_time_from_out_to_in, vehicle_last_log_ap_or_not, vehicle_ns_crossing_time_from_out_to_in, vehicle_last_log_ns_or_not):
     with open(path_to_csv_file, 'rb') as r_csvfile:
