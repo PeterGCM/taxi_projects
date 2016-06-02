@@ -4,22 +4,24 @@ import os, sys
 sys.path.append(os.getcwd() + '/..')
 #
 import csv
-from time import time
-#
-from supports.multiprocess import init_multiprocessor, put_task, end_multiprocessor
-#
-_stout = sys.stdout
-_fix_time = time()
-PERIOD = 30
-X_LOGGING = False
 #
 TAXI_HOME = '/home/taxi'
 USER_HOME = '/home/temp'
-# YEARS = ['2009', '2010', '2011', '2012']
 YEARS = ['2011', '2012']
 MONTHS = ['01', '02', '03', '04', '05', '06',
           '07', '08', '09', '10', '11', '12']
 
+def combine_trip_data():
+    print 'Start combine'
+    for y in YEARS:
+        y_two_digit = y[-2:]
+        for m in MONTHS:
+            if os.path.exists(USER_HOME + '/taxi/trips/trips-%s%s.csv' % (y_two_digit, m)):
+                continue
+            normal_file = TAXI_HOME + '/%s/%s/trips/trips-%s%s-normal.csv' % (y, m, y_two_digit, m)
+            ext_file = TAXI_HOME + '/%s/%s/trips/trips-%s%s-normal-ext.csv' % (y, m, y_two_digit, m)
+            read_write_a_trip(normal_file, ext_file)
+    
 
 def combine_trip_data_with_multi():
     '''
@@ -31,17 +33,14 @@ def combine_trip_data_with_multi():
     ex.
     6029L09010100005,001010000,1230739200,1230739680,103.95029,1.37226,103.93417,1.38599,8069,3.4,850,480,4,1,0,0,4,1,0,8,51,51,518457,519355,20108
     
-    Also, this function uses the multiprocess library in Python.
     '''
-    init_multiprocessor()
     print 'Start combine'
     for y in YEARS:
         y_two_digit = y[-2:]
         for m in MONTHS:
             normal_file = TAXI_HOME + '/%s/%s/trips/trips-%s%s-normal.csv' % (y, m, y_two_digit, m)
             ext_file = TAXI_HOME + '/%s/%s/trips/trips-%s%s-normal-ext.csv' % (y, m, y_two_digit, m)
-            put_task(read_write_a_trip, [normal_file, ext_file])
-    end_multiprocessor(len(YEARS) * len(MONTHS))
+            read_write_a_trip(normal_file, ext_file)
 
 def read_write_a_trip(nf, ef):
     target_period = nf.split('/')[-1].split('-')[1]
@@ -73,17 +72,6 @@ def test_single_run():
     normal_file = TAXI_HOME + '/2009/01/trips/trips-0901-normal.csv'
     ext_file = TAXI_HOME + '/2009/01/trips/trips-0901-normal-ext.csv'
     read_write_a_trip(normal_file, ext_file)
-
-def combine_trip_data():
-    print 'Start combine'
-    for y in YEARS:
-        y_two_digit = y[-2:]
-        for m in MONTHS:
-            if os.path.exists(USER_HOME + '/taxi/trips/trips-%s%s.csv' % (y_two_digit, m)):
-                continue
-            normal_file = TAXI_HOME + '/%s/%s/trips/trips-%s%s-normal.csv' % (y, m, y_two_digit, m)
-            ext_file = TAXI_HOME + '/%s/%s/trips/trips-%s%s-normal-ext.csv' % (y, m, y_two_digit, m)
-            read_write_a_trip(normal_file, ext_file)
 
 if __name__ == '__main__':
     '''

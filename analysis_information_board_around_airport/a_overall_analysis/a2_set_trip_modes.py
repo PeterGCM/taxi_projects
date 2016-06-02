@@ -17,7 +17,7 @@ from supports.logger import logging_msg
 def run():
     remove_creat_dir(trips_dir)
     csv_files = get_all_files(merged_trip_dir, 'trips', '.csv')
-    
+    #
     init_multiprocessor()
     counter = 0
     for fn in csv_files:

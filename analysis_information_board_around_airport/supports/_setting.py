@@ -24,6 +24,10 @@ else:
     prefix = 'C:\Users/ckhan.2015/taxi_data'
 assert prefix
 #
+# original data path in the server
+#
+taxi_home = '/home/taxi'
+#
 # trips(_merged)
 #
 merged_trip_dir = prefix + '/trips_merged'
