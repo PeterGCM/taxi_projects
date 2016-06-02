@@ -10,8 +10,6 @@ from supports._setting import CENT, SEC60
 from supports.charts import simple_barchart
 #
 import pandas as pd
-import matplotlib.pyplot as plt
-import numpy as np
 #
 def run():
     ap_analysis()
