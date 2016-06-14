@@ -1,15 +1,27 @@
 from __future__ import division
 import wx, time
-from polygon_reader import singapore_poly_points, vertical_lines, horizontal_lines
+
+ENLARGE_SCALE = 10000
+PEN_THICKNESS = 100000
+def run(singapore_poly_points, lines):
+    app = wx.App()
+    app.frame = MainFrame(singapore_poly_points, lines)
+    app.MainLoop()
 
 class MainFrame(wx.Frame):
-    def __init__(self):
-        wx.Frame.__init__(self, None, -1, 'test', size=(300, 300))
-        MyPanel(self)
+    def __init__(self, singapore_poly_points, lines):
+        wx.Frame.__init__(self, None, -1, 'test', size=(800, 600))
+        MyPanel(self, singapore_poly_points, lines)
         self.Show(True)
 
 class MyPanel(wx.Panel):
-    def __init__(self, parent):
+    def __init__(self, parent, singapore_poly_points, lines):
+        self.singapore_poly_points = [(x * ENLARGE_SCALE, y * ENLARGE_SCALE) for x, y in singapore_poly_points]  
+        self.lines = [(sx * ENLARGE_SCALE,
+                       sy * ENLARGE_SCALE,
+                       ex * ENLARGE_SCALE,
+                       ey * ENLARGE_SCALE) for sx, sy, ex, ey in lines]
+        #
         wx.Panel.__init__(self, parent)
         self.SetBackgroundColour(wx.WHITE)
         self.Bind(wx.EVT_PAINT, self.OnPaint)
@@ -26,8 +38,6 @@ class MyPanel(wx.Panel):
         
         self.gpath = None
         
-        
-        
 #         self.timer = wx.Timer(self)
 #         self.Bind(wx.EVT_TIMER, self.OnTimer, self.timer)
 #         self.timer.Start(1000)
@@ -36,13 +46,11 @@ class MyPanel(wx.Panel):
     def OnSize(self, evt):
         self.InitBuffer()
         evt.Skip()
-        
     def OnLeftDown(self, evt):
         self.translate_mode = True
         print evt.GetX(), evt.GetY()
         self.prev_x, self.prev_y = evt.GetX(), evt.GetY()
         self.CaptureMouse()
-        
     def OnMotion(self, evt):
         if self.translate_mode:
             dx, dy = evt.GetX() - self.prev_x, evt.GetY() - self.prev_y
@@ -50,17 +58,13 @@ class MyPanel(wx.Panel):
             self.translate_y += dy
             self.prev_x, self.prev_y = evt.GetX(), evt.GetY()
             self.RefreshGC()
-    
     def OnLeftUp(self, evt):
         self.translate_mode = False
         self.ReleaseMouse()
-    
 #     def OnTimer(self, evt):
 #         self.RefreshGC()
-            
     def OnPaint(self, evt):
         _ = wx.BufferedPaintDC(self, self._buffer)
-        
     def OnMouseWheel(self, evt):
         zoom_scale = 1.2
         old_scale = self.scale 
@@ -73,7 +77,6 @@ class MyPanel(wx.Panel):
             self.translate_x = evt.GetX() - self.scale / old_scale * (evt.GetX() - self.translate_x)
             self.translate_y = evt.GetY() - self.scale / old_scale * (evt.GetY() - self.translate_y)
         self.RefreshGC()
-        
     def InitBuffer(self):
         sz = self.GetClientSize()
         sz.width = max(1, sz.width)
@@ -84,7 +87,6 @@ class MyPanel(wx.Panel):
         dc.Clear()
         gc = wx.GraphicsContext.Create(dc)
         self.Draw(gc)
-        
     def RefreshGC(self):
         dc = wx.MemoryDC(self._buffer)
         dc.SetBackground(wx.Brush(self.GetBackgroundColour()))
@@ -93,9 +95,6 @@ class MyPanel(wx.Panel):
         self.Draw(gc)
         self.Refresh(False)
     def set_scale(self, s, cx, cy):
-        '''
-        set scale based on (cx, cy) as center.
-        '''
         old_scale, self.scale = self.scale, s
         self.translate_x = cx - self.scale / old_scale * (cx - self.translate_x)
         self.translate_y = cy - self.scale / old_scale * (cy - self.translate_y)
@@ -111,7 +110,7 @@ class MyPanel(wx.Panel):
         if not self.gpath:
             self.gpath = gc.CreatePath()
             # draw Singapore polygon
-            reversed_points = [(x, -y)for x, y in singapore_poly_points]
+            reversed_points = [(x, -y) for x, y in self.singapore_poly_points]
             x_min = x_max = reversed_points[0][0]
             y_min = y_max = reversed_points[0][1]
             self.gpath.MoveToPoint(*reversed_points[0])
@@ -123,13 +122,13 @@ class MyPanel(wx.Panel):
                 y_min, y_max = min(y_min, y), max(y_max, y)
             self.gpath.AddLineToPoint(*reversed_points[0])
             #
-            for sx, sy, ex, ey in vertical_lines + horizontal_lines:
+            for sx, sy, ex, ey in self.lines:
                 self.gpath.MoveToPoint(sx, -sy)
                 self.gpath.AddLineToPoint(ex, -ey)
             self.fit_viewport(x_min, y_min, x_max, y_max)
         gc.Translate(self.translate_x, self.translate_y)
         gc.Scale(self.scale, self.scale)
-        gc.SetPen(wx.Pen("black", 1000))
+        gc.SetPen(wx.Pen("black", 1))
         gc.DrawPath(self.gpath)
         
 #         t = time.localtime(time.time())
@@ -137,7 +136,3 @@ class MyPanel(wx.Panel):
 #         gc.SetFont(wx.Font(30, wx.SWISS, wx.NORMAL, wx.NORMAL))
 #         gc.DrawText(st, 10, 150)
 
-if __name__ == '__main__':
-    app = wx.App()
-    app.frame = MainFrame()
-    app.MainLoop()

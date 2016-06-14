@@ -1,2 +1,10 @@
 /.project
 /.pydevproject
+/logs-0901-normal.csv
+/obsolete/
+/_setting.pyc
+/classes.pyc
+/polygon_reader.pyc
+/process_log.pyc
+/split_into_zones.pyc
+/visualizer.pyc
