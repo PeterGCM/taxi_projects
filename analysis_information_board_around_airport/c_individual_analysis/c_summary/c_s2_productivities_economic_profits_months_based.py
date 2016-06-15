@@ -19,8 +19,8 @@ import pandas as pd
 #
 _package = [Y09_ftd_general_stat, Y10_ftd_general_stat,
             Y09_ftd_prev_in_ap_stat, Y10_ftd_prev_in_ap_stat,
-            Y09_ftd_prev_in_ns_stat, Y10_ftd_prev_in_ns_stat,
             Y09_ftd_prev_out_ap_stat, Y10_ftd_prev_out_ap_stat,
+            Y09_ftd_prev_in_ns_stat, Y10_ftd_prev_in_ns_stat,
             Y09_ftd_prev_out_ns_stat, Y10_ftd_prev_out_ns_stat]
 dfs = [pd.read_csv(path_fn) for path_fn in _package]
 #
@@ -28,7 +28,7 @@ Y09_GEN, Y10_GEN, \
 Y09_PIAP, Y10_PIAP, \
 Y09_POAP, Y10_POAP, \
 Y09_PINS, Y10_PINS, \
-Y09_PONS, Y10_PONS = range(10)
+Y09_PONS, Y10_PONS = range(len(_package))
 
 def run():
     check_dir_create(summary_dir)
@@ -42,7 +42,9 @@ def run():
 def general_productivities():
     drivers_month_productivities = []
     for i in [Y09_GEN, Y10_GEN]:
-        df_gb = dfs[i].groupby(['mm'])
+        df = dfs[i]
+        df = df[((df['prod'] - df['prod'].mean()) / df['prod'].std()).abs() < 3]
+        df_gb = df.groupby(['mm'])
         prod_sec_mb = df_gb.mean()['prod'].to_frame('avg_prod').reset_index()
         drivers_month_productivities.append([prod * SEC3600 / CENT for _, prod in prod_sec_mb.values])
     return drivers_month_productivities
@@ -74,6 +76,8 @@ def get_month_average(full_drivers, df_indices):
     for i in df_indices:
         df = dfs[i] 
         df = df[df['did'].isin(full_drivers)]
+        df = df[((df['prod'] - df['prod'].mean()) / df['prod'].std()).abs() < 3]
+        df = df[((df['eco-profit'] - df['eco-profit'].mean()) / df['eco-profit'].std()).abs() < 3]
         gb_df = df.groupby(['mm'])
         prod_sec_mb = gb_df.mean()['prod'].to_frame('avg_prod').reset_index()
         eco_prof_cent_mb = gb_df.mean()['eco-profit'].to_frame('avg_eco_pro').reset_index()

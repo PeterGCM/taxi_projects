@@ -60,12 +60,12 @@ def generate_zones(singapore_poly_points, x_unit, x_points, y_unit, y_points):
                                  [x, y + y_unit]]
                                 )
             if singapore_poly.contains(zone_poly):
-                z = zone(IN, x, y) 
+                relation = IN 
             elif singapore_poly.intersects(zone_poly):
-                z = zone(INTERSECT, x, y) 
+                relation = INTERSECT
             else:
-                z = zone(OUT, x, y)
-            zones[(i, j)] = z
+                relation = OUT
+            zones[(i, j)] = zone(relation, i, j, x, y)
     return zones
 
 def make_grid(min_long, max_long, min_lat, max_lat):

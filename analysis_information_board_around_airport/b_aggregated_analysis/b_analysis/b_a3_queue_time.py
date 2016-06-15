@@ -20,7 +20,8 @@ def run():
 
 def ap_analysis():
     Y09, Y10 = pd.read_csv(Y09_ap_trips), pd.read_csv(Y10_ap_trips)
-    draw_cumulative_histogram('ap', Y09, Y10)
+    draw_cumulative_histogram('ap', Y09, Y10, 'ap')
+    assert False
     #
     Y09_prev_in, Y09_prev_out = Y09[Y09['ap-trip-mode'] == DInAP_PInAP], Y09[Y09['ap-trip-mode'] == DOutAP_PInAP]
     Y10_prev_in, Y10_prev_out = Y10[Y10['ap-trip-mode'] == DInAP_PInAP], Y10[Y10['ap-trip-mode'] == DOutAP_PInAP]
@@ -41,14 +42,14 @@ def ap_analysis():
     out_num = [Y10_out_hourly_num[i] + Y09_out_hourly_num[i] for i in xrange(len(Y09_out_hourly_num))]
     #
     x_info = ('Time slot', TIME_SLOTS, 0)
-    y_info1 = ('Minute', [Y09_in_hourly_qt, Y10_in_hourly_qt, in_diff], (-5, 90), ['Y2009', 'Y2010', 'Diff.'], 'upper left')
+    y_info1 = ('Minute', [Y09_in_hourly_qt, Y10_in_hourly_qt, in_diff], (-5, 125), ['Y2009', 'Y2010', 'Diff.'], 'upper left')
     y_info2 = ('', [in_num], (0, 350000), ['Number of airport trips'], 'upper right') 
     x_twin_chart((12, 6), '', x_info, y_info1, y_info2, 'time_slot_queue_time_in_ap')
     print '----------------------T-test in_hourly_qt'
     print 't statistics %.3f, p-value %.3f' % (stats.ttest_rel(Y09_in_hourly_qt, Y10_in_hourly_qt))
     #
     x_info = ('Time slot', TIME_SLOTS, 0)
-    y_info1 = ('Minute', [Y09_out_hourly_qt, Y10_out_hourly_qt, out_diff], (-5, 120), ['Y2009', 'Y2010', 'Diff.'], 'upper left')
+    y_info1 = ('Minute', [Y09_out_hourly_qt, Y10_out_hourly_qt, out_diff], (-5, 125), ['Y2009', 'Y2010', 'Diff.'], 'upper left')
     y_info2 = ('', [out_num], (0, 350000), ['Number of airport trips'], 'upper right') 
     x_twin_chart((12, 6), '', x_info, y_info1, y_info2, 'time_slot_queue_time_out_ap')
     print '----------------------T-test out_hourly_qt'
@@ -89,7 +90,7 @@ def ns_analysis():
     print '----------------------T-test out_hourly_qt'
     print 't statistics %.3f, p-value %.3f' % (stats.ttest_rel(Y09_out_hourly_qt, Y10_out_hourly_qt))
 
-def draw_cumulative_histogram(location, Y09, Y10):
+def draw_cumulative_histogram(location, Y09, Y10, fn_postfix):
     temp_Y09, temp_Y10 = [ x / SEC60 for x in Y09['%s-queue-time' % location]], [ x / SEC60 for x in Y10['%s-queue-time' % location]]
     filtering_boundary = 120
     x1, x2 = [x for x in temp_Y09 if x < filtering_boundary], [x for x in temp_Y10 if x < filtering_boundary]
@@ -102,7 +103,7 @@ def draw_cumulative_histogram(location, Y09, Y10):
     print '----------------------T-test (%s)' % location
     print 't statistics %.3f, p-value %.3f' % (stats.ttest_ind(x1, x2, equal_var=False))
     num_bin = 30
-    histo_cumulative('', 'Minute', '', num_bin, [x1, x2], ['Y2009', 'Y2010'], save_fn='cum_histo_qt_%s' % location)
+    histo_cumulative('', 'Minute', '', num_bin, [x1, x2], ['Y2009', 'Y2010'], save_fn='cum_histo_qt_%s' % fn_postfix)
 
 if __name__ == '__main__':
     run()

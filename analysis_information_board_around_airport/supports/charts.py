@@ -53,9 +53,11 @@ mlists = (
 '8',  #    octagon
           )
 #
+FONT_SIZE = 18
+#
 check_dir_create(charts_dir)
 #
-
+ 
 class simple_barchart(object):
     def __init__(self, x_ticks, y_label, _data, save_fn=None) :
         fig = plt.figure(figsize=(6, 6))
@@ -66,6 +68,8 @@ class simple_barchart(object):
         ax.set_xlim(-width, len(ind))
         ax.set_ylabel(y_label)
         plt.xticks(ind + width / 2, x_ticks)
+        for item in ([ax.yaxis.label] + ax.get_xticklabels()):
+            item.set_fontsize(FONT_SIZE)
         if save_fn:
             chart_path_fn = '%s/%s.pdf' % (charts_dir, save_fn)
             plt.savefig(chart_path_fn)
@@ -192,7 +196,7 @@ class multiple_line_chart(object):
             ymax1 = max(y_data)
             if ymax < ymax1:
                 ymax = ymax1
-        plt.legend(y_legend_labels, ncol=1, loc=legend_pos, fontsize=10)
+        plt.legend(y_legend_labels, ncol=1, loc=legend_pos, fontsize=FONT_SIZE * 0.6)
         #
         _xticks, _rotation = xticks_info 
         plt.xticks(range(len(_xticks)), _xticks, rotation=_rotation)
@@ -200,6 +204,8 @@ class multiple_line_chart(object):
         #
         ax.set_ybound(upper=ymax * 1.05)
         ax.yaxis.set_major_formatter(tkr.FuncFormatter(comma_formating))  # set formatter to needed axis
+        for item in ([ax.xaxis.label, ax.yaxis.label] + ax.get_xticklabels() + ax.get_yticklabels()):
+            item.set_fontsize(FONT_SIZE)
         if save_fn:
             chart_path_fn = '%s/%s.pdf' % (charts_dir, save_fn)
             plt.savefig(chart_path_fn)
@@ -231,12 +237,13 @@ class x_twin_chart(object):
             ymax1 = max(y_data)
             if ymax < ymax1:
                 ymax = ymax1
-        plt.legend(y_legend_labels1, ncol=1, loc=legend_pos1, fontsize=12)
+        plt.legend(y_legend_labels1, ncol=1, loc=legend_pos1, fontsize=FONT_SIZE * 0.8)
         if bounds1:
             ax1.set_ybound(lower=bounds1[0], upper=bounds1[1])
         else:
             ax1.set_ybound(upper=ymax * 1.05)
         ax1.yaxis.set_major_formatter(tkr.FuncFormatter(comma_formating))  # set formatter to needed axis
+        plt.xticks(range(len(_xticks)), _xticks, rotation=_rotation)
         #
         ax2 = ax1.twinx()
         ymax = 0
@@ -245,14 +252,14 @@ class x_twin_chart(object):
             ymax1 = max(y_data)
             if ymax < ymax1:
                 ymax = ymax1
-        plt.legend(y_legend_labels2, ncol=1, loc=legend_pos2, fontsize=12)
+        plt.legend(y_legend_labels2, ncol=1, loc=legend_pos2, fontsize=FONT_SIZE * 0.8)
         if bounds2:
             ax2.set_ybound(lower=bounds2[0], upper=bounds2[1])
         else:
             ax2.set_ybound(upper=ymax * 1.05) 
         ax2.yaxis.set_major_formatter(tkr.FuncFormatter(comma_formating))  # set formatter to needed axis
         #
-        plt.xticks(range(len(_xticks)), _xticks, rotation=_rotation)
+        
         ax1.set_xbound(lower=0, upper=range(len(_xticks))[-1])
         #
         ax1.set_title(_title)
@@ -260,6 +267,8 @@ class x_twin_chart(object):
         ax1.set_ylabel(_ylabel1)
         ax2.set_ylabel(_ylabel2)
         #
+        for item in ([ax1.xaxis.label, ax1.yaxis.label, ax2.yaxis.label] + ax1.get_xticklabels() + ax1.get_yticklabels() + ax2.get_yticklabels()):
+            item.set_fontsize(FONT_SIZE)
         if save_fn:
             chart_path_fn = '%s/%s.pdf' % (charts_dir, save_fn)
             plt.savefig(chart_path_fn)
@@ -584,7 +593,7 @@ def comma_formating(x, pos):  # formatter function takes tick label and tick pos
     if abs(x) == 5:
         return int(x)
     if x < 10:
-        return x
+        return int(x)
     s = '%d' % x
     groups = []
     while s and s[-1].isdigit():

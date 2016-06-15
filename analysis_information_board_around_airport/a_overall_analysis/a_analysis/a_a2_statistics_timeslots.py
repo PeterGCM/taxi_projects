@@ -9,14 +9,13 @@ from supports._setting import DAY_OF_WEEK, TIME_SLOTS, CENT
 from supports._setting import DInAP_PInAP, DOutAP_PInAP
 from supports._setting import DInNS_PInNS, DOutNS_PInNS
 from supports.charts import multiple_line_chart
-from supports.etc_functions import check_dir_create, write_text_file
 #
 import pandas as pd
 
 def run():
-    general_analysis()
+#     general_analysis()
     ap_analysis()
-    ns_analysis()
+#     ns_analysis()
     
 def general_analysis():
     whole = pd.read_csv(ap_tm_num_dur_fare_fn)
@@ -72,7 +71,8 @@ def ap_analysis():
     for hour, dow, totalFare in hour_dow_totalFare.values:
         yss[DAY_OF_WEEK.index(dow)][hour] += (totalFare / CENT) / UNIT
     #
-    multiple_line_chart((12, 6), '', 'Time slot', 'S$ 1,000,000', (xs, 0), yss, DAY_OF_WEEK, 'upper left', 'in_ap_fare')
+    multiple_line_chart((12, 6), '', 'Time slot', 'S$ 1,000,000', 
+                        (xs, 0), yss, DAY_OF_WEEK, 'upper left', 'in_ap_fare')
 
 
 def ns_analysis():

@@ -97,6 +97,7 @@ def summary(main_st, diffs):
     main_values = [v for v, _ in order_v_did]
     write_text_file(ftd_group_analysis, 'AVG: %f, STD: %f' % (np.mean(main_values), np.std(main_values)))
     high_group_range, middle_group_range, low_group_range = find_extreme_range(order_v_did), (0.45, 0.55), find_negative_range(order_v_did)
+#     high_group_range, middle_group_range, low_group_range = (0, 0.05), (0.45, 0.55), find_negative_range(order_v_did)
     data_ranges = [high_group_range, middle_group_range, low_group_range]
     hg_value, hg_did, mg_value, mg_did, lg_value, lg_did = grouping(data_ranges, order_v_did)
     main_group_data = [hg_value, mg_value, lg_value]

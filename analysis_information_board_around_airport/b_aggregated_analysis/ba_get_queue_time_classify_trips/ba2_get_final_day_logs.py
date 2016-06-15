@@ -31,7 +31,7 @@ def process_file(fn):
         next_y, next_m = y, m + 1
     next_m_first_day = datetime.datetime(next_y, next_m, 1, 0)
     cur_m_last_day = next_m_first_day - datetime.timedelta(days=1)
-    dd = '%2d' % cur_m_last_day.day
+    dd = '%02d' % cur_m_last_day.day
     last_day_timestamp = time.mktime(cur_m_last_day.timetuple())
     with open('%s/%s' % (logs_dir, fn), 'rb') as r_csvfile:
         reader = csv.reader(r_csvfile)

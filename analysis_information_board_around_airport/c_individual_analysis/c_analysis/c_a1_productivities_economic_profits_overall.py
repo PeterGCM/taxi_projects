@@ -107,10 +107,16 @@ def draw_month_change(my_d):
         for measure in ['%s in eco.' % LOC, '%s out eco.' % LOC]:
             eco_profits.append([])
             eco_profits[-1] += my_d[(measure, 'Y09')] + my_d[(measure, 'Y10')]
-        x_info = ('Year and Month', months, 0)
-        y_info1 = ('Minute', productivities, None, 
+        if LOC == 'AP':
+            y_info1_lb, y_info1_ub = 15, 32
+            y_info2_lb, y_info2_ub = 250, -150
+        else:
+            y_info1_lb, y_info1_ub = 15, 32
+            y_info2_lb, y_info2_ub = 250, -250
+        x_info = ('Year and Month', months, 15)
+        y_info1 = ('$S/Hour', productivities, (y_info1_lb, y_info1_ub), 
                    ['General productivity', 'Prev. in %s productivity' % LOC, 'Prev. out %s productivity' % LOC], 'upper left')
-        y_info2 = ('', eco_profits, None, 
+        y_info2 = ('$/Month', eco_profits, (y_info2_lb, y_info2_ub), 
                    ['Prev. in %s economic profit.' % LOC, 'Prev. out %s economic profit' % LOC], 'upper right') 
         loc = 'ap' if LOC == 'AP' else 'ns'
         x_twin_chart((12, 6), '', x_info, y_info1, y_info2, 'productivities_economic_profits_%s' % loc)

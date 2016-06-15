@@ -20,8 +20,8 @@ import pandas as pd
 #
 _package = [Y09_ftd_general_stat, Y10_ftd_general_stat,
             Y09_ftd_prev_in_ap_stat, Y10_ftd_prev_in_ap_stat,
-            Y09_ftd_prev_in_ns_stat, Y10_ftd_prev_in_ns_stat,
             Y09_ftd_prev_out_ap_stat, Y10_ftd_prev_out_ap_stat,
+            Y09_ftd_prev_in_ns_stat, Y10_ftd_prev_in_ns_stat,
             Y09_ftd_prev_out_ns_stat, Y10_ftd_prev_out_ns_stat]
 dfs = [pd.read_csv(path_fn) for path_fn in _package]
 #
@@ -43,6 +43,7 @@ def general_productivities(full_drivers):
     drivers_hourly_producities = []
     for i in [Y09_GEN, Y10_GEN]:
         df = dfs[i]
+        df = df[((df['prod'] - df['prod'].mean()) / df['prod'].std()).abs() < 3]
         df = df[df['did'].isin(full_drivers)]
         df_gb = df.groupby(['did'])
         drivers_avg_productivities = df_gb.mean()['prod'].to_frame('avg_prod').reset_index()
@@ -54,9 +55,15 @@ def ap_productivities_economical_profits():
     #
     # drivers who operate taxi in both years
     #
-    ap_full_drivers = set(dfs[Y09_PIAP]['did'])
+    df = dfs[Y09_PIAP]
+    df = df[((df['prod'] - df['prod'].mean()) / df['prod'].std()).abs() < 3]
+    df = df[((df['eco-profit'] - df['eco-profit'].mean()) / df['eco-profit'].std()).abs() < 3]
+    ap_full_drivers = set(df['did'])
     for i in [Y10_PIAP, Y09_POAP, Y10_POAP]:
-        ap_full_drivers = ap_full_drivers.intersection(set(dfs[i]['did']))
+        df = dfs[i]
+        df = df[((df['prod'] - df['prod'].mean()) / df['prod'].std()).abs() < 3]
+        df = df[((df['eco-profit'] - df['eco-profit'].mean()) / df['eco-profit'].std()).abs() < 3]
+        ap_full_drivers = ap_full_drivers.intersection(set(df['did']))
     #
     save_pickle_file(ftd_general_prod_db_for_ap, general_productivities(ap_full_drivers))
     save_pickle_file(ftd_ap_prod_eco_prof_db, get_driver_average(ap_full_drivers, [Y09_PIAP, Y10_PIAP, Y09_POAP, Y10_POAP]))
@@ -66,9 +73,15 @@ def ns_productivities_economical_profits():
     #
     # drivers who operate taxi in both years
     #
-    ns_full_drivers = set(dfs[Y09_PINS]['did'])
+    df = dfs[Y09_PINS]
+    df = df[((df['prod'] - df['prod'].mean()) / df['prod'].std()).abs() < 3]
+    df = df[((df['eco-profit'] - df['eco-profit'].mean()) / df['eco-profit'].std()).abs() < 3]
+    ns_full_drivers = set(df['did'])
     for i in [Y10_PINS, Y09_PONS, Y10_PONS]:
-        ns_full_drivers = ns_full_drivers.intersection(set(dfs[i]['did']))
+        df = dfs[i]
+        df = df[((df['prod'] - df['prod'].mean()) / df['prod'].std()).abs() < 3]
+        df = df[((df['eco-profit'] - df['eco-profit'].mean()) / df['eco-profit'].std()).abs() < 3]
+        ns_full_drivers = ns_full_drivers.intersection(set(df['did']))
     #
     save_pickle_file(ftd_general_prod_db_for_ns, general_productivities(ns_full_drivers))
     save_pickle_file(ftd_ns_prod_eco_prof_db, get_driver_average(ns_full_drivers, [Y09_PINS, Y10_PINS, Y09_PONS, Y10_PONS]))
