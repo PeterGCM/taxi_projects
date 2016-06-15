@@ -5,6 +5,7 @@ from _setting import zone_driver_prefix
 #
 from bisect import bisect
 import csv
+import pickle
 import time, datetime 
 import sys
 
@@ -112,7 +113,6 @@ def get_csv_files(time_from, time_to):
 
 if __name__ == '__main__':
     from _setting import zone_visual_info_fn
-    import pickle
     with open(zone_visual_info_fn, 'rb') as fp:
         x_points, y_points, zones, singapore_poly_points, lines = pickle.load(fp)
     run(x_points, y_points, zones, (2009, 1, 1, 0, 0, 30), (2009, 1, 1, 1, 0, 30))
