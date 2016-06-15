@@ -22,11 +22,11 @@ class zone(object):
         return 'zone (%d,%d)' % (self.i, self.j)
     def check_validation(self):
         if self.relation_with_poly == IN or self.relation_with_poly == INTERSECT:
-            pass
+            return True
         else:
             # Originally there should be now log in this zone
             # But because I manually draw a polygon of Singpaore, there can be error
-            self.relation_with_poly = INTERSECT
+            return False
     def add_driver_in_Q(self, t, d):
         self.num_visit += 1
         self.log_Q.append([t, d])

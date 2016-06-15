@@ -16,6 +16,11 @@ x_points, y_points, zones = None, None, None
 
 RECORDING_INTERVAL = 60 * 5
 
+out_boundary_logs_fn = 'out_boundary.txt'
+out_boundary_logs_num = 0
+with open(out_boundary_logs_fn, 'w') as f:
+    f.write('time,driver-id,longitude,latitude,state,zone_defined' + '\n')
+
 def run(_x_points, _y_points, _zones, time_from, time_to):
     init_time = time.time()
     global x_points, y_points, zones
@@ -45,6 +50,26 @@ def run(_x_points, _y_points, _zones, time_from, time_to):
                 longitude, latitude = eval(row[hid['longitude']]), eval(row[hid['latitude']])
                 state = int(row[hid['state']])
                 #
+                # Find a targeted zone
+                #
+                i = bisect(x_points, longitude) - 1
+                j = bisect(y_points, latitude) - 1
+                try:
+                    z = zones[(i, j)]
+                    #
+                    try:
+                        assert z.check_validation()
+                    except AssertionError:
+                        out_boundary_logs_num += 1
+                        with open(out_boundary_logs_fn, 'a') as f:
+                            f.write('%d,%s,%f,%f,%d,O' % (t, did, longitude, latitude, state) + '\n')
+                        continue
+                except KeyError:
+                    out_boundary_logs_num += 1
+                    with open(out_boundary_logs_fn, 'a') as f:
+                        f.write('%d,%s,%f,%f,%d,X' % (t, did, longitude, latitude, state) + '\n')
+                    continue
+                #
                 z = get_zone(longitude, latitude)
                 #
                 if not drivers.has_key(did): drivers[did] = driver(did)
@@ -70,7 +95,10 @@ def get_zone(longitude, latitude):
     j = bisect(y_points, latitude) - 1
     z = zones[(i, j)]
     #
-    z.check_validation()
+    try:
+        assert z.check_validation()
+    except AssertionError:
+        pass
     #
     return zones[(i, j)]
     
