@@ -78,8 +78,7 @@ def run(_x_points, _y_points, _zones, time_from, time_to):
                 if not drivers.has_key(did): drivers[did] = driver(did)
                 d = drivers[did]
                 if state == POB:
-                    z.update_Q(t)
-                    d.update_relation(z)
+                    d.update_relation(t, z)
                 else:
                     d.update_position(t, z)
                 if time.time() - old_time > RECORDING_INTERVAL:

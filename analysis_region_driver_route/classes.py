@@ -46,7 +46,8 @@ class driver(object):
         if self.current_zone != z:
             self.current_zone = z
             self.current_zone.add_driver_in_Q(t, self)
-    def update_relation(self, z):
+    def update_relation(self, t, z):
+        z.update_Q(t)
         for _, d in z.log_Q:
             if self == d:
                 continue
