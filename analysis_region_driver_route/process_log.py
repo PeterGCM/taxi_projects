@@ -18,6 +18,7 @@ RECORDING_INTERVAL = 60 * 5
 
 out_boundary_logs_fn = 'out_boundary.txt'
 out_boundary_logs_num = 0
+
 with open(out_boundary_logs_fn, 'w') as f:
     f.write('time,driver-id,longitude,latitude,state,zone_defined' + '\n')
 
@@ -60,11 +61,13 @@ def run(_x_points, _y_points, _zones, time_from, time_to):
                     try:
                         assert z.check_validation()
                     except AssertionError:
+                        global out_boundary_logs_fn, out_boundary_logs_num
                         out_boundary_logs_num += 1
                         with open(out_boundary_logs_fn, 'a') as f:
                             f.write('%d,%s,%f,%f,%d,O' % (t, did, longitude, latitude, state) + '\n')
                         continue
                 except KeyError:
+                    global out_boundary_logs_fn, out_boundary_logs_num
                     out_boundary_logs_num += 1
                     with open(out_boundary_logs_fn, 'a') as f:
                         f.write('%d,%s,%f,%f,%d,X' % (t, did, longitude, latitude, state) + '\n')
