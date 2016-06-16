@@ -57,7 +57,7 @@ def save_meaningful_log(x_points, y_points, time_from, time_to):
                 if not drivers.has_key(did): drivers[did] = (None, None)
                 i0, j0 = drivers[did]
                 if state == POB or not (i0 == i or j0 == j):
-                    with open(log_grid_fn, 'wt') as w_csvfile:
+                    with open(log_grid_fn, 'a') as w_csvfile:
                         writer = csv.writer(w_csvfile)
                         writer.writerow([t, i, j, did, state])
                 computation_time = time.time() - old_time
