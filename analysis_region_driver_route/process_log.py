@@ -66,6 +66,8 @@ def save_meaningful_log(x_points, y_points, time_from, time_to):
                     old_time = time.time()
 
 def run(_x_points, _y_points, _zones, time_from, time_to):
+    global x_points, y_points, zones
+    x_points, y_points, zones = _x_points, _y_points, _zones
     save_meaningful_log(x_points, y_points, time_from, time_to)
     
     assert False
@@ -77,8 +79,6 @@ def run(_x_points, _y_points, _zones, time_from, time_to):
         f.write('time,driver-id,longitude,latitude,state,zone_defined' + '\n')
     
     init_time = time.time()
-    global x_points, y_points, zones
-    x_points, y_points, zones = _x_points, _y_points, _zones
     #
     tf_str = str(time_from[0])[-2:] + ''.join(['%02d' % d for d in time_from[1:]])
     tt_str = str(time_to[0])[-2:] + ''.join(['%02d' % d for d in time_from[1:]])
