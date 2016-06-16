@@ -31,6 +31,8 @@ def save_meaningful_log(x_points, y_points, time_from, time_to):
     with open(log_grid_fn, 'wt') as w_csvfile:
         writer = csv.writer(w_csvfile)
         writer.writerow('time,i,j,did,state')
+    #
+    old_time = time.time() 
     for fn in csv_files:
         with open(fn, 'rb') as r_csvfile:
             reader = csv.reader(r_csvfile)
@@ -58,6 +60,10 @@ def save_meaningful_log(x_points, y_points, time_from, time_to):
                     with open(log_grid_fn, 'wt') as w_csvfile:
                         writer = csv.writer(w_csvfile)
                         writer.writerow([t, i, j, did, state])
+                computation_time = time.time() - old_time
+                if computation_time > RECORDING_INTERVAL:
+                    print computation_time  
+                    old_time = time.time()
 
 def run(_x_points, _y_points, _zones, time_from, time_to):
     save_meaningful_log(x_points, y_points, time_from, time_to)
