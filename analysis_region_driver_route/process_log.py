@@ -19,15 +19,18 @@ RECORDING_INTERVAL = 60 * 5
 
 log_grid_prefix = 'log-grid-'
 
-def save_meaningful_log(x_points, y_points, time_from, time_to):
+def get_log_grid_file_name(time_from, time_to):
     tf_str = str(time_from[0])[-2:] + ''.join(['%02d' % d for d in time_from[1:]])
     tt_str = str(time_to[0])[-2:] + ''.join(['%02d' % d for d in time_from[1:]])
+    return '%s%s-%s.csv' % (log_grid_prefix, tf_str, tt_str)
+
+def save_meaningful_log(x_points, y_points, time_from, time_to):
     tf_ts = time.mktime(datetime.datetime(*time_from).timetuple())
     tt_ts = time.mktime(datetime.datetime(*time_to).timetuple())
     #
     csv_files = get_csv_files(time_from, time_to)
     drivers = {}
-    log_grid_fn = '%s%s-%s.csv' % (log_grid_prefix, tf_str, tt_str) 
+    log_grid_fn = get_log_grid_file_name(time_from, time_to) 
     with open(log_grid_fn, 'wt') as w_csvfile:
         writer = csv.writer(w_csvfile)
         writer.writerow(['time','i','j','did','state'])
@@ -68,6 +71,10 @@ def save_meaningful_log(x_points, y_points, time_from, time_to):
 def run(_x_points, _y_points, _zones, time_from, time_to):
     global x_points, y_points, zones
     x_points, y_points, zones = _x_points, _y_points, _zones
+    log_grid_fn = get_log_grid_file_name(time_from, time_to)
+    
+    # TODO
+    
     save_meaningful_log(x_points, y_points, time_from, time_to)
     
     assert False
