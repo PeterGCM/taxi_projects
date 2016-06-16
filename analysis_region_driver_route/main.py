@@ -22,25 +22,22 @@ def run():
 #         run_visualizer(singapore_poly_points, lines)
 
 def test():
-    with open('zone-driver-090101000030-090101000030.pkl', 'rb') as fp:
-        zones, drivers = pickle.load(fp)
-    print len(zones), len(drivers)
-    count = 0
-    for pos, z in zones.iteritems():
-        print z.num_visit
-        count += 1
-        if count == 5:
-            break
+    with open('zone-driver-090101000000-090101031139.pkl', 'rb') as fp:
+        t, zones, drivers = pickle.load(fp)
+#     count = 0
+#     for pos, z in zones.iteritems():
+#         print z.num_visit
+#         count += 1
+#         if count == 5:
+#             break
     count = 0
     for did, d in drivers.iteritems():
-        print d.relation
+        print did, d.relation
         count += 1
-        if count == 5:
-            break    
-        
-#     print d
-    
+        if count == 2:
+            break
+    print t, len(zones), len(drivers)
 
 if __name__ == '__main__':
-#     test()
-    run()
+    test()
+#     run()
