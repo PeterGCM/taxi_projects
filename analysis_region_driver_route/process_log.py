@@ -30,7 +30,7 @@ def save_meaningful_log(x_points, y_points, time_from, time_to):
     log_grid_fn = '%s%s-%s.csv' % (log_grid_prefix, tf_str, tt_str) 
     with open(log_grid_fn, 'wt') as w_csvfile:
         writer = csv.writer(w_csvfile)
-        writer.writerow('time,i,j,did,state')
+        writer.writerow(['time','i','j','did','state'])
     #
     old_time = time.time() 
     for fn in csv_files:
