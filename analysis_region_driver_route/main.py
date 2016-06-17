@@ -22,22 +22,19 @@ def run():
 #         run_visualizer(singapore_poly_points, lines)
 
 def test():
-    with open('zone-driver-090101000000-090101031139.pkl', 'rb') as fp:
-        t, zones, drivers = pickle.load(fp)
-#     count = 0
-#     for pos, z in zones.iteritems():
-#         print z.num_visit
-#         count += 1
-#         if count == 5:
-#             break
-    count = 0
-    for did, d in drivers.iteritems():
-        print did, d.relation
-        count += 1
-        if count == 2:
-            break
-    print t, len(zones), len(drivers)
-
+    import os, sys  
+    sys.path.append(os.getcwd() + '/../taxi_common')
+    for p in sys.path:
+        print p 
+    import etc_functions
+    print etc_functions.load_picle_file
+    
+    assert False
+    with open('zone-driver-090101000030-090101010030.pkl', 'rb') as fp:
+        drivers = pickle.load(fp)
+    with open('result.txt', 'w') as f:
+        for v in drivers:
+            f.write(str(v) + '\n')
 if __name__ == '__main__':
     test()
 #     run()
