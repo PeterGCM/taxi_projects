@@ -25,6 +25,7 @@ if py_vinfo.major == 2 and py_vinfo.minor == 7:
         taxi_data = 'C:\Users/ckhan.2015/taxi_data'
         pass
     sys.path.append(os.getcwd() + '/../taxi_common')
+#     sys.path.append(os.getcwd() + '/../taxi_common/test')
 else:
     print 'This python is not 2.7 version'
     assert False
