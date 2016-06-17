@@ -9,7 +9,8 @@ print test
 # for p in sys.path:
 #     print p
 print 'import 2'
-import test.m1 
+from test import m1
+print m1 
 assert False
 from _setting import zone_visual_info_fn
 from split_into_zones import run as run_split_into_zones
