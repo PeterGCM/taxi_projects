@@ -2,6 +2,9 @@ from __init__ import * #@UnusedWildImport
 #
 print taxi_data
 from etc_functions import save_pickle_file
+import sys
+for p in sys.path:
+    print p
 import test.m1 
 assert False
 from _setting import zone_visual_info_fn
