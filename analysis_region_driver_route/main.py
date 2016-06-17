@@ -5,8 +5,9 @@ from etc_functions import save_pickle_file
 import sys
 print 'import 1'
 import test
-for p in sys.path:
-    print p
+print test
+# for p in sys.path:
+#     print p
 print 'import 2'
 import test.m1 
 assert False
