@@ -1,8 +1,8 @@
 from __future__ import division
 import init_path_setting; init_path_setting.run() 
 #
-import sys_path_setting
-assert False
+# import sys_path_setting
+# assert False
 from _setting import zone_visual_info_fn
 from split_into_zones import run as run_split_into_zones
 # from visualizer import run as run_visualizer
@@ -11,6 +11,8 @@ from process_log import run as run_process_log
 import os, pickle
 #
 USE_VISUALIZER = False
+
+assert False
 
 def run():
     if not os.path.exists(zone_visual_info_fn):
