@@ -1,16 +1,10 @@
 from __init__ import * #@UnusedWildImport
 #
-print taxi_data
-from etc_functions import save_pickle_file
 import sys
 print 'import 1'
-import test
-print test
-# for p in sys.path:
-#     print p
-print 'import 2'
-from test import m1
-print m1 
+import taxi_common.test
+from taxi_common.test import m1
+print m1
 assert False
 from _setting import zone_visual_info_fn
 from split_into_zones import run as run_split_into_zones
