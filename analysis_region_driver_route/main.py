@@ -1,8 +1,9 @@
-from __future__ import division
-import init_path_setting; init_path_setting.run() 
+from __init__ import * #@UnusedWildImport
 #
-# import sys_path_setting
-# assert False
+print taxi_data
+from etc_functions import save_pickle_file
+import test.m1 
+assert False
 from _setting import zone_visual_info_fn
 from split_into_zones import run as run_split_into_zones
 # from visualizer import run as run_visualizer

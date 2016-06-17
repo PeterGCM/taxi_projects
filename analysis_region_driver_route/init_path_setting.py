@@ -1,10 +1,10 @@
 from __future__ import division
 import os, sys, platform
 #
-taxi_home, taxi_common, taxi_data = None, None, None
+taxi_home, taxi_data = None, None, None
 #
 def run():
-    global taxi_home, taxi_common, taxi_data
+    global taxi_home, taxi_data
     #
     # Check environments and set a prefix for finding files and libraries
     #
