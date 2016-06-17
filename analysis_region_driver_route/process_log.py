@@ -39,13 +39,11 @@ def run(_x_points, _y_points, _zones, time_from, time_to):
         f.write('time,did,i,j,state,zone_defined' + '\n')
     #
     drivers = {}
-    init_time = time.time()
     with open(log_grid_fn, 'rb') as r_csvfile:
         reader = csv.reader(r_csvfile)
         headers = reader.next()
         # {'i': 1, 'did': 3, 'state': 4, 'j': 2, 'time': 0}
         hid = {h : i for i, h in enumerate(headers)}
-        print hid
         old_time = time.time()
         for row in reader:
             t = eval(row[hid['time']])
@@ -124,7 +122,7 @@ def save_pkl_file(t, zones, drivers):
     t_str = str(t_dt.year)[-2:] + \
          ''.join(['%02d' % d for d in [t_dt.month, t_dt.day, t_dt.hour, t_dt.minute, t_dt.second]])
     with open('%s%s-%s.pkl' % (zone_driver_prefix, tf, t_str), 'wb') as fp:
-        pickle.dump([(d.did, d.relation) for d in drivers], fp)
+        pickle.dump([(did, d.relation) for did, d in drivers.iteritems()], fp)
     
 def get_csv_files(time_from, time_to):
     #
