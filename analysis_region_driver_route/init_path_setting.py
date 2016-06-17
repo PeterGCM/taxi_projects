@@ -14,6 +14,8 @@ def run():
         plf = platform.platform()
         if plf.startswith('Linux'):
             # Linux server
+            from subprocess import call
+            call('LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/usr/local/lib"')
             sys.path.append('/home/ckhan/local/lib/python2.7/site-packages')
             sys.path.append('/home/ckhan/local/lib64/python2.7/site-packages')
             taxi_data = '/home/ckhan/taxi_data'
