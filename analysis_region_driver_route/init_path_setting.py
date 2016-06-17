@@ -9,7 +9,9 @@ def run():
     # Check environments and set a prefix for finding files and libraries
     #
     py_vinfo = sys.version_info
-    print sys.version_info
+    if type(sys.version_info) == type(()):
+        print 'This python is not 2.7 version'
+        assert False
     if py_vinfo.major == 2 and py_vinfo.minor == 7:
         plf = platform.platform()
         if plf.startswith('Linux'):
