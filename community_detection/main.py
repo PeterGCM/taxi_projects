@@ -22,7 +22,7 @@ def run(time_from, time_to):
     #
     # Step 3. Count the number of 
     #
-    if not do_file_exist(get_relation_fn(time_from, time_to)):
+    if not do_file_exist(get_relation_fn(processed_log_fn)):
         from count_relation import run as run_count_relation
         run_count_relation(processed_log_fn, zones)
     else:
