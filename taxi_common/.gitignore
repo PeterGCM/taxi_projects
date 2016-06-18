@@ -1,2 +1,6 @@
 /.project
 /.pydevproject
+/__init__.pyc
+/classes.pyc
+/geo_functions.pyc
+/file_handling_functions.pyc

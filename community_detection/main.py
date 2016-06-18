@@ -1,0 +1,37 @@
+from __future__ import division
+from __init__ import *  # @UnusedWildImport
+
+from taxi_common.file_handling_functions import do_file_exist, load_picle_file  # @UnresolvedImport
+
+def run(time_from, time_to):
+    #
+    # Step 1. Split Singapore into zones
+    #
+    if not do_file_exist(grid_info_fn):
+        from split_into_zones import run as run_split_into_zones
+        hl_points, vl_points, zones = run_split_into_zones()
+    else:
+        hl_points, vl_points, zones = load_picle_file(grid_info_fn)
+    #
+    # Step 2. Preprocess logs 
+    #
+    processed_log_fn = get_processed_log_fn(time_from, time_to)
+    if not do_file_exist(processed_log_fn):
+        from preprocess_logs import run as run_preprocess_logs
+        run_preprocess_logs(hl_points, vl_points, time_from, time_to)
+    #
+    # Step 3. Count the number of 
+    #
+    if not do_file_exist(get_relation_fn(time_from, time_to)):
+        from count_relation import run as run_count_relation
+        run_count_relation(processed_log_fn, zones)
+    else:
+        did_relations = load_picle_file(grid_info_fn)
+    #
+    # Step 4. Visualize relations 
+    #
+    
+    
+if __name__ == '__main__':
+    run((2009, 1, 1, 0, 0, 30), (2009, 1, 1, 1, 0, 30)) 
+    
