@@ -9,10 +9,8 @@ class cd_zone(zone):
         zone.__init__(self, relation_with_poly, i, j, x, y)
         self.log_Q = []
     def add_driver_in_Q(self, t, d):
-        self.num_visit += 1
         self.log_Q.append([t, d])
     def update_Q(self, t):
-        self.num_pickup += 1
         while self.log_Q and self.log_Q[0] < t - cd_zone.THRESHOLD_VALUE:
             self.log_Q.pop(0)
 
