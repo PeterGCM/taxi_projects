@@ -50,7 +50,7 @@ class poly(Polygon):
     def __init__(self, poly_points):
         Polygon.__init__(self, poly_points)
     def is_including(self, coordinate):
-        assert type(coordinate) == type(tuple), coordinate 
+        assert type(coordinate) == type(()), coordinate 
         assert len(coordinate) == 2, len(coordinate) 
         p = Point(*coordinate)
         return p.within(self)
