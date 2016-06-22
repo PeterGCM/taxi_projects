@@ -1,7 +1,7 @@
 from __future__ import division
 #
 from math import ceil
-from shapely.geometry import Polygon, LineString
+from shapely.geometry import Polygon, LineString, Point
 from geopy.distance import vincenty
 #
 from classes import zone
@@ -45,3 +45,11 @@ def generate_zones(poly_points, x_unit, x_points, y_unit, y_points, zone_class):
                 relation = zone.OUT
             zones[(i, j)] = zone_class(relation, i, j, x, y)
     return zones
+
+class poly(Polygon):
+    def __init__(self, poly_points):
+        Polygon.__init__(self, poly_points)
+    def is_including(self, coordinate):
+        assert type(coordinate) == type(tuple) and len(coordinate) == 2
+        p = Point(*coordinate)
+        return p.within(self)

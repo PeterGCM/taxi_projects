@@ -3,7 +3,7 @@ from __init__ import singapore_poly_fn
 from taxi_common.classes import zone #@UnresolvedImport
 from taxi_common.geo_functions import make_grid, generate_zones #@UnresolvedImport
 #
-class cd_zone(zone):
+class rp_zone(zone):
     THRESHOLD_VALUE = None
     def __init__(self, relation_with_poly, i, j, x, y):
         zone.__init__(self, relation_with_poly, i, j, x, y)
@@ -35,5 +35,5 @@ def read_singapore_polygon():
 def run():
     singapore_poly_points, min_long, max_long, min_lat, max_lat = read_singapore_polygon()
     hl_unit, vl_unit, hl_points, vl_points = make_grid(min_long, max_long, min_lat, max_lat)
-    zones = generate_zones(singapore_poly_points, hl_unit, hl_points, vl_unit, vl_points, cd_zone)
+    zones = generate_zones(singapore_poly_points, hl_unit, hl_points, vl_unit, vl_points, rp_zone)
     return hl_points, vl_points, zones

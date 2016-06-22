@@ -1,15 +1,16 @@
 from __future__ import division
 from __init__ import *  # @UnusedWildImport
-
-from taxi_common.file_handling_functions import do_file_exist, load_picle_file  # @UnresolvedImport
-
+from classes import cd_zone
+#
+from taxi_common.file_handling_functions import do_file_exist, load_picle_file #@UnresolvedImport
+#
 def run(time_from, time_to):
     #
     # Step 1. Split Singapore into zones
     #
     if not do_file_exist(grid_info_fn):
-        from split_into_zones import run as run_split_into_zones
-        hl_points, vl_points, zones = run_split_into_zones()
+        from taxi_common.split_into_zones import run as run_split_into_zones #@UnresolvedImport
+        hl_points, vl_points, zones = run_split_into_zones(cd_zone)
     else:
         hl_points, vl_points, zones = load_picle_file(grid_info_fn)
     #
@@ -20,17 +21,19 @@ def run(time_from, time_to):
         from preprocess_logs import run as run_preprocess_logs
         run_preprocess_logs(hl_points, vl_points, time_from, time_to)
     #
-    # Step 3. Count the number of 
+    # Step 3. Count the number of relations 
     #
-    if not do_file_exist(get_relation_fn(processed_log_fn)):
-        from count_relation import run as run_count_relation
-        run_count_relation(processed_log_fn, zones)
+    relation_fn = get_relation_fn(processed_log_fn)
+    if not do_file_exist(relation_fn):
+        from count_relations import run as run_count_relations
+        did_relations = run_count_relations(processed_log_fn, zones)
     else:
-        did_relations = load_picle_file(grid_info_fn)
+        did_relations = load_picle_file(relation_fn)
     #
     # Step 4. Visualize relations 
     #
-    
+    from visualize_relations import run as run_visualize_relations
+    run_visualize_relations(did_relations)
     
 if __name__ == '__main__':
     run((2009, 1, 1, 0, 0, 30), (2009, 1, 1, 1, 0, 30)) 

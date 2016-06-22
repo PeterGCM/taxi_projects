@@ -1,12 +1,9 @@
-from __future__ import division
-#
-import os, sys
-sys.path.append(os.getcwd() + '/../..')
+import __init__  # @UnresolvedImport # @UnusedImport
 #
 from supports._setting import ftd_general_prod_mb, ftd_ap_prod_eco_prof_mb, ftd_ns_prod_eco_prof_mb
 from supports._setting import tables_dir, ftd_overall_analysis
 from supports.etc_functions import check_dir_create, load_picle_file, write_text_file
-from supports.charts import x_twin_chart
+from taxi_common.charts import multiple_line_chart, x_twin_chart  # @UnresolvedImport
 #
 import numpy as np
 import scipy.stats as stats
@@ -57,7 +54,7 @@ def run():
              ('NS out eco.'  , 'Y10'): y10_pons_m_eco_prof,
              }
     #
-    both_year_comparison(my_d)
+#     both_year_comparison(my_d)
     draw_month_change(my_d)
     
 def both_year_comparison(my_d):
@@ -96,7 +93,9 @@ def both_year_comparison(my_d):
 def draw_month_change(my_d): 
     months = ['0901', '0902', '0903', '0904', '0905', '0906', '0907', '0908', '0909', '0910', '0911',
               '1001', '1002', '1003', '1004', '1005', '1006', '1007', '1008', '1009', '1011', '1012']
-    measure = 'General prod.'
+    productivity = my_d[('AP in prod.', 'Y09')] + my_d[('AP in prod.', 'Y10')]
+    multiple_line_chart((12, 6), '', 'Year and Month', '$S/Hour', (months, 15), [productivity], ['Productivity'], 'upper right', 'temp')
+    assert False
     for LOC in ['AP', 'NS']:
         measure = 'General prod.'
         productivities = [my_d[(measure, 'Y09')] + my_d[(measure, 'Y10')]]
@@ -113,6 +112,7 @@ def draw_month_change(my_d):
         else:
             y_info1_lb, y_info1_ub = 15, 32
             y_info2_lb, y_info2_ub = 250, -250
+        
         x_info = ('Year and Month', months, 15)
         y_info1 = ('$S/Hour', productivities, (y_info1_lb, y_info1_ub), 
                    ['General productivity', 'Prev. in %s productivity' % LOC, 'Prev. out %s productivity' % LOC], 'upper left')

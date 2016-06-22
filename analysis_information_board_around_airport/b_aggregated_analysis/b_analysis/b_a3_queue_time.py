@@ -1,28 +1,35 @@
-from __future__ import division
-#
-import os, sys
-sys.path.append(os.getcwd() + '/../..')
+import __init__  # @UnresolvedImport # @UnusedImport
 #
 from supports._setting import Y09_ap_trips, Y10_ap_trips, Y09_ns_trips, Y10_ns_trips
 from supports._setting import SEC60
 from supports._setting import DInAP_PInAP, DOutAP_PInAP
 from supports._setting import DInNS_PInNS, DOutNS_PInNS
 from supports._setting import TIME_SLOTS
-from supports.charts import histo_cumulative, x_twin_chart
+from taxi_common.charts import histo_cumulative, multiple_line_chart, x_twin_chart  # @UnresolvedImport
 #
 import pandas as pd
 import scipy.stats as stats
 #
 def run():
     #
-    ap_analysis()
-    ns_analysis()
-
-def ap_analysis():
     Y09, Y10 = pd.read_csv(Y09_ap_trips), pd.read_csv(Y10_ap_trips)
-    draw_cumulative_histogram('ap', Y09, Y10, 'ap')
+#     draw_cumulative_histogram('ap', Y09, Y10, 'ap')
+    ap_monthly_queueing_time_in_only(Y09, Y10)
     assert False
+    ap_monthly_queueing_time_num_trips(Y09, Y10)
     #
+    ns_analysis()
+    
+def ap_monthly_queueing_time_in_only(Y09, Y10):
+    (Y09_in_hourly_qt, Y10_in_hourly_qt, in_diff, _), _ = monthly_data_process(Y09, Y10)
+    xs = range(len(TIME_SLOTS))
+    yss = [Y09_in_hourly_qt, Y10_in_hourly_qt, in_diff]
+    #
+    multiple_line_chart((12, 6), '', 'Time slot', 'Minute', (xs, 0), yss, ['Y2009', 'Y2010', 'Diff.'], 'upper right', 'in_ns_num_trips')
+    print '----------------------T-test in_hourly_qt'
+    print 't statistics %.3f, p-value %.3f' % (stats.ttest_rel(Y09_in_hourly_qt, Y10_in_hourly_qt))
+
+def monthly_data_process(Y09, Y10):
     Y09_prev_in, Y09_prev_out = Y09[Y09['ap-trip-mode'] == DInAP_PInAP], Y09[Y09['ap-trip-mode'] == DOutAP_PInAP]
     Y10_prev_in, Y10_prev_out = Y10[Y10['ap-trip-mode'] == DInAP_PInAP], Y10[Y10['ap-trip-mode'] == DOutAP_PInAP]
     #
@@ -40,6 +47,13 @@ def ap_analysis():
     Y09_out_hourly_num = [ x for x in Y09_out_hourly_gb.count()['ap-queue-time']]
     Y10_out_hourly_num = [ x for x in Y10_out_hourly_gb.count()['ap-queue-time']]
     out_num = [Y10_out_hourly_num[i] + Y09_out_hourly_num[i] for i in xrange(len(Y09_out_hourly_num))]
+    
+    return (Y09_in_hourly_qt, Y10_in_hourly_qt, in_diff, in_num), (Y09_out_hourly_qt, Y10_out_hourly_qt, out_diff, out_num) 
+    
+
+def ap_monthly_queueing_time_num_trips(Y09, Y10):
+    (Y09_in_hourly_qt, Y10_in_hourly_qt, in_diff, in_num), \
+    (Y09_out_hourly_qt, Y10_out_hourly_qt, out_diff, out_num) = monthly_data_process(Y09, Y10) 
     #
     x_info = ('Time slot', TIME_SLOTS, 0)
     y_info1 = ('Minute', [Y09_in_hourly_qt, Y10_in_hourly_qt, in_diff], (-5, 125), ['Y2009', 'Y2010', 'Diff.'], 'upper left')
@@ -77,13 +91,13 @@ def ns_analysis():
     Y10_out_hourly_num = [ x for x in Y10_out_hourly_gb.count()['ns-queue-time']]
     out_num = [Y10_out_hourly_num[i] + Y09_out_hourly_num[i] for i in xrange(len(Y09_out_hourly_num))]
     #
-    x_info = ('Time slot', [19,20,21,22,23], 0)
+    x_info = ('Time slot', [19, 20, 21, 22, 23], 0)
     y_info1 = ('Minute', [Y09_in_hourly_qt, Y10_in_hourly_qt, in_diff], (-5, 40), ['Y2009', 'Y2010', 'Diff.'], 'upper left')
     y_info2 = ('', [in_num], (0, 30000), ['Number of night safari trips'], 'upper right') 
     x_twin_chart((6, 6), '', x_info, y_info1, y_info2, 'time_slot_queue_time_in_ns')
     print '----------------------T-test in_hourly_qt'
     print 't statistics %.3f, p-value %.3f' % (stats.ttest_rel(Y09_in_hourly_qt, Y10_in_hourly_qt))
-    x_info = ('Time slot', [19,20,21,22,23], 0)
+    x_info = ('Time slot', [19, 20, 21, 22, 23], 0)
     y_info1 = ('Minute', [Y09_out_hourly_qt, Y10_out_hourly_qt, out_diff], None, ['Y2009', 'Y2010', 'Diff.'], 'upper left')
     y_info2 = ('', [out_num], (0, 30000), ['Number of night safari trips'], 'upper right') 
     x_twin_chart((6, 6), '', x_info, y_info1, y_info2, 'time_slot_queue_time_out_ns')

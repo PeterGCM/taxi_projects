@@ -10,8 +10,8 @@ def run(x_points, y_points, time_from, time_to):
     #
     csv_files = get_csv_files(time_from, time_to)
     drivers = {}
-    log_grid_fn = get_processed_log_fn(time_from, time_to)
-    with open(log_grid_fn, 'wt') as w_csvfile:
+    processed_log_fn = get_processed_log_fn(time_from, time_to)
+    with open(processed_log_fn, 'wt') as w_csvfile:
         writer = csv.writer(w_csvfile)
         writer.writerow(['time', 'i', 'j', 'did', 'state'])
     #
@@ -38,7 +38,11 @@ def run(x_points, y_points, time_from, time_to):
                 if not drivers.has_key(did): drivers[did] = (None, None)
                 i0, j0 = drivers[did]
                 if state == POB or not (i0 == i or j0 == j):
-                    with open(log_grid_fn, 'a') as w_csvfile:
+                    #
+                    # TODO
+                    # only do this when the first PDB occur. -> don't 
+                    #
+                    with open(processed_log_fn, 'a') as w_csvfile:
                         writer = csv.writer(w_csvfile)
                         writer.writerow([t, i, j, did, state])
                         

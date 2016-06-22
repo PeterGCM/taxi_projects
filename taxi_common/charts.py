@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 import matplotlib.mlab as mlab
 from matplotlib.path import Path
 import matplotlib.patches as patches
-from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.ticker as tkr
 from supports._setting import charts_dir
 from supports.etc_functions import check_dir_create, write_text_file

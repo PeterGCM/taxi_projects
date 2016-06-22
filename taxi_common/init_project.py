@@ -1,8 +1,8 @@
 import os, sys, platform
 #
-# Check environments and set a prefix for finding files and libraries
+taxi_home, taxi_data = None, None
 #
-taxi_home, taxi_data = None
+# Check environments and set a prefix for finding files and libraries
 #
 py_vinfo = sys.version_info
 if type(sys.version_info) == type(()):
@@ -31,8 +31,8 @@ else:
 #
 singapore_poly_fn = os.path.dirname(os.path.realpath(__file__)) + '/Singapore_polygon'
 #
-def get_taxi_home_path():
-    return taxi_home
-
 def get_taxi_data_path():
     return taxi_data
+
+def get_taxi_home_path():
+    return taxi_home

@@ -1,30 +1,13 @@
 from __init__ import get_relation_fn
 from __init__ import MEMORY_MANAGE_INTERVAL, COINCIDENCE_THRESHOLD_VALUE
 from __init__ import POB
-from __init__ import out_boundary_logs_fn  
+from __init__ import out_boundary_logs_fn
 #
-from taxi_common.classes import driver #@UnresolvedImport
+from classes import cd_driver   
+#
 from taxi_common.file_handling_functions import save_pickle_file #@UnresolvedImport
 #
 import csv
-
-class cd_driver(driver):
-    def __init__(self,did):
-        driver.__init__(self,did)
-        self.current_zone = None
-        self.relation = {}
-    def update_position(self, t, z):
-        if self.current_zone != z:
-            self.current_zone = z
-            self.current_zone.add_driver_in_Q(t, self)
-    def update_relation(self, t, z):
-        z.update_Q(t)
-        for _, d in z.log_Q:
-            if self == d:
-                continue
-            if not self.relation.has_key(d.did):
-                self.relation[d.did] = 0
-            self.relation[d.did] += 1
 
 def run(processed_log_fn, zones):
     out_boundary_logs_num = 0
@@ -72,10 +55,15 @@ def run(processed_log_fn, zones):
                 #
                 # Remove low possibility relations
                 #
-                for d in driver.itervalue():
+                for d in drivers.itervalues():
                     for d1, num in d.relation.iteritems():
                         if num < COINCIDENCE_THRESHOLD_VALUE:
                             d.relation.pop(d1)
                 memory_manage_clock = t
-    save_pickle_file(get_relation_fn(processed_log_fn), [(did, d.relation) for did, d in drivers.iteritems()])
+    did_relations = [(did, d.relation) for did, d in drivers.iteritems()]
+    save_pickle_file(get_relation_fn(processed_log_fn), did_relations)
+    return did_relations
+    
+    return
+    
     
