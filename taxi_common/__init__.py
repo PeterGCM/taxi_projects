@@ -2,7 +2,7 @@ import os, sys, platform
 #
 # Check environments and set a prefix for finding files and libraries
 #
-taxi_home, taxi_data = None
+taxi_home, taxi_data = None, None
 #
 py_vinfo = sys.version_info
 if type(sys.version_info) == type(()):
