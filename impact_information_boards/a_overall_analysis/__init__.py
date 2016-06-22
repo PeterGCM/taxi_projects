@@ -1,3 +1,7 @@
+from __future__ import division
+import os, sys
+sys.path.append(os.path.dirname(os.path.realpath(__file__)) + '/..')
+#
 from init_project import taxi_data
 #
 trips_dir, trip_prefix = taxi_data + '/trips', 'trip-'
