@@ -15,6 +15,7 @@ if py_vinfo.major == 2 and py_vinfo.minor == 7:
         sys.path.append('/home/ckhan/local/lib/python2.7/site-packages')
         sys.path.append('/home/ckhan/local/lib64/python2.7/site-packages')
         taxi_data = '/home/ckhan/taxi_data'
+        taxi_home = '/home/taxi'
     elif plf.startswith('Darwin'):
         # Mac
         taxi_data = '/Users/JerryHan88/taxi_data'
