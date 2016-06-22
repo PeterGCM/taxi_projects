@@ -28,12 +28,6 @@ def process_files(yymm):
     normal_file = taxi_home + '/%s/%s/trips/trips-%s-normal.csv' % (yyyy, mm, yymm)
     ext_file = taxi_home + '/%s/%s/trips/trips-%s-normal-ext.csv' % (yyyy, mm, yymm)
     #
-    # Load data from files
-    #
-    trip_data1 = read_whole(normal_file)
-    trip_data2 = read_whole(ext_file)
-    assert len(trip_data1) == len(trip_data2) 
-    #
     ap_poly, ns_poly = read_generate_polygon(ap_poly_fn), read_generate_polygon(ns_poly_fn)
     vehicle_prev_trip_position_time = {}
     with open('%s/%s%s.csv' % (trips_dir, trip_prefix, yymm), 'wt') as w_csvfile:
