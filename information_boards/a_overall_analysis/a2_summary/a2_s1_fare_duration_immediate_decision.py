@@ -42,8 +42,6 @@ def process_files(yymm):
     ap_tm_lable, ns_tm_lable = 'ap-trip-mode', 'ns-trip-mode' 
     dur_lable, fare_label = 'duration', 'fare'
     #
-    tm = [DIn_PIn, DIn_POut, DOut_PIn, DOut_POut]
-    #
     while cur_day_time != last_day_time:
         next_day_time = cur_day_time + datetime.timedelta(hours=1)
         st_timestamp, et_timestamp = time.mktime(cur_day_time.timetuple()), time.mktime(next_day_time.timetuple())
@@ -53,7 +51,7 @@ def process_files(yymm):
         filtered_trip = trip_df[(st_timestamp <= trip_df[st_label]) & (trip_df[st_label] < et_timestamp)]
         for fn, label in [(ap_tm_num_dur_fare_fn, ap_tm_lable), (ns_tm_num_dur_fare_fn, ns_tm_lable)]:
             gp_f_trip = filtered_trip.groupby([label])
-            num_totalDuration_totalFare_tm = [[0, 0, 0, tm] for tm in tm]
+            num_totalDuration_totalFare_tm = [[0, 0, 0, tm] for tm in [DIn_PIn, DIn_POut, DOut_PIn, DOut_POut]]
             tm_num_df = gp_f_trip.count()[fare_label].to_frame('total_tm_num').reset_index()
             for tm, num in tm_num_df.values:
                 num_totalDuration_totalFare_tm[tm][NUM] += num
