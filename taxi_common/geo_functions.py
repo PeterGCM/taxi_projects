@@ -54,3 +54,12 @@ class poly(Polygon):
         assert len(coordinate) == 2, len(coordinate) 
         p = Point(*coordinate)
         return p.within(self)
+
+def read_generate_polygon(fn):
+    with open(fn, 'r') as f:
+        ls = [w.strip() for w in f.readlines()]
+    points = []
+    for l in ls:
+        _long, _lat = l.split(',')
+        points.append([eval(_long), eval(_lat)])
+    return poly(points)

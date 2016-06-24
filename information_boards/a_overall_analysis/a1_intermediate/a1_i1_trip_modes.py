@@ -2,12 +2,11 @@ import __init__  # @UnresolvedImport # @UnusedImport
 #
 from init_project import taxi_home
 from init_project import DIn_PIn, DIn_POut, DOut_PIn, DOut_POut
+from init_project import ap_poly, ns_poly
+from init_project import IN, OUT
 from a_overall_analysis.__init__ import trips_dir, trip_prefix  # @UnresolvedImport
-from __init__ import IN, OUT  # @UnresolvedImport
-from __init__ import ap_poly_fn, ns_poly_fn  # @UnresolvedImport
 #
-from taxi_common.file_handling_functions import remove_creat_dir  # @UnresolvedImport 
-from taxi_common.geo_functions import poly  # @UnresolvedImport
+from taxi_common.file_handling_functions import remove_creat_dir  # @UnresolvedImport
 #
 import csv
 #
@@ -20,15 +19,14 @@ def run():
             if yymm in ['0912', '1010']:
                 # both years data are corrupted
                 continue
-            process_files(yymm)
+            process_file(yymm)
 
-def process_files(yymm):
+def process_file(yymm):
     yy, mm = yymm[:2], yymm[-2:]
     yyyy = str(2000 + int(yy))
     normal_file = taxi_home + '/%s/%s/trips/trips-%s-normal.csv' % (yyyy, mm, yymm)
     ext_file = taxi_home + '/%s/%s/trips/trips-%s-normal-ext.csv' % (yyyy, mm, yymm)
     #
-    ap_poly, ns_poly = read_generate_polygon(ap_poly_fn), read_generate_polygon(ns_poly_fn)
     vehicle_prev_trip_position_time = {}
     with open('%s/%s%s.csv' % (trips_dir, trip_prefix, yymm), 'wt') as w_csvfile:
         writer = csv.writer(w_csvfile)
@@ -88,22 +86,5 @@ def process_files(yymm):
                     #
                     vehicle_prev_trip_position_time[vid] = (c_el_ap, c_el_ns, et_ts)
 
-def read_whole(fn):
-    rv = []
-    with open(fn, 'rt') as csvfile:
-        reader = csv.reader(csvfile)
-        for row in reader:
-            rv.append(row)
-    return rv
-            
-def read_generate_polygon(fn):
-    with open(fn, 'r') as f:
-        ls = [w.strip() for w in f.readlines()]
-    points = []
-    for l in ls:
-        _long, _lat = l.split(',')
-        points.append([eval(_long), eval(_lat)])
-    return poly(points)
-    
 if __name__ == '__main__':
     run()

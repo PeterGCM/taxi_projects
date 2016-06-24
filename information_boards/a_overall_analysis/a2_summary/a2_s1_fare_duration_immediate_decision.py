@@ -65,7 +65,7 @@ def process_files(yymm):
                 num_totalDuration_totalFare_tm[int(tm)][FARE] += fare
             save_as_csv(fn, yymm, dd, hh, num_totalDuration_totalFare_tm)
         cur_day_time = next_day_time
-    print 'handle the file; %s' % yymm
+    print 'end the file; %s' % yymm
 
 def save_as_csv(fn, yymm, dd, hh, _data):
     yy, mm = yymm[:2], yymm[2:]
