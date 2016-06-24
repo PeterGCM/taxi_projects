@@ -18,7 +18,7 @@ TIME_SLOTS = range(24)
 summary_dir = taxi_data + '/summary'
 #
 from taxi_common.geo_functions import read_generate_polygon
-ap_poly_fn = './src/airport_polygon'
-ns_poly_fn = './src/night_safari_polygon'
+ap_poly_fn = 'src/airport_polygon'
+ns_poly_fn = 'src/night_safari_polygon'
 ap_poly, ns_poly = read_generate_polygon(ap_poly_fn), read_generate_polygon(ns_poly_fn)
 
