@@ -39,30 +39,30 @@ def process_files(yymm):
     last_day_time = datetime.datetime(next_yyyy, next_mm, dd, hh)
     #
     st_label = 'start-time'
-    ap_tm_lable, ns_tm_lable = 'ap-trip-mode', 'ns-trip-mode' 
-    dur_lable, fare_label = 'duration', 'fare'
+    ap_tm_label, ns_tm_label = 'ap-trip-mode', 'ns-trip-mode' 
+    dur_label, fare_label = 'duration', 'fare'
     #
     while cur_day_time != last_day_time:
         next_day_time = cur_day_time + datetime.timedelta(hours=1)
         st_timestamp, et_timestamp = time.mktime(cur_day_time.timetuple()), time.mktime(next_day_time.timetuple())
         #
-        yyyy, mm, dd, hh = cur_day_time.year, cur_day_time.month, cur_day_time.day, cur_day_time.hour
+        _, mm, dd, hh = cur_day_time.year, cur_day_time.month, cur_day_time.day, cur_day_time.hour
         #    
         filtered_trip = trip_df[(st_timestamp <= trip_df[st_label]) & (trip_df[st_label] < et_timestamp)]
-        for fn, label in [(ap_tm_num_dur_fare_fn, ap_tm_lable), (ns_tm_num_dur_fare_fn, ns_tm_lable)]:
+        for fn, label in [(ap_tm_num_dur_fare_fn, ap_tm_label), (ns_tm_num_dur_fare_fn, ns_tm_label)]:
             gp_f_trip = filtered_trip.groupby([label])
             num_totalDuration_totalFare_tm = [[0, 0, 0, tm] for tm in [DIn_PIn, DIn_POut, DOut_PIn, DOut_POut]]
             tm_num_df = gp_f_trip.count()[fare_label].to_frame('total_tm_num').reset_index()
             for tm, num in tm_num_df.values:
-                num_totalDuration_totalFare_tm[tm][NUM] += num
+                num_totalDuration_totalFare_tm[int(tm)][NUM] += num
             #
-            tm_dur_df = gp_f_trip.sum()[dur_lable].to_frame('total_tm_dur').reset_index()
+            tm_dur_df = gp_f_trip.sum()[dur_label].to_frame('total_tm_dur').reset_index()
             for tm, dur in tm_dur_df.values:
-                num_totalDuration_totalFare_tm[tm][DUR] += dur
+                num_totalDuration_totalFare_tm[int(tm)][DUR] += dur
             #
             tm_fare_df = gp_f_trip.sum()[fare_label].to_frame('total_tm_fare').reset_index()
             for tm, fare in tm_fare_df.values:
-                num_totalDuration_totalFare_tm[tm][FARE] += fare
+                num_totalDuration_totalFare_tm[int(tm)][FARE] += fare
             save_as_csv(fn, yymm, dd, hh, num_totalDuration_totalFare_tm)
         cur_day_time = next_day_time
     print 'handle the file; %s' % yymm
