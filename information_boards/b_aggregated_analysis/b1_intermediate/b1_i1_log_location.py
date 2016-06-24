@@ -28,7 +28,7 @@ def process_file(yymm):
     print 'handle the file; %s' % yymm
     yy, mm = yymm[:2], yymm[-2:]
     #
-    with open('%s/20%s/%s/logs-%s-normal.csv' % (taxi_home, yy, mm, yymm), 'rb') as r_csvfile:
+    with open('%s/20%s/%s/logs/logs-%s-normal.csv' % (taxi_home, yy, mm, yymm), 'rb') as r_csvfile:
         reader = csv.reader(r_csvfile)
         headers = reader.next()
         hid = {h: i for i, h in enumerate(headers)}
