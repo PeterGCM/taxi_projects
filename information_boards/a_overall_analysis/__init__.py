@@ -8,8 +8,6 @@ from taxi_common.file_handling_functions import check_dir_create
 from init_project import taxi_data
 check_dir_create(taxi_data)
 trips_dir, trip_prefix = taxi_data + '/trips', 'trip-'
-ap_trips_dir, ap_trip_prefix = trips_dir + '/ap_trips', 'ap-trip-'
-ns_trips_dir, ns_trip_prefix = trips_dir + '/ns_trips', 'ns-trip-'
 #
 from init_project import summary_dir
 check_dir_create(summary_dir)
