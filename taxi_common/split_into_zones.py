@@ -1,7 +1,8 @@
 from __init__ import singapore_poly_fn
 #
-from taxi_common.geo_functions import make_grid, generate_zones #@UnresolvedImport
-#
+from geo_functions import make_grid, generate_zones
+
+
 def read_singapore_polygon():
     #
     # Read Singapore polygon
@@ -20,8 +21,9 @@ def read_singapore_polygon():
     #
     return singapore_poly_points, min_long, max_long, min_lat, max_lat
 
-def run(zone_class):
+
+def run(zone_unit_km, zone_class):
     singapore_poly_points, min_long, max_long, min_lat, max_lat = read_singapore_polygon()
-    hl_unit, vl_unit, hl_points, vl_points = make_grid(min_long, max_long, min_lat, max_lat)
+    hl_unit, vl_unit, hl_points, vl_points = make_grid(zone_unit_km, min_long, max_long, min_lat, max_lat)
     zones = generate_zones(singapore_poly_points, hl_unit, hl_points, vl_unit, vl_points, zone_class)
     return hl_points, vl_points, zones

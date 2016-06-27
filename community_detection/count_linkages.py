@@ -25,7 +25,6 @@ def run(processed_log_fn, zones):
             t = eval(row[hid['time']])
             did = row[hid['did']]
             i, j = int(row[hid['i']]), int(row[hid['j']])
-            state = int(row[hid['state']])
             #
             # Find a targeted zone
             #

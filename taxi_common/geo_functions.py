@@ -8,13 +8,13 @@ from classes import zone
 #
 METER1000 = 1000
 
-def make_grid(min_long, max_long, min_lat, max_lat, consider_visualization=False):
+def make_grid(zone_unit_km, min_long, max_long, min_lat, max_lat, consider_visualization=False):
     western_end, eastern_end = (min_long, (min_lat + max_lat) / 2), (max_long, (min_lat + max_lat) / 2) 
     southern_end, northern_end = ((min_lat + max_lat) / 2, min_lat), ((min_lat + max_lat) / 2, max_lat)
     hl_length, vl_length = max_long - min_long, max_lat - min_lat
     #
-    width_km = (vincenty(western_end, eastern_end).meters) / METER1000
-    height_km = (vincenty(southern_end, northern_end).meters) / METER1000
+    width_km = (vincenty(western_end, eastern_end).meters) / METER1000 * zone_unit_km
+    height_km = (vincenty(southern_end, northern_end).meters) / METER1000 * zone_unit_km
     hl_unit, vl_unit = hl_length / width_km, vl_length / height_km
     #
     num_cols, num_rows = int(ceil(width_km)), int(ceil(height_km))

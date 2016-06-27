@@ -1,1 +1,1 @@
-import init_project
+import __init__

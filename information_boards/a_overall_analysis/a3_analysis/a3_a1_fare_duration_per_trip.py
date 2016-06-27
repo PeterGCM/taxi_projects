@@ -1,7 +1,7 @@
 import __init__  # @UnresolvedImport # @UnusedImport
 #
-from init_project import DIn_PIn, DIn_POut, DOut_PIn, DOut_POut
-from init_project import CENT, SEC60
+from __init__ import DIn_PIn, DIn_POut, DOut_PIn, DOut_POut
+from __init__ import CENT, SEC60
 from a_overall_analysis.__init__ import ap_tm_num_dur_fare_fn, ns_tm_num_dur_fare_fn  # @UnresolvedImport
 #
 from taxi_common.charts import simple_barchart  # @UnresolvedImport

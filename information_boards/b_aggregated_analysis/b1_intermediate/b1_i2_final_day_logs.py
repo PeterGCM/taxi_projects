@@ -22,6 +22,7 @@ def run():
             # process_files(yymm)
             put_task(process_file, [yymm])
             count_num_jobs += 1
+    end_multiprocessor(count_num_jobs)
 
 def process_file(yymm):
     print 'handle the file; %s' % yymm

@@ -1,6 +1,6 @@
 import __init__  # @UnresolvedImport # @UnusedImport
 #
-from init_project import DIn_PIn, DIn_POut, DOut_PIn, DOut_POut
+from __init__ import DIn_PIn, DIn_POut, DOut_PIn, DOut_POut
 from a_overall_analysis.__init__ import trips_dir, trip_prefix  # @UnresolvedImport
 from a_overall_analysis.__init__ import ap_tm_num_dur_fare_fn, ns_tm_num_dur_fare_fn  # @UnresolvedImport
 from __init__ import NUM, DUR, FARE

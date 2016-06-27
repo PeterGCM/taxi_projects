@@ -1,9 +1,9 @@
 import __init__  # @UnresolvedImport # @UnusedImport
 #
-from init_project import taxi_home
-from init_project import DIn_PIn, DIn_POut, DOut_PIn, DOut_POut
-from init_project import ap_poly, ns_poly
-from init_project import IN, OUT
+from __init__ import taxi_home
+from __init__ import DIn_PIn, DIn_POut, DOut_PIn, DOut_POut
+from __init__ import ap_poly, ns_poly
+from __init__ import IN, OUT
 from a_overall_analysis.__init__ import trips_dir, trip_prefix  # @UnresolvedImport
 #
 from taxi_common.file_handling_functions import remove_creat_dir  # @UnresolvedImport

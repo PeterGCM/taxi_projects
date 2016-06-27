@@ -1,7 +1,7 @@
 import __init__  # @UnresolvedImport # @UnusedImport
 #
-from init_project import taxi_home
-from init_project import ap_poly, ns_poly
+from __init__ import taxi_home
+from __init__ import ap_poly, ns_poly
 from b_aggregated_analysis.__init__ import logs_dir, log_prefix
 #
 from taxi_common.file_handling_functions import remove_creat_dir
@@ -23,6 +23,7 @@ def run():
             # process_files(yymm)
             put_task(process_file, [yymm])
             count_num_jobs += 1
+    end_multiprocessor(count_num_jobs)
 
 def process_file(yymm):
     print 'handle the file; %s' % yymm
@@ -32,8 +33,6 @@ def process_file(yymm):
         reader = csv.reader(r_csvfile)
         headers = reader.next()
         hid = {h: i for i, h in enumerate(headers)}
-        id_time, id_vid, id_did = headers.index('time'), headers.index('vehicle-id'), headers.index('driver-id')
-        index_long, index_lat = headers.index('longitude'), headers.index('latitude')
         with open('%s/%s%s.csv' % (logs_dir, log_prefix, yymm), 'wt') as w_csvfile:
             writer = csv.writer(w_csvfile)
             new_headers = ['time', 'vid', 'did', 'ap-or-not', 'np-or-not']

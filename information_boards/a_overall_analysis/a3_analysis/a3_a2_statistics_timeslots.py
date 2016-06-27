@@ -1,8 +1,8 @@
 import __init__  # @UnresolvedImport # @UnusedImport
 #
-from init_project import DIn_PIn, DOut_PIn
-from init_project import CENT
-from init_project import DAY_OF_WEEK, TIME_SLOTS
+from __init__ import DIn_PIn, DOut_PIn
+from __init__ import CENT
+from __init__ import DAY_OF_WEEK, TIME_SLOTS
 from a_overall_analysis.__init__ import ap_tm_num_dur_fare_fn, ns_tm_num_dur_fare_fn  # @UnresolvedImport
 #
 from taxi_common.charts import multiple_line_chart  # @UnresolvedImport

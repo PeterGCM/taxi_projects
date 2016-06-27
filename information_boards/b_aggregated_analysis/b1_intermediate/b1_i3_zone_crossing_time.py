@@ -1,18 +1,18 @@
 import __init__  # @UnresolvedImport # @UnusedImport
 #
-from init_project import IN, OUT
+from __init__ import IN, OUT
 from b_aggregated_analysis.__init__ import logs_dir, log_prefix
 from b_aggregated_analysis.__init__ import logs_last_day_dir, log_last_day_prefix
 from b_aggregated_analysis.__init__ import ap_crossing_dir, ap_crossing_prefix
 from b_aggregated_analysis.__init__ import ns_crossing_dir, ns_crossing_prefix
 #
-from taxi_common.file_handling_functions import get_all_files, save_pickle_file
+from taxi_common.file_handling_functions import get_all_files, save_pickle_file, remove_creat_dir
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
 import csv
 #
 def run():
-    csv_files = get_all_files(logs_dir, log_prefix, '.csv')
+    remove_creat_dir(ap_crossing_dir); remove_creat_dir(ns_crossing_dir)
     #
     init_multiprocessor()
     count_num_jobs = 0
@@ -60,21 +60,18 @@ def record_crossing_time(path_to_csv_file, vehicle_ap_crossing_time_from_out_to_
         reader = csv.reader(r_csvfile)
         headers = reader.next()
         hid = {h: i for i, h in enumerate(headers)}
-        id_time, id_vid, id_did, id_ap_or_not, id_ns_or_not = headers.index('time'), headers.index('vid'), headers.index('did'), headers.index('ap-or-not'), headers.index('np-or-not')
         for row in reader:
-            t, vid, _, ap_or_not, ns_or_not = eval(row[hid['time']]), row[id_vid], row[id_did], row[id_ap_or_not], row[id_ns_or_not]
+            t, vid = eval(row[hid['time']]), row[hid['vid']]
+            ap_or_not, ns_or_not = eval(row[hid['ap-or-not']]), eval(row[hid['ns-or-not']])
             #
             if not vehicle_last_log_ap_or_not.has_key(vid):
-                print ap_or_not, IN
-                print type(ap_or_not), type(IN)
-                assert False
                 if ap_or_not == IN:
                     # the first log's position was occurred in the AP zone
                     assert not vehicle_ap_crossing_time_from_out_to_in.has_key(vid)
                     vehicle_ap_crossing_time_from_out_to_in[vid] = [t]
             else:
                 assert vehicle_last_log_ap_or_not.has_key(vid)
-                if vehicle_last_log_ap_or_not[vid] == OUT and ap_or_not == IN:
+                if vehicle_last_log_ap_or_not[vid] == OUT and eval(ap_or_not )== IN:
                     vehicle_ap_crossing_time_from_out_to_in.setdefault(vid, [t]).append(t)
             #
             if not vehicle_last_log_ns_or_not.has_key(vid):
