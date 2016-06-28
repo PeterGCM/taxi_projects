@@ -21,6 +21,9 @@ def run(time_from, time_to, zone_unit_km):
     if not do_file_exist(processed_log_fn):
         from preprocess_logs import run as run_preprocess_logs
         run_preprocess_logs(hl_points, vl_points, time_from, time_to)
+
+    assert False
+
     #
     # Step 3. Count the number of relations 
     #
