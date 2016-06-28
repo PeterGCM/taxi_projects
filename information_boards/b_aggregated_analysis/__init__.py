@@ -5,7 +5,7 @@ import information_boards.__init__
 #
 from taxi_common.file_handling_functions import check_dir_create
 #
-from __init__ import taxi_data, summary_dir
+from information_boards.__init__ import taxi_data, summary_dir
 from a_overall_analysis.__init__ import trips_dir
 check_dir_create(taxi_data)
 check_dir_create(summary_dir)
