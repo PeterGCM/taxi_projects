@@ -7,7 +7,8 @@ from taxi_common.file_handling_functions import remove_creat_dir, get_all_files
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
 import datetime, time, csv
-#
+
+
 def run():
     remove_creat_dir(logs_last_day_dir)
     #

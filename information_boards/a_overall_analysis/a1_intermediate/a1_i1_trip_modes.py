@@ -9,7 +9,8 @@ from a_overall_analysis.__init__ import trips_dir, trip_prefix  # @UnresolvedImp
 from taxi_common.file_handling_functions import remove_creat_dir  # @UnresolvedImport
 #
 import csv
-#
+
+
 def run():
     remove_creat_dir(trips_dir)
     #
@@ -21,6 +22,7 @@ def run():
                 continue
             process_file(yymm)
 
+
 def process_file(yymm):
     yy, mm = yymm[:2], yymm[-2:]
     yyyy = str(2000 + int(yy))
@@ -30,14 +32,18 @@ def process_file(yymm):
     vehicle_prev_trip_position_time = {}
     with open('%s/%s%s.csv' % (trips_dir, trip_prefix, yymm), 'wt') as w_csvfile:
         writer = csv.writer(w_csvfile)
-        new_headers = ['tid', 'vid', 'did', 'start-time', 'end-time', 'duration', 'fare', 'ap-trip-mode', 'ns-trip-mode', 'prev-trip-end-time']
+        new_headers = ['tid', 'vid', 'did', 'start-time', 'end-time',
+                       'duration', 'fare',
+                       'ap-trip-mode', 'ns-trip-mode',
+                       'prev-trip-end-time']
         writer.writerow(new_headers)
         #
         with open(normal_file, 'rb') as r_csvfile1:
             reader1 = csv.reader(r_csvfile1)
             headers1 = reader1.next()
-            # {'trip-id': 0, 'job-id': 1, 'start-time': 2, 'end-time': 3, 'start-long': 4, 'start-lat': 5, 'end-long': 6,
-            #  'end-lat': 7, 'vehicle-id': 8, 'distance': 9, 'fare': 10, 'duration': 11,
+            # {'trip-id': 0, 'job-id': 1, 'start-time': 2, 'end-time': 3,
+            #  'start-long': 4, 'start-lat': 5, 'end-long': 6, 'end-lat': 7,
+            #  'vehicle-id': 8, 'distance': 9, 'fare': 10, 'duration': 11,
             #  'start-dow': 12, 'start-day': 13, 'start-hour': 14, 'start-minute': 15,
             #  'end-dow': 16, 'end-day': 17, 'end-hour': 18, 'end-minute': 19}  
             hid1 = {h : i for i, h in enumerate(headers1)}

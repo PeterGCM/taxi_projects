@@ -7,7 +7,8 @@ from __init__ import NUM, DUR, FARE
 #
 import datetime, time, csv
 import pandas as pd
-#
+
+
 def run():
     init_csv_files()
     #
@@ -18,13 +19,15 @@ def run():
                 continue
             process_files(yymm)
 
+
 def init_csv_files():
     for fn in [ap_tm_num_dur_fare_fn, ns_tm_num_dur_fare_fn]:
         with open(fn, 'wt') as csvFile:
             writer = csv.writer(csvFile)
             header = ['yy', 'mm', 'dd', 'hh', 'day-of-week', 'total-num', 'total-dur', 'total-fare', 'trip-mode']
             writer.writerow(header)
-    
+
+
 def process_files(yymm):
     print 'handle the file; %s' % yymm
     trip_df = pd.read_csv('%s/%s%s.csv' % (trips_dir, trip_prefix, yymm))
@@ -66,6 +69,7 @@ def process_files(yymm):
             save_as_csv(fn, yymm, dd, hh, num_totalDuration_totalFare_tm)
         cur_day_time = next_day_time
     print 'end the file; %s' % yymm
+
 
 def save_as_csv(fn, yymm, dd, hh, _data):
     yy, mm = yymm[:2], yymm[2:]
