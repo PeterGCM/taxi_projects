@@ -1,6 +1,5 @@
 import __init__
 #
-from __init__ import get_relation_fn
 from __init__ import MEMORY_MANAGE_INTERVAL, COINCIDENCE_THRESHOLD_VALUE
 from __init__ import POB
 from __init__ import out_boundary_logs_fn, linkage_dir
