@@ -37,7 +37,7 @@ def process_file(yymm):
         hid = {h: i for i, h in enumerate(headers)}
         with open('%s/%s%s.csv' % (logs_dir, log_prefix, yymm), 'wt') as w_csvfile:
             writer = csv.writer(w_csvfile)
-            new_headers = ['time', 'vid', 'did', 'ap-or-not', 'np-or-not']
+            new_headers = ['time', 'vid', 'did', 'ap-or-not', 'ns-or-not']
             writer.writerow(new_headers)
             #
             for row in reader:

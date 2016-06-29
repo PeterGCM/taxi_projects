@@ -74,7 +74,7 @@ def record_crossing_time(path_to_csv_file, veh_ap_crossing_time, veh_last_log_ap
                     veh_ap_crossing_time[vid] = [t]
             else:
                 assert veh_last_log_ap_or_not.has_key(vid)
-                if veh_last_log_ap_or_not[vid] == OUT and eval(ap_or_not )== IN:
+                if veh_last_log_ap_or_not[vid] == OUT and ap_or_not== IN:
                     veh_ap_crossing_time.setdefault(vid, [t]).append(t)
             #
             if not veh_last_log_ns_or_not.has_key(vid):
