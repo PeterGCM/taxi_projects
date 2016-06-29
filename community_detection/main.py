@@ -17,7 +17,7 @@ def run(time_from, time_to, zone_unit_km):
     else:
         hl_points, vl_points, zones = load_picle_file(grid_info_fn)
     #
-    # Step 2. Preprocess logs 
+    # Step 2. Preprocess logs
     #
     processed_log_fn = get_processed_log_fn(time_from, time_to)
     if not do_file_exist(processed_log_fn):
@@ -26,8 +26,8 @@ def run(time_from, time_to, zone_unit_km):
     #
     # Step 3. Count the number of relations
     #
-    from b_linkage import run as run_count_relations
-    run_count_relations(processed_log_fn, zones)
+    from b_linkage import run as run_linkage
+    run_linkage(processed_log_fn, zones)
 
 
     #
