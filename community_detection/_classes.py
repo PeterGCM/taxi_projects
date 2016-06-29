@@ -17,6 +17,8 @@ class cd_zone(zone):
     def update_logQ(self, t):
         while self.logQ and self.logQ[0] < t - THRESHOLD_VALUE:
             self.logQ.pop(0)
+    def init_logQ(self):
+        self.logQ = []
 
 
 class cd_driver(driver):
@@ -31,3 +33,6 @@ class cd_driver(driver):
                 self.linkage[d.did] = 0
             self.linkage[d.did] += 1
         z.add_driver_in_logQ(t, self)
+
+    def init_linkage(self):
+        self.linkage = {}

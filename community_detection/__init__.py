@@ -16,7 +16,8 @@ out_boundary_logs_fn = cd_home + '/out_boundary.txt'
 
 
 
-
+MAX_LINKAGE_RATIO = 0.8
+MIN_LINKAGE = 2
 THRESHOLD_VALUE = 30 * 60
 COINCIDENCE_THRESHOLD_VALUE = 1
 FREE, POB = 0, 5

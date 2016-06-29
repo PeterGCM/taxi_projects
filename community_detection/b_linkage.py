@@ -35,8 +35,14 @@ def run(processed_log_fn, zones):
             t = eval(row[hid['time']])
             cur_date = datetime.date.fromtimestamp(t)
             if handling_date < cur_date:
-                save_pickle_file(pkl_dir + '/%d%d%d.pkl' % (handling_date.year, handling_date.month, handling_date.day),
-                                 [(did, d.linkage) for did, d in drivers.iteritems()])
+                day_linkage = []
+                for did, d in drivers.iteritems():
+                    day_linkage.append((did, d.linkage))
+                    d.init_linkage()
+                for z in zones.itervalues():
+                    z.init_logQ()
+                save_pickle_file(pkl_dir + '/%d%02d%02d.pkl' % (handling_date.year, handling_date.month, handling_date.day),
+                                 day_linkageday_linkage)
                 handling_date = cur_date
             did = row[hid['did']]
             i, j = int(row[hid['i']]), int(row[hid['j']])
