@@ -12,7 +12,7 @@ import csv, datetime
 
 def run(processed_log_fn, zones):
     _, time_from, time_to = processed_log_fn[:-len('.csv')].split('-')
-    pkl_dir = linkage_dir + '/%s-%s' % (time_from, time_to)
+    pkl_dir = linkage_dir + '/%s-%s' % (time_from[:len('yyyymmdd')], time_to[:len('yyyymmdd')])
     remove_creat_dir(pkl_dir)
     #
     out_boundary_logs_num = 0
