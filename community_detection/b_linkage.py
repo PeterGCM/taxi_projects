@@ -31,12 +31,11 @@ def run(processed_log_fn, zones):
         dd = eval(time_from[len('yyyymm'):len('yyyymmdd')])
         tf_date = datetime.date(yyyy, mm, dd)
         handling_date = tf_date
-        pkl_fn = None
         for row in reader:
             t = eval(row[hid['time']])
             cur_date = datetime.date.fromtimestamp(t)
             if handling_date < cur_date:
-                save_pickle_file(pkl_dir + '/%d%d%d' % (handling_date.year, handling_date.month, handling_date.day),
+                save_pickle_file(pkl_dir + '/%d%d%d.pkl' % (handling_date.year, handling_date.month, handling_date.day),
                                  [(did, d.linkage) for did, d in drivers.iteritems()])
                 handling_date = cur_date
             did = row[hid['did']]
