@@ -13,7 +13,7 @@ from c_individual_analysis.__init__ import ftd_prev_in_ns_stat_dir, ftd_prev_in_
 from c_individual_analysis.__init__ import ftd_prev_out_ap_stat_dir, ftd_prev_out_ap_stat_prefix
 from c_individual_analysis.__init__ import ftd_prev_out_ns_stat_dir, ftd_prev_out_ns_stat_prefix
 #
-from taxi_common.file_handling_functions import load_picle_file, remove_creat_dir
+from taxi_common.file_handling_functions import load_pickle_file, remove_creat_dir
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
 import csv
@@ -57,7 +57,7 @@ def process_files(yymm):
             headers = ['yy', 'mm', 'did', 'prod', 'eco-profit']
             writer.writerow(headers)
     #
-    full_dids = sorted(load_picle_file('%s/%s%s.pkl' % (ftd_list_dir, ftd_list_prefix, yymm)))
+    full_dids = sorted(load_pickle_file('%s/%s%s.pkl' % (ftd_list_dir, ftd_list_prefix, yymm)))
     s_df = pd.read_csv('%s/%s%s.csv' % (ftd_shift_dir, ftd_shift_prefix, yymm))
     trip_df = pd.read_csv('%s/%s%s.csv' % (ftd_trips_dir, ftd_trips_prefix, yymm))
     ap_trip_df = pd.read_csv('%s/%s%s.csv' % (ap_ep_dir, ap_ep_prefix, yymm))

@@ -9,13 +9,13 @@ from c_individual_analysis.__init__ import ftd_trips_dir, ftd_trips_prefix
 from c_individual_analysis.__init__ import ftd_shift_dir, ftd_shift_prefix
 from c_individual_analysis.__init__ import ftd_list_dir, ftd_list_prefix
 #
-from taxi_common.file_handling_functions import load_picle_file, remove_creat_dir, save_pickle_file
+from taxi_common.file_handling_functions import load_pickle_file, remove_creat_dir, save_pickle_file
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
 import csv, datetime
 #
 omitted_timeslots = [] 
-for l, ts in load_picle_file(zero_duration_timeslots):
+for l, ts in load_pickle_file(zero_duration_timeslots):
     if l == GENERAL:
         yyyy, mm, dd, hh = 2000 + eval(ts[0]), eval(ts[1]), eval(ts[2]), eval(ts[3])
         omitted_timeslots.append((yyyy, mm, dd, hh))
@@ -37,7 +37,7 @@ def run():
 
 def process_files(yymm):
     print 'handle the file; %s' % yymm
-    is_driver_vehicle = load_picle_file('%s/%s%s.pkl' % (vehicle_sharing_dir, vehicle_sharing_prefix, yymm))
+    is_driver_vehicle = load_pickle_file('%s/%s%s.pkl' % (vehicle_sharing_dir, vehicle_sharing_prefix, yymm))
     full_time_drivers = set()
     with open('%s/%s%s.csv' % (shift_pro_dur_dir, shift_pro_dur_prefix, yymm), 'rt') as r_csvfile:
         reader = csv.reader(r_csvfile)

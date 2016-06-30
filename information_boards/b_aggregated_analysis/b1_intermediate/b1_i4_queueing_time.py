@@ -8,7 +8,7 @@ from b_aggregated_analysis.__init__ import ns_crossing_dir, ns_crossing_prefix
 from b_aggregated_analysis.__init__ import ap_trips_dir, ap_trip_prefix
 from b_aggregated_analysis.__init__ import ns_trips_dir, ns_trip_prefix
 #
-from taxi_common.file_handling_functions import load_picle_file, remove_creat_dir
+from taxi_common.file_handling_functions import load_pickle_file, remove_creat_dir
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
 import csv
@@ -37,7 +37,7 @@ def process_file(yymm):
     #
     ap_pkl_file_path = '%s/%s%s.pkl' % (ap_crossing_dir, ap_crossing_prefix, yymm)
     ns_pkl_file_path = '%s/%s%s.pkl' % (ns_crossing_dir, ns_crossing_prefix, yymm)
-    ap_crossing_time, ns_crossing_time = load_picle_file(ap_pkl_file_path), load_picle_file(ns_pkl_file_path)
+    ap_crossing_time, ns_crossing_time = load_pickle_file(ap_pkl_file_path), load_pickle_file(ns_pkl_file_path)
     #
     # Initiate csv files
     #

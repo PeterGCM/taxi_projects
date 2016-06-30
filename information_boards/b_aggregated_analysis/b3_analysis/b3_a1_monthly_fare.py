@@ -2,7 +2,7 @@ import __init__  # @UnresolvedImport # @UnusedImport
 #
 from b_aggregated_analysis.__init__ import driver_monthly_fare_fn
 #
-from taxi_common.file_handling_functions import load_picle_file
+from taxi_common.file_handling_functions import load_pickle_file
 #
 from taxi_common.charts import one_histogram
 #
@@ -13,7 +13,7 @@ def run():
     general_analysis()
 
 def general_analysis():
-    Y09, Y10 = load_picle_file(driver_monthly_fare_fn)
+    Y09, Y10 = load_pickle_file(driver_monthly_fare_fn)
     num_bin = 50
     #
     print 't statistics %.3f, p-value %.3f' % (stats.ttest_ind(Y09, Y10, equal_var=False))

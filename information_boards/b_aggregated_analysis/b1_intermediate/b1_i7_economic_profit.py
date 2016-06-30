@@ -7,7 +7,7 @@ from b_aggregated_analysis.__init__ import ap_ep_dir, ap_ep_prefix
 from b_aggregated_analysis.__init__ import ns_ep_dir, ns_ep_prefix
 from b_aggregated_analysis.b2_summary.__init__ import GENERAL
 #
-from taxi_common.file_handling_functions import do_file_exist, get_all_files, load_picle_file, remove_creat_dir
+from taxi_common.file_handling_functions import do_file_exist, get_all_files, load_pickle_file, remove_creat_dir
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
 import csv, datetime
@@ -17,7 +17,7 @@ if not do_file_exist(hourly_productity_fn):
     summary_run()
 #
 omitted_timeslots = []
-for l, ts in load_picle_file(zero_duration_timeslots):
+for l, ts in load_pickle_file(zero_duration_timeslots):
     if l == GENERAL:
         yyyy, mm, dd, hh = 2000 + eval(ts[0]), eval(ts[1]), eval(ts[2]), eval(ts[3])
         omitted_timeslots.append((yyyy, mm, dd, hh))
