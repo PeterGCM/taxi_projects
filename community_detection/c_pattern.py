@@ -3,14 +3,17 @@ import __init__
 from __init__ import MAX_LINKAGE_RATIO
 from __init__ import linkage_dir
 #
-from taxi_common.file_handling_functions import save_pickle_file, remove_creat_dir, load_picle_file, get_fn_only, get_all_files
+from taxi_common.file_handling_functions import save_pickle_file, remove_creat_dir
+from taxi_common.file_handling_functions import load_pickle_file, get_fn_only, get_all_files
 
 
 def run(pkl_dir):
     for fn in get_all_files(pkl_dir , '', '.pkl'):
-        linkages = load_picle_file(pkl_dir + '/' + fn)
+        linkages = load_pickle_file(pkl_dir + '/' + fn)
         edge_weight = {}
+        count = 0
         for _did0, l in linkages:
+            count += 1
             max_linkage = max([num for num in l.itervalues()])
             for _did1, num_linkage in l.iteritems():
                 if num_linkage < max_linkage * MAX_LINKAGE_RATIO:
@@ -21,4 +24,7 @@ def run(pkl_dir):
                 if not edge_weight.key_has((did0, did1)):
                     edge_weight[(did0, did1)] = 0
                 edge_weight[(did0, did1)] += num_linkage
-        save_pickle_file(pkl_dir + '/ft_%s.pkl' % get_fn_only(fn)[:-len('.pkl')])
+            if count % 2000 == 0:
+                print count
+                save_pickle_file(pkl_dir + '/ft_%s.pkl' % get_fn_only(fn)[:-len('.pkl')], edge_weight)
+        save_pickle_file(pkl_dir + '/ft_%s.pkl' % get_fn_only(fn)[:-len('.pkl')], edge_weight)
