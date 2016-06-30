@@ -25,10 +25,11 @@ def run():
                 continue
             put_task(process_file, [yymm])
             count_num_jobs += 1
-        end_multiprocessor(count_num_jobs)
+    end_multiprocessor(count_num_jobs)
 
 
 def process_file(yymm):
+    print 'handle the file; %s' % yymm
     yy, mm = yymm[:2], yymm[-2:]
     yyyy = str(2000 + int(yy))
     normal_file = taxi_home + '/%s/%s/trips/trips-%s-normal.csv' % (yyyy, mm, yymm)
