@@ -1,9 +1,9 @@
 import __init__  # @UnresolvedImport # @UnusedImport
 #
-from __init__ import taxi_home
-from __init__ import DIn_PIn, DIn_POut, DOut_PIn, DOut_POut
-from __init__ import ap_poly, ns_poly
-from __init__ import IN, OUT
+from information_boards.__init__ import  taxi_home
+from information_boards.__init__ import DIn_PIn, DIn_POut, DOut_PIn, DOut_POut
+from information_boards.__init__ import ap_poly, ns_poly
+from information_boards.__init__ import IN, OUT
 from a_overall_analysis.__init__ import trips_dir, trip_prefix  # @UnresolvedImport
 #
 from taxi_common.file_handling_functions import remove_creat_dir  # @UnresolvedImport
@@ -75,7 +75,7 @@ def process_file(yymm):
                     if pt_el_ap == IN and c_sl_ap == IN: ap_trip_mode = DIn_PIn
                     elif pt_el_ap == IN and c_sl_ap == OUT: ap_trip_mode = DIn_POut
                     elif pt_el_ap == OUT and c_sl_ap == IN: ap_trip_mode = DOut_PIn
-                    elif pt_el_ap == OUT and c_sl_ap == OUT: ns_trip_mode = DOut_POut   
+                    elif pt_el_ap == OUT and c_sl_ap == OUT: ap_trip_mode = DOut_POut
                     else: assert False
                     #
                     if pt_el_ns == IN and c_sl_ns == IN: ns_trip_mode = DIn_PIn
