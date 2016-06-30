@@ -32,6 +32,9 @@ def run(processed_log_fn, zones):
         tf_date = datetime.date(yyyy, mm, dd)
         handling_date = tf_date
         for row in reader:
+            did = row[hid['did']]
+            if did == '-1':
+                continue
             t = eval(row[hid['time']])
             cur_date = datetime.date.fromtimestamp(t)
             if handling_date < cur_date:
@@ -44,7 +47,6 @@ def run(processed_log_fn, zones):
                 save_pickle_file(pkl_dir + '/%d%02d%02d.pkl' % (handling_date.year, handling_date.month, handling_date.day),
                                  day_linkageday_linkage)
                 handling_date = cur_date
-            did = row[hid['did']]
             i, j = int(row[hid['i']]), int(row[hid['j']])
             #
             # Find a targeted zone
