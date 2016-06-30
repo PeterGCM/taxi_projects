@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import __init__  # @UnresolvedImport # @UnusedImport
 #
-from __init__ import DIn_PIn, DIn_POut, DOut_PIn, DOut_POut
-from __init__ import Q_LIMIT_MIN
+from information_boards.__init__ import DIn_PIn, DIn_POut, DOut_PIn, DOut_POut
+from information_boards.__init__ import Q_LIMIT_MIN
 from a_overall_analysis.__init__ import trips_dir, trip_prefix
 from b_aggregated_analysis.__init__ import ap_crossing_dir, ap_crossing_prefix
 from b_aggregated_analysis.__init__ import ns_crossing_dir, ns_crossing_prefix
