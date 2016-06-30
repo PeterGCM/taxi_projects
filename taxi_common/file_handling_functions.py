@@ -22,7 +22,7 @@ def get_fn_only(path):
     _, tail = os.path.split(path)
     return tail
 
-def load_picle_file(path):
+def load_pickle_file(path):
     with open(path, 'rb') as fp:
         return pickle.load(fp)
     

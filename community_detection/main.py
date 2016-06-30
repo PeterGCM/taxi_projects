@@ -1,7 +1,7 @@
 import __init__
 #
 from __init__ import grid_info_fn, get_processed_log_fn, linkage_dir
-from taxi_common.file_handling_functions import do_file_exist, load_picle_file, save_pickle_file
+from taxi_common.file_handling_functions import do_file_exist, load_pickle_file, save_pickle_file
 #
 from _classes import cd_zone
 
@@ -15,7 +15,7 @@ def run(time_from, time_to, zone_unit_km):
         hl_points, vl_points, zones = run_split_into_zones(zone_unit_km, cd_zone)
         save_pickle_file(grid_info_fn, [hl_points, vl_points, zones])
     else:
-        hl_points, vl_points, zones = load_picle_file(grid_info_fn)
+        hl_points, vl_points, zones = load_pickle_file(grid_info_fn)
     #
     # Step 2. Preprocess logs
     #
