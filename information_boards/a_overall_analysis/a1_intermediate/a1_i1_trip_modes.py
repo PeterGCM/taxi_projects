@@ -7,6 +7,7 @@ from information_boards.__init__ import IN, OUT
 from a_overall_analysis.__init__ import trips_dir, trip_prefix  # @UnresolvedImport
 #
 from taxi_common.file_handling_functions import remove_creat_dir  # @UnresolvedImport
+from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
 import csv
 
@@ -14,13 +15,17 @@ import csv
 def run():
     remove_creat_dir(trips_dir)
     #
+    init_multiprocessor()
+    count_num_jobs = 0
     for y in xrange(9, 11):
         for m in xrange(1, 13):
             yymm = '%02d%02d' % (y, m) 
             if yymm in ['0912', '1010']:
                 # both years data are corrupted
                 continue
-            process_file(yymm)
+            put_task(process_file, [yymm])
+            count_num_jobs += 1
+        end_multiprocessor(count_num_jobs)
 
 
 def process_file(yymm):
