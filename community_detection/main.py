@@ -1,6 +1,6 @@
 import __init__
 #
-from __init__ import grid_info_fn, get_processed_log_fn
+from __init__ import grid_info_fn, get_processed_log_fn, linkage_dir
 from taxi_common.file_handling_functions import do_file_exist, load_picle_file, save_pickle_file
 #
 from _classes import cd_zone
@@ -26,20 +26,24 @@ def run(time_from, time_to, zone_unit_km):
     #
     # Step 3. Count the number of relations
     #
-    from b_linkage import run as run_linkage
-    run_linkage(processed_log_fn, zones)
+    pkl_dir = linkage_dir + '/%d%02d%02d-%d%02d%02d' \
+                            % (time_from[0], time_from[1],time_from[2],
+                               time_to[0], time_to[1], time_to[2])
 
+    if not do_file_exist(pkl_dir):
+        from b_linkage import run as run_linkage
+        run_linkage(processed_log_fn, zones)
     #
-    # Step 5. Find pattern
+    # Step 4. Find pattern
     #
     from c_pattern import run as run_pattern
-    run_pattern(time_from, time_to)
+    run_pattern(pkl_dir)
     #
-    # Step 4. Visualize relations 
+    # Step 5. Visualize relations
     #
-    from d_graph import run as run_visualize_relations
-    run_visualize_relations(did_relations)
+    # from d_graph import run as run_visualize_relations
+    # run_visualize_relations(did_relations)
     
 if __name__ == '__main__':
-    run((2009, 1, 1, 0, 0, 30), (2009, 1, 20, 1, 0, 30), 0.5)
+    run((2009, 1, 1, 0, 0, 30), (2009, 1, 10, 1, 0, 30), 0.5)
     

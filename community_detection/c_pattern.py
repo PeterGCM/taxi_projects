@@ -3,13 +3,12 @@ import __init__
 from __init__ import MAX_LINKAGE_RATIO
 from __init__ import linkage_dir
 #
-from taxi_common.file_handling_functions import save_pickle_file, remove_creat_dir, load_picle_file, get_fn_only
+from taxi_common.file_handling_functions import save_pickle_file, remove_creat_dir, load_picle_file, get_fn_only, get_all_files
 
 
-def run(time_from, time_to):
-    pkl_dir = linkage_dir + '/%s-%s' % (time_from[:len('yyyymmdd')], time_to[:len('yyyymmdd')])
+def run(pkl_dir):
     for fn in get_all_files(pkl_dir , '', '.pkl'):
-        linkages = load_picle_file(fn)
+        linkages = load_picle_file(pkl_dir + '/' + fn)
         edge_weight = {}
         for _did0, l in linkages:
             max_linkage = max([num for num in l.itervalues()])
