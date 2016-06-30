@@ -19,7 +19,7 @@ def run(pkl_dir):
             num_linkages0 = [num for num in l.itervalues()]
             if not num_linkages0:
                 continue
-            max_linkage = max(num_linkage0)
+            max_linkage = max(num_linkages0)
             for _did1, num_linkage1 in l.iteritems():
                 if _did1 == '-1':
                     continue
