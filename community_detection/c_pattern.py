@@ -21,7 +21,7 @@ def run(pkl_dir):
                 did0, did1 = int(_did0), int(_did1)
                 if did0 > did1:
                     did0, did1 = int(_did1), int(_did0)
-                if not edge_weight.key_has((did0, did1)):
+                if not edge_weight.has_key((did0, did1)):
                     edge_weight[(did0, did1)] = 0
                 edge_weight[(did0, did1)] += num_linkage
             if count % 2000 == 0:
