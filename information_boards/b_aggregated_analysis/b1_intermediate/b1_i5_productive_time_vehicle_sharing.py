@@ -11,7 +11,7 @@ import csv
 
 
 def run():
-    remove_creat_dir(shift_pro_dur_dir)
+    remove_creat_dir(shift_pro_dur_dir); remove_creat_dir(vehicle_sharing_dir)
     #
     init_multiprocessor()
     count_num_jobs = 0
