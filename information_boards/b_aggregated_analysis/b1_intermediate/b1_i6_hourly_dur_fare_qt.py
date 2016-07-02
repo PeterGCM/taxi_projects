@@ -1,6 +1,6 @@
 import __init__  # @UnresolvedImport # @UnusedImport
 #
-from __init__ import SEC3600
+from information_boards.__init__ import SEC3600
 from a_overall_analysis.__init__ import trips_dir, trip_prefix
 from b_aggregated_analysis.__init__ import shift_pro_dur_dir, shift_pro_dur_prefix
 from b_aggregated_analysis.__init__ import ap_trips_dir, ap_trip_prefix
@@ -12,7 +12,8 @@ from taxi_common.file_handling_functions import remove_creat_dir
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
 import csv, time, datetime
-#
+
+
 def run():
     remove_creat_dir(productivity_dir)
     #
@@ -27,6 +28,7 @@ def run():
             put_task(process_files, [yymm])
             count_num_jobs += 1
     end_multiprocessor(count_num_jobs)
+
 
 def process_files(yymm):
     print 'handle the file; %s' % yymm
