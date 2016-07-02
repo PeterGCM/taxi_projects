@@ -5,7 +5,7 @@ from __init__ import POB
 from __init__ import out_boundary_logs_fn, linkage_dir
 from _classes import cd_driver
 #
-from taxi_common.file_handling_functions import save_pickle_file, remove_creat_dir
+from taxi_common.file_handling_functions import save_pkl_threading, remove_creat_dir
 #
 import csv, datetime
 
@@ -44,8 +44,9 @@ def run(processed_log_fn, zones):
                     d.init_linkage()
                 for z in zones.itervalues():
                     z.init_logQ()
-                save_pickle_file(pkl_dir + '/%d%02d%02d.pkl' % (handling_date.year, handling_date.month, handling_date.day),
-                                 day_linkageday_linkage)
+                #
+                path = pkl_dir + '/%d%02d%02d.pkl' % (handling_date.year, handling_date.month, handling_date.day)
+                save_pkl_threading(path, day_linkage)
                 handling_date = cur_date
             i, j = int(row[hid['i']]), int(row[hid['j']])
             #
@@ -61,22 +62,11 @@ def run(processed_log_fn, zones):
                     with open(out_boundary_logs_fn, 'a') as f:
                         f.write('%d,%s,%d,%d,O' % (t, did, i, j) + '\n')
                     continue
-            except KeyError:
                 out_boundary_logs_num += 1
+            except KeyError:
                 with open(out_boundary_logs_fn, 'a') as f:
                     f.write('%d,%s,%d,%d,X' % (t, did, i, j) + '\n')
                 continue
             #
             if not drivers.has_key(did): drivers[did] = cd_driver(did)
             drivers[did].update_linkage(t, z)
-
-            # if t - memory_manage_clock > MEMORY_MANAGE_INTERVAL:
-            #     #
-            #     # Remove low possibility relations
-            #     #
-            #     for d in drivers.itervalues():
-            #         for d1, num in d.relation.iteritems():
-            #             if num < COINCIDENCE_THRESHOLD_VALUE:
-            #                 d.relation.pop(d1)
-            #     memory_manage_clock = t
-
