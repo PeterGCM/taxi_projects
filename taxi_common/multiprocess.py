@@ -25,12 +25,15 @@ class Worker(mp.Process):
             self.result_queue.put(answer)
         return
 
+
 class Task(object):
     def __init__(self, call_back, args):
         self.call_back, self.args = call_back, args
+
     def __call__(self):
         return self.call_back(*self.args)
-#    
+
+
 def init_multiprocessor():
     # Init multiple process
     global _tasks, _results, _num_workers
@@ -38,9 +41,11 @@ def init_multiprocessor():
     for w in workers:
         w.start()
 
+
 def put_task(f, args):
     _tasks.put(Task(f, args))
-    
+
+
 def end_multiprocessor(num_tasks):
     global _tasks
     # end procedure for multi processor
@@ -48,4 +53,3 @@ def end_multiprocessor(num_tasks):
         _tasks.put(None)
     # Wait for all of the tasks to finish
     _tasks.join()
-    

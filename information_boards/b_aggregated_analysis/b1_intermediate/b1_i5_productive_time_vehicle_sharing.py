@@ -8,7 +8,8 @@ from taxi_common.file_handling_functions import remove_creat_dir, save_pickle_fi
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
 import csv
-#
+
+
 def run():
     remove_creat_dir(shift_pro_dur_dir)
     #
@@ -23,8 +24,9 @@ def run():
             # process_files(yymm)
             put_task(process_file, [yymm])
             count_num_jobs += 1
-        end_multiprocessor(count_num_jobs)
-    
+    end_multiprocessor(count_num_jobs)
+
+
 def process_file(yymm):
     print 'handle the file; %s' % yymm
     #        
