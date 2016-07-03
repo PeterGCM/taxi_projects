@@ -67,18 +67,21 @@ def run():
             except ZeroDivisionError:
                 gen_prod = -1
                 zero_dur.append([GENERAL, k])
+                continue
             try:
                 ap_prod = ap_fare / (ap_dur + ap_queue)
+                ap_out_prod = (gen_fare - ap_fare) / (gen_dur - (ap_dur + ap_queue))
             except ZeroDivisionError:
                 ap_prod = -1
+                ap_out_prod = -1
                 zero_dur.append([AIRPORT, k])
-            ap_out_prod = (gen_fare - ap_fare) / (gen_dur - (ap_dur + ap_queue))
             try:
                 ns_prod = ns_fare / (ns_dur + ns_queue)
+                ns_out_prod = (gen_fare - ns_fare) / (gen_dur - (ns_dur + ns_queue))
             except ZeroDivisionError:
                 ns_prod = -1
+                ns_out_prod = -1
                 zero_dur.append([NIGHTSAFARI, k])
-            ns_out_prod = (gen_fare - ns_fare) / (gen_dur - (ns_dur + ns_queue))
             #
             writer.writerow([yy, mm, dd, hh,
                             gen_dur, gen_fare,
@@ -88,7 +91,7 @@ def run():
                             ap_prod, ap_out_prod,
                             ns_prod, ns_out_prod])
     #
-    save_pickle_file(zero_duration_timeslots, zero_dur)    
+    save_pickle_file(zero_duration_timeslots, zero_dur)
     
 if __name__ == '__main__':
     run()
