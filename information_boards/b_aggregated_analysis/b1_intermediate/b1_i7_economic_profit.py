@@ -73,7 +73,7 @@ def process_files(yymm):
                     k = (st_dt.year, st_dt.month, st_dt.day, st_dt.hour)
                     if k in omitted_timeslots:
                         continue
-                    qt = eval(row[hid['queue-time']])
+                    qt = eval(row[hid['queueing-time']])
                     dur, fare = eval(row[hid['duration']]), eval(row[hid['fare']]) 
                     eco_profit = fare - out_productivity[k] * (qt + dur)
                     #
