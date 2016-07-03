@@ -56,7 +56,7 @@ def process_files(yymm):
     print 'handle the file; %s' % yymm 
     for dir_path, file_prefix, ep_dir, ep_prefix, out_productivity in [(ap_trips_dir, ap_trip_prefix, ap_ep_dir, ap_ep_prefix, ap_out_productivity), 
                                                      (ns_trips_dir, ns_trip_prefix, ns_ep_dir, ns_ep_prefix, ns_out_productivity)]:
-        with open('%s/%s' % (dir_path, file_prefix ), 'rb') as r_csvfile:
+        with open('%s/%s%s.csv' % (dir_path, file_prefix, yymm), 'rb') as r_csvfile:
             reader = csv.reader(r_csvfile)
             headers = reader.next()
             hid = {h : i for i, h in enumerate(headers)}
