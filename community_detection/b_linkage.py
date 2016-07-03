@@ -50,7 +50,7 @@ def run(processed_log_fn, zones):
                 handling_time = cur_time
                 for d in drivers.itervalues():
                     d.init_linkage()
-                for z in zones.iteralues():
+                for z in zones.itervalues():
                     z.update_logQ(t)
             #
             # Find a targeted zone
