@@ -29,15 +29,15 @@ def run(processed_log_fn, zones):
         yyyy = eval(time_from[:len('yyyy')])
         mm = eval(time_from[len('yyyy'):len('yyyymm')])
         dd = eval(time_from[len('yyyymm'):len('yyyymmdd')])
-        tf_date = datetime.date(yyyy, mm, dd)
-        handling_date = tf_date
+        hh = eval(time_from[len('yyyymmdd'):len('yyyymmddhh')])
+        handling_time = datetime.datetime(yyyy, mm, dd,hh)
         for row in reader:
             did = row[hid['did']]
             if did == '-1':
                 continue
             t = eval(row[hid['time']])
-            cur_date = datetime.date.fromtimestamp(t)
-            if handling_date < cur_date:
+            cur_time = datetime.datetime.fromtimestamp(t)
+            if handling_time < cur_time:
                 day_linkage = []
                 for did, d in drivers.iteritems():
                     day_linkage.append((did, d.linkage))
@@ -45,9 +45,9 @@ def run(processed_log_fn, zones):
                 for z in zones.itervalues():
                     z.init_logQ()
                 #
-                path = pkl_dir + '/%d%02d%02d.pkl' % (handling_date.year, handling_date.month, handling_date.day)
+                path = pkl_dir + '/%d%02d%02d%02d.pkl' % (handling_time.year, handling_time.month, handling_time.day, handling_time.hour)
                 save_pkl_threading(path, day_linkage)
-                handling_date = cur_date
+                handling_time = cur_time
             i, j = int(row[hid['i']]), int(row[hid['j']])
             #
             # Find a targeted zone
