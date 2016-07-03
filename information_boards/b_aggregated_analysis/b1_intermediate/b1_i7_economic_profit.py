@@ -12,7 +12,7 @@ from taxi_common.multiprocess import init_multiprocessor, put_task, end_multipro
 #
 import csv, datetime
 #
-if not check_file_exist(hourly_productity_fn):
+if not check_file_exist(hourly_productivity_fn):
     from b_aggregated_analysis.b2_summary import run as summary_run
     summary_run()
 #
