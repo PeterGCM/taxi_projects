@@ -16,18 +16,19 @@ import csv, time, datetime
 
 def run():
     remove_creat_dir(productivity_dir)
+    process_files('0901')
     #
-    init_multiprocessor()
-    count_num_jobs = 0
-    for y in xrange(9, 11):
-        for m in xrange(1, 13):
-            yymm = '%02d%02d' % (y, m)
-            if yymm in ['0912', '1010']:
-                continue
-            # process_files('1007')
-            put_task(process_files, [yymm])
-            count_num_jobs += 1
-    end_multiprocessor(count_num_jobs)
+    # init_multiprocessor()
+    # count_num_jobs = 0
+    # for y in xrange(9, 11):
+    #     for m in xrange(1, 13):
+    #         yymm = '%02d%02d' % (y, m)
+    #         if yymm in ['0912', '1010']:
+    #             continue
+    #         # process_files('1007')
+    #         put_task(process_files, [yymm])
+    #         count_num_jobs += 1
+    # end_multiprocessor(count_num_jobs)
 
 
 def process_files(yymm):
@@ -48,13 +49,13 @@ def process_files(yymm):
     qt_label = 'queueing-time'
     # Productive duration
     yyyy, mm = 2000 + int(yymm[:2]), int(yymm[2:])
-    with open('%s/%s%s.csv' % (shift_pro_dur_dir, shift_pro_dur_prefix, yymm), 'rb') as r_csvfile:
-        reader = csv.reader(r_csvfile)
-        headers = reader.next()
-        hid = {h: i for i, h in enumerate(headers)}
-        for row in reader:
-            dd, hh = eval(row[hid['dd']]), eval(row[hid['hh']])
-            hourly_total[(yyyy, mm, dd, hh)][GEN_DUR] += eval(row[hid['pro-dur']]) * 60  # unit change; Minute -> Second
+    # with open('%s/%s%s.csv' % (shift_pro_dur_dir, shift_pro_dur_prefix, yymm), 'rb') as r_csvfile:
+    #     reader = csv.reader(r_csvfile)
+    #     headers = reader.next()
+    #     hid = {h: i for i, h in enumerate(headers)}
+    #     for row in reader:
+    #         dd, hh = eval(row[hid['dd']]), eval(row[hid['hh']])
+    #         hourly_total[(yyyy, mm, dd, hh)][GEN_DUR] += eval(row[hid['pro-dur']]) * 60  # unit change; Minute -> Second
     # Total fare
     with open('%s/%s%s.csv' % (trips_dir, trip_prefix, yymm), 'rb') as r_csvfile:
         reader = csv.reader(r_csvfile)
@@ -64,6 +65,8 @@ def process_files(yymm):
             st_ts, et_ts = eval(row[hid[st_label]]), eval(row[hid[et_label]])
             dur, fare = eval(row[hid[dur_label]]), eval(row[hid[fare_label]])
             sum_prop_fare_dur(hourly_total, st_ts, et_ts, dur, fare, GEN_FARE, None)
+    assert False
+
     # Sum up fare, duration and queue time
     for dir_path, file_prefix, id_DUR, id_FARE, id_QUEUE in [(ap_trips_dir, ap_trip_prefix, AP_DUR, AP_FARE, AP_QUEUE),
                                                              (ns_trips_dir, ns_trip_prefix, NS_DUR, NS_FARE, NS_QUEUE)]:

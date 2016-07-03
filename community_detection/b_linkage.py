@@ -1,7 +1,7 @@
 import __init__
 #
 from __init__ import MEMORY_MANAGE_INTERVAL, COINCIDENCE_THRESHOLD_VALUE
-from __init__ import POB, EIGHT_HOUR
+from __init__ import POB, SIX_HOUR
 from __init__ import out_boundary_logs_fn, linkage_dir
 from _classes import cd_driver
 #
@@ -37,14 +37,15 @@ def run(processed_log_fn, zones):
                 continue
             t = eval(row[hid['time']])
             cur_time = datetime.datetime.fromtimestamp(t)
-            if handling_time.hour + EIGHT_HOUR < cur_time.hour:
+            if handling_time.hour + SIX_HOUR < cur_time.hour:
                 day_linkage = []
                 for did0, d in drivers.iteritems():
                     for did1, num_linkage in d.linkage.iteritems():
                         day_linkage.append((did0, did1, num_linkage))
                 #
-                path = pkl_dir + '/%d%02d%02d-%d.pkl' % (handling_time.year, handling_time.month, handling_time.day, int(handling_time.hour / EIGHT_HOUR))
+                path = pkl_dir + '/%d%02d%02d-%d.pkl' % (handling_time.year, handling_time.month, handling_time.day, int(handling_time.hour / SIX_HOUR))
                 save_pkl_threading(path, day_linkage)
+                del day_linkage
                 #
                 handling_time = cur_time
                 for d in drivers.itervalues():
