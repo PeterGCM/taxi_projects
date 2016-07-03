@@ -39,9 +39,8 @@ def run(processed_log_fn, zones):
             cur_time = datetime.datetime.fromtimestamp(t)
             if handling_time.hour + SIX_HOUR < cur_time.hour:
                 day_linkage = []
-                for did0, d in drivers.iteritems():
-                    for did1, num_linkage in d.linkage.iteritems():
-                        day_linkage.append((did0, did1, num_linkage))
+                for did, d in drivers.iteritems():
+                    day_linkage.append((did, d.linkage))
                 #
                 path = pkl_dir + '/%d%02d%02d-%d.pkl' % (handling_time.year, handling_time.month, handling_time.day, int(handling_time.hour / SIX_HOUR))
                 save_pkl_threading(path, day_linkage)
