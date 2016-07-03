@@ -22,10 +22,17 @@ def save_pickle_file(path, _objects):
         pickle.dump(_objects, fp)
 
 
+thread_writing = None
 def save_pkl_threading(path, _objects):
-    t = threading.Thread(target=save_pickle_file, args=(path, _objects))
-    t.daemon = True
-    t.start()
+    global thread_writing
+    if thread_writing is not None:
+        thread_writing = threading.Thread(target=save_pickle_file, args=(path, _objects))
+        thread_writing.daemon = True
+        thread_writing.start()
+    else:
+        thread_writing.join()
+        thread_writing = None
+        save_pkl_threading(path, _objects)
 
 
 def get_fn_only(path):

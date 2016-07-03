@@ -47,10 +47,11 @@ def run(processed_log_fn, zones):
                 del day_linkage
                 #
                 handling_time = cur_time
-                for d in drivers.itervalues():
-                    d.init_linkage()
                 for z in zones.itervalues():
-                    z.update_logQ(t)
+                    z.init_logQ()
+                for did in drivers.iterkeys():
+                    d = drivers.pop(did)
+                    del d
             #
             # Find a targeted zone
             #
