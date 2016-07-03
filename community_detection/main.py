@@ -48,4 +48,4 @@ def run(time_from, time_to, zone_unit_km):
     # run_visualize_relations(did_relations)
     
 if __name__ == '__main__':
-    run((2009, 1, 1, 0, 0, 0), (2009, 1, 20, 1, 0, 0), 0.5)
+    run((2009, 1, 1, 0, 0, 30), (2009, 1, 20, 1, 0, 30), 0.5)
