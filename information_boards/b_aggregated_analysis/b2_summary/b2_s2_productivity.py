@@ -8,7 +8,8 @@ from __init__ import GEN_DUR, GEN_FARE, AP_DUR, AP_FARE, AP_QUEUE, NS_DUR, NS_FA
 from taxi_common.file_handling_functions import check_dir_create, get_all_files, save_pickle_file
 #
 import datetime, csv
-#
+
+
 def run():
     cur_timestamp = datetime.datetime(2008, 12, 31, 23)
     last_timestamp = datetime.datetime(2011, 1, 1, 0)
@@ -45,7 +46,7 @@ def run():
     # Summary
     print 'summary'
     zero_dur = []
-    with open(hourly_productivities, 'wt') as w_csvfile:
+    with open(hourly_productivity_fn, 'wt') as w_csvfile:
         writer = csv.writer(w_csvfile)
         header = ['yy', 'mm', 'dd', 'hh',
                     'gen-duration', 'gen-fare',
