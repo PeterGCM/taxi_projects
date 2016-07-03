@@ -41,9 +41,9 @@ def run(processed_log_fn, zones):
                 day_linkage = []
                 for did, d in drivers.iteritems():
                     day_linkage.append((did, d.linkage))
-                    d.init_linkage()
-                for z in zones.itervalues():
-                    z.init_logQ()
+                    # d.init_linkage()
+                # for z in zones.itervalues():
+                    # z.init_logQ()
                 #
                 path = pkl_dir + '/%d%02d%02d%02d.pkl' % (handling_time.year, handling_time.month, handling_time.day, handling_time.hour)
                 save_pkl_threading(path, day_linkage)
