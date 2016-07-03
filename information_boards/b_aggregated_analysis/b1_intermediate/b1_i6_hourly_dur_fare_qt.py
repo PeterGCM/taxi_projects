@@ -126,7 +126,7 @@ def sum_queueing_time(hourly_total, st_ts, qt, id_QUEUE):
                               st_dt.day, st_dt.hour)][id_QUEUE] += st_ts - tg_ts
                 break
             hourly_total[(tg_dt.year, tg_dt.month,
-                          tg_dt.day, tg_dt.SEC3600)][id_QUEUE] += SEC3600
+                          tg_dt.day, tg_dt.hour)][id_QUEUE] += SEC3600
             tg_dt += datetime.timedelta(hours=1)
 
 
