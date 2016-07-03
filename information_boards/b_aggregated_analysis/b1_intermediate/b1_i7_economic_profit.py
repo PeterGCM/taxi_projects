@@ -22,7 +22,7 @@ for l, ts in load_pickle_file(zero_duration_timeslots):
         yyyy, mm, dd, hh = 2000 + eval(ts[0]), eval(ts[1]), eval(ts[2]), eval(ts[3])
         omitted_timeslots.append((yyyy, mm, dd, hh))
 #
-ap_out_productivities, ns_out_productivities = {}, {}
+ap_out_productivity, ns_out_productivity = {}, {}
 with open(hourly_productity_fn) as r_csvfile:
     reader = csv.reader(r_csvfile)
     headers = reader.next()
@@ -31,29 +31,31 @@ with open(hourly_productity_fn) as r_csvfile:
         yyyy, mm, dd, hh = 2000 + eval(row[hid['yy']]), eval(row[hid['mm']]), eval(row[hid['dd']]), eval(row[hid['hh']])
         if (yyyy, mm, dd, hh) in omitted_timeslots:
             continue  
-        ap_out_productivities[(yyyy, mm, dd, hh)] = eval(row[hid['ap-out-productivity']])
-        ns_out_productivities[(yyyy, mm, dd, hh)] = eval(row[hid['ns-out-productivity']])
-#
+        ap_out_productivity[(yyyy, mm, dd, hh)] = eval(row[hid['ap-out-productivity']])
+        ns_out_productivity[(yyyy, mm, dd, hh)] = eval(row[hid['ns-out-productivity']])
+
+
 def run():
     remove_creat_dir(ap_ep_dir); remove_creat_dir(ns_ep_dir)
     #
-    init_multiprocessor()
-    count_num_jobs = 0
+    # init_multiprocessor()
+    # count_num_jobs = 0
     for y in xrange(9, 11):
         for m in xrange(1, 13):
             yymm = '%02d%02d' % (y, m)
             if yymm in ['0912', '1010']:
                 continue
-            # process_files('1007')
-            put_task(process_files, [yymm])
-            count_num_jobs += 1
-    end_multiprocessor(count_num_jobs)
-#     
+            process_files(yymm)
+            # put_task(process_files, [yymm])
+    #         count_num_jobs += 1
+    # end_multiprocessor(count_num_jobs)
+
+
 def process_files(yymm):
     yy, mm = yymm[:2], yymm[-2:]
     print 'handle the file; %s' % yymm 
-    for dir_path, file_prefix, ep_dir, ep_prefix in [(ap_trips_dir, ap_trip_prefix, ap_ep_dir, ap_ep_prefix), 
-                                                     (ns_trips_dir, ns_trip_prefix, ns_ep_dir, ns_ep_prefix)]:
+    for dir_path, file_prefix, ep_dir, ep_prefix, out_productivity in [(ap_trips_dir, ap_trip_prefix, ap_ep_dir, ap_ep_prefix, ap_out_productivity), 
+                                                     (ns_trips_dir, ns_trip_prefix, ns_ep_dir, ns_ep_prefix, ns_out_productivity)]:
         with open('%s/%s' % (dir_path, file_prefix ), 'rb') as r_csvfile:
             reader = csv.reader(r_csvfile)
             headers = reader.next()
@@ -73,7 +75,7 @@ def process_files(yymm):
                         continue
                     qt = eval(row[hid['queue-time']])
                     dur, fare = eval(row[hid['duration']]), eval(row[hid['fare']]) 
-                    eco_profit = fare - ap_out_productivities[k] * (qt + dur)
+                    eco_profit = fare - out_productivity[k] * (qt + dur)
                     #
                     writer.writerow([st_ts, row[hid['did']], dur, fare,
                                      row[hid['trip-mode']], qt, eco_profit,
