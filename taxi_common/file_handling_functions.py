@@ -25,7 +25,7 @@ def save_pickle_file(path, _objects):
 thread_writing = None
 def save_pkl_threading(path, _objects):
     global thread_writing
-    if thread_writing is not None:
+    if thread_writing is None:
         thread_writing = threading.Thread(target=save_pickle_file, args=(path, _objects))
         thread_writing.daemon = True
         thread_writing.start()
