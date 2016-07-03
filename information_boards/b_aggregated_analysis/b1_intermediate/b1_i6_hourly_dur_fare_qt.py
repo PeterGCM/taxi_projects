@@ -48,17 +48,17 @@ def process_files(yymm):
     st_label, et_label, dur_label, fare_label = 'start-time', 'end-time', 'duration', 'fare'
     qt_label = 'queueing-time'
     # Productive duration
-    print 'Productive duration'
+    print yymm, 'Productive duration'
     yyyy, mm = 2000 + int(yymm[:2]), int(yymm[2:])
-    # with open('%s/%s%s.csv' % (shift_pro_dur_dir, shift_pro_dur_prefix, yymm), 'rb') as r_csvfile:
-    #     reader = csv.reader(r_csvfile)
-    #     headers = reader.next()
-    #     hid = {h: i for i, h in enumerate(headers)}
-    #     for row in reader:
-    #         dd, hh = eval(row[hid['dd']]), eval(row[hid['hh']])
-    #         hourly_total[(yyyy, mm, dd, hh)][GEN_DUR] += eval(row[hid['pro-dur']]) * 60  # unit change; Minute -> Second
+    with open('%s/%s%s.csv' % (shift_pro_dur_dir, shift_pro_dur_prefix, yymm), 'rb') as r_csvfile:
+        reader = csv.reader(r_csvfile)
+        headers = reader.next()
+        hid = {h: i for i, h in enumerate(headers)}
+        for row in reader:
+            dd, hh = eval(row[hid['dd']]), eval(row[hid['hh']])
+            hourly_total[(yyyy, mm, dd, hh)][GEN_DUR] += eval(row[hid['pro-dur']]) * 60  # unit change; Minute -> Second
     # Total fare
-    print 'Total fare'
+    print yymm, 'Total fare'
     with open('%s/%s%s.csv' % (trips_dir, trip_prefix, yymm), 'rb') as r_csvfile:
         reader = csv.reader(r_csvfile)
         headers = reader.next()
@@ -68,7 +68,7 @@ def process_files(yymm):
             dur, fare = eval(row[hid[dur_label]]), eval(row[hid[fare_label]])
             sum_prop_fare_dur(hourly_total, st_ts, et_ts, dur, fare, GEN_FARE, None)
     # Sum up fare, duration and queue time
-    print 'Sum up fare, duration and queue time'
+    print yymm, 'Sum up fare, duration and queue time'
     for dir_path, file_prefix, id_DUR, id_FARE, id_QUEUE in [(ap_trips_dir, ap_trip_prefix, AP_DUR, AP_FARE, AP_QUEUE),
                                                              (ns_trips_dir, ns_trip_prefix, NS_DUR, NS_FARE, NS_QUEUE)]:
         with open('%s/%s%s.csv' % (dir_path, file_prefix, yymm), 'rb') as r_csvfile:
@@ -83,7 +83,7 @@ def process_files(yymm):
                 sum_prop_fare_dur(hourly_total, st_ts, et_ts, dur, fare, id_FARE, id_DUR)
                 sum_queueing_time(hourly_total, st_ts, qt, id_QUEUE)
     # Generate .csv file
-    print 'Generate .csv file'
+    print yymm, 'Generate .csv file'
     with open('%s/%s%s.csv' % (productivity_dir, productivity_prefix, yymm), 'wt') as w_csvfile:
         writer = csv.writer(w_csvfile)
         header = ['yy', 'mm', 'dd', 'hh',
