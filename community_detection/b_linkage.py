@@ -49,7 +49,8 @@ def run(processed_log_fn, zones):
                 handling_time = cur_time
                 for z in zones.itervalues():
                     z.init_logQ()
-                for did in drivers.iterkeys():
+                driver_indices = drivers.keys()
+                for did in driver_indices:
                     d = drivers.pop(did)
                     del d
             #
