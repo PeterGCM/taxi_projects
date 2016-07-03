@@ -37,7 +37,7 @@ def run(processed_log_fn, zones):
                 continue
             t = eval(row[hid['time']])
             cur_time = datetime.datetime.fromtimestamp(t)
-            if handling_time < cur_time:
+            if handling_time.hour < cur_time.hour:
                 day_linkage = []
                 for did, d in drivers.iteritems():
                     day_linkage.append((did, d.linkage))
