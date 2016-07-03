@@ -39,19 +39,20 @@ def run(processed_log_fn, zones):
             cur_time = datetime.datetime.fromtimestamp(t)
             if handling_time.hour + EIGHT_HOUR < cur_time.hour:
                 day_linkage = []
-                for did, d in drivers.iteritems():
-                    day_linkage.append((did, d.linkage))
-                    d.init_linkage()
-                # for z in zones.itervalues():
-                    # z.init_logQ()
+                for did0, d in drivers.iteritems():
+                    for did1, num_linkage in d.linkage.iteritems():
+                        day_linkage.append((did0, did1, num_linkage))
                 #
                 path = pkl_dir + '/%d%02d%02d-%d.pkl' % (handling_time.year, handling_time.month, handling_time.day, int(handling_time.hour / EIGHT_HOUR))
                 save_pkl_threading(path, day_linkage)
+                #
                 handling_time = cur_time
-            i, j = int(row[hid['i']]), int(row[hid['j']])
+                for d in drivers.itervalues():
+                    d.init_linkage()
             #
             # Find a targeted zone
             #
+            i, j = int(row[hid['i']]), int(row[hid['j']])
             try:
                 z = zones[(i, j)]
                 #

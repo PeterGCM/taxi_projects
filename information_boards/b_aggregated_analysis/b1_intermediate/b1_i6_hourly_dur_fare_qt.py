@@ -63,7 +63,7 @@ def process_files(yymm):
         for row in reader:
             st_ts, et_ts = eval(row[hid[st_label]]), eval(row[hid[et_label]])
             dur, fare = eval(row[hid[dur_label]]), eval(row[hid[fare_label]])
-            sum_prop_fare_dur(hourly_total, st_ts, et_ts, dur, fare, GEN_FARE)
+            sum_prop_fare_dur(hourly_total, st_ts, et_ts, dur, fare, GEN_FARE, None)
     # Sum up fare, duration and queue time
     for dir_path, file_prefix, id_DUR, id_FARE, id_QUEUE in [(ap_trips_dir, ap_trip_prefix, AP_DUR, AP_FARE, AP_QUEUE),
                                                              (ns_trips_dir, ns_trip_prefix, NS_DUR, NS_FARE, NS_QUEUE)]:
@@ -140,7 +140,7 @@ def sum_prop_fare_dur(hourly_total, st_ts, et_ts, dur, fare, id_FARE, id_DUR=Non
     if st_dt.hour == et_dt.hour:
         hourly_total[(st_dt.year, st_dt.month,
                       st_dt.day, st_dt.hour)][id_FARE] += fare
-        if not id_DUR == None:
+        if not id_DUR:
             hourly_total[(st_dt.year, st_dt.month,
                           st_dt.day, st_dt.hour)][id_DUR] += dur
     else:
@@ -155,7 +155,6 @@ def sum_prop_fare_dur(hourly_total, st_ts, et_ts, dur, fare, id_FARE, id_DUR=Non
             if tg_dt.hour == et_dt.hour:
                 dur_within_slot = et_ts - tg_ts
                 add_prop_fare_dur(dur_within_slot, dur, fare, id_FARE, id_DUR)
-                prop = dur_within_slot / dur
                 break
             dur_within_slot = SEC3600
             add_prop_fare_dur(dur_within_slot, dur, fare, id_FARE, id_DUR)

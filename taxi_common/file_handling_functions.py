@@ -23,8 +23,9 @@ def save_pickle_file(path, _objects):
 
 
 def save_pkl_threading(path, _objects):
-    t1 = threading.Thread(target=save_pickle_file, args=(path, _objects))
-    t1.start()
+    t = threading.Thread(target=save_pickle_file, args=(path, _objects))
+    t.daemon = True
+    t.start()
 
 
 def get_fn_only(path):
