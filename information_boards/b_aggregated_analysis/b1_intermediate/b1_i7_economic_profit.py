@@ -1,6 +1,6 @@
 import __init__  # @UnresolvedImport # @UnusedImport
 #
-from b_aggregated_analysis.__init__ import hourly_productity_fn, zero_duration_timeslots
+from b_aggregated_analysis.__init__ import hourly_productivity_fn, zero_duration_timeslots
 from b_aggregated_analysis.__init__ import ap_trips_dir, ap_trip_prefix
 from b_aggregated_analysis.__init__ import ns_trips_dir, ns_trip_prefix
 from b_aggregated_analysis.__init__ import ap_ep_dir, ap_ep_prefix
@@ -23,7 +23,7 @@ for l, ts in load_pickle_file(zero_duration_timeslots):
         omitted_timeslots.append((yyyy, mm, dd, hh))
 #
 ap_out_productivity, ns_out_productivity = {}, {}
-with open(hourly_productity_fn) as r_csvfile:
+with open(hourly_productivity_fn) as r_csvfile:
     reader = csv.reader(r_csvfile)
     headers = reader.next()
     hid = {h : i for i, h in enumerate(headers)}
