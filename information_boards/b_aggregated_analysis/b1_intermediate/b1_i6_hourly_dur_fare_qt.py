@@ -130,7 +130,7 @@ def sum_prop_fare_dur(hourly_total, st_ts, et_ts, dur, fare, id_FARE, id_DUR=Non
         prop = dur_within_slot / dur
         hourly_total[(et_dt.year, et_dt.month,
                       et_dt.day, et_dt.hour)][id_FARE] += fare * prop
-        if not id_DUR != None:
+        if not id_DUR:
             hourly_total[(st_dt.year, st_dt.month,
                           st_dt.day, st_dt.hour)][id_DUR] += dur_within_slot
 
