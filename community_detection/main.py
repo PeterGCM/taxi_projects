@@ -32,9 +32,17 @@ def run(time_from, time_to, zone_unit_km):
     pkl_dir = linkage_dir + '/%d%02d%02d-%d%02d%02d' \
                             % (time_from[0], time_from[1],time_from[2],
                                time_to[0], time_to[1], time_to[2])
-    if not check_file_exist(pkl_dir):
-        from b_linkage import run as run_linkage
-        run_linkage(processed_log_fn, zones)
+
+    from traceback import format_exc
+    try:
+        assert  False
+        if not check_file_exist(pkl_dir):
+            from b_linkage import run as run_linkage
+            run_linkage(processed_log_fn, zones)
+    except Exception as _:
+        with open('logging.txt', 'w') as f:
+            f.write(format_exc())
+        raise
     #
     # Step 4. Find pattern
     #
