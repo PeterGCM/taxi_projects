@@ -3,6 +3,8 @@ import os, sys
 sys.path.append(os.path.dirname(os.path.realpath(__file__)) + '/../..')
 import information_boards.__init__
 #
+from taxi_common.file_handling_functions import check_dir_create
+#
 # full time drivers data
 #
 from information_boards.__init__ import taxi_data, summary_dir
