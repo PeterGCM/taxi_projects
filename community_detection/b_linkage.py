@@ -41,7 +41,7 @@ def run(processed_log_fn, zones):
                 day_linkage = []
                 for did, d in drivers.iteritems():
                     day_linkage.append((did, d.linkage))
-                save_linkage(handling_time, day_linkage, zones, drivers)
+                save_linkage(pkl_dir, handling_time, day_linkage, zones, drivers)
                 #
                 handling_time = cur_time
             #
@@ -66,7 +66,7 @@ def run(processed_log_fn, zones):
             #
             if not drivers.has_key(did): drivers[did] = cd_driver(did)
             drivers[did].update_linkage(t, z)
-        save_linkage(cur_time, day_linkage, zones, drivers)
+        save_linkage(pkl_dir, cur_time, day_linkage, zones, drivers)
 
 
 def save_linkage(pkl_dir, dt, day_linkage, zones, drivers):
