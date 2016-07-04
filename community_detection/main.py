@@ -35,12 +35,11 @@ def run(time_from, time_to, zone_unit_km):
 
     from traceback import format_exc
     try:
-        assert  False
         if not check_file_exist(pkl_dir):
             from b_linkage import run as run_linkage
             run_linkage(processed_log_fn, zones)
     except Exception as _:
-        with open('logging.txt', 'w') as f:
+        with open('logging_Python.txt', 'w') as f:
             f.write(format_exc())
         raise
     #
