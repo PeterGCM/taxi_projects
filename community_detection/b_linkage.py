@@ -69,7 +69,7 @@ def run(processed_log_fn, zones):
         save_linkage(cur_time, day_linkage, zones, drivers)
 
 
-def save_linkage(dt, day_linkage, zones, drivers):
+def save_linkage(pkl_dir, dt, day_linkage, zones, drivers):
     path = pkl_dir + '/%d%02d%02d-%d.pkl' % (dt.year, dt.month, dt.day, int(dt.hour/HOUR12))
     save_pkl_threading(path, day_linkage)
     del day_linkage
