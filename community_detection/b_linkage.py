@@ -1,7 +1,7 @@
 import __init__
 #
 from __init__ import MEMORY_MANAGE_INTERVAL, COINCIDENCE_THRESHOLD_VALUE
-from __init__ import POB, SIX_HOUR, EIGHT_HOUR, ONE_HOUR
+from __init__ import POB, SIX_HOUR, EIGHT_HOUR, ONE_HOUR, HOUR24
 from __init__ import out_boundary_logs_fn, linkage_dir
 from _classes import cd_driver
 #
@@ -37,17 +37,11 @@ def run(processed_log_fn, zones):
                 continue
             t = eval(row[hid['time']])
             cur_time = datetime.datetime.fromtimestamp(t)
-            # if handling_time.hour + EIGHT_HOUR < cur_time.hour:
-            # if handling_time.hour + ONE_HOUR < cur_time.hour:
-            if handling_time.hour < cur_time.hour:
+            if handling_time + datetime.timedelta(days=1) < cur_time.hour:
                 day_linkage = []
                 for did, d in drivers.iteritems():
                     day_linkage.append((did, d.linkage))
-                #
-                # path = pkl_dir + '/%d%02d%02d-%d.pkl' % (handling_time.year, handling_time.month, handling_time.day, int(handling_time.hour / EIGHT_HOUR))
-                path = pkl_dir + '/%d%02d%02d%d.pkl' % (handling_time.year, handling_time.month, handling_time.day, handling_time.hour)
-                save_pickle_file(path, day_linkage)
-                del day_linkage
+                save_linkage(handling_time, day_linkage, zones, drivers)
                 #
                 handling_time = cur_time
                 for z in zones.itervalues():
@@ -78,3 +72,18 @@ def run(processed_log_fn, zones):
             #
             if not drivers.has_key(did): drivers[did] = cd_driver(did)
             drivers[did].update_linkage(t, z)
+        save_linkage(cur_time, day_linkage, zones, drivers)
+
+
+def save_linkage(dt, day_linkage, zones, drivers):
+    path = pkl_dir + '/%d%02d%02d.pkl' % (dt.year, dt.month, dt.day)
+    save_pkl_threading(path, day_linkage)
+    del day_linkage
+
+    for z in zones.itervalues():
+        z.init_logQ()
+    driver_indices = drivers.keys()
+    for did in driver_indices:
+        d = drivers.pop(did)
+        del d
+
