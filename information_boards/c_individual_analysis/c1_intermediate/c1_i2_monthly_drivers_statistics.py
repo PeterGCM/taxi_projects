@@ -1,7 +1,7 @@
-import __init__  # @UnresolvedImport # @UnusedImport
+import __init__
 #
-from __init__ import DIn_PIn, DOut_PIn
-from __init__ import SEC60
+from information_boards.__init__ import DIn_PIn, DOut_PIn
+from information_boards.__init__ import SEC60
 from b_aggregated_analysis.__init__ import ap_ep_dir, ap_ep_prefix
 from b_aggregated_analysis.__init__ import ns_ep_dir, ns_ep_prefix
 from c_individual_analysis.__init__ import ftd_trips_dir, ftd_trips_prefix
