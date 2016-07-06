@@ -29,13 +29,4 @@ def run(pkl_dir):
                     edge_weight0[k] = v
                 else:
                     edge_weight0[k] += v
-
-
-        else:
-
-
-
-
-
-
-        save_pickle_file(pkl_dir + '/m_%s.pkl' % get_fn_only(fn)[:-len('.pkl')], edge_weight0)
+        save_pickle_file(saving_fn, edge_weight0)

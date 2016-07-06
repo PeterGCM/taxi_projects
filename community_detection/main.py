@@ -46,8 +46,8 @@ def run(time_from, time_to, zone_unit_km):
     # Step 4. Find pattern
     #
     print 'step 4'
-    from c_pattern import run as run_pattern
-    run_pattern(pkl_dir)
+    from c_merge import run as run_merge
+    run_merge(pkl_dir)
     #
     # Step 5. Visualize relations
     #
