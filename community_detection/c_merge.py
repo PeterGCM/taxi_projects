@@ -9,6 +9,7 @@ from taxi_common.file_handling_functions import load_pickle_file, get_fn_only, g
 
 def run(pkl_dir):
     for fn in get_all_files(pkl_dir , '', '.pkl'):
+    	print fn
         linkages = load_pickle_file(pkl_dir + '/' + fn)
         edge_weight0 = {}
         for _did0, l in linkages:
