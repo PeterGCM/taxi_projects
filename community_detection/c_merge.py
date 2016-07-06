@@ -18,14 +18,17 @@ def run(pkl_dir):
 
     while handling_date < to_date:
         yyyy, mm, dd = handling_date.year, handling_date.month, handling_date.day
+        print 'start reading'
         twrv0 = ThreadWithReturnValue(target=load_pickle_file, args=(pkl_dir + '/%s%s%s-0.pkl' % (yyyy, mm, dd),))
         twrv1 = ThreadWithReturnValue(target=load_pickle_file, args=(pkl_dir + '/%s%s%s-1.pkl' % (yyyy, mm, dd),))
         twrv0.start(); twrv1.start()
         #
         edge_weight = {}
         linkages0 = twrv0.join()
+        print 'handling 0'
         arrage_linkage(linkages0, edge_weight)
         linkages1 = twrv1.join()
+        print 'handling 1'
         arrage_linkage(linkages1, edge_weight)
         #
         saving_fn = pkl_dir + '/m_%s%s%s.pkl' % (yyyy, mm, dd)
