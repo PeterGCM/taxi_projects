@@ -45,6 +45,9 @@ def run(pkl_dir):
 def arrange_linkage(linkages, edge_weight):
     while linkages:
         _did0, l = linkages.pop()
+        values = l.values()
+        if not values:
+            continue
         max_value = max(l.values())
         for _did1, num_linkage in l.iteritems():
             if num_linkage < max_value * MAX_LINKAGE_RATIO:
