@@ -4,7 +4,7 @@ from __init__ import MIN_LINKAGE, MAX_LINKAGE_RATIO
 from __init__ import linkage_dir
 #
 from taxi_common.file_handling_functions import save_pickle_file, remove_creat_dir, check_path_exist
-from taxi_common.file_handling_functions import load_pickle_file, get_fn_only, get_all_files
+from taxi_common.file_handling_functions import load_pickle_file, get_fn_only, get_all_files, save_pkl_threading
 #
 import datetime
 from threading import Thread
@@ -36,6 +36,8 @@ def run(pkl_dir):
         #
         saving_fn = pkl_dir + '/m2_%d%02d%02d.pkl' % (yyyy, mm, dd)
         save_pickle_file(saving_fn, edge_weight)
+        # save_pkl_threading(saving_fn, edge_weight)
+        del edge_weight
         #
         handling_date += datetime.timedelta(days=1)
 
@@ -43,8 +45,9 @@ def run(pkl_dir):
 def arrange_linkage(linkages, edge_weight):
     while linkages:
         _did0, l = linkages.pop()
+        max_value = max(l.values())
         for _did1, num_linkage in l.iteritems():
-            if num_linkage < MIN_LINKAGE:
+            if num_linkage < max_value * MAX_LINKAGE_RATIO:
                 continue
             did0, did1 = int(_did0), int(_did1)
             if did0 > did1:
