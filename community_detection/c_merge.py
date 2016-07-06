@@ -23,8 +23,8 @@ def run(pkl_dir):
     while handling_date < to_date:
         yyyy, mm, dd = handling_date.year, handling_date.month, handling_date.day
         print 'start reading'
-        twrv0 = ThreadWithReturnValue(target=load_pickle_file, args=(pkl_dir + '/%s%s%s-0.pkl' % (yyyy, mm, dd),))
-        twrv1 = ThreadWithReturnValue(target=load_pickle_file, args=(pkl_dir + '/%s%s%s-1.pkl' % (yyyy, mm, dd),))
+        twrv0 = ThreadWithReturnValue(target=load_pickle_file, args=(pkl_dir + '/%d%02d%02d-0.pkl' % (yyyy, mm, dd),))
+        twrv1 = ThreadWithReturnValue(target=load_pickle_file, args=(pkl_dir + '/%d%02d%02d-1.pkl' % (yyyy, mm, dd),))
         twrv0.start(); twrv1.start()
         #
         edge_weight = {}
@@ -36,7 +36,7 @@ def run(pkl_dir):
         arrage_linkage(linkages1, edge_weight)
         #
         saving_fn = pkl_dir + '/m_%s%s%s.pkl' % (yyyy, mm, dd)
-        save_pickle_file(saving_fn, edge_weight0)
+        save_pickle_file(saving_fn, edge_weight)
         #
         handling_date += datetime.timedelta(days=1)
 
