@@ -48,8 +48,8 @@ def run(time_from, time_to, zone_unit_km):
     print 'step 4'
     # if False:
     try:
-        from c_merge import run as run_merge
-        # from c_merge_2 import run as run_merge
+        # from c_merge import run as run_merge
+        from c_merge_2 import run as run_merge
         run_merge(pkl_dir)
     except Exception as _:
         with open('logging_Python.txt', 'w') as f:
