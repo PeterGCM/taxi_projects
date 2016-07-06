@@ -11,8 +11,8 @@ from threading import Thread
 
 def run(pkl_dir):
     f_yyyymmdd, t_yyyymmdd = pkl_dir.split('/')[-1].split('-')
-    from_date = date(int(f_yyyymmdd[:'yyyy']), int(f_yyyymmdd['yyyy':'yyyymm']), int(f_yyyymmdd['yyyymm':]))
-    to_date = date(int(t_yyyymmdd[:'yyyy']), int(t_yyyymmdd['yyyy':'yyyymm']), int(t_yyyymmdd['yyyymm':]))
+    from_date = datetime.date(int(f_yyyymmdd[:'yyyy']), int(f_yyyymmdd['yyyy':'yyyymm']), int(f_yyyymmdd['yyyymm':]))
+    to_date = datetime.date(int(t_yyyymmdd[:'yyyy']), int(t_yyyymmdd['yyyy':'yyyymm']), int(t_yyyymmdd['yyyymm':]))
 
     handling_date = from_date
 
