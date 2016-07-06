@@ -4,7 +4,7 @@ import pickle
 import threading
 
 
-def check_file_exist(path):
+def check_path_exist(path):
     return True if os.path.exists(path) else False
 
 
@@ -20,6 +20,11 @@ def write_text_file(path, msg, is_first=False):
 def save_pickle_file(path, _objects):
     with open(path, 'wb') as fp:
         pickle.dump(_objects, fp)
+
+
+def load_pickle_file(path):
+    with open(path, 'rb') as fp:
+        return pickle.load(fp)
 
 
 thread_writing = None
@@ -42,11 +47,6 @@ def get_fn_only(path):
     _, tail = os.path.split(path)
     return tail
 
-
-def load_pickle_file(path):
-    with open(path, 'rb') as fp:
-        return pickle.load(fp)
-    
 
 def check_dir_create(path):
     if not os.path.exists(path):

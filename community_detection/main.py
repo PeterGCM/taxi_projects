@@ -1,7 +1,7 @@
 import __init__
 #
 from __init__ import grid_info_fn, get_processed_log_fn, linkage_dir
-from taxi_common.file_handling_functions import check_file_exist, load_pickle_file, save_pickle_file
+from taxi_common.file_handling_functions import check_path_exist, load_pickle_file, save_pickle_file
 #
 from _classes import cd_zone
 
@@ -11,7 +11,7 @@ def run(time_from, time_to, zone_unit_km):
     # Step 1. Split Singapore into zones
     #
     print 'step 1'
-    if not check_file_exist(grid_info_fn):
+    if not check_path_exist(grid_info_fn):
         from taxi_common.split_into_zones import run as run_split_into_zones
         hl_points, vl_points, zones = run_split_into_zones(zone_unit_km, cd_zone)
         save_pickle_file(grid_info_fn, [hl_points, vl_points, zones])
@@ -22,7 +22,7 @@ def run(time_from, time_to, zone_unit_km):
     #
     print 'step 2'
     processed_log_fn = get_processed_log_fn(time_from, time_to)
-    if not check_file_exist(processed_log_fn):
+    if not check_path_exist(processed_log_fn):
         from a_log_processing import run as run_preprocess_logs
         run_preprocess_logs(hl_points, vl_points, time_from, time_to)
     #
@@ -35,7 +35,7 @@ def run(time_from, time_to, zone_unit_km):
 
     from traceback import format_exc
     try:
-        if not check_file_exist(pkl_dir):
+        if not check_path_exist(pkl_dir):
             from b_linkage import run as run_linkage
             run_linkage(processed_log_fn, zones)
     except Exception as _:

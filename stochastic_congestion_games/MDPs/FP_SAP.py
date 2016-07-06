@@ -1,35 +1,45 @@
 from __future__ import division
 #
+from DDAP import define_DDAP
+from __init__ import policy_prefix, x_prefix, dist_prefix, lp_prefix
+#
+from taxi_common.file_handling_functions import remove_creat_dir
+#
 from gurobipy import *
 from random import random
 from prettytable import PrettyTable
 #
-from stochastic_congestion_game.file_handling import policy_prefix, x_prefix, dist_prefix, lp_prefix
-
-#
-P, S, A, PHI, R, H, d0 = None, None, None, None, None, None, None
-#
+policy_dir, x_dir, dist_dir, lp_dir = None, None, None, None
 GAMMA = 0.99
 #
-RESULT_SAVE = True
+
+def creative_result_saving_dir(problem_saving_dir):
+    MDPs_dir = problem_saving_dir + '/MDPs'; remove_creat_dir(MDPs_dir)
+    _policy_dir = MDPs_dir + '/re_policy'; remove_creat_dir(policy_dir)
+    _x_dir = MDPs_dir + '/re_x'; remove_creat_dir(x_dir)
+    _dist_dir = MDPs_dir + '/re_dist'; remove_creat_dir(dist_dir)
+    _lp_dir = MDPs_dir + '/re_lp'; remove_creat_dir(lp_dir)
+
+    global policy_dir, x_dir, dist_dir, lp_dir
+    policy_dir, x_dir, dist_dir, lp_dir = _policy_dir , _x_dir, _dist_dir, _lp_dir
 
 
-#
-def FP_SAP(_P, _S, _A, _PHI, _R, _H, _d0):
-    #
-    # Initialize algorithm inputs
-    #
+def run(num_agents, num_zones, time_horizon, fl, Re, Co, _d0, problem_saving_dir):
     global P, S, A, PHI, R, H, d0
-    P, S, A, PHI, R, H, d0 = _P, _S, _A, _PHI, _R, _H, _d0
+    P, S, A = range(num_agents), range(num_zones), range(num_zones)
+    PHI, R = define_DDAP(fl, Re, Co)
+    H, d0 = time_horizon, _d0
+    #
+    creative_result_saving_dir(problem_saving_dir)
     #
     # Run the algorithm
     #
-    pi0 = GET_RANDOM_POLICY()
+    pi0 = get_random_policy()
     i = 0
     x = {k: 0 for k in pi0.keys()}
     while True:
-        d = GET_DIST(pi0, i)
-        _x = SOLVE_MDP(d, i)
+        d = get_dist(pi0, i)
+        _x = solve_mdp(d, i)
         x = update_x(i, x, _x)
         pi1 = update_pi(x, i)
         i += 1
@@ -44,7 +54,7 @@ def FP_SAP(_P, _S, _A, _PHI, _R, _H, _d0):
 
 
 def policy_saving(_pi, postfix):
-    with open('%s%s.txt' % (policy_prefix, postfix), 'w') as f:
+    with open('%s/%s%s.txt' % (policy_dir, policy_prefix, postfix), 'w') as f:
         f.write('Policy -----------------------------------\n')
         f.write('Column represents state and Row represents action\n')
         for t in xrange(H):
@@ -62,8 +72,7 @@ def update_pi(x, i):
             sum_a = sum(x[t, s, a] for a in A)
             for a in A:
                 pi1[t, s, a] = x[t, s, a] / sum_a
-    if RESULT_SAVE:
-        policy_saving(pi1, i)
+    policy_saving(pi1, i)
     return pi1
 
 
@@ -72,32 +81,30 @@ def update_x(i, x, _x):
         for s in S:
             for a in A:
                 x[t, s, a] = (i * x[t, s, a] + _x[t, s, a]) / (i + 1)
-    if RESULT_SAVE:
-        with open('%s%d.txt' % (x_prefix, i), 'w') as f:
-            f.write('x -----------------------------------\n')
-            f.write('Column represents state and Row represents action\n')
-            for t in xrange(H):
-                f.write('t = %d,\n' % t)
-                _table = PrettyTable([''] + [a for a in A])
-                for s in S:
-                    _table.add_row([s] + [x[t, s, a] for a in A])
-                f.write('%s\n' % _table.get_string())
+    with open('%s/%s%d.txt' % (x_dir, x_prefix, i), 'w') as f:
+        f.write('x -----------------------------------\n')
+        f.write('Column represents state and Row represents action\n')
+        for t in xrange(H):
+            f.write('t = %d,\n' % t)
+            _table = PrettyTable([''] + [a for a in A])
+            for s in S:
+                _table.add_row([s] + [x[t, s, a] for a in A])
+            f.write('%s\n' % _table.get_string())
     return x
 
 
-def GET_RANDOM_POLICY():
+def get_random_policy():
     _pi = {}
     for t in xrange(H):
         for s in S:
             rates = [random() for _ in A]
             for a in A:
                 _pi[t, s, a] = rates[a] / sum(rates)
-    if RESULT_SAVE:
-        policy_saving(_pi, 'init')
+    policy_saving(_pi, 'init')
     return _pi
 
 
-def GET_DIST(_pi, i):
+def get_dist(_pi, i):
     _delta0 = [d0[s] / len(P) for s in S]
     #
     d = [d0]
@@ -114,16 +121,19 @@ def GET_DIST(_pi, i):
         _delta0 = _delta1[:]
         d.append(_d1)
         t += 1
-    if RESULT_SAVE:
-        _table = PrettyTable([s for s in S])
-        _table.add_row([d0[s] for s in S])
-        with open('%s%d.txt' % (dist_prefix, i), 'w') as f:
-            f.write('----------------------------------- Initial distribution\n')
-            f.write('%s\n' % _table.get_string())
+    _table = PrettyTable([s for s in S])
+    _table.add_row([d0[s] for s in S])
+    with open('%s/%s%d.txt' % (dist_dir, dist_prefix, i), 'w') as f:
+        f.write('----------------------------------- Initial distribution\n')
+        f.write('%s\n' % _table.get_string())
     return d
 
 
-def SOLVE_MDP(d, i):
+def solve_mdp_quad(d, i):
+    pass
+
+
+def solve_mdp(d, i):
     def _delta(t, s):
         return d[t][s] / sum(d[t])
 
@@ -161,7 +171,7 @@ def SOLVE_MDP(d, i):
     _x = {}
     if m.status == GRB.Status.OPTIMAL:
         #
-        m.write('%s%d.lp' % (lp_prefix, i))
+        m.write('%s/%s%d.lp' % (lp_dir, lp_prefix, i))
 
         for t in xrange(H):
             for s in S:
