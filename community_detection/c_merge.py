@@ -21,11 +21,13 @@ def run(pkl_dir):
     handling_date = from_date
 
     while handling_date < to_date:
+        print handling_date
         yyyy, mm, dd = handling_date.year, handling_date.month, handling_date.day
         print 'start reading'
         twrv0 = ThreadWithReturnValue(target=load_pickle_file, args=(pkl_dir + '/%d%02d%02d-0.pkl' % (yyyy, mm, dd),))
         twrv1 = ThreadWithReturnValue(target=load_pickle_file, args=(pkl_dir + '/%d%02d%02d-1.pkl' % (yyyy, mm, dd),))
         twrv0.start(); twrv1.start()
+        print 'reading....'
         #
         edge_weight = {}
         linkages0 = twrv0.join()
