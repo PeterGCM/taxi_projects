@@ -32,18 +32,18 @@ def run(pkl_dir):
         edge_weight = {}
         linkages0 = twrv0.join()
         print 'handling 0'
-        arrage_linkage(linkages0, edge_weight)
+        arrange_linkage(linkages0, edge_weight)
         linkages1 = twrv1.join()
         print 'handling 1'
-        arrage_linkage(linkages1, edge_weight)
+        arrange_linkage(linkages1, edge_weight)
         #
-        saving_fn = pkl_dir + '/m_%d%02d%02d.pkl' % (yyyy, mm, dd)
+        saving_fn = pkl_dir + '/m1_%d%02d%02d.pkl' % (yyyy, mm, dd)
         save_pickle_file(saving_fn, edge_weight)
         #
         handling_date += datetime.timedelta(days=1)
 
 
-def arrage_linkage(linkages, edge_weight):
+def arrange_linkage(linkages, edge_weight):
     while linkages:
         _did0, l = linkages.pop()
         for _did1, num_linkage in l.iteritems():
@@ -52,7 +52,7 @@ def arrage_linkage(linkages, edge_weight):
             did0, did1 = int(_did0), int(_did1)
             if did0 > did1:
                 did0, did1 = int(_did1), int(_did0)
-            if not edge_weight.has_key((did, did1)):
+            if not edge_weight.has_key((did0, did1)):
                 edge_weight[(did0, did1)] = 0
             edge_weight[(did0, did1)] += num_linkage
     #
