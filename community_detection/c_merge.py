@@ -35,7 +35,7 @@ def run(pkl_dir):
         print 'handling 1'
         arrage_linkage(linkages1, edge_weight)
         #
-        saving_fn = pkl_dir + '/m_%s%s%s.pkl' % (yyyy, mm, dd)
+        saving_fn = pkl_dir + '/m_%d%02d%02d.pkl' % (yyyy, mm, dd)
         save_pickle_file(saving_fn, edge_weight)
         #
         handling_date += datetime.timedelta(days=1)
