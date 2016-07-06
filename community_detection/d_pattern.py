@@ -1,15 +1,28 @@
 import __init__
 #
-from __init__ import MAX_LINKAGE_RATIO
+from __init__ import MIN_LINKAGE, MAX_LINKAGE_RATIO
 from __init__ import linkage_dir
 #
 from taxi_common.file_handling_functions import save_pickle_file, remove_creat_dir, check_path_exist
 from taxi_common.file_handling_functions import load_pickle_file, get_fn_only, get_all_files
-
+from taxi_common.charts import one_histogram
 
 def run(pkl_dir):
-    for fn in get_all_files(pkl_dir , '', '.pkl'):
-        linkages = load_pickle_file(pkl_dir + '/' + fn)
+    for fn in get_all_files(pkl_dir , 'm-', '.pkl'):
+        edge_weight0 = load_pickle_file(pkl_dir + '/' + fn)
+        edge_weight1 = {}
+        values = []
+        for k, v in edge_weight0.itervalues():
+            if v < MIN_LINKAGE:
+                continue
+            edge_weight1[k] = v
+            values.append(v)
+        #
+        one_histogram('','','',30, values, fn[:-len('.pkl')])
+
+
+
+
         edge_weight0 = {}
         for _did0, l in linkages:
             for _did1, num_linkage in l.iteritems():

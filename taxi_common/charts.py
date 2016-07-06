@@ -24,32 +24,32 @@ clists = (
 )
 
 mlists = (
-'o',  #    circle
-'v',  #    triangle_down
-'^',  #    triangle_up
-'<',  #    triangle_left
-'>',  #    triangle_right
-'s',  #    square
-'p',  #    pentagon
-'*',  #    star
-'+',  #    plus
-'x',  #    x
-'D',  #    diamond
-'h',  #    hexagon1
-'1',  #    tri_down
-'2',  #    tri_up
-'3',  #    tri_left
-'4',  #    tri_right
-'8',  #    octagon
-'H',  #    hexagon2
-'d',  #    thin_diamond
-'|',  #    vline
-'_',  #    hline
-'.',  #    point
-',',  #    pixel
+    'o',  #    circle
+    'v',  #    triangle_down
+    '^',  #    triangle_up
+    '<',  #    triangle_left
+    '>',  #    triangle_right
+    's',  #    square
+    'p',  #    pentagon
+    '*',  #    star
+    '+',  #    plus
+    'x',  #    x
+    'D',  #    diamond
+    'h',  #    hexagon1
+    '1',  #    tri_down
+    '2',  #    tri_up
+    '3',  #    tri_left
+    '4',  #    tri_right
+    '8',  #    octagon
+    'H',  #    hexagon2
+    'd',  #    thin_diamond
+    '|',  #    vline
+    '_',  #    hline
+    '.',  #    point
+    ',',  #    pixel
 
-'D',  #    diamond
-'8',  #    octagon
+    'D',  #    diamond
+    '8',  #    octagon
           )
 #
 FONT_SIZE = 18
