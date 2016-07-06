@@ -8,14 +8,14 @@ from taxi_common.file_handling_functions import load_pickle_file, get_fn_only, g
 
 
 def run(pkl_dir):
+    print pkl_dir
+    assert False
     for fn in get_all_files(pkl_dir , '', '.pkl'):
         linkages = load_pickle_file(pkl_dir + '/' + fn)
         edge_weight = {}
         count = 0
         for _did0, l in linkages:
             count += 1
-            if _did0 == '-1':
-                continue
             num_linkages0 = [num for num in l.itervalues()]
             if not num_linkages0:
                 continue
