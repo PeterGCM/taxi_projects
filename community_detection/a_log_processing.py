@@ -28,7 +28,6 @@ def run(x_points, y_points, time_from, time_to):
                 t = eval(row[hid['time']])
                 did = row[hid['driver-id']]
                 if did == '-1':
-                    assert False
                     continue
                 if t < tf_ts:
                     continue
