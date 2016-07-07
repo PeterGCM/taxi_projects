@@ -1,4 +1,4 @@
-from __future__ import division
+import __init__
 #
 from DDAP import define_DDAP
 from __init__ import policy_prefix, x_prefix, dist_prefix, lp_prefix
@@ -11,14 +11,14 @@ from prettytable import PrettyTable
 #
 policy_dir, x_dir, dist_dir, lp_dir = None, None, None, None
 GAMMA = 0.99
-#
+
 
 def creative_result_saving_dir(problem_saving_dir):
     MDPs_dir = problem_saving_dir + '/MDPs'; remove_creat_dir(MDPs_dir)
-    _policy_dir = MDPs_dir + '/re_policy'; remove_creat_dir(policy_dir)
-    _x_dir = MDPs_dir + '/re_x'; remove_creat_dir(x_dir)
-    _dist_dir = MDPs_dir + '/re_dist'; remove_creat_dir(dist_dir)
-    _lp_dir = MDPs_dir + '/re_lp'; remove_creat_dir(lp_dir)
+    _policy_dir = MDPs_dir + '/re_policy'; remove_creat_dir(_policy_dir)
+    _x_dir = MDPs_dir + '/re_x'; remove_creat_dir(_x_dir)
+    _dist_dir = MDPs_dir + '/re_dist'; remove_creat_dir(_dist_dir)
+    _lp_dir = MDPs_dir + '/re_lp'; remove_creat_dir(_lp_dir)
 
     global policy_dir, x_dir, dist_dir, lp_dir
     policy_dir, x_dir, dist_dir, lp_dir = _policy_dir , _x_dir, _dist_dir, _lp_dir
@@ -40,6 +40,7 @@ def run(num_agents, num_zones, time_horizon, fl, Re, Co, _d0, problem_saving_dir
     while True:
         d = get_dist(pi0, i)
         _x = solve_mdp(d, i)
+        # _x = solve_mdp_quad(d, i)
         x = update_x(i, x, _x)
         pi1 = update_pi(x, i)
         i += 1
@@ -65,14 +66,15 @@ def policy_saving(_pi, postfix):
             f.write('%s\n' % _table.get_string())
 
 
-def update_pi(x, i):
+def update_pi(x, i=None):
     pi1 = {}
     for t in xrange(H):
         for s in S:
             sum_a = sum(x[t, s, a] for a in A)
             for a in A:
                 pi1[t, s, a] = x[t, s, a] / sum_a
-    policy_saving(pi1, i)
+    if i is not None:
+        policy_saving(pi1, i)
     return pi1
 
 
@@ -130,7 +132,72 @@ def get_dist(_pi, i):
 
 
 def solve_mdp_quad(d, i):
-    pass
+    def _delta(t, s):
+        return d[t][s] / sum(d[t])
+
+    pi0 = {}
+    for t in xrange(H):
+        for s in S:
+            rates = [1 for _ in A]
+            for a in A:
+                pi0[t, s, a] = rates[a] / sum(rates)
+    while True:
+        # Create optimization model
+        m = Model('SOLVE_MDP')
+
+        # Create variables
+        x = {}
+        for t in xrange(H):
+            for s in S:
+                for a in A:
+                    x[t, s, a] = m.addVar(name='x_%d_(%d,%d)' % (t, s, a))
+        m.update()
+        # Constraints
+        for t in xrange(H):
+            for s1 in S:
+                m.addConstr(quicksum(x[t, s1, a] for a in A)
+                            - GAMMA * quicksum(x[t, s0, a] * PHI(t, d[t], s0, a, s1) for a in A for s0 in S) == _delta(t, s1))
+        for t in xrange(H):
+            for s in S:
+                for a in A:
+                    m.addConstr(x[t, s, a] >= 0, 'x_%d_(%d,%d)__Constr' % (t, s, a))
+
+        # Objective
+        obj = LinExpr()
+        for t in xrange(H):
+            for s in S:
+                for a in A:
+                    for k in P:
+                        obj += R(t, s, a, k) * pi0[[t, s, a]] * x[t, s, a]
+        m.setObjective(obj, GRB.MAXIMIZE);
+        #
+        m.optimize()
+        #
+        _x = {}
+        if m.status == GRB.Status.OPTIMAL:
+            #
+            m.write('%s/%s%d.lp' % (lp_dir, lp_prefix, i))
+
+            for t in xrange(H):
+                for s in S:
+                    for a in A:
+                        _x[t, s, a] = x[t, s, a].x
+        else:
+            print 'Errors while optimization'
+            assert False
+
+        pi1 = update_pi(_x)
+        if pi0 == pi1:
+            break
+        else:
+            pi0 = pi1
+
+
+        # compare policy
+        # for k, v in pi0.iteritems():
+        #     if abs(v - pi1[k]) < EPSILON:
+
+
 
 
 def solve_mdp(d, i):

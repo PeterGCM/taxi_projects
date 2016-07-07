@@ -8,7 +8,7 @@ from random import randrange, normalvariate, shuffle
 import numpy as np
 #
 ONE_SIGMA = 1
-ALPH, GAMMA = 0.01, 0.6
+ALPH, GAMMA = 0.8, 0.6
 EPSILON = 0.0000001
 
 def run(num_agents, num_zones, time_horizon, fl, Re, Co, d0, problem_saving_dir):
@@ -120,6 +120,7 @@ def run(num_agents, num_zones, time_horizon, fl, Re, Co, d0, problem_saving_dir)
                 d.from_zone.remove_driver(d)
         if Q_value_changing:
             num_iter += 1
+    print pi0
 
 
 class scg_zone(object):

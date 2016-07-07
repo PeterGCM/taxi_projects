@@ -6,8 +6,7 @@ import matplotlib.mlab as mlab
 from matplotlib.path import Path
 import matplotlib.patches as patches
 import matplotlib.ticker as tkr
-from supports._setting import charts_dir
-from supports.etc_functions import check_dir_create, write_text_file
+from file_handling_functions import check_dir_create, write_text_file
 
 _rgb = lambda r, g, b: (r / 255, g / 255, b / 255)
 
@@ -54,9 +53,8 @@ mlists = (
 #
 FONT_SIZE = 18
 #
-check_dir_create(charts_dir)
-#
- 
+
+
 class simple_barchart(object):
     def __init__(self, x_ticks, y_label, _data, save_fn=None) :
         fig = plt.figure(figsize=(6, 6))
@@ -70,11 +68,9 @@ class simple_barchart(object):
         for item in ([ax.yaxis.label] + ax.get_xticklabels()):
             item.set_fontsize(FONT_SIZE)
         if save_fn:
-            chart_path_fn = '%s/%s.pdf' % (charts_dir, save_fn)
-            plt.savefig(chart_path_fn)
+            plt.savefig(save_fn + '.pdf')
             #
-            txt_path_fn = '%s/%s.txt' % (charts_dir, save_fn)
-            write_text_file(txt_path_fn, 'Init', True)
+            write_text_file(save_fn + '.txt', 'Init', True)
             for i in xrange(len(x_ticks)):
                 write_text_file(txt_path_fn,'%s: %f' %(str(x_ticks[i]), _data[i]))
         plt.show()
@@ -90,11 +86,9 @@ class one_histogram(object):
         plt.xlabel(x_label); plt.ylabel(y_label)
         plt.title(r'$\mathrm{%s}\ \mu=%.2f,\ \sigma=%.2f$' % (_title, x_mean, x_std))
         if save_fn:
-            chart_path_fn = '%s/%s.pdf' % (charts_dir, save_fn)
-            plt.savefig(chart_path_fn)
+            plt.savefig(save_fn + '.pdf')
             #
-            txt_path_fn = '%s/%s.txt' % (charts_dir, save_fn)
-            self.saving_histo_data(txt_path_fn, num_bin, x_data)
+            self.saving_histo_data(save_fn + '.txt', num_bin, x_data)
     def saving_histo_data(self, txt_path_fn, num_bin, x_data):
         write_text_file(txt_path_fn, 'Init', True)
         num_data = len(x_data)
@@ -146,10 +140,9 @@ class histo_cumulative(object):
         plt.title(s)
         
         if save_fn:
-            chart_path_fn = '%s/%s.pdf' % (charts_dir, save_fn)
-            plt.savefig(chart_path_fn)
+            plt.savefig(save_fn + '.pdf')
             #
-            txt_path_fn = '%s/%s.txt' % (charts_dir, save_fn)
+            txt_path_fn = save_fn + 'txt'
             self.saving_histo_cumulative_data(txt_path_fn, num_bin, x_data)
         plt.show()
     def saving_histo_cumulative_data(self, txt_path_fn, num_bin, x_data):
@@ -206,11 +199,9 @@ class multiple_line_chart(object):
         for item in ([ax.xaxis.label, ax.yaxis.label] + ax.get_xticklabels() + ax.get_yticklabels()):
             item.set_fontsize(FONT_SIZE)
         if save_fn:
-            chart_path_fn = '%s/%s.pdf' % (charts_dir, save_fn)
-            plt.savefig(chart_path_fn)
+            plt.savefig(save_fn + '.pdf')
             #
-            txt_path_fn = '%s/%s.txt' % (charts_dir, save_fn)
-            write_text_file(txt_path_fn, 'Init', True)
+            write_text_file(save_fn + '.txt', 'Init', True)
             write_text_file(txt_path_fn, 'x-asix: %s' % str(_xticks))
             for i, ys in enumerate(multi_y_data):
                 write_text_file(txt_path_fn, '%s: %s' %(y_legend_labels[i], str(ys)))
@@ -269,10 +260,9 @@ class x_twin_chart(object):
         for item in ([ax1.xaxis.label, ax1.yaxis.label, ax2.yaxis.label] + ax1.get_xticklabels() + ax1.get_yticklabels() + ax2.get_yticklabels()):
             item.set_fontsize(FONT_SIZE)
         if save_fn:
-            chart_path_fn = '%s/%s.pdf' % (charts_dir, save_fn)
-            plt.savefig(chart_path_fn)
+            plt.savefig(save_fn + '.pdf')
             #
-            txt_path_fn = '%s/%s.txt' % (charts_dir, save_fn)
+            txt_path_fn = save_fn + '.txt'
             write_text_file(txt_path_fn, 'Init', True)
             write_text_file(txt_path_fn, 'x-asix: %s' % str(_xticks))
             write_text_file(txt_path_fn, '-----------------------y1-asix')
@@ -326,7 +316,7 @@ class bar_table(object):
         plt.xticks([])
         plt.title(_title)
         if save_fn:
-            plt.savefig('%s/%s.pdf' % (charts_dir, save_fn))
+            plt.savefig(save_fn + '.pdf')
         plt.show()
 
 class one_pie_chart(object):
@@ -340,7 +330,7 @@ class one_pie_chart(object):
         plt.legend(labels, fontsize='x-small')
         ax.set_title(_title)
         if save_fn:
-            plt.savefig('%s/%s.pdf' % (charts_dir, save_fn))
+            plt.savefig(save_fn + '.pdf')
         plt.show()
 
 class two_pie_chart(object):
@@ -361,7 +351,7 @@ class two_pie_chart(object):
         plt.legend(labels, fontsize='x-small')
         ax.set_title(title2)
         if save_fn:
-            plt.savefig('%s/%s.pdf' % (charts_dir, save_fn))
+            plt.savefig(save_fn + '.pdf')
         plt.show()
 
 class histograms(object):
@@ -574,7 +564,7 @@ class one_grid_chart(object):
         plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
            ncol=2, mode="expand", borderaxespad=0., framealpha=0.0)
         if save_fn:
-            plt.savefig('%s/%s.pdf' % (charts_dir, save_fn))
+            plt.savefig(save_fn + '.pdf')
         plt.show()
                 
     def gen_rect_coord_by_center(self, x, y):

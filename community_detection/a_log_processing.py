@@ -26,11 +26,14 @@ def run(x_points, y_points, time_from, time_to):
             hid = {h : i for i, h in enumerate(headers)}
             for row in reader:
                 t = eval(row[hid['time']])
+                did = row[hid['driver-id']]
+                if did == '-1':
+                    assert False
+                    continue
                 if t < tf_ts:
                     continue
                 if t > tt_ts:
                     break
-                did = row[hid['driver-id']]
                 longitude, latitude = eval(row[hid['longitude']]), eval(row[hid['latitude']])
                 state = int(row[hid['state']])
                 if not drivers_states.has_key(did): drivers_states[did] = FREE

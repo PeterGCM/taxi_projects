@@ -25,6 +25,7 @@ class cd_driver(driver):
     def __init__(self, did):
         driver.__init__(self, did)
         self.linkage = {}
+        self.num_pickup = 0
 
     def update_linkage(self, t, z):
         z.update_logQ(t)
@@ -33,6 +34,8 @@ class cd_driver(driver):
                 self.linkage[d.did] = 0
             self.linkage[d.did] += 1
         z.add_driver_in_logQ(t, self)
+        self.num_pickup += 1
 
     def init_linkage(self):
         self.linkage = {}
+        self.num_pickup = 0

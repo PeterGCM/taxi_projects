@@ -46,15 +46,14 @@ def run(time_from, time_to, zone_unit_km):
     # Step 4. Merge files
     #
     print 'step 4'
-    # if False:
-    try:
-        # from c_merge import run as run_merge
-        from c_merge_2 import run as run_merge
-        run_merge(pkl_dir)
-    except Exception as _:
-        with open('logging_Python.txt', 'w') as f:
-            f.write(format_exc())
-        raise
+    # try:
+    #     # from c_merge import run as run_merge
+    #     from c_merge import run as run_merge
+    #     run_merge(pkl_dir)
+    # except Exception as _:
+    #     with open('logging_Python.txt', 'w') as f:
+    #         f.write(format_exc())
+    #     raise
     #
     # Step 5. Find pattern
     #
@@ -68,4 +67,4 @@ def run(time_from, time_to, zone_unit_km):
     # run_visualize_relations(did_relations)
     
 if __name__ == '__main__':
-    run((2009, 1, 1, 0, 0, 0), (2009, 2, 1, 0, 0, 0), 0.5)
+    run((2009, 1, 1, 0, 0, 0), (2009, 1, 2, 0, 0, 0), 0.5)

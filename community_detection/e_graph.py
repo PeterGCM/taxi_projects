@@ -3,6 +3,7 @@ import __init__
 from graph_tool.all import *
 import numpy as np
 from taxi_common.file_handling_functions import load_pickle_file
+
 def run():
     #
     # Filtering and edges' weight arrangement

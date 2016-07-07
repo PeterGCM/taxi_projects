@@ -12,13 +12,13 @@ problem_saving_dir = None
 
 def p1():
     global problem_saving_dir
-    problem_saving_dir = problem_dir + '/Problem 1'
+    problem_saving_dir = problem_dir + '/Problem1'
     if not check_path_exist(problem_saving_dir):
         check_dir_create(problem_saving_dir)
         #
         num_agents, num_zones, time_horizon = 10, 3, 3; save_init_inputs(num_agents, num_zones, time_horizon)
         #
-        seed(1)
+        # seed(1)
         flow_lb, flow_ub = 1, int(num_agents * 1.5)
         reward_lb, reward_ub = 1, 100
         fl = flow_generation(flow_lb, flow_ub, num_zones, time_horizon)

@@ -32,15 +32,13 @@ def run(processed_log_fn, zones):
         hh = eval(time_from[len('yyyymmdd'):len('yyyymmddhh')])
         handling_time = datetime.datetime(yyyy, mm, dd,hh)
         for row in reader:
-            did = row[hid['did']]
-            if did == '-1':
-                continue
             t = eval(row[hid['time']])
+            did = row[hid['did']]
             cur_time = datetime.datetime.fromtimestamp(t)
             if handling_time + datetime.timedelta(hours=HOUR12) < cur_time:
                 day_linkage = []
                 for did, d in drivers.iteritems():
-                    day_linkage.append((did, d.linkage))
+                    day_linkage.append((did, d.num_pickup, d.linkage))
                 save_linkage(pkl_dir, handling_time, day_linkage, zones, drivers)
                 #
                 handling_time = cur_time

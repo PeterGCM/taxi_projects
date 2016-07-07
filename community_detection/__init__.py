@@ -8,7 +8,8 @@ taxi_home, taxi_data = get_taxi_home_path(), get_taxi_data_path()
 #
 cd_home = taxi_data + '/community_data'
 linkage_dir = cd_home + '/linkage'
-check_dir_create(cd_home); check_dir_create(linkage_dir)
+charts_dir = cd_home + '/charts'
+check_dir_create(cd_home); check_dir_create(linkage_dir); check_dir_create(charts_dir)
 #
 grid_info_fn = cd_home + '/hl_vl_zones.pkl'
 out_boundary_logs_fn = cd_home + '/out_boundary.txt'

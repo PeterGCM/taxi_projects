@@ -1,6 +1,8 @@
 import os, sys, platform
+from os.path import expanduser
 #
-taxi_home, taxi_data = None, None
+user_home = expanduser("~")
+taxi_home, taxi_data = None, user_home + '/taxi_data'
 #
 # Check environments and set a prefix for finding files and libraries
 #
@@ -12,18 +14,14 @@ if py_vinfo.major == 2 and py_vinfo.minor == 7:
     plf = platform.platform()
     if plf.startswith('Linux'):
         # Linux server
-        sys.path.append('/home/ckhan/local/lib/python2.7/site-packages')
-        sys.path.append('/home/ckhan/local/lib64/python2.7/site-packages')
-        taxi_data = '/home/ckhan/taxi_data'
-        taxi_home = '/home/taxi'
+        sys.path.append(user_home + '/local/lib/python2.7/site-packages')
+        sys.path.append(user_home + '/local/lib64/python2.7/site-packages')
+        taxi_home = user_home + '/../taxi'
     elif plf.startswith('Darwin'):
         # Mac
-        taxi_data = '/Users/JerryHan88/taxi_data'
-        taxi_home = '/Users/JerryHan88/taxi'
         pass
     else:
         # Window ?
-        taxi_data = 'C:\Users/ckhan.2015/taxi_data'
         pass
     sys.path.append(os.getcwd() + '/..')
 #     sys.path.append(os.getcwd() + '/../taxi_common/test')

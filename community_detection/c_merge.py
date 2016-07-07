@@ -4,7 +4,7 @@ from __init__ import MIN_LINKAGE, MAX_LINKAGE_RATIO
 from __init__ import linkage_dir
 #
 from taxi_common.file_handling_functions import save_pickle_file, remove_creat_dir, check_path_exist
-from taxi_common.file_handling_functions import load_pickle_file, get_fn_only, get_all_files
+from taxi_common.file_handling_functions import load_pickle_file, get_fn_only, get_all_files, save_pkl_threading
 #
 import datetime
 from threading import Thread
@@ -23,22 +23,21 @@ def run(pkl_dir):
     while handling_date < to_date:
         print handling_date
         yyyy, mm, dd = handling_date.year, handling_date.month, handling_date.day
-        print 'start reading'
-        twrv0 = ThreadWithReturnValue(target=load_pickle_file, args=(pkl_dir + '/%d%02d%02d-0.pkl' % (yyyy, mm, dd),))
-        twrv1 = ThreadWithReturnValue(target=load_pickle_file, args=(pkl_dir + '/%d%02d%02d-1.pkl' % (yyyy, mm, dd),))
-        twrv0.start(); twrv1.start()
-        print 'reading....'
         #
         edge_weight = {}
-        linkages0 = twrv0.join()
+        print 'start reading'
+        linkages0 = load_pickle_file(pkl_dir + '/%d%02d%02d-0.pkl' % (yyyy, mm, dd))
         print 'handling 0'
         arrange_linkage(linkages0, edge_weight)
-        linkages1 = twrv1.join()
+        print 'reading....'
+        linkages1 = load_pickle_file(pkl_dir + '/%d%02d%02d-1.pkl' % (yyyy, mm, dd))
         print 'handling 1'
         arrange_linkage(linkages1, edge_weight)
         #
-        saving_fn = pkl_dir + '/m1_%d%02d%02d.pkl' % (yyyy, mm, dd)
+        saving_fn = pkl_dir + '/m2_%d%02d%02d.pkl' % (yyyy, mm, dd)
         save_pickle_file(saving_fn, edge_weight)
+        # save_pkl_threading(saving_fn, edge_weight)
+        del edge_weight
         #
         handling_date += datetime.timedelta(days=1)
 
@@ -46,8 +45,12 @@ def run(pkl_dir):
 def arrange_linkage(linkages, edge_weight):
     while linkages:
         _did0, l = linkages.pop()
+        values = l.values()
+        if not values:
+            continue
+        max_value = max(l.values())
         for _did1, num_linkage in l.iteritems():
-            if num_linkage < MIN_LINKAGE:
+            if num_linkage < max_value * MAX_LINKAGE_RATIO:
                 continue
             did0, did1 = int(_did0), int(_did1)
             if did0 > did1:
