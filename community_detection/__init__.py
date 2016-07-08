@@ -14,6 +14,7 @@ check_dir_create(cd_home); check_dir_create(linkage_dir); check_dir_create(chart
 grid_info_fn = cd_home + '/hl_vl_zones.pkl'
 out_boundary_logs_fn = cd_home + '/out_boundary.txt'
 
+FREE, POB = 0, 5
 
 
 
@@ -26,7 +27,7 @@ HOUR24 = 24
 HOUR12 = 12
 THRESHOLD_VALUE = 30 * 60
 COINCIDENCE_THRESHOLD_VALUE = 1
-FREE, POB = 0, 5
+
 MEMORY_MANAGE_INTERVAL = 24 * 60 * 60
 #
 

@@ -9,6 +9,10 @@ import numpy as np
 
 problem_saving_dir = None
 
+def p0():
+    # Manually generated problem
+    pass
+
 
 def p1():
     global problem_saving_dir
