@@ -3,11 +3,6 @@ import __init__
 from information_boards.__init__ import SEC3600
 from a_overall_analysis.__init__ import trips_dir, trip_prefix
 from b_aggregated_analysis.__init__ import shift_pro_dur_dir, shift_pro_dur_prefix
-
-print shift_pro_dur_dir
-
-assert False
-
 from b_aggregated_analysis.__init__ import ap_trips_dir, ap_trip_prefix
 from b_aggregated_analysis.__init__ import ns_trips_dir, ns_trip_prefix
 from b_aggregated_analysis.__init__ import productivity_dir, productivity_prefix
