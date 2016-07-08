@@ -70,10 +70,12 @@ class simple_barchart(object):
         if save_fn:
             plt.savefig(save_fn + '.pdf')
             #
-            write_text_file(save_fn + '.txt', 'Init', True)
+            txt_path_fn = save_fn + '.txt'
+            write_text_file(txt_path_fn, 'Init', True)
             for i in xrange(len(x_ticks)):
                 write_text_file(txt_path_fn,'%s: %f' %(str(x_ticks[i]), _data[i]))
         plt.show()
+
 
 class one_histogram(object):
     def __init__(self, _title, x_label, y_label, num_bin, x_data, save_fn=None):
@@ -201,7 +203,8 @@ class multiple_line_chart(object):
         if save_fn:
             plt.savefig(save_fn + '.pdf')
             #
-            write_text_file(save_fn + '.txt', 'Init', True)
+            txt_path_fn = save_fn + '.txt'
+            write_text_file(txt_path_fn, 'Init', True)
             write_text_file(txt_path_fn, 'x-asix: %s' % str(_xticks))
             for i, ys in enumerate(multi_y_data):
                 write_text_file(txt_path_fn, '%s: %s' %(y_legend_labels[i], str(ys)))

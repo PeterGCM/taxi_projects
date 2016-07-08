@@ -1,4 +1,4 @@
-import __init__  # @UnresolvedImport # @UnusedImport
+import __init__
 #
 from information_boards.__init__ import SEC3600
 from a_overall_analysis.__init__ import trips_dir, trip_prefix
@@ -132,7 +132,7 @@ def sum_queueing_time(hourly_total, st_ts, qt, id_QUEUE):
 
 def sum_prop_fare_dur(hourly_total, st_ts, et_ts, dur, fare, id_FARE, id_DUR=None):
     def add_prop_fare_dur(dur_within_slot, dur, fare, id_FARE, id_DUR):
-        prop = dur_within_slot / dur
+        prop = dur_within_slot / float(dur)
         hourly_total[(et_dt.year, et_dt.month,
                       et_dt.day, et_dt.hour)][id_FARE] += fare * prop
         if id_DUR is not None:

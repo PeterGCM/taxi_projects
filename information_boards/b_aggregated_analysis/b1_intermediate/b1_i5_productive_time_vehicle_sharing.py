@@ -1,4 +1,4 @@
-import __init__  # @UnresolvedImport # @UnusedImport
+import __init__
 #
 from b_aggregated_analysis.__init__ import shifts_dir, shift_prefix
 from b_aggregated_analysis.__init__ import shift_pro_dur_dir, shift_pro_dur_prefix

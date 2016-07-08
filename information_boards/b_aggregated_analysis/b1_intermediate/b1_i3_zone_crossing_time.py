@@ -1,4 +1,4 @@
-import __init__  # @UnresolvedImport # @UnusedImport
+import __init__
 #
 from information_boards.__init__ import IN, OUT
 from b_aggregated_analysis.__init__ import logs_dir, log_prefix

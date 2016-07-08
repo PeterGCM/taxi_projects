@@ -1,4 +1,4 @@
-import __init__  # @UnresolvedImport # @UnusedImport
+import __init__
 #
 from information_boards.__init__ import  taxi_home
 from information_boards.__init__ import ap_poly, ns_poly
