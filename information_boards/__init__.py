@@ -6,6 +6,10 @@ taxi_home = get_taxi_home_path()
 #
 from taxi_common.file_handling_functions import check_dir_create
 taxi_data = os.path.dirname(os.path.realpath(__file__)) + '/data'
+
+
+print taxi_data
+
 check_dir_create(taxi_data)
 # Trip mode
 DIn_PIn, DIn_POut, DOut_PIn, DOut_POut = range(4)
