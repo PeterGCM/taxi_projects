@@ -1,18 +1,19 @@
-from __future__ import division
 import os, sys
 sys.path.append(os.path.dirname(os.path.realpath(__file__)) + '/..')
 #
-from taxi_common.__init__ import get_taxi_home_path, get_taxi_data_path
+from taxi_common.__init__ import get_taxi_home_path
+taxi_home = get_taxi_home_path()
+#
 from taxi_common.file_handling_functions import check_dir_create
-taxi_home, taxi_data = get_taxi_home_path(), get_taxi_data_path()
+taxi_data = os.path.dirname(os.path.realpath(__file__)) + '/data'
+check_dir_create(taxi_data)
 #
-cd_home = taxi_data + '/community_data'
-linkage_dir = cd_home + '/linkage'
-charts_dir = cd_home + '/charts'
-check_dir_create(cd_home); check_dir_create(linkage_dir); check_dir_create(charts_dir)
+linkage_dir = taxi_data + '/linkage'
+charts_dir = taxi_data + '/charts'
+check_dir_create(taxi_data); check_dir_create(linkage_dir); check_dir_create(charts_dir)
 #
-grid_info_fn = cd_home + '/hl_vl_zones.pkl'
-out_boundary_logs_fn = cd_home + '/out_boundary.txt'
+grid_info_fn = taxi_data+ '/hl_vl_zones.pkl'
+out_boundary_logs_fn = taxi_data+ '/out_boundary.txt'
 
 FREE, POB = 0, 5
 

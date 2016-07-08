@@ -31,31 +31,13 @@ def run(num_agents, num_zones, time_horizon, fl, Re, Co, d0, problem_saving_dir)
         l2.sort()
         dist_ranking.append([i for _, i in l2])
     #
-    Q_sa = [[0] * num_zones for _ in xrange(num_zones)]
+
     num_iter = 0
     count_Q = 0
     while True:
-        for z in zones:
-                z.passengers = []
+
         # drivers state and Q-value update
-        Q_value_changing = False
-        for d in [d for d in drivers if d.state != IDLE]:
-            d.time_to_arrival -= 1
-            if d.time_to_arrival == 0:
-                Q_value_changing = True
-                if d.state == POB:
-                    reward = d.revenue - d.cost
-                    d.revenue, d.cost = 0, 0
-                else:
-                    assert d.state == MOVING
-                    reward = -d.cost
-                    d.cost = 0
-                Q_sa[d.from_zone.zid][d.to_zone.zid] += ALPH * \
-                                    (reward + GAMMA * max(Q_sa[d.from_zone.zid]) - Q_sa[d.from_zone.zid][d.to_zone.zid])
-                count_Q += 1
-                d.to_zone.add_driver(d)
-                d.from_zone = d.to_zone; d.to_zone = None
-                d.state = IDLE
+
 
         if num_iter != 0 and Q_value_changing:
             print num_iter, count_Q, Q_sa
@@ -80,28 +62,9 @@ def run(num_agents, num_zones, time_horizon, fl, Re, Co, d0, problem_saving_dir)
                 break
         #
         pi0 = [np.argmax(Q_sa[i]) for i in xrange(len(Q_sa))]
-        Q_sa0 = [x[:] for x in Q_sa]
         #
         # t = randrange(time_horizon)
         t = 1
-        # Apply policy
-        for d in [d for d in drivers if d.state == IDLE]:
-            next_z_id = pi0[d.from_zone.zid]
-            if d.from_zone.zid != next_z_id:
-                d.to_zone = zones[next_z_id]
-                d.time_to_arrival = dist_ranking[d.from_zone.zid].index(d.to_zone.zid) + 1
-                d.cost = Co[t][d.from_zone.zid][d.to_zone.zid]
-                d.state = MOVING
-                #
-                d.from_zone.remove_driver(d)
-
-        # Passenger generation
-        passengers = [[int(normalvariate(fl[t][i][j], ONE_SIGMA))
-                       for j in xrange(len(fl[t][i]))] for i in xrange(len(fl[t]))]
-        for src, zone_passenger in enumerate(passengers):
-            for dest, num_passenger in enumerate(zone_passenger):
-                for _ in xrange(num_passenger):
-                    zones[src].add_passenger([dest, Re[t][src][dest], Co[t][src][dest]])
         # Passenger boarding
         for z in zones:
             departuring_drivers = []
@@ -121,6 +84,20 @@ def run(num_agents, num_zones, time_horizon, fl, Re, Co, d0, problem_saving_dir)
         if Q_value_changing:
             num_iter += 1
     print pi0
+
+
+def on_passenger_arrival():
+    for z in zones:
+        z.passengers = []
+    # Passenger generation
+    passengers = [[int(normalvariate(fl[t][i][j], ONE_SIGMA))
+                   for j in xrange(len(fl[t][i]))] for i in xrange(len(fl[t]))]
+    for src, zone_passenger in enumerate(passengers):
+        for dest, num_passenger in enumerate(zone_passenger):
+            for _ in xrange(num_passenger):
+                zones[src].add_passenger([dest, Re[t][src][dest], Co[t][src][dest]])
+
+
 
 
 class scg_zone(object):
@@ -143,17 +120,57 @@ class scg_zone(object):
 
 
 class scg_driver(driver):
-    def __init__(self, did, z):
+    def __init__(self, did, z, states, actions):
         driver.__init__(self, did)
         self.from_zone, self.to_zone = z, None
+        self.Q_sa = {}
+        for s in states:
+            for a in actions:
+                self.Q_sa[s, a] = 0
         self.time_to_arrival = 0
         self.revenue, self.cost = 0, 0
-        self.state = IDLE
+        self.veh_state = IDLE
         #
         self.from_zone.add_driver(self)
 
     def __repr__(self):
-        return '(did:%s, %s, %s-%s)' % (str(self.did), str(self.state), str(self.from_zone), str(self.to_zone))
+        return '(did:%s, %s, %s-%s)' % (str(self.did), str(self.veh_state), str(self.from_zone), str(self.to_zone))
+
+    def on_departure(self):
+        # Apply policy
+        for d in [d for d in drivers if d.state == IDLE]:
+            next_z_id = pi0[d.from_zone.zid]
+            if d.from_zone.zid != next_z_id:
+                d.to_zone = zones[next_z_id]
+                d.time_to_arrival = dist_ranking[d.from_zone.zid].index(d.to_zone.zid) + 1
+                d.cost = Co[t][d.from_zone.zid][d.to_zone.zid]
+                d.state = MOVING
+                #
+                d.from_zone.remove_driver(d)
+
+    def on_arrival(self):
+        Q_value_changing = False
+        for d in [d for d in drivers if d.state != IDLE]:
+            d.time_to_arrival -= 1
+            if d.time_to_arrival == 0:
+                Q_value_changing = True
+                if d.state == POB:
+                    reward = d.revenue - d.cost
+                    d.revenue, d.cost = 0, 0
+                else:
+                    assert d.state == MOVING
+                    reward = -d.cost
+                    d.cost = 0
+                Q_sa[d.from_zone.zid][d.to_zone.zid] += ALPH * \
+                                                        (reward + GAMMA * max(Q_sa[d.from_zone.zid]) -
+                                                         Q_sa[d.from_zone.zid][d.to_zone.zid])
+                count_Q += 1
+                d.to_zone.add_driver(d)
+                d.from_zone = d.to_zone;
+                d.to_zone = None
+                d.state = IDLE
+
+
 
 
 if __name__ == '__main__':
