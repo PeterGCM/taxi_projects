@@ -1,4 +1,4 @@
-import __init__  # @UnresolvedImport # @UnusedImport
+import __init__
 #
 from b_aggregated_analysis.__init__ import hourly_productivity_fn, zero_duration_timeslots
 from b_aggregated_analysis.__init__ import ap_trips_dir, ap_trip_prefix
@@ -8,12 +8,11 @@ from b_aggregated_analysis.__init__ import ns_ep_dir, ns_ep_prefix
 from b_aggregated_analysis.b2_summary.__init__ import GENERAL
 #
 from taxi_common.file_handling_functions import check_path_exist, get_all_files, load_pickle_file, remove_creat_dir
-from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
 import csv, datetime
 #
 if not check_path_exist(hourly_productivity_fn):
-    from b_aggregated_analysis.b2_summary import run as summary_run
+    from b_aggregated_analysis.b2_summary.b2_s2_productivity import run as summary_run
     summary_run()
 #
 omitted_timeslots = []
