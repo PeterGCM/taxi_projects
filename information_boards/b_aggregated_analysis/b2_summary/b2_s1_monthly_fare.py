@@ -1,6 +1,6 @@
-import __init__  # @UnresolvedImport # @UnusedImport
+import __init__
 #
-from __init__ import CENT
+from information_boards.__init__ import CENT
 from a_overall_analysis.__init__ import trips_dir, trip_prefix
 from b_aggregated_analysis.__init__ import driver_monthly_fare_fn
 #
@@ -18,7 +18,7 @@ def run():
             trip_df = pd.read_csv('%s/%s%s.csv' % (trips_dir, trip_prefix, yymm))
             trip_df = trip_df[(trip_df['did'] != -1)]
             #
-            fares = [ x / CENT for x in list(trip_df.groupby(['did']).sum()['fare'])]
+            fares = [ x / float(CENT) for x in list(trip_df.groupby(['did']).sum()['fare'])]
             if y == 9:
                 Y09_monthly_fare += fares
             else:
