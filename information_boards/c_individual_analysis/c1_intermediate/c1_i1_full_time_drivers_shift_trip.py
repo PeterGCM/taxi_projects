@@ -24,26 +24,26 @@ from traceback import format_exc
 
 
 def run():
-    # for path in [ftd_trips_dir, ftd_shift_dir, ftd_list_dir]:
-    #     remove_create_dir(path)
+    for path in [ftd_trips_dir, ftd_shift_dir, ftd_list_dir]:
+        remove_create_dir(path)
 
-    init_multiprocessor()
+    # init_multiprocessor()
+    # count_num_jobs = 0
+    # for yymm in ['1006','1007','1008','1009','1011','1012']:
+    #     put_task(process_files, [yymm])
+    #     count_num_jobs += 1
+    # end_multiprocessor(count_num_jobs)
+
     count_num_jobs = 0
-    for yymm in ['1006','1007','1008','1009','1011','1012']:
-        put_task(process_files, [yymm])
-        count_num_jobs += 1
+    for y in xrange(9, 11):
+        for m in xrange(1, 13):
+            yymm = '%02d%02d' % (y, m)
+            if yymm in ['0912', '1010']:
+                continue
+#             process_files(yymm)
+            put_task(process_files, [yymm])
+            count_num_jobs += 1
     end_multiprocessor(count_num_jobs)
-
-#     count_num_jobs = 0
-#     for y in xrange(9, 11):
-#         for m in xrange(1, 13):
-#             yymm = '%02d%02d' % (y, m)
-#             if yymm in ['0912', '1010']:
-#                 continue
-# #             process_files(yymm)
-#             put_task(process_files, [yymm])
-#             count_num_jobs += 1
-#     end_multiprocessor(count_num_jobs)
 
 def process_files(yymm):
     try:
