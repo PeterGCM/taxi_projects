@@ -13,7 +13,7 @@ import pandas as pd
 
 
 def run():
-    a2_dir = charts_dir + '/a_a2 statistics for time slots'
+    a2_dir = charts_dir + '/a_overall_a2 statistics for time slots'
     check_dir_create(a2_dir)
     #
     whole_df = pd.read_csv(ap_tm_num_dur_fare_fn)

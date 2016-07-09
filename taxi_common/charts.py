@@ -8,7 +8,7 @@ import matplotlib.patches as patches
 import matplotlib.ticker as tkr
 from file_handling_functions import check_dir_create, write_text_file
 
-_rgb = lambda r, g, b: (r / 255, g / 255, b / 255)
+_rgb = lambda r, g, b: (r / float(255), g / float(255), b / float(255))
 
 clists = (
     'blue', 'green', 'red', 'cyan', 'magenta', 'black',
@@ -64,7 +64,7 @@ class simple_barchart(object):
         ax.bar(ind, _data, width, color='blue')
         ax.set_xlim(-width, len(ind))
         ax.set_ylabel(y_label)
-        plt.xticks(ind + width / 2, x_ticks)
+        plt.xticks(ind + width / float(2), x_ticks)
         for item in ([ax.yaxis.label] + ax.get_xticklabels()):
             item.set_fontsize(FONT_SIZE)
         if save_fn:
@@ -78,8 +78,8 @@ class simple_barchart(object):
 
 
 class one_histogram(object):
-    def __init__(self, _title, x_label, y_label, num_bin, x_data, save_fn=None):
-        plt.figure(figsize=(6, 6))
+    def __init__(self, _figsize, _title, x_label, y_label, num_bin, x_data, save_fn=None):
+        plt.figure(figsize=_figsize)
         _, bins, _ = plt.hist(x_data, num_bin, normed=1, facecolor='green', alpha=0.75)
         x_mean, x_std = np.mean(x_data), np.std(x_data)
         # add a 'best fit' line
@@ -91,31 +91,29 @@ class one_histogram(object):
             plt.savefig(save_fn + '.pdf')
             #
             self.saving_histo_data(save_fn + '.txt', num_bin, x_data)
+
     def saving_histo_data(self, txt_path_fn, num_bin, x_data):
-        write_text_file(txt_path_fn, 'Init', True)
         num_data = len(x_data)
         sorted_data = sorted(x_data)
         min_v, max_v = sorted_data[0], sorted_data[-1]
         intervals = []
-        interval = float(max_v - min_v) / num_bin
+        interval = (max_v - min_v) / float(num_bin)
         bins = [[] for _ in xrange(num_bin)]
         for v in sorted_data[:-1]:
-            i = int((v - min_v) / interval)
+            i = int((v - min_v) / float(interval))
             lower_bound, upper_bound = min_v + i * interval, min_v + (i + 1) * interval
             bins[i].append(v)
             if (not intervals) or (intervals[-1] != [lower_bound, upper_bound]):
                 intervals.append([lower_bound, upper_bound])
         bins[-1].append(max_v)
         #
-        write_text_file(txt_path_fn, '-----lower bound, upper bound')
-        for lower_bound, upper_bound in intervals:
+        write_text_file(txt_path_fn, 'lower-bound,upper-bound,proportion')
+        proportion = [len(_bin) / float(num_data) for _bin in bins]
+        for i, (lower_bound, upper_bound) in enumerate(intervals):
             write_text_file(txt_path_fn,
-                            '%f, %f' % (lower_bound, upper_bound))
-        write_text_file(txt_path_fn, '-----Proportion')
-        for p in [float(len(_bin)) / num_data for _bin in bins]:
-            write_text_file(txt_path_fn, str(p))
-        write_text_file(txt_path_fn, '')
+                            '%f, %f, %s' % (lower_bound, upper_bound, str(proportion[i])))
         plt.show()
+
 
 class histo_cumulative(object):
     def __init__(self, _title, x_label, y_label, num_bin, xs_data, _legend, save_fn=None):
@@ -131,7 +129,7 @@ class histo_cumulative(object):
             x_means.append(x_mean); x_stds.append(x_std)
             #
             y = mlab.normpdf(bins, x_mean, x_std).cumsum()
-            y /= y[-1]
+            y /= float(y[-1])
         plt.legend(_legend, ncol=1, loc='upper left', fontsize=10)
         #
         plt.xlabel(x_label); plt.ylabel(y_label)
@@ -144,19 +142,22 @@ class histo_cumulative(object):
         if save_fn:
             plt.savefig(save_fn + '.pdf')
             #
-            txt_path_fn = save_fn + 'txt'
+            txt_path_fn = save_fn + '.txt'
             self.saving_histo_cumulative_data(txt_path_fn, num_bin, x_data)
         plt.show()
+
     def saving_histo_cumulative_data(self, txt_path_fn, num_bin, x_data):
-        write_text_file(txt_path_fn, 'Init', True)
         num_data = len(x_data)
         sorted_data = sorted(x_data)
         min_v, max_v = sorted_data[0], sorted_data[-1]
         intervals = []
-        interval = float(max_v - min_v) / num_bin
+        interval = (max_v - min_v) / float(num_bin)
         bins = [[] for _ in xrange(num_bin)]
         for v in sorted_data[:-1]:
-            i = int((v - min_v) / interval)
+            if v == max_v:
+                i = len(bins) - 1
+            else:
+                i = int((v - min_v) / float(interval))
             lower_bound, upper_bound = min_v + i * interval, min_v + (i + 1) * interval
             try:
                 bins[i].append(v)
@@ -165,16 +166,15 @@ class histo_cumulative(object):
             if (not intervals) or (intervals[-1] != [lower_bound, upper_bound]):
                 intervals.append([lower_bound, upper_bound])
         #
-        write_text_file(txt_path_fn, '-----lower bound, upper bound')
-        for lower_bound, upper_bound in intervals:
+
+        write_text_file(txt_path_fn, 'lower-bound,upper-bound,cum-proportion')
+        proportion = [len(_bin) / float(num_data) for _bin in bins]
+        cum_prob = [sum(proportion[:i+1]) for i in xrange(len(proportion))]
+        for i, (lower_bound, upper_bound) in enumerate(intervals):
             write_text_file(txt_path_fn,
-                            '%f, %f' % (lower_bound, upper_bound))
-        write_text_file(txt_path_fn, '-----Proportion')
-        cumulated_prob = 0
-        for p in [float(len(_bin)) / num_data for _bin in bins]:
-            cumulated_prob += p
-            write_text_file(txt_path_fn, str(cumulated_prob))
-        write_text_file(txt_path_fn, '')
+                            '%f, %f, %s' % (lower_bound, upper_bound, str(cum_prob[i])))
+        plt.show()
+
 
 class multiple_line_chart(object):
     def __init__(self, _figsize, _title, _xlabel, _ylabel, xticks_info, multi_y_data, y_legend_labels, legend_pos, save_fn=None):
@@ -290,14 +290,14 @@ class line_3D(object):
         plt.show()
 
 class bar_table(object):
-    def __init__(self, _title, _ylabel, row_labels, col_labels, table_data, save_fn=None):
+    def __init__(self, _figsize, _title, _ylabel, row_labels, col_labels, table_data, save_fn=None):
         assert len(table_data) == len(row_labels)
         assert len(table_data[0]) == len(col_labels)
-        fig = plt.figure(figsize=(6, 6))
+        fig = plt.figure(figsize=_figsize)
         ax = fig.add_subplot(111)
         #
         bar_width = 0.5
-        ind = [bar_width / 2 + i for i in xrange(len(col_labels))]
+        ind = [bar_width / float(2) + i for i in xrange(len(col_labels))]
         #
         bar_data = table_data[:]
         bar_data.reverse()
@@ -307,10 +307,10 @@ class bar_table(object):
             y_offset = y_offset + row_data
         ax.set_xlim(0, len(ind))
         #
-        formated_table_data = []
+        formatted_table_data = []
         for r in table_data:
-            formated_table_data.append(['{:,}'.format(x) for x in r])
-        table = plt.table(cellText=formated_table_data, colLabels=col_labels, rowLabels=row_labels, loc='bottom')
+            formatted_table_data.append(['{:,}'.format(x) for x in r])
+        table = plt.table(cellText=formatted_table_data, colLabels=col_labels, rowLabels=row_labels, loc='bottom')
         table.scale(1, 2)
         #
         plt.subplots_adjust(left=0.2, bottom=0.2)
@@ -425,7 +425,7 @@ class one_bar_chart(object):
 
 class horizontal_bar_chart(object):
     UNIT = 1.0
-    HALF_UNIT = UNIT / 2
+    HALF_UNIT = UNIT / float(2)
     codes = [Path.MOVETO, Path.LINETO, Path.LINETO, Path.LINETO, Path.CLOSEPOLY]
     FIG_SIZE_UNIT = 6
     def __init__(self, main_name, sub_name, x_data):
@@ -465,7 +465,7 @@ class horizontal_bar_chart(object):
 
 class grid_charts(object):
     UNIT = 1.0
-    HALF_UNIT = UNIT / 2
+    HALF_UNIT = UNIT / float(2)
     codes = [Path.MOVETO, Path.LINETO, Path.LINETO, Path.LINETO, Path.CLOSEPOLY]
     FIG_SIZE_UNIT = 6
     def __init__(self, x_axis_info, y_axis_info, _legends, titles, _data, fn=None):
@@ -527,7 +527,7 @@ class grid_charts(object):
 
 class one_grid_chart(object):
     UNIT = 1.0
-    HALF_UNIT = UNIT / 2
+    HALF_UNIT = UNIT / float(2)
     codes = [Path.MOVETO, Path.LINETO, Path.LINETO, Path.LINETO, Path.CLOSEPOLY]
     FIG_SIZE_UNIT = 6
     def __init__(self, x_axis_info, y_axis_info, _legends, titles, _data, save_fn=None):

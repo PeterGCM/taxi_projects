@@ -12,7 +12,7 @@ import pandas as pd
 
 
 def run():
-    a1_dir = charts_dir + '/a_a1 fare and duration per trip'
+    a1_dir = charts_dir + '/a_overall_a1 fare and duration per trip'
     check_dir_create(a1_dir)
     for fn, l, x0_label in [(ap_tm_num_dur_fare_fn, 'ap', 'Airport'),
                             (ns_tm_num_dur_fare_fn, 'ns', 'Night safari')]:
