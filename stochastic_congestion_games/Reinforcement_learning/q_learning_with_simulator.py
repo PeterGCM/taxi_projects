@@ -11,7 +11,7 @@ ONE_SIGMA = 1
 ALPH, GAMMA = 0.8, 0.6
 EPSILON = 0.0000001
 
-def run(num_agents, num_zones, time_horizon, fl, Re, Co, d0, problem_saving_dir):
+def run(num_agents, num_zones, time_horizon, fl, Re, Co, Ds, d0, problem_saving_dir):
     # Generate drivers and initialize their location
     zones = [scg_zone(i) for i in xrange(num_zones)]
     drivers = []
@@ -174,6 +174,7 @@ class scg_driver(driver):
 
 
 if __name__ == '__main__':
-    from problems import p1
-    from problems import p2
+    # from problems import p1
+    # from problems import p2
+    from problems import p0
     run(*p1())

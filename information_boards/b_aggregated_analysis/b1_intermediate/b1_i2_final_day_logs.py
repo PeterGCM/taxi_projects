@@ -3,14 +3,14 @@ import __init__
 from b_aggregated_analysis.__init__ import logs_dir, log_prefix
 from b_aggregated_analysis.__init__ import logs_last_day_dir, log_last_day_prefix
 #
-from taxi_common.file_handling_functions import remove_creat_dir, get_all_files
+from taxi_common.file_handling_functions import remove_create_dir, get_all_files
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
 import datetime, time, csv
 
 
 def run():
-    remove_creat_dir(logs_last_day_dir)
+    remove_create_dir(logs_last_day_dir)
     #
     init_multiprocessor()
     count_num_jobs = 0

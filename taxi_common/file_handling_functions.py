@@ -1,7 +1,8 @@
-from __future__ import division
 import os, shutil
 import pickle
 import threading
+#
+thread_writing = None
 
 
 def check_path_exist(path):
@@ -27,7 +28,6 @@ def load_pickle_file(path):
         return pickle.load(fp)
 
 
-thread_writing = None
 def save_pkl_threading(path, _objects):
     global thread_writing
     if thread_writing is None:
@@ -58,7 +58,7 @@ def remove_file(path):
         os.remove(path)
 
 
-def remove_creat_dir(path):
+def remove_create_dir(path):
     if os.path.exists(path):
         shutil.rmtree(path)
     os.makedirs(path)

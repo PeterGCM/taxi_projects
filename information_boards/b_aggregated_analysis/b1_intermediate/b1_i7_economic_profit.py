@@ -7,7 +7,7 @@ from b_aggregated_analysis.__init__ import ap_ep_dir, ap_ep_prefix
 from b_aggregated_analysis.__init__ import ns_ep_dir, ns_ep_prefix
 from b_aggregated_analysis.b2_summary.__init__ import GENERAL
 #
-from taxi_common.file_handling_functions import check_path_exist, get_all_files, load_pickle_file, remove_creat_dir
+from taxi_common.file_handling_functions import check_path_exist, get_all_files, load_pickle_file, remove_create_dir
 #
 import csv, datetime
 #
@@ -35,7 +35,7 @@ with open(hourly_productivity_fn) as r_csvfile:
 
 
 def run():
-    remove_creat_dir(ap_ep_dir); remove_creat_dir(ns_ep_dir)
+    remove_create_dir(ap_ep_dir); remove_create_dir(ns_ep_dir)
     #
     # init_multiprocessor()
     # count_num_jobs = 0

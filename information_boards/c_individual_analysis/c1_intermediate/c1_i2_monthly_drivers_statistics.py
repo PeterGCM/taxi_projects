@@ -13,7 +13,7 @@ from c_individual_analysis.__init__ import ftd_prev_in_ns_stat_dir, ftd_prev_in_
 from c_individual_analysis.__init__ import ftd_prev_out_ap_stat_dir, ftd_prev_out_ap_stat_prefix
 from c_individual_analysis.__init__ import ftd_prev_out_ns_stat_dir, ftd_prev_out_ns_stat_prefix
 #
-from taxi_common.file_handling_functions import load_pickle_file, remove_creat_dir
+from taxi_common.file_handling_functions import load_pickle_file, remove_create_dir
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
 import csv
@@ -23,7 +23,7 @@ def run():
     for dn in [ftd_gen_stat_dir,
                ftd_prev_in_ap_stat_dir, ftd_prev_out_ap_stat_dir, 
                ftd_prev_in_ns_stat_dir, ftd_prev_out_ns_stat_dir]:
-        remove_creat_dir(dn)
+        remove_create_dir(dn)
     #
     init_multiprocessor()
     count_num_jobs = 0

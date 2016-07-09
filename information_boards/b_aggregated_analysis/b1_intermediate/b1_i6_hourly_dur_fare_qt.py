@@ -8,14 +8,14 @@ from b_aggregated_analysis.__init__ import ns_trips_dir, ns_trip_prefix
 from b_aggregated_analysis.__init__ import productivity_dir, productivity_prefix
 from __init__ import GEN_DUR, GEN_FARE, AP_DUR, AP_FARE, AP_QUEUE, NS_DUR, NS_FARE, NS_QUEUE
 #
-from taxi_common.file_handling_functions import remove_creat_dir
+from taxi_common.file_handling_functions import remove_create_dir
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
 import csv, time, datetime
 
 
 def run():
-    remove_creat_dir(productivity_dir)
+    remove_create_dir(productivity_dir)
     #
     # process_files('0901')
     init_multiprocessor()

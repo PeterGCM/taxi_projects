@@ -18,7 +18,7 @@ def run():
             trip_df = pd.read_csv('%s/%s%s.csv' % (trips_dir, trip_prefix, yymm))
             trip_df = trip_df[(trip_df['did'] != -1)]
             #
-            fares = [ x / float(CENT) for x in list(trip_df.groupby(['did']).sum()['fare'])]
+            fares = [x / float(CENT) for x in list(trip_df.groupby(['did']).sum()['fare'])]
             if y == 9:
                 Y09_monthly_fare += fares
             else:

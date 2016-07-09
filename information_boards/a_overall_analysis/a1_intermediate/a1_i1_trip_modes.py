@@ -6,14 +6,14 @@ from information_boards.__init__ import ap_poly, ns_poly
 from information_boards.__init__ import IN, OUT
 from a_overall_analysis.__init__ import trips_dir, trip_prefix  # @UnresolvedImport
 #
-from taxi_common.file_handling_functions import remove_creat_dir  # @UnresolvedImport
+from taxi_common.file_handling_functions import remove_create_dir  # @UnresolvedImport
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
 import csv
 
 
 def run():
-    remove_creat_dir(trips_dir)
+    remove_create_dir(trips_dir)
     #
     init_multiprocessor()
     count_num_jobs = 0

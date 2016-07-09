@@ -8,14 +8,14 @@ from b_aggregated_analysis.__init__ import ns_crossing_dir, ns_crossing_prefix
 from b_aggregated_analysis.__init__ import ap_trips_dir, ap_trip_prefix
 from b_aggregated_analysis.__init__ import ns_trips_dir, ns_trip_prefix
 #
-from taxi_common.file_handling_functions import load_pickle_file, remove_creat_dir
+from taxi_common.file_handling_functions import load_pickle_file, remove_create_dir
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
 import csv
 from bisect import bisect
 #
 def run():
-    remove_creat_dir(ap_trips_dir); remove_creat_dir(ns_trips_dir)
+    remove_create_dir(ap_trips_dir); remove_create_dir(ns_trips_dir)
     #
     init_multiprocessor()
     count_num_jobs = 0

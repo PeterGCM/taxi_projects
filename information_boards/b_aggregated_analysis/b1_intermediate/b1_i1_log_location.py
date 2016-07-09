@@ -4,14 +4,14 @@ from information_boards.__init__ import  taxi_home
 from information_boards.__init__ import ap_poly, ns_poly
 from b_aggregated_analysis.__init__ import logs_dir, log_prefix
 #
-from taxi_common.file_handling_functions import remove_creat_dir
+from taxi_common.file_handling_functions import remove_create_dir
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
 import csv
 
 
 def run():
-    remove_creat_dir(logs_dir)
+    remove_create_dir(logs_dir)
     #
     init_multiprocessor()
     count_num_jobs = 0

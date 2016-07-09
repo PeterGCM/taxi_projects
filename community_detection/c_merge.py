@@ -3,7 +3,7 @@ import __init__
 from __init__ import MIN_LINKAGE, MAX_LINKAGE_RATIO
 from __init__ import linkage_dir
 #
-from taxi_common.file_handling_functions import save_pickle_file, remove_creat_dir, check_path_exist
+from taxi_common.file_handling_functions import save_pickle_file, remove_create_dir, check_path_exist
 from taxi_common.file_handling_functions import load_pickle_file, get_fn_only, get_all_files, save_pkl_threading
 #
 import datetime

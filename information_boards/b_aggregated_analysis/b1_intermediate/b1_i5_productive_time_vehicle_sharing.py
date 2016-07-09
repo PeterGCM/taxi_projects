@@ -4,14 +4,14 @@ from b_aggregated_analysis.__init__ import shifts_dir, shift_prefix
 from b_aggregated_analysis.__init__ import shift_pro_dur_dir, shift_pro_dur_prefix
 from b_aggregated_analysis.__init__ import vehicle_sharing_dir, vehicle_sharing_prefix
 #
-from taxi_common.file_handling_functions import remove_creat_dir, save_pickle_file
+from taxi_common.file_handling_functions import remove_create_dir, save_pickle_file
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
 import csv
 
 
 def run():
-    remove_creat_dir(shift_pro_dur_dir); remove_creat_dir(vehicle_sharing_dir)
+    remove_create_dir(shift_pro_dur_dir); remove_create_dir(vehicle_sharing_dir)
     #
     init_multiprocessor()
     count_num_jobs = 0

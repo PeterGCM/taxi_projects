@@ -9,7 +9,7 @@ from c_individual_analysis.__init__ import ftd_trips_dir, ftd_trips_prefix
 from c_individual_analysis.__init__ import ftd_shift_dir, ftd_shift_prefix
 from c_individual_analysis.__init__ import ftd_list_dir, ftd_list_prefix
 #
-from taxi_common.file_handling_functions import load_pickle_file, remove_creat_dir, save_pickle_file
+from taxi_common.file_handling_functions import load_pickle_file, remove_create_dir, save_pickle_file
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
 import csv, datetime
@@ -22,7 +22,7 @@ for l, ts in load_pickle_file(zero_duration_timeslots):
 
 def run():
     for path in [ftd_trips_dir, ftd_shift_dir, ftd_list_dir]:
-        remove_creat_dir(path)
+        remove_create_dir(path)
     init_multiprocessor()
     count_num_jobs = 0
     for y in xrange(9, 11):

@@ -9,9 +9,37 @@ import numpy as np
 
 problem_saving_dir = None
 
+
 def p0():
     # Manually generated problem
-    pass
+    # This is only for Reinforcement learning because this problem has single time slot
+    global problem_saving_dir
+    problem_saving_dir = problem_dir + '/Problem0'
+    if not check_path_exist(problem_saving_dir):
+        check_dir_create(problem_saving_dir)
+        num_agents, num_zones, time_horizon = 10, 2, 1
+        fl = [[
+                [2, 2],
+                [7, 8]
+                ]]; assert len(fl) == time_horizon; assert len(fl[0]) == num_zones
+        Re = [[
+                [2, 10],
+                [8, 3]
+                ]]; assert len(Re) == time_horizon; assert len(Re[0]) == num_zones
+        Co = [[
+                [1, 4],
+                [3, 2]
+                ]]; assert len(Co) == time_horizon; assert len(Co[0]) == num_zones
+        Ds =  [[
+                [1, 2],
+                [3, 1]
+                ]]; assert len(Ds) == time_horizon; assert len(Ds[0]) == num_zones
+        d0 = [8, 2]; assert sum(d0) == num_agents
+        save_pickle_file(problem_saving_dir + '/p0.pkl', [num_agents, num_zones, time_horizon, fl, Re, Co, Ds, d0])
+    else:
+        num_agents, num_zones, time_horizon, fl, Re, Co, Ds, d0 = load_pickle_file(problem_saving_dir + '/p0.pkl')
+    return num_agents, num_zones, time_horizon, fl, Re, Co, Ds, d0, problem_saving_dir
+
 
 
 def p1():

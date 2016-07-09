@@ -1,11 +1,14 @@
-import __init__  # @UnresolvedImport # @UnusedImport
+import __init__
 #
 from b_aggregated_analysis.__init__ import ap_ep_dir, ap_ep_prefix
 from b_aggregated_analysis.__init__ import ns_ep_dir, ns_ep_prefix
 from b_aggregated_analysis.__init__ import Y09_ap_trips, Y10_ap_trips, Y09_ns_trips, Y10_ns_trips
 #
-import csv
+from taxi_common.file_handling_functions import check_path_exist
 #
+import csv
+
+
 def run():
     for y in xrange(9, 11):
         for m in xrange(1, 13):
@@ -14,6 +17,7 @@ def run():
                 continue
             process_files(yymm)
 
+
 def process_files(yymm):
     print 'handle the file; %s' % yymm
     #
@@ -21,7 +25,7 @@ def process_files(yymm):
     with open('%s/%s%s.csv' % (ap_ep_dir, ap_ep_prefix, yymm), 'rb') as r_csvfile:
         reader = csv.reader(r_csvfile)
         headers = reader.next()
-        if not os.path.exists(ap_target_file):
+        if not check_path_exist(ap_target_file):
             with open(ap_target_file, 'wt') as csvFile:
                 writer = csv.writer(csvFile)
                 writer.writerow(headers)
@@ -34,7 +38,7 @@ def process_files(yymm):
     with open('%s/%s%s.csv' % (ns_ep_dir, ns_ep_prefix, yymm), 'rb') as r_csvfile:
         reader = csv.reader(r_csvfile)
         headers = reader.next()
-        if not os.path.exists(ns_target_file):
+        if not check_path_exist(ns_target_file):
             with open(ns_target_file, 'wt') as csvFile:
                 writer = csv.writer(csvFile)
                 writer.writerow(headers)

@@ -3,7 +3,7 @@ import __init__
 from DDAP import define_DDAP
 from __init__ import policy_prefix, x_prefix, dist_prefix, lp_prefix
 #
-from taxi_common.file_handling_functions import remove_creat_dir
+from taxi_common.file_handling_functions import remove_create_dir
 #
 from gurobipy import *
 from random import random
@@ -14,11 +14,11 @@ GAMMA = 0.99
 
 
 def creative_result_saving_dir(problem_saving_dir):
-    MDPs_dir = problem_saving_dir + '/MDPs'; remove_creat_dir(MDPs_dir)
-    _policy_dir = MDPs_dir + '/re_policy'; remove_creat_dir(_policy_dir)
-    _x_dir = MDPs_dir + '/re_x'; remove_creat_dir(_x_dir)
-    _dist_dir = MDPs_dir + '/re_dist'; remove_creat_dir(_dist_dir)
-    _lp_dir = MDPs_dir + '/re_lp'; remove_creat_dir(_lp_dir)
+    MDPs_dir = problem_saving_dir + '/MDPs'; remove_create_dir(MDPs_dir)
+    _policy_dir = MDPs_dir + '/re_policy'; remove_create_dir(_policy_dir)
+    _x_dir = MDPs_dir + '/re_x'; remove_create_dir(_x_dir)
+    _dist_dir = MDPs_dir + '/re_dist'; remove_create_dir(_dist_dir)
+    _lp_dir = MDPs_dir + '/re_lp'; remove_create_dir(_lp_dir)
 
     global policy_dir, x_dir, dist_dir, lp_dir
     policy_dir, x_dir, dist_dir, lp_dir = _policy_dir , _x_dir, _dist_dir, _lp_dir

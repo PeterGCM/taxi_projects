@@ -5,7 +5,7 @@ from __init__ import POB, SIX_HOUR, EIGHT_HOUR, ONE_HOUR, HOUR24, HOUR12
 from __init__ import out_boundary_logs_fn, linkage_dir
 from _classes import cd_driver
 #
-from taxi_common.file_handling_functions import save_pkl_threading, remove_creat_dir, save_pickle_file
+from taxi_common.file_handling_functions import save_pkl_threading, remove_create_dir, save_pickle_file
 #
 import csv, datetime
 
@@ -13,7 +13,7 @@ import csv, datetime
 def run(processed_log_fn, zones):
     _, time_from, time_to = processed_log_fn[:-len('.csv')].split('-')
     pkl_dir = linkage_dir + '/%s-%s' % (time_from[:len('yyyymmdd')], time_to[:len('yyyymmdd')])
-    remove_creat_dir(pkl_dir)
+    remove_create_dir(pkl_dir)
     #
     out_boundary_logs_num = 0
     with open(out_boundary_logs_fn, 'w') as f:
