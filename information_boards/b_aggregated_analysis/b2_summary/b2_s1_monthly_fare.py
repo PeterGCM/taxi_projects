@@ -23,7 +23,7 @@ def run():
                 Y09_monthly_fare += fares
             else:
                 Y10_monthly_fare += fares
-    save_pickle_file(driver_monthly_fare_gt, [Y09_monthly_fare, Y10_monthly_fare])
+    save_pickle_file(driver_monthly_fare_fn, [Y09_monthly_fare, Y10_monthly_fare])
             
 if __name__ == '__main__':
     run()
