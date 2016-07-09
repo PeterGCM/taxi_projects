@@ -27,13 +27,13 @@ def run():
     for path in [ftd_trips_dir, ftd_shift_dir, ftd_list_dir]:
         remove_create_dir(path)
 
-    # init_multiprocessor()
+
     # count_num_jobs = 0
     # for yymm in ['1006','1007','1008','1009','1011','1012']:
     #     put_task(process_files, [yymm])
     #     count_num_jobs += 1
     # end_multiprocessor(count_num_jobs)
-
+    init_multiprocessor()
     count_num_jobs = 0
     for y in xrange(9, 11):
         for m in xrange(1, 13):
