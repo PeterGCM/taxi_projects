@@ -26,7 +26,7 @@ def run():
     #     remove_create_dir(path)
     init_multiprocessor()
     count_num_jobs = 0
-    for yymm in ['1006','1007','1008','1009','10011','1012']:
+    for yymm in ['1006','1007','1008','1009','1011','1012']:
         put_task(process_files, [yymm])
         count_num_jobs += 1
     end_multiprocessor(count_num_jobs)
