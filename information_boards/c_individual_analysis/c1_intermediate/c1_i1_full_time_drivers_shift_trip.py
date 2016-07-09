@@ -1,4 +1,4 @@
-import __init__  # @UnresolvedImport # @UnusedImport
+import __init__
 #
 from a_overall_analysis.__init__ import trips_dir, trip_prefix
 from b_aggregated_analysis.__init__ import zero_duration_timeslots

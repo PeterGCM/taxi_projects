@@ -5,12 +5,15 @@ from information_boards.__init__ import CENT, SEC60
 from information_boards.__init__ import charts_dir
 from a_overall_analysis.__init__ import ap_tm_num_dur_fare_fn, ns_tm_num_dur_fare_fn
 #
+from taxi_common.file_handling_functions import check_dir_create
 from taxi_common.charts import simple_barchart  # @UnresolvedImport
 #
 import pandas as pd
 
 
 def run():
+    a1_dir = charts_dir + '/a_a1 fare and duration per trip'
+    check_dir_create(a1_dir)
     for fn, l, x0_label in [(ap_tm_num_dur_fare_fn, 'ap', 'Airport'),
                             (ns_tm_num_dur_fare_fn, 'ns', 'Night safari')]:
         trip_df = pd.read_csv(fn)
@@ -35,10 +38,10 @@ def run():
         # charts
         #
         _data = [in_fare_per_trip, out_fare_per_trip]
-        simple_barchart([x0_label, 'Other areas'], 'S$', _data, charts_dir + '/fare_per_trip_%s' % l)
+        simple_barchart([x0_label, 'Other areas'], 'S$', _data, a1_dir + '/fare_per_trip_%s' % l)
         #
         _data = [in_dur_per_trip, out_dur_per_trip]
-        simple_barchart([x0_label, 'Other areas'], 'Minute', _data,charts_dir + '/dur_per_trip_%s' % l)
+        simple_barchart([x0_label, 'Other areas'], 'Minute', _data, a1_dir + '/dur_per_trip_%s' % l)
 
 if __name__ == '__main__':
     run()
