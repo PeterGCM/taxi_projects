@@ -120,9 +120,9 @@ class histo_cumulative(object):
         assert len(xs_data) == len(_legend)
         plt.figure(figsize=(6, 6))
         x_means, x_stds = [], []
-        _xmax = -1e400
+        _xmax = [-1e400, -1e400]
         for i, x_data in enumerate(xs_data):
-            _xmax = max(_xmax, max(x_data))
+            _xmax[i] = max(_xmax[i], max(x_data))
             _, bins, _ = plt.hist(x_data, num_bin, normed=1,
                                     histtype='step', cumulative=True, color=clists[i])
             x_mean, x_std = np.mean(x_data), np.std(x_data)
@@ -133,7 +133,7 @@ class histo_cumulative(object):
         plt.legend(_legend, ncol=1, loc='upper left', fontsize=10)
         #
         plt.xlabel(x_label); plt.ylabel(y_label)
-        plt.xlim(xmax = _xmax)
+        plt.xlim(xmax = min(_xmax))
         plt.ylim(ymax = 1.0)
         
         s = r'  '.join(['$\mathrm{%s}\ \mu=%.2f,\ \sigma=%.2f$' % (_legend[i], x_means[i], x_stds[i]) for i in xrange(len(_legend))])

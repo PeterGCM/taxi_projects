@@ -11,7 +11,7 @@ from c_individual_analysis.__init__ import Y09_ftd_prev_in_ns_stat, Y10_ftd_prev
 from c_individual_analysis.__init__ import Y09_ftd_prev_out_ap_stat, Y10_ftd_prev_out_ap_stat
 from c_individual_analysis.__init__ import Y09_ftd_prev_out_ns_stat, Y10_ftd_prev_out_ns_stat
 #
-from taxi_common.file_handling_functions import check_dir_create, remove_file
+from taxi_common.file_handling_functions import remove_file, check_path_exist
 #
 import csv
 #
@@ -41,7 +41,7 @@ def process_files(yymm):
         with open('%s/%s%s.csv' % (dn, fn_prefix, yymm), 'rb') as r_csvfile:
             reader = csv.reader(r_csvfile)
             headers = reader.next()
-            if not os.path.exists(target_file):
+            if not check_path_exist(target_file):
                 with open(target_file, 'wt') as csvFile:
                     writer = csv.writer(csvFile)
                     writer.writerow(headers)
