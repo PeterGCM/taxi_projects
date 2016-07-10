@@ -36,22 +36,21 @@ def process_files(yymm):
         with open('%s/%s%s.csv' % (dn, fn_prefix, yymm), 'rb') as r_csvfile:
             reader = csv.reader(r_csvfile)
             headers = reader.next()
-            if not check_path_exist(both):
-                with open(both, 'wt') as csvFile:
+            for row in reader:
+                if not check_path_exist(both):
+                    with open(both, 'wt') as csvFile:
+                        writer = csv.writer(csvFile)
+                        writer.writerow(headers)
+                with open(both, 'a') as csvFile:
                     writer = csv.writer(csvFile)
-                    writer.writerow(headers)
-            with open(both, 'a') as csvFile:
-                writer = csv.writer(csvFile)
-                for row in reader:
                     writer.writerow(row)
-            #
-            if not check_path_exist(target_file):
-                with open(target_file, 'wt') as csvFile:
+                #
+                if not check_path_exist(target_file):
+                    with open(target_file, 'wt') as csvFile:
+                        writer = csv.writer(csvFile)
+                        writer.writerow(headers)
+                with open(target_file, 'a') as csvFile:
                     writer = csv.writer(csvFile)
-                    writer.writerow(headers)
-            with open(target_file, 'a') as csvFile:
-                writer = csv.writer(csvFile)
-                for row in reader:
                     writer.writerow(row)
 
 
