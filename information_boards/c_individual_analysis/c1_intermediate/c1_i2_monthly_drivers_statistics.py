@@ -43,9 +43,9 @@ def process_files(yymm):
                                           (ftd_stat_ns_trip_dir, ftd_stat_ns_trip_prefix)]:
         with open('%s/%s%s.csv' % (ftd_stat_dir, ftd_stat_prefix, yymm), 'wt') as w_csvfile:
             writer = csv.writer(w_csvfile)
-            headers = ['yy', 'mm', 'did', 'fare', 'pro-dur', 'gen-prod'
-                                        , 'pin-fare', 'pin-dur', 'pin-qu', 'pin-prod', 'pin-eco-profit'
-                                        , 'pout-fare', 'pout-dur', 'pout-qu', 'pout-prod', 'pout-eco-profit']
+            headers = ['yy', 'mm', 'did', 'num-trips', 'fare', 'pro-dur', 'gen-prod'
+                                        , 'pin-num-trips', 'pin-fare', 'pin-dur', 'pin-qu', 'pin-prod', 'pin-eco-profit'
+                                        , 'pout-num-trips', 'pout-fare', 'pout-dur', 'pout-qu', 'pout-prod', 'pout-eco-profit']
             writer.writerow(headers)
     #
     full_dids = sorted(load_pickle_file('%s/%s%s.pkl' % (ftd_list_dir, ftd_list_prefix, yymm)))
