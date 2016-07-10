@@ -63,6 +63,7 @@ def process_files(yymm):
         pro_dur = sum(did_sh['pro-dur']) * SEC60
         did_wt = trip_df[(trip_df['did'] == did)]
         fare = sum(did_wt['fare'])
+        num_trips = len(did_wt['fare'])
         if pro_dur > 0 and fare != 0:
             gen_prod = fare / float(pro_dur)
         else:
@@ -73,20 +74,21 @@ def process_files(yymm):
             #
             pin_trip_df = did_df[(did_df['trip-mode'] == DIn_PIn)]
             if len(pin_trip_df) == 0: continue
-            pin_fare, pin_dur, pin_qu, pin_prod, pin_eco_profit = calc_prod_eco_profit(pin_trip_df)
+            pin_num_trips, pin_fare, pin_dur, pin_qu, pin_prod, pin_eco_profit = calc_prod_eco_profit(pin_trip_df)
             #
             pout_trip_df = did_df[(did_df['trip-mode'] == DOut_PIn)]
             if len(pout_trip_df) == 0: continue
-            pout_fare, pout_dur, pout_qu, pout_prod, pout_eco_profit = calc_prod_eco_profit(pout_trip_df)
+            pout_num_trips, pout_fare, pout_dur, pout_qu, pout_prod, pout_eco_profit = calc_prod_eco_profit(pout_trip_df)
             #
             with open('%s/%s%s.csv' % (ftd_stat_dir, ftd_stat_prefix, yymm), 'a') as w_csvfile:
                 writer = csv.writer(w_csvfile)
-                writer.writerow([yy, mm, did, fare, pro_dur, gen_prod
-                                            , pin_fare, pin_dur, pin_qu, pin_prod, pin_eco_profit
-                                            , pout_fare, pout_dur, pout_qu, pout_prod, pout_eco_profit])
+                writer.writerow([yy, mm, did, num_trips, fare, pro_dur, gen_prod
+                                            , pin_num_trips, pin_fare, pin_dur, pin_qu, pin_prod, pin_eco_profit
+                                            , pout_num_trips, pout_fare, pout_dur, pout_qu, pout_prod, pout_eco_profit])
 
 
 def calc_prod_eco_profit(df):
+    num_trips = len(df['duration'])
     dur, qu = sum(df['duration']), sum(df['queueing-time'])
     fare = sum(df['fare'])
     if qu + dur > 0 and fare != 0:
@@ -94,7 +96,7 @@ def calc_prod_eco_profit(df):
     else:
         prod = 0
     eco_profit = sum(df['economic-profit'])
-    return fare, dur, qu, prod, eco_profit
+    return num_trips, fare, dur, qu, prod, eco_profit
 
 
 if __name__ == '__main__':
