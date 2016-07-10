@@ -15,23 +15,25 @@ from taxi_common.multiprocess import init_multiprocessor, put_task, end_multipro
 #
 import csv
 import pandas as pd
-#
+
+
 def run():
-    # for dn in [ftd_stat_ap_trip_dir, ftd_stat_ns_trip_dir]:
-    #     remove_create_dir(dn)
+    for dn in [ftd_stat_ap_trip_dir, ftd_stat_ns_trip_dir]:
+        remove_create_dir(dn)
     #
-    # init_multiprocessor()
+    init_multiprocessor()
     count_num_jobs = 0
     for y in xrange(9, 11):
         for m in xrange(1, 13):
             yymm = '%02d%02d' % (y, m) 
             if yymm in ['0912', '1010']:
                 continue
-            process_files(yymm)
-#             put_task(process_files, [yymm])
+#             process_files(yymm)
+            put_task(process_files, [yymm])
             count_num_jobs += 1
-    # end_multiprocessor(count_num_jobs)
-    
+    end_multiprocessor(count_num_jobs)
+
+
 def process_files(yymm):
     print 'handle the file; %s' % yymm
     #
@@ -63,12 +65,11 @@ def process_files(yymm):
             gen_prod = total_fare / float(pro_dur)
         else:
             continue
-        for loc_trip_df in [ap_trip_df, ns_trip_df]:
+        for loc_trip_df, ftd_stat_dir, ftd_stat_prefix in [(ap_trip_df, ftd_stat_ap_trip_dir, ftd_stat_ap_trip_prefix),
+                                                           (ns_trip_df, ftd_stat_ns_trip_dir, ftd_stat_ns_trip_prefix)]:
             did_df = loc_trip_df[(loc_trip_df['did'] == did)]
             #
             pin_trip_df = did_df[(did_df['trip-mode'] == DIn_PIn)]
-            print pin_trip_df
-            assert  False
             if len(pin_trip_df) == 0: continue
             pin_prod, pin_eco_profit = calc_prod_eco_profit(pin_trip_df)
             #
@@ -79,6 +80,7 @@ def process_files(yymm):
             with open('%s/%s%s.csv' % (ftd_stat_dir, ftd_stat_prefix, yymm), 'a') as w_csvfile:
                 writer = csv.writer(w_csvfile)
                 writer.writerow([yy, mm, did, gen_prod, pin_prod, pin_eco_profit, pout_prod, pout_eco_profit])
+
 
 def calc_prod_eco_profit(df):
     qu, dur = sum(df['queueing-time']), sum(df['duration'])
