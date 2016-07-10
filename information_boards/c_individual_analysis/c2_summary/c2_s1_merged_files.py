@@ -1,37 +1,86 @@
-import __init__  # @UnresolvedImport # @UnusedImport
+import __init__
 #
-from c_individual_analysis.__init__ import ftd_gen_stat_dir, ftd_gen_stat_prefix
-from c_individual_analysis.__init__ import ftd_prev_in_ap_stat_dir, ftd_prev_in_ap_stat_prefix
-from c_individual_analysis.__init__ import ftd_prev_in_ns_stat_dir, ftd_prev_in_ns_stat_prefix
-from c_individual_analysis.__init__ import ftd_prev_out_ap_stat_dir, ftd_prev_out_ap_stat_prefix
-from c_individual_analysis.__init__ import ftd_prev_out_ns_stat_dir, ftd_prev_out_ns_stat_prefix
-from c_individual_analysis.__init__ import Y09_ftd_gen_stat, Y10_ftd_gen_stat
-from c_individual_analysis.__init__ import Y09_ftd_prev_in_ap_stat, Y10_ftd_prev_in_ap_stat
-from c_individual_analysis.__init__ import Y09_ftd_prev_in_ns_stat, Y10_ftd_prev_in_ns_stat
-from c_individual_analysis.__init__ import Y09_ftd_prev_out_ap_stat, Y10_ftd_prev_out_ap_stat
-from c_individual_analysis.__init__ import Y09_ftd_prev_out_ns_stat, Y10_ftd_prev_out_ns_stat
+from c_individual_analysis.__init__ import ftd_stat_ap_trip_dir, ftd_stat_ap_trip_prefix
+from c_individual_analysis.__init__ import ftd_stat_ns_trip_dir, ftd_stat_ns_trip_prefix
+from c_individual_analysis.__init__ import ftd_Y09_stat_ap_fn, ftd_Y10_stat_ap_fn
+from c_individual_analysis.__init__ import ftd_Y09_stat_ns_fn, ftd_Y10_stat_ns_fn
+
+
+
+
 #
 from taxi_common.file_handling_functions import remove_file, check_path_exist
 #
 import csv
 #
-_package = [(ftd_gen_stat_dir, ftd_gen_stat_prefix , Y09_ftd_gen_stat, Y10_ftd_gen_stat),
-            (ftd_prev_in_ap_stat_dir, ftd_prev_in_ap_stat_prefix, Y09_ftd_prev_in_ap_stat, Y10_ftd_prev_in_ap_stat),
-            (ftd_prev_in_ns_stat_dir, ftd_prev_in_ns_stat_prefix, Y09_ftd_prev_in_ns_stat, Y10_ftd_prev_in_ns_stat),
-            (ftd_prev_out_ap_stat_dir, ftd_prev_out_ap_stat_prefix, Y09_ftd_prev_out_ap_stat, Y10_ftd_prev_out_ap_stat),
-            (ftd_prev_out_ns_stat_dir, ftd_prev_out_ns_stat_prefix, Y09_ftd_prev_out_ns_stat, Y10_ftd_prev_out_ns_stat)]
-#
 def run():
-    for _, _, Y09, Y10 in _package:
-        remove_file(Y09)
-        remove_file(Y10)
-    #
-    for y in xrange(9, 11):
-        for m in xrange(1, 13):
-            yymm = '%02d%02d' % (y, m) 
-            if yymm in ['0912', '1010']:
-                continue
-            process_files(yymm)
+    driver_measure = ['num-trips', 'fare', 'pro-dur', 'gen-prod', 
+                      'pin-num-trips', 'pin-fare', 'pin-dur', 'pin-qu', 'pin-prod', 'pin-eco-profit',
+                      'pout-num-trips', 'pout-fare', 'pout-dur', 'pout-qu', 'pout-prod', 'pout-eco-profit']
+    for Y09_fn, Y10_fn in [(ftd_Y09_stat_ap_fn, ftd_Y10_stat_ap_fn), 
+                           (ftd_Y09_stat_ns_fn, ftd_Y10_stat_ns_fn])]:
+        remove_file(Y09_fn)
+        remove_file(Y10_fn)
+        #
+        Y09_yymm, Y10_yymm = [], []
+        for y in xrange(9, 11):
+            for m in xrange(1, 13):
+                yymm = '%02d%02d' % (y, m) 
+                if yymm in ['0912', '1010']:
+                    continue
+                if yymm.startswith('09'):
+                    Y09_yymm.append(yymm)
+                else:
+                    assert yymm.startswith('10')
+                    Y10_yymm.append(yymm)
+        for Y_yymm, Y_fn, stat_dir, stat_prefix in [(Y09_yymm, Y09_fn, ftd_stat_ap_trip_dir, ftd_stat_ap_trip_prefix),
+                                                    (Y10_yymm, Y10_fn, ftd_stat_ns_trip_dir, ftd_stat_ns_trip_prefix)]:
+            drivers = {}
+            for yymm in Y_yymm:
+                with open('%s/%s%s.csv' % (stat_dir, stat_prefix, yymm), 'rt') as r_csvfile:
+                    reader = csv.reader(r_csvfile)
+                    headers = reader.next()
+                    hid = {h : i for i, h in enumerate(headers)}
+                    # 'did'
+                    # 'num-trips', 'fare', 'pro-dur' 'gen-prod', 
+                    # 'pin-num-trips', 'pin-fare', 'pin-dur', 'pin-qu', 'pin-prod', 'pin-eco-profit',
+                    # 'pout-num-trips', 'pout-fare', 'pout-dur', 'pout-qu', 'pout-prod', 'pout-eco-profit'
+                    for row in reader:
+                        did = row[hid['did']]
+                        if not drivers.has_key(did):
+                            drivers[did] = [[] for _ in driver_measure]
+                        for measure in driver_measure:
+                            drivers[did][driver_measure.index(measure)].append(eval(row[hid[measure]]))
+            with open(Y_fn, 'wt') as w_csvfile:
+                writer = csv.writer(w_csvfile)
+                headers = ['did',
+                           , 'num-trips', 'num-trips', 'num-trips', 
+                           , 'fare', 
+                           , 'pro-dur', 
+                           , 'gen-prod', 
+                           , 'pin-num-trips', 
+                           , 'pin-fare', 
+                           , 'pin-dur', 
+                           , 'pin-qu', 
+                           , 'pin-prod', 
+                           , 'pin-eco-profit',
+                           , 'pout-num-trips', 
+                           , 'pout-fare', 
+                           , 'pout-dur', 
+                           , 'pout-qu', 
+                           , 'pout-prod', 
+                           , 'pout-eco-profit']
+
+                            ]
+
+
+                writer.writerow(headers)
+
+
+
+def process_year(Y_yymm):
+
+    dfs = pd.read_csv('%s/%s%s.csv' % (ap_ep_dir, ap_ep_prefix, yymm))
 
 def process_files(yymm):
     print 'handle the file; %s' % yymm
