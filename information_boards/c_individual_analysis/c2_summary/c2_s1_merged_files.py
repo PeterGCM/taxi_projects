@@ -10,8 +10,8 @@ from taxi_common.file_handling_functions import remove_file, check_path_exist
 #
 import csv
 #
-_package = [(ftd_stat_ap_trip_dir, ftd_stat_ap_trip_prefix, ftd_Y09_stat_ap_fn, ftd_Y10_stat_ap_fn, stat_ap_both_fn),
-            (ftd_stat_ns_trip_dir, ftd_stat_ns_trip_prefix, ftd_Y09_stat_ns_fn, ftd_Y10_stat_ns_fn, stat_ns_both_fn)]
+_package = [(ftd_stat_ap_trip_dir, ftd_stat_ap_trip_prefix, Y09_stat_ap_fn, Y10_stat_ap_fn, stat_ap_both_fn),
+            (ftd_stat_ns_trip_dir, ftd_stat_ns_trip_prefix, Y09_stat_ns_fn, Y10_stat_ns_fn, stat_ns_both_fn)]
 
 
 def run():
