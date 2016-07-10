@@ -20,12 +20,12 @@ ftd_list_dir, ftd_list_prefix =  full_time_drivers_dir + '/ftd_list', 'ftd-list-
 ftd_stat_ap_trip_dir, ftd_stat_ap_trip_prefix = full_time_drivers_dir + '/driver_stat_ap_trips', 'stat-ap-trips-'
 ftd_stat_ns_trip_dir, ftd_stat_ns_trip_prefix = full_time_drivers_dir + '/driver_stat_ns_trips', 'stat-ns-trips-'
 
-Y09_stat_ap_fn = ftd_stat_ap_trip_dir + '/Y09-stat-ap.csv'
-Y10_stat_ap_fn = ftd_stat_ap_trip_dir + '/Y10-stat-ap.csv'
-stat_ap_both_fn = ftd_stat_ap_trip_dir + '/stat-ap-both.csv'
-Y09_stat_ns_fn = ftd_stat_ns_trip_dir + '/Y09-stat-ns.csv'
-Y10_stat_ns_fn = ftd_stat_ns_trip_dir + '/Y10-stat-ns.csv'
-stat_ns_both_fn = ftd_stat_ns_trip_dir + '/stat-ns-both.csv'
+ftd_Y09_stat_ap_fn = summary_dir+ '/ftd-Y09-stat-ap.csv'
+ftd_Y10_stat_ap_fn = summary_dir+ '/ftd-Y10-stat-ap.csv'
+ftd_stat_ap_both_fn = summary_dir + '/ftd-stat-ap-both.csv'
+ftd_Y09_stat_ns_fn = summary_dir + '/ftd-Y09-stat-ns.csv'
+ftd_Y10_stat_ns_fn = summary_dir + '/ftd-Y10-stat-ns.csv'
+ftd_stat_ns_both_fn = summary_dir + '/ftd-stat-ns-both.csv'
 
 ftd_gen_stat_dir, ftd_gen_stat_prefix = full_time_drivers_dir + '/ftd_gen_stat', 'ftd-gen-stat-'
 ftd_prev_in_ap_stat_dir, ftd_prev_in_ap_stat_prefix = full_time_drivers_dir + '/ftd_prev_in_ap_stat', 'ftd-prev-in-ap-stat-'
