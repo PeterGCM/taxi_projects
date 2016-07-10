@@ -7,11 +7,8 @@ from b_aggregated_analysis.__init__ import ns_ep_dir, ns_ep_prefix
 from c_individual_analysis.__init__ import ftd_trips_dir, ftd_trips_prefix
 from c_individual_analysis.__init__ import ftd_shift_dir, ftd_shift_prefix
 from c_individual_analysis.__init__ import ftd_list_dir, ftd_list_prefix
-from c_individual_analysis.__init__ import ftd_gen_stat_dir, ftd_gen_stat_prefix
-from c_individual_analysis.__init__ import ftd_prev_in_ap_stat_dir, ftd_prev_in_ap_stat_prefix
-from c_individual_analysis.__init__ import ftd_prev_in_ns_stat_dir, ftd_prev_in_ns_stat_prefix
-from c_individual_analysis.__init__ import ftd_prev_out_ap_stat_dir, ftd_prev_out_ap_stat_prefix
-from c_individual_analysis.__init__ import ftd_prev_out_ns_stat_dir, ftd_prev_out_ns_stat_prefix
+from c_individual_analysis.__init__ import ftd_stat_ap_trip_dir, ftd_stat_ap_trip_prefix
+from c_individual_analysis.__init__ import ftd_stat_ns_trip_dir, ftd_stat_ns_trip_prefix
 #
 from taxi_common.file_handling_functions import load_pickle_file, remove_create_dir
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
@@ -20,9 +17,7 @@ import csv
 import pandas as pd
 #
 def run():
-    for dn in [ftd_gen_stat_dir,
-               ftd_prev_in_ap_stat_dir, ftd_prev_out_ap_stat_dir, 
-               ftd_prev_in_ns_stat_dir, ftd_prev_out_ns_stat_dir]:
+    for dn in [ftd_stat_ap_trip_dir, ftd_stat_ns_trip_dir]:
         remove_create_dir(dn)
     #
     init_multiprocessor()
@@ -42,19 +37,11 @@ def process_files(yymm):
     #
     # initialize csv_files
     #
-    # general productivities
-    with open('%s/%s%s.csv' % (ftd_gen_stat_dir, ftd_gen_stat_prefix, yymm), 'wt') as w_csvfile:
-        writer = csv.writer(w_csvfile)
-        headers = ['yy', 'mm', 'did', 'prod']
-        writer.writerow(headers)
-    # airport and night safari productivities
-    for dn, fn_prefix in [(ftd_prev_in_ap_stat_dir, ftd_prev_in_ap_stat_prefix),
-                          (ftd_prev_out_ap_stat_dir, ftd_prev_out_ap_stat_prefix),
-                          (ftd_prev_in_ns_stat_dir, ftd_prev_in_ns_stat_prefix),
-                          (ftd_prev_out_ns_stat_dir, ftd_prev_out_ns_stat_prefix)]:
-        with open('%s/%s%s.csv' % (dn, fn_prefix, yymm), 'wt') as w_csvfile:
+    for ftd_stat_dir, ftd_stat_prefix in [ftd_stat_ap_trip_dir, ftd_stat_ap_trip_prefix,
+                                          ftd_stat_ns_trip_dir, ftd_stat_ns_trip_prefix]:
+        with open('%s/%s%s.csv' % (ftd_stat_dir, ftd_stat_prefix, yymm), 'wt') as w_csvfile:
             writer = csv.writer(w_csvfile)
-            headers = ['yy', 'mm', 'did', 'prod', 'eco-profit']
+            headers = ['yy', 'mm', 'did', 'gen-prod', 'pin-prod', 'pin-eco-profit', 'pout-prod', 'pout-eco-profit']
             writer.writerow(headers)
     #
     full_dids = sorted(load_pickle_file('%s/%s%s.pkl' % (ftd_list_dir, ftd_list_prefix, yymm)))
@@ -73,44 +60,34 @@ def process_files(yymm):
         did_wt = trip_df[(trip_df['did'] == did)]
         total_fare = sum(did_wt['fare'])
         if pro_dur > 0 and total_fare != 0:
-            total_prod = total_fare / pro_dur
-            with open('%s/%s%s.csv' % (ftd_gen_stat_dir, ftd_gen_stat_prefix, yymm), 'a') as w_csvfile:
+            gen_prod = total_fare / float(pro_dur)
+        else:
+            continue
+        for loc_trip_df in [ap_trip_df, ns_trip_df]:
+            did_df = loc_trip_df[(loc_trip_df['did'] == did)]
+            #
+            pin_trip_df = did_df[(did_df['trip-mode'] == DIn_PIn)]
+            if len(pin_trip_df) == 0: continue
+            pin_prod, pin_eco_profit = calc_prod_eco_profit(pin_trip_df)
+            #
+            pout_trip_df = did_df[(did_df['trip-mode'] == DOut_PIn)]
+            if len(pout_trip_df) == 0: continue
+            pout_prod, pout_eco_profit = calc_prod_eco_profit(pout_trip_df)
+            #
+            with open('%s/%s%s.csv' % (ftd_stat_dir, ftd_stat_prefix, yymm, yymm), 'a') as w_csvfile:
                 writer = csv.writer(w_csvfile)
-                writer.writerow([yy, mm, did, total_prod])
-        #
-        # airport trips
-        #
-        did_ap = ap_trip_df[(ap_trip_df['did'] == did)]
-        prev_in_ap_trip = did_ap[(did_ap['trip-mode'] == DIn_PIn)]
-        prev_out_ap_trip = did_ap[(did_ap['trip-mode'] == DOut_PIn)]
-        #
-        if len(did_ap) != 0:
-            df_dir_path_prefix = [(prev_in_ap_trip, ftd_prev_in_ap_stat_dir, ftd_prev_in_ap_stat_prefix),
-                                  (prev_out_ap_trip, ftd_prev_out_ap_stat_dir, ftd_prev_out_ap_stat_prefix)]
-            calc_drivers_monthly_eco_profit(yymm, yy, mm, did, df_dir_path_prefix)
-        #
-        # night safari trips
-        #
-        did_ns = ns_trip_df[(ns_trip_df['did'] == did)]
-        prev_in_ns_trip = did_ns[(did_ns['trip-mode'] == DIn_PIn)]
-        prev_out_ns_trip = did_ns[(did_ns['trip-mode'] == DOut_PIn)]
-        #
-        if len(did_ns) != 0:
-            df_dir_path_prefix = [(prev_in_ns_trip, ftd_prev_in_ns_stat_dir, ftd_prev_in_ns_stat_prefix),
-                                  (prev_out_ns_trip, ftd_prev_out_ns_stat_dir, ftd_prev_out_ns_stat_prefix)]
-            calc_drivers_monthly_eco_profit(yymm, yy, mm, did, df_dir_path_prefix)
-    print 'End the file; %s' % yymm
+                writer.writerow([yy, mm, did, gen_prod, pin_prod, pin_eco_profit, pout_prod, pout_eco_profit])
 
-def calc_drivers_monthly_eco_profit(yymm, yy, mm, did, df_dir_path_prefix):
-    for df, dir_path, fn_prefix in df_dir_path_prefix:
-        qu, dur = sum(df['queueing-time']), sum(df['duration'])
-        fare = sum(df['fare'])
-        eco_profit = sum(df['economic-profit'])
-        if qu + dur > 0 and fare != 0:
-            prod = fare / float(qu + dur)
-            with open('%s/%s%s.csv' % (dir_path, fn_prefix, yymm), 'a') as w_csvfile:
-                writer = csv.writer(w_csvfile)
-                writer.writerow([yy, mm, did, prod, eco_profit])
+def calc_prod_eco_profit(df):
+    qu, dur = sum(df['queueing-time']), sum(df['duration'])
+    fare = sum(df['fare'])
+    if qu + dur > 0 and fare != 0:
+        prod = fare / float(qu + dur)
+    else:
+        prod = 0
+    eco_profit = sum(df['economic-profit'])
+    return prod, eco_profit
+
 
 if __name__ == '__main__':
     run()

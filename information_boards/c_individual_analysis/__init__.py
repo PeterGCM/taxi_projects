@@ -15,6 +15,14 @@ full_time_drivers_dir = taxi_data + '/full_time_driver'
 ftd_trips_dir, ftd_trips_prefix = full_time_drivers_dir + '/ftd_trips', 'ftd-trips-'
 ftd_shift_dir, ftd_shift_prefix = full_time_drivers_dir + '/ftd_shift', 'ftd-shift-'
 ftd_list_dir, ftd_list_prefix =  full_time_drivers_dir + '/ftd_list', 'ftd-list-'
+
+
+ftd_stat_ap_trip_dir, ftd_stat_ap_trip_prefix = full_time_drivers_dir + '/driver_stat_ap_trips', 'stat-ap-trips-'
+ftd_stat_ns_trip_dir, ftd_stat_ns_trip_prefix = full_time_drivers_dir + '/driver_stat_ns_trips', 'stat-ns-trips-'
+
+
+
+
 ftd_gen_stat_dir, ftd_gen_stat_prefix = full_time_drivers_dir + '/ftd_gen_stat', 'ftd-gen-stat-'
 ftd_prev_in_ap_stat_dir, ftd_prev_in_ap_stat_prefix = full_time_drivers_dir + '/ftd_prev_in_ap_stat', 'ftd-prev-in-ap-stat-'
 ftd_prev_in_ns_stat_dir, ftd_prev_in_ns_stat_prefix = full_time_drivers_dir + '/ftd_prev_in_ns_stat', 'ftd-prev-in-ns-stat-'
