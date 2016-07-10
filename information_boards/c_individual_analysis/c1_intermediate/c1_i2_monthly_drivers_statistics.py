@@ -74,7 +74,7 @@ def process_files(yymm):
             if len(pout_trip_df) == 0: continue
             pout_prod, pout_eco_profit = calc_prod_eco_profit(pout_trip_df)
             #
-            with open('%s/%s%s.csv' % (ftd_stat_dir, ftd_stat_prefix, yymm, yymm), 'a') as w_csvfile:
+            with open('%s/%s%s.csv' % (ftd_stat_dir, ftd_stat_prefix, yymm), 'a') as w_csvfile:
                 writer = csv.writer(w_csvfile)
                 writer.writerow([yy, mm, did, gen_prod, pin_prod, pin_eco_profit, pout_prod, pout_eco_profit])
 
