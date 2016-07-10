@@ -30,16 +30,15 @@ def p0():
                 [1, 4],
                 [3, 2]
                 ]]; assert len(Co) == time_horizon; assert len(Co[0]) == num_zones
-        Ds =  [[
+        Mt =  [[
                 [1, 2],
                 [3, 1]
-                ]]; assert len(Ds) == time_horizon; assert len(Ds[0]) == num_zones
+                ]]; assert len(Mt) == time_horizon; assert len(Mt[0]) == num_zones
         d0 = [8, 2]; assert sum(d0) == num_agents
-        save_pickle_file(problem_saving_dir + '/p0.pkl', [num_agents, num_zones, time_horizon, fl, Re, Co, Ds, d0])
+        save_pickle_file(problem_saving_dir + '/p0.pkl', [num_agents, num_zones, time_horizon, fl, Re, Co, Mt, d0])
     else:
         num_agents, num_zones, time_horizon, fl, Re, Co, Ds, d0 = load_pickle_file(problem_saving_dir + '/p0.pkl')
     return num_agents, num_zones, time_horizon, fl, Re, Co, Ds, d0, problem_saving_dir
-
 
 
 def p1():
