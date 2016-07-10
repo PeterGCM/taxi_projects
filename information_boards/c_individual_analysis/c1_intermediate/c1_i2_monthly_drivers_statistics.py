@@ -17,20 +17,20 @@ import csv
 import pandas as pd
 #
 def run():
-    for dn in [ftd_stat_ap_trip_dir, ftd_stat_ns_trip_dir]:
-        remove_create_dir(dn)
+    # for dn in [ftd_stat_ap_trip_dir, ftd_stat_ns_trip_dir]:
+    #     remove_create_dir(dn)
     #
-    init_multiprocessor()
+    # init_multiprocessor()
     count_num_jobs = 0
     for y in xrange(9, 11):
         for m in xrange(1, 13):
             yymm = '%02d%02d' % (y, m) 
             if yymm in ['0912', '1010']:
                 continue
-#             process_files(yymm)
-            put_task(process_files, [yymm])
+            process_files(yymm)
+#             put_task(process_files, [yymm])
             count_num_jobs += 1
-    end_multiprocessor(count_num_jobs)
+    # end_multiprocessor(count_num_jobs)
     
 def process_files(yymm):
     print 'handle the file; %s' % yymm
@@ -67,6 +67,8 @@ def process_files(yymm):
             did_df = loc_trip_df[(loc_trip_df['did'] == did)]
             #
             pin_trip_df = did_df[(did_df['trip-mode'] == DIn_PIn)]
+            print pin_trip_df
+            assert  False
             if len(pin_trip_df) == 0: continue
             pin_prod, pin_eco_profit = calc_prod_eco_profit(pin_trip_df)
             #
