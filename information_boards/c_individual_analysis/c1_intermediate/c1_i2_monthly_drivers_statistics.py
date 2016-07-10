@@ -43,7 +43,9 @@ def process_files(yymm):
                                           (ftd_stat_ns_trip_dir, ftd_stat_ns_trip_prefix)]:
         with open('%s/%s%s.csv' % (ftd_stat_dir, ftd_stat_prefix, yymm), 'wt') as w_csvfile:
             writer = csv.writer(w_csvfile)
-            headers = ['yy', 'mm', 'did', 'gen-prod', 'pin-prod', 'pin-eco-profit', 'pout-prod', 'pout-eco-profit']
+            headers = ['yy', 'mm', 'did', 'fare', 'pro-dur', 'gen-prod'
+                                        , 'pin-fare', 'pin-dur', 'pin-qu', 'pin-prod', 'pin-eco-profit'
+                                        , 'pout-fare', 'pout-dur', 'pout-qu', 'pout-prod', 'pout-eco-profit']
             writer.writerow(headers)
     #
     full_dids = sorted(load_pickle_file('%s/%s%s.pkl' % (ftd_list_dir, ftd_list_prefix, yymm)))
@@ -60,9 +62,9 @@ def process_files(yymm):
         did_sh = s_df[(s_df['did'] == did)]
         pro_dur = sum(did_sh['pro-dur']) * SEC60
         did_wt = trip_df[(trip_df['did'] == did)]
-        total_fare = sum(did_wt['fare'])
-        if pro_dur > 0 and total_fare != 0:
-            gen_prod = total_fare / float(pro_dur)
+        fare = sum(did_wt['fare'])
+        if pro_dur > 0 and fare != 0:
+            gen_prod = fare / float(pro_dur)
         else:
             continue
         for loc_trip_df, ftd_stat_dir, ftd_stat_prefix in [(ap_trip_df, ftd_stat_ap_trip_dir, ftd_stat_ap_trip_prefix),
@@ -71,26 +73,28 @@ def process_files(yymm):
             #
             pin_trip_df = did_df[(did_df['trip-mode'] == DIn_PIn)]
             if len(pin_trip_df) == 0: continue
-            pin_prod, pin_eco_profit = calc_prod_eco_profit(pin_trip_df)
+            pin_fare, pin_dur, pin_qu, pin_prod, pin_eco_profit = calc_prod_eco_profit(pin_trip_df)
             #
             pout_trip_df = did_df[(did_df['trip-mode'] == DOut_PIn)]
             if len(pout_trip_df) == 0: continue
-            pout_prod, pout_eco_profit = calc_prod_eco_profit(pout_trip_df)
+            pout_fare, pout_dur, pout_qu, pout_prod, pout_eco_profit = calc_prod_eco_profit(pout_trip_df)
             #
             with open('%s/%s%s.csv' % (ftd_stat_dir, ftd_stat_prefix, yymm), 'a') as w_csvfile:
                 writer = csv.writer(w_csvfile)
-                writer.writerow([yy, mm, did, gen_prod, pin_prod, pin_eco_profit, pout_prod, pout_eco_profit])
+                writer.writerow([yy, mm, did, fare, pro_dur, gen_prod
+                                            , pin_fare, pin_dur, pin_qu, pin_prod, pin_eco_profit
+                                            , pout_fare, pout_dur, pout_qu, pout_prod, pout_eco_profit])
 
 
 def calc_prod_eco_profit(df):
-    qu, dur = sum(df['queueing-time']), sum(df['duration'])
+    dur, qu = sum(df['duration']), sum(df['queueing-time'])
     fare = sum(df['fare'])
     if qu + dur > 0 and fare != 0:
         prod = fare / float(qu + dur)
     else:
         prod = 0
     eco_profit = sum(df['economic-profit'])
-    return prod, eco_profit
+    return fare, dur, qu, prod, eco_profit
 
 
 if __name__ == '__main__':
