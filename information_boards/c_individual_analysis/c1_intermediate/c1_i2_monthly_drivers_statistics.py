@@ -37,8 +37,8 @@ def process_files(yymm):
     #
     # initialize csv_files
     #
-    for ftd_stat_dir, ftd_stat_prefix in [ftd_stat_ap_trip_dir, ftd_stat_ap_trip_prefix,
-                                          ftd_stat_ns_trip_dir, ftd_stat_ns_trip_prefix]:
+    for ftd_stat_dir, ftd_stat_prefix in [(ftd_stat_ap_trip_dir, ftd_stat_ap_trip_prefix),
+                                          (ftd_stat_ns_trip_dir, ftd_stat_ns_trip_prefix)]:
         with open('%s/%s%s.csv' % (ftd_stat_dir, ftd_stat_prefix, yymm), 'wt') as w_csvfile:
             writer = csv.writer(w_csvfile)
             headers = ['yy', 'mm', 'did', 'gen-prod', 'pin-prod', 'pin-eco-profit', 'pout-prod', 'pout-eco-profit']
