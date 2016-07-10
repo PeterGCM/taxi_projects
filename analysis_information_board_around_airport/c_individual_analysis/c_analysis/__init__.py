@@ -1,1 +1,0 @@
-from c_individual_analysis import __init__

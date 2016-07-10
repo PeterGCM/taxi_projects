@@ -2,8 +2,8 @@ import __init__
 #
 from c_individual_analysis.__init__ import ftd_stat_ap_trip_dir, ftd_stat_ap_trip_prefix
 from c_individual_analysis.__init__ import ftd_stat_ns_trip_dir, ftd_stat_ns_trip_prefix
-from c_individual_analysis.__init__ import ftd_Y09_stat_ap_fn, ftd_Y10_stat_ap_fn
-from c_individual_analysis.__init__ import ftd_Y09_stat_ns_fn, ftd_Y10_stat_ns_fn
+from c_individual_analysis.__init__ import Y09_stat_ap_fn, Y10_stat_ap_fn
+from c_individual_analysis.__init__ import Y09_stat_ns_fn, Y10_stat_ns_fn
 from c_individual_analysis.__init__ import stat_ap_both_fn, stat_ns_both_fn
 #
 from taxi_common.file_handling_functions import remove_file, check_path_exist
