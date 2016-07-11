@@ -27,6 +27,13 @@ ftd_Y09_stat_ns_fn = summary_dir + '/ftd-Y09-stat-ns.csv'
 ftd_Y10_stat_ns_fn = summary_dir + '/ftd-Y10-stat-ns.csv'
 ftd_stat_ns_both_fn = summary_dir + '/ftd-stat-ns-both.csv'
 
+ftd_monthly_stats_ap_fn = summary_dir + '/ftd-monthly-stats-ap.csv'
+ftd_monthly_stats_ns_fn = summary_dir + '/ftd-monthly-stats-ns.csv'
+
+ftd_driver_stats_ap_fn = summary_dir + '/ftd-driver-stats-ap.csv'
+ftd_driver_stats_ns_fn = summary_dir + '/ftd-driver-stats-ns.csv'
+
+
 ftd_gen_stat_dir, ftd_gen_stat_prefix = full_time_drivers_dir + '/ftd_gen_stat', 'ftd-gen-stat-'
 ftd_prev_in_ap_stat_dir, ftd_prev_in_ap_stat_prefix = full_time_drivers_dir + '/ftd_prev_in_ap_stat', 'ftd-prev-in-ap-stat-'
 ftd_prev_in_ns_stat_dir, ftd_prev_in_ns_stat_prefix = full_time_drivers_dir + '/ftd_prev_in_ns_stat', 'ftd-prev-in-ns-stat-'
