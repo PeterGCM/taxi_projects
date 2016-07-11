@@ -44,6 +44,7 @@ def run():
             writer = csv.writer(w_csvfile)
             for row in _data:
                 writer.writerow(row)
+        print ''
 
 if __name__ == '__main__':
     run()

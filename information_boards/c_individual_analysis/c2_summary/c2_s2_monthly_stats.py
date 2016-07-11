@@ -3,7 +3,7 @@ import __init__
 from c_individual_analysis.__init__ import ftd_stat_ap_both_fn, ftd_stat_ns_both_fn
 from c_individual_analysis.__init__ import ftd_monthly_stats_ap_fn, ftd_monthly_stats_ns_fn
 #
-from taxi_common.file_handling_functions import remove_file, save_pickle_file
+from taxi_common.file_handling_functions import remove_file
 #
 import csv
 import pandas as pd

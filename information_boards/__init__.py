@@ -21,7 +21,8 @@ TIME_SLOTS = range(24)
 # summary and charts directory
 summary_dir = taxi_data + '/summary'
 charts_dir = taxi_data + '/charts'
-check_dir_create(summary_dir); check_dir_create(charts_dir)
+tables_dir = taxi_data + '/tables'
+check_dir_create(summary_dir); check_dir_create(charts_dir); check_dir_create(tables_dir)
 #
 from taxi_common.geo_functions import read_generate_polygon
 ap_poly_fn = os.path.dirname(os.path.realpath(__file__)) + '/src/airport_polygon'
