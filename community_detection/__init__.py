@@ -34,5 +34,5 @@ MEMORY_MANAGE_INTERVAL = 24 * 60 * 60
 
 
 def get_processed_log_fn(time_from, time_to):
-    return cd_home + "/pl-%s-%s.csv" % (str(time_from[0]) + ''.join(['%02d' % d for d in time_from[1:]]),
+    return taxi_data + "/pl-%s-%s.csv" % (str(time_from[0]) + ''.join(['%02d' % d for d in time_from[1:]]),
                                        str(time_to[0]) + ''.join(['%02d' % d for d in time_to[1:]]))
