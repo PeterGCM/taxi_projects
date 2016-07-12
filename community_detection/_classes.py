@@ -17,6 +17,7 @@ class cd_zone(zone):
     def update_logQ(self, t):
         while self.logQ and self.logQ[0] < t - THRESHOLD_VALUE:
             self.logQ.pop(0)
+
     def init_logQ(self):
         self.logQ = []
 

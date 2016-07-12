@@ -12,19 +12,21 @@ from taxi_common.file_handling_functions import check_path_exist, save_pickle_fi
 from bisect import bisect
 import csv, datetime
 
+x_points, y_points = None, None
 
 def run():
+    global x_points, y_points, zones
     if not check_path_exist(grid_info_fn):
         from taxi_common.split_into_zones import run as run_split_into_zones
-        x_points, y_points, zones = run_split_into_zones(ZONE_UNIT_KM, cd_zone)
+        x_points, y_points, _ = run_split_into_zones(ZONE_UNIT_KM, cd_zone)
         save_pickle_file(grid_info_fn, [x_points, y_points, zones])
     else:
-        x_points, y_points, zones = load_pickle_file(grid_info_fn)
+        x_points, y_points, _ = load_pickle_file(grid_info_fn)
     #
-    process_file('0901', x_points, y_points, zones)
+    process_file('0901')
 
 
-def process_file(yymm, x_points, y_points, zones):
+def process_file(yymm):
     yymm_dir = logs_dir + '/' + yymm
     remove_create_dir(yymm_dir)
     def init_processed_file(h_dt):
