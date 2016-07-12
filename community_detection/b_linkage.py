@@ -31,7 +31,7 @@ def run(processed_log_fn, zones):
         mm = eval(time_from[len('yyyy'):len('yyyymm')])
         dd = eval(time_from[len('yyyymm'):len('yyyymmdd')])
         hh = eval(time_from[len('yyyymmdd'):len('yyyymmddhh')])
-        handling_time = datetime.datetime(yyyy, mm, dd,hh)
+        handling_time = datetime.datetime(yyyy, mm, dd, hh)
         for row in reader:
             t = eval(row[hid['time']])
             did = row[hid['did']]
