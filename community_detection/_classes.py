@@ -29,7 +29,14 @@ class cd_driver(driver):
 
     def update_linkage(self, t, z):
         z.update_logQ(t)
+        updated_drivers = set()
         for _, d in z.logQ:
+            if d.did == self.did:
+                continue
+            if d.did in updated_drivers:
+                continue
+            else:
+                updated_drivers.add(d.did)
             if not self.linkage.has_key(d.did):
                 self.linkage[d.did] = 0
             self.linkage[d.did] += 1

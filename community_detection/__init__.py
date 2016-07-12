@@ -17,10 +17,16 @@ out_boundary_logs_fn = taxi_data+ '/out_boundary.txt'
 
 FREE, POB = 0, 5
 
+MIN_LINKAGE_NUM, MIN_LINKAGE_RATIO = 2, 0.2
+
+
+
+
+
 
 
 MAX_LINKAGE_RATIO = 0.8
-MIN_LINKAGE = 2
+
 SIX_HOUR = 6
 EIGHT_HOUR = 8
 ONE_HOUR = 1

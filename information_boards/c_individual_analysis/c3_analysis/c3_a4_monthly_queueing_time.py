@@ -1,6 +1,6 @@
 import __init__
 #
-from information_boards.__init__ import CENT, SEC3600
+from information_boards.__init__ import SEC60
 from information_boards.__init__ import charts_dir
 from c_individual_analysis.__init__ import ftd_monthly_stats_ap_fn, ftd_monthly_stats_ns_fn
 #
@@ -22,8 +22,8 @@ def run():
         yss = []
         productivity_label = ['pin-qu', 'pout-qu']
         for l in productivity_label:
-            yss.append((Y09Y10_df['%s-mean' % l] / float(CENT)).values)
-        multiple_line_chart((15, 7.5), '', 'Year and Month', '$S', (months, 20), yss, productivity_label,
+            yss.append((Y09Y10_df['%s-mean' % l] / float(SEC60)).values)
+        multiple_line_chart((15, 7.5), '', 'Year and Month', 'Minute', (months, 20), yss, productivity_label,
                             'upper left', a4_chart_dir + '/queuing-time-%s' % label)
 
 if __name__ == '__main__':

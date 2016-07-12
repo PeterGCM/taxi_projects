@@ -2,6 +2,7 @@ import __init__
 #
 from __init__ import MEMORY_MANAGE_INTERVAL, COINCIDENCE_THRESHOLD_VALUE
 from __init__ import POB, SIX_HOUR, EIGHT_HOUR, ONE_HOUR, HOUR24, HOUR12
+from __init__ import MIN_LINKAGE_NUM, MIN_LINKAGE_RATIO
 from __init__ import out_boundary_logs_fn, linkage_dir
 from _classes import cd_driver
 #
@@ -37,8 +38,13 @@ def run(processed_log_fn, zones):
             cur_time = datetime.datetime.fromtimestamp(t)
             if handling_time + datetime.timedelta(hours=HOUR12) < cur_time:
                 day_linkage = []
-                for did, d in drivers.iteritems():
-                    day_linkage.append((did, d.num_pickup, d.linkage))
+                for did0, d in drivers.iteritems():
+                    filtered_linkage = {}
+                    for did1, num_linkage in d.linkage.iteritems():
+                        if num_linkage < MIN_LINKAGE_NUM or num_linkage < MIN_LINKAGE_RATIO * d.num_pickup:
+                            continue
+                        filtered_linkage[did1] = num_linkage
+                    day_linkage.append((did, d.num_pickup, filtered_linkage))
                 save_linkage(pkl_dir, handling_time, day_linkage, zones, drivers)
                 #
                 handling_time = cur_time
