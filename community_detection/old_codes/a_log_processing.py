@@ -1,47 +1,17 @@
-import __init__
-#
-from __init__ import taxi_home, grid_info_fn
-from __init__ import ZONE_UNIT_KM
+from __init__ import taxi_home
+from __init__ import get_processed_log_fn
 from __init__ import FREE, POB
-from _classes import cd_zone
-#
-from taxi_common.file_handling_functions import check_path_exist, save_pickle_file, load_pickle_file
-#
+
 from bisect import bisect
 import csv, datetime, time
 from dateutil.relativedelta import relativedelta
 
 
-def run(time_from, time_to):
-    if not check_path_exist(grid_info_fn):
-        from taxi_common.split_into_zones import run as run_split_into_zones
-        x_points, y_points, zones = run_split_into_zones(ZONE_UNIT_KM, cd_zone)
-        save_pickle_file(grid_info_fn, [x_points, y_points, zones])
-    else:
-        x_points, y_points, zones = load_pickle_file(grid_info_fn)
-    #
-    tf_ts = time.mktime(datetime.datetime(*time_from).timetuple())
+def run(x_points, y_points, time_from, time_to):
+    tf_ts = time.mktime(datetime.datetime(*time_from).timetuple()) 
     tt_ts = time.mktime(datetime.datetime(*time_to).timetuple())
     #
     csv_files = get_csv_files(time_from, time_to)
-    for fn in csv_files:
-        with open(fn, 'rb') as r_csvfile:
-            reader = csv.reader(r_csvfile)
-            headers = reader.next()
-            # {'longitude': 3, 'state': 6, 'vehicle-id': 1, 'time': 0, 'latitude': 4, 'speed': 5, 'driver-id': 2}
-            hid = {h: i for i, h in enumerate(headers)}
-            for row in reader:
-                did = row[hid['driver-id']]
-                if did == '-1':
-                    continue
-                t = eval(row[hid['time']])
-
-
-
-
-
-
-
     drivers_states = {}
     processed_log_fn = get_processed_log_fn(time_from, time_to)
     with open(processed_log_fn, 'wt') as w_csvfile:
@@ -54,11 +24,6 @@ def run(time_from, time_to):
             headers = reader.next()
             # {'longitude': 3, 'state': 6, 'vehicle-id': 1, 'time': 0, 'latitude': 4, 'speed': 5, 'driver-id': 2}
             hid = {h : i for i, h in enumerate(headers)}
-
-
-
-
-
             for row in reader:
                 t = eval(row[hid['time']])
                 did = row[hid['driver-id']]
@@ -99,4 +64,4 @@ def get_csv_files(time_from, time_to):
 
 
 if __name__ == '__main__':
-    run((2009, 1, 1, 0, 0, 0), (2009, 1, 5, 0, 0, 0))
+    run()

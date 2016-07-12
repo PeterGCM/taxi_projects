@@ -9,6 +9,9 @@ def run():
     # Filtering and edges' weight arrangement
     #
     edge_weight = load_pickle_file('/Users/JerryHan88/taxi_data/community_data/linkage/20090101-20090110/ft_20090101.pkl')
+
+
+
     #
     # Generate a graph
     #

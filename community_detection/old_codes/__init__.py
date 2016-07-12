@@ -8,7 +8,6 @@ from taxi_common.file_handling_functions import check_dir_create
 taxi_data = os.path.dirname(os.path.realpath(__file__)) + '/data'
 check_dir_create(taxi_data)
 #
-ZONE_UNIT_KM = 0.5
 FREE, POB = 0, 5
 MIN_LINKAGE_NUM, MIN_LINKAGE_RATIO = 2, 0.2
 
