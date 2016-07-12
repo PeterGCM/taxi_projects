@@ -34,7 +34,7 @@ def run(pkl_dir):
         print 'handling 1'
         arrange_linkage(linkages1, edge_weight)
         #
-        saving_fn = pkl_dir + '/m-%s-%d%02d%02d.pkl' % (f_yyyymmdd, yyyy, mm, dd)
+        saving_fn = pkl_dir + '/%d%02d%02d.pkl' % (yyyy, mm, dd)
         save_pkl_threading(saving_fn, edge_weight)
         #
         handling_date += datetime.timedelta(days=1)
