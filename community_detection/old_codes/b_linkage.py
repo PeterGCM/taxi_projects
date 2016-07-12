@@ -1,6 +1,5 @@
 import __init__
 #
-from __init__ import MEMORY_MANAGE_INTERVAL, COINCIDENCE_THRESHOLD_VALUE
 from __init__ import POB, SIX_HOUR, EIGHT_HOUR, ONE_HOUR, HOUR24, HOUR12
 from __init__ import MIN_LINKAGE_NUM, MIN_LINKAGE_RATIO
 from __init__ import out_boundary_logs_fn, linkage_dir
