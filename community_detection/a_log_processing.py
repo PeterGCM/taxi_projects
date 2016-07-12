@@ -14,7 +14,7 @@ import csv, datetime, time
 from dateutil.relativedelta import relativedelta
 
 
-def run(time_from, time_to):
+def run():
     if not check_path_exist(grid_info_fn):
         from taxi_common.split_into_zones import run as run_split_into_zones
         x_points, y_points, zones = run_split_into_zones(ZONE_UNIT_KM, cd_zone)
