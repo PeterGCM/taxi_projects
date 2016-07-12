@@ -7,11 +7,10 @@ from __init__ import FREE, POB
 from __init__ import HOUR12
 from _classes import cd_zone
 #
-from taxi_common.file_handling_functions import check_path_exist, save_pickle_file, load_pickle_file
+from taxi_common.file_handling_functions import check_path_exist, save_pickle_file, load_pickle_file, remove_create_dir
 #
 from bisect import bisect
-import csv, datetime, time
-from dateutil.relativedelta import relativedelta
+import csv, datetime
 
 
 def run():
@@ -26,8 +25,10 @@ def run():
 
 
 def process_file(yymm, x_points, y_points, zones):
+    yymm_dir = logs_dir + '/' + yymm
+    remove_create_dir(yymm_dir)
     def init_processed_file(h_dt):
-        processed_fn = logs_dir + '/%d%02d%02d-%d.pkl' % \
+        processed_fn = yymm_dir + '/%d%02d%02d-%d.csv' % \
                                   (h_dt.year, h_dt.month, h_dt.day, int(h_dt.hour / float(HOUR12)))
         with open(processed_fn, 'wt') as w_csvfile:
             writer = csv.writer(w_csvfile)
