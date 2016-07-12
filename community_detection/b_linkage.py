@@ -3,15 +3,25 @@ import __init__
 from __init__ import MEMORY_MANAGE_INTERVAL, COINCIDENCE_THRESHOLD_VALUE
 from __init__ import POB, SIX_HOUR, EIGHT_HOUR, ONE_HOUR, HOUR24, HOUR12
 from __init__ import MIN_LINKAGE_NUM, MIN_LINKAGE_RATIO
+from __init__ import grid_info_fn
 from __init__ import out_boundary_logs_fn, linkage_dir
 from _classes import cd_driver
 #
-from taxi_common.file_handling_functions import save_pkl_threading, remove_create_dir, save_pickle_file
+from taxi_common.file_handling_functions import check_path_exist, save_pkl_threading, remove_create_dir, save_pickle_file
 #
 import csv, datetime
 
 
-def run(processed_log_fn, zones):
+def run():
+    if not check_path_exist(grid_info_fn):
+        from taxi_common.split_into_zones import run as run_split_into_zones
+        _, _, zones = run_split_into_zones(ZONE_UNIT_KM, cd_zone)
+        save_pickle_file(grid_info_fn, [x_points, y_points, zones])
+    else:
+        _, _, zones = load_pickle_file(grid_info_fn)
+
+
+
     _, time_from, time_to = processed_log_fn[:-len('.csv')].split('-')
     pkl_dir = linkage_dir + '/%s-%s' % (time_from[:len('yyyymmdd')], time_to[:len('yyyymmdd')])
     remove_create_dir(pkl_dir)

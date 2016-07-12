@@ -15,7 +15,7 @@ import csv, datetime
 x_points, y_points = None, None
 
 def run():
-    global x_points, y_points, zones
+    global x_points, y_points
     if not check_path_exist(grid_info_fn):
         from taxi_common.split_into_zones import run as run_split_into_zones
         x_points, y_points, _ = run_split_into_zones(ZONE_UNIT_KM, cd_zone)
