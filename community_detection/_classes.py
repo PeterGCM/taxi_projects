@@ -1,7 +1,7 @@
 import __init__
 #
-from taxi_common.classes import zone  # @UnresolvedImport
-from taxi_common.classes import driver  # @UnresolvedImport
+from taxi_common._classes import zone  # @UnresolvedImport
+from taxi_common._classes import driver  # @UnresolvedImport
 #
 from __init__ import THRESHOLD_VALUE
 

@@ -4,7 +4,7 @@ from __init__ import MOVING, WAITING, POB, IDLE
 from __init__ import ONE_SIGMA, EPSILON
 from q_learning import simple_q_learning
 #
-from taxi_common.classes import driver
+from taxi_common._classes import driver
 #
 from random import randrange, normalvariate, shuffle, sample
 from heapq import heappush, heappop

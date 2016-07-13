@@ -8,7 +8,7 @@ from __init__ import MIN_LINKAGE_NUM, MIN_LINKAGE_RATIO
 from taxi_common.file_handling_functions import save_pkl_threading, remove_create_dir, get_all_files
 from taxi_common.singapore_grid_zone import get_singapore_zones
 #
-import csv, datetime
+import csv
 
 
 def run():

@@ -1,6 +1,6 @@
 from __init__ import singapore_poly_fn
 #
-from taxi_common.classes import zone #@UnresolvedImport
+from taxi_common._classes import zone #@UnresolvedImport
 from taxi_common.geo_functions import make_grid, generate_zones #@UnresolvedImport
 #
 class rp_zone(zone):

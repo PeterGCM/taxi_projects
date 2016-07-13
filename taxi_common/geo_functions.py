@@ -1,7 +1,7 @@
 import __init__
 #
 from __init__ import METER1000
-from classes import zone
+from _classes import zone
 #
 from math import ceil
 from shapely.geometry import Polygon, Point
