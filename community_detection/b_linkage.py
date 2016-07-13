@@ -64,7 +64,7 @@ def process_files(yymm):
                     continue
                 filtered_linkage[did1] = num_linkage
             day_linkage.append((did0, d.num_pickup, filtered_linkage))
-        save_pkl_threading(linkage_yymm_dir + '/%s.pkl' % fn[-len('.csv'):], day_linkage)
+        save_pkl_threading(linkage_yymm_dir + '/%s.pkl' % fn[:-len('.csv')], day_linkage)
         #
         for del_object in [day_linkage, zones, drivers]:
             del del_object
