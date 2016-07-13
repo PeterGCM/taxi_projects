@@ -13,7 +13,7 @@ import csv, datetime
 
 
 def run():
-    process_file('0902')
+    process_file('0901')
 
 
 def process_file(yymm):
