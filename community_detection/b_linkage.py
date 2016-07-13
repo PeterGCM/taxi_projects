@@ -14,7 +14,7 @@ import csv, datetime
 
 def run():
     if not check_path_exist(grid_info_fn):
-        from taxi_common.split_into_zones import run as run_split_into_zones
+        from taxi_common.singapore_grid_zone import run as run_split_into_zones
         _, _, zones = run_split_into_zones(ZONE_UNIT_KM, cd_zone)
         save_pickle_file(grid_info_fn, [x_points, y_points, zones])
     else:

@@ -8,7 +8,7 @@ def run(time_from, time_to):
     # Step 1. Split Singapore into zones
     #
     if not check_path_exist(grid_info_fn):
-        from taxi_common.split_into_zones import run as run_split_into_zones  # @UnresolvedImport
+        from taxi_common.singapore_grid_zone import run as run_split_into_zones  # @UnresolvedImport
         hl_points, vl_points, zones = run_split_into_zones(rp_zone)
     else:
         hl_points, vl_points, zones = load_pickle_file(grid_info_fn)

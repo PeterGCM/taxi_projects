@@ -16,7 +16,6 @@ edge_dir = taxi_data + '/edge'
 for _dir in [logs_dir, linkage_dir, edge_dir]:
     check_dir_create(_dir)
 #
-ZONE_UNIT_KM = 0.5
 FREE, POB = 0, 5
 THRESHOLD_VALUE = 30 * 60
 MIN_LINKAGE_NUM, MIN_LINKAGE_RATIO = 2, 0.2

@@ -12,7 +12,7 @@ def run(time_from, time_to, zone_unit_km):
     #
     print 'step 1'
     if not check_path_exist(grid_info_fn):
-        from taxi_common.split_into_zones import run as run_split_into_zones
+        from taxi_common.singapore_grid_zone import run as run_split_into_zones
         hl_points, vl_points, zones = run_split_into_zones(zone_unit_km, cd_zone)
         save_pickle_file(grid_info_fn, [hl_points, vl_points, zones])
     else:
