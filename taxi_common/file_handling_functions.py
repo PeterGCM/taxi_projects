@@ -64,8 +64,8 @@ def remove_create_dir(path):
     os.makedirs(path)
 
 
-def get_all_files(_path, filtering_prefix, filtering_postfix):
-    return [fn for fn in os.listdir(_path) if fn.startswith(filtering_prefix) and fn.endswith(filtering_postfix)]
+def get_all_files(path, filtering_prefix, filtering_postfix):
+    return [fn for fn in os.listdir(path) if fn.startswith(filtering_prefix) and fn.endswith(filtering_postfix)]
 
 
 def get_all_directories(_path):
