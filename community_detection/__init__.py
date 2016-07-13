@@ -8,9 +8,7 @@ from taxi_common.file_handling_functions import check_dir_create
 taxi_data = os.path.dirname(os.path.realpath(__file__)) + '/data'
 check_dir_create(taxi_data)
 #
-grid_info_fn = taxi_data+ '/hl_vl_zones.pkl'
-#
-logs_dir = taxi_data + '/logs'; out_boundary_logs_fn = logs_dir+ '/out_boundary.txt'
+logs_dir = taxi_data + '/logs'
 linkage_dir = taxi_data + '/linkage'
 edge_dir = taxi_data + '/edge'
 for _dir in [logs_dir, linkage_dir, edge_dir]:

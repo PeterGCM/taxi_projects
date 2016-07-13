@@ -7,16 +7,13 @@ from taxi_common.file_handling_functions import save_pickle_file, remove_create_
 from taxi_common.file_handling_functions import load_pickle_file, get_fn_only, save_pkl_threading
 #
 import datetime
-from threading import Thread
 
-def run(pkl_dir):
-    f_yyyymmdd, t_yyyymmdd = get_fn_only(pkl_dir).split('-')
-    from_date = datetime.date(int(f_yyyymmdd[:len('yyyy')]),
-                              int(f_yyyymmdd[len('yyyy'):len('yyyymm')]),
-                              int(f_yyyymmdd[len('yyyymm'):]))
-    to_date = datetime.date(int(t_yyyymmdd[:len('yyyy')]),
-                            int(t_yyyymmdd[len('yyyy'):len('yyyymm')]),
-                            int(t_yyyymmdd[len('yyyymm'):]))
+def run():
+    process_files('_0901')
+
+
+def process_files(yymm):
+
 
     handling_date = from_date
 
@@ -50,3 +47,7 @@ def arrange_linkage(linkages, edge_weight):
             if not edge_weight.has_key((did0, did1)):
                 edge_weight[(did0, did1)] = 0
             edge_weight[(did0, did1)] += num_linkage
+
+
+if __name__ == '__main__':
+    run()

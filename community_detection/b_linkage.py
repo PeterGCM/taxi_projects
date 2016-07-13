@@ -1,9 +1,8 @@
 import __init__
 #
 from __init__ import logs_dir, linkage_dir
-from __init__ import out_boundary_logs_fn
-from _classes import cd_driver, cd_zone
 from __init__ import MIN_LINKAGE_NUM, MIN_LINKAGE_RATIO
+from _classes import cd_driver, cd_zone
 #
 from taxi_common.file_handling_functions import save_pkl_threading, remove_create_dir, get_all_files
 from taxi_common.singapore_grid_zone import get_singapore_zones
@@ -16,11 +15,12 @@ def run():
 
 
 def process_files(yymm):
-    yymm_dir = linkage_dir + '/' + yymm
-    remove_create_dir(yymm_dir)
+    linkage_yymm_dir = linkage_dir + '/' + yymm
+    remove_create_dir(linkage_yymm_dir)
     #
     out_boundary_logs_num = 0
     logs_num = 0
+    out_boundary_logs_fn = linkage_yymm_dir + '/out_boundary.txt'
     with open(out_boundary_logs_fn, 'w') as f:
         f.write('time,did,i,j,zone_defined' + '\n')
     log_yymm_dir = logs_dir + '/%s' % yymm
@@ -64,7 +64,7 @@ def process_files(yymm):
                     continue
                 filtered_linkage[did1] = num_linkage
             day_linkage.append((did0, d.num_pickup, filtered_linkage))
-        save_pkl_threading(linkage_dir + '/%s.pkl' % fn[-len('.csv'):], day_linkage)
+        save_pkl_threading(linkage_yymm_dir + '/%s.pkl' % fn[-len('.csv'):], day_linkage)
         #
         for del_object in [day_linkage, zones, drivers]:
             del del_object
