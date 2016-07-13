@@ -27,19 +27,9 @@ def push_event(t, handler, args=()):
 
 def take_action(d):
     global zones
-    pi = {}
-    for (s, a), v in d.Q_sa.iteritems():
-        if not pi.has_key(s):
-            pi[s] = [a, v]
-        else:
-            a0, v0 = pi[s]
-            if v0 > v:
-                pi[s] = [a, v]
-
-
     pi = [np.argmax(d.Q_sa[i]) for i in xrange(len(d.Q_sa))]
     zfrom = d.zone_from
-    zto = zones[pi[zfrom.zid, len([d for d in zfrom.drivers if d.veh_state == WAITING])]]
+    zto = zones[pi[zfrom.zid]]
     time_to_arrival = Mt[zfrom.zid][zto.zid]
     cost = Co[zfrom.zid][zto.zid]
     #
@@ -152,16 +142,11 @@ def run(num_agents, num_zones, time_horizon, _fl, _Re, _Co, _Mt, d0, problem_sav
     fl, Re, Co, Mt = _fl[0], _Re[0], _Co[0], _Mt[0]
     #
     driver_count = 0
-    states = []
-    for zid in range(num_zones):
-        for did in range(num_agents):
-            states.append((zid, did))
-        states.append((zid, num_agents))
     for i, num in enumerate(d0):
         z = scg_zone(i)
         zones[z.zid] = z
         for _ in xrange(num):
-            d = scg_driver(driver_count, states, range(num_zones), z)
+            d = scg_driver(driver_count, range(num_zones), range(num_zones), z)
             drivers.append(d)
             z.add_driver(d)
             driver_count += 1
@@ -197,10 +182,9 @@ class scg_zone(object):
 class scg_driver(driver):
     def __init__(self, did, states, actions, z):
         driver.__init__(self, did)
-        self.Q_sa = {}
-        for s in states:
-            for a in actions:
-                self.Q_sa[s, a] = 0
+        self.Q_sa = []
+        for _ in states:
+            self.Q_sa.append([0.0 for _ in actions])
         self.Q_convergence = False
         self.zone_from, self.zone_to = z, None
         self.service_revenue, self.moving_cost = 0.0, 0.0
@@ -214,7 +198,7 @@ class scg_driver(driver):
 if __name__ == '__main__':
     # from problems import p1
     # from problems import p2
-    from problems import p10
+    from stochastic_congestion_games.problems import p10
 
     num_agents, num_zones, time_horizon, fl, Re, Co, Ds, d0, problem_saving_dir = p10()
     # num_agents = 1; d0 = [1, 0]
