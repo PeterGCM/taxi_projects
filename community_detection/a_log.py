@@ -17,7 +17,7 @@ def run():
 
 
 def process_file(yymm):
-    yymm_dir = logs_dir + '/' + yymm
+    yymm_dir = logs_dir + '/%s' % yymm
     remove_create_dir(yymm_dir)
     def init_processed_file(h_dt):
         processed_fn = yymm_dir + '/%d%02d%02d-%d.csv' % \

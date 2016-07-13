@@ -5,6 +5,14 @@ import numpy as np
 from taxi_common.file_handling_functions import load_pickle_file
 
 def run():
+    # TODO
+    # Decide how many days will you consider
+    # Get the maximum weight
+    # Draw graphs by changing a threshold value about the minimum condition for weights
+    #     the maximum weight * [0.8, 0.4, 0.2]
+
+
+
     #
     # Filtering and edges' weight arrangement
     #

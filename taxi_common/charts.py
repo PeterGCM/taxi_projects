@@ -458,8 +458,6 @@ class horizontal_bar_chart(object):
         ax.set_ylim(min(ys) - grid_charts.HALF_UNIT, max(ys) + grid_charts.HALF_UNIT)
         ax.grid()
         plt.yticks([int(len(ys) * 0.00), int(len(ys) * 0.25), int(len(ys) * 0.50), int(len(ys) * 0.75), int(len(ys) * 1.00)], ['0%', '25%', '50%', '75%', '100%'])
-        # TODO
-        # Modify saving part
         plt.savefig('%s-%s.pdf' % (main_name, sub_name))
 #         plt.show()
 
@@ -476,7 +474,6 @@ class grid_charts(object):
         fig = plt.figure(figsize=(grid_charts.FIG_SIZE_UNIT * num_charts, grid_charts.FIG_SIZE_UNIT))
         
         if fn:
-            # TODO save it !!
             for i, points_color in enumerate(_data):
                 self.draw_a_chart(fig, num_charts, i, _legends, _xlabel, _ylabel, _xticks, _yticks, points_color)
             plt.savefig(fn)

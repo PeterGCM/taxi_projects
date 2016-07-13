@@ -15,7 +15,7 @@ def run():
 
 
 def process_files(yymm):
-    linkage_yymm_dir = linkage_dir + '/' + yymm
+    linkage_yymm_dir = linkage_dir + '/%s' % yymm
     remove_create_dir(linkage_yymm_dir)
     #
     out_boundary_logs_num = 0
