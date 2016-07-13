@@ -7,6 +7,7 @@ class zone(object):
     def __init__(self, relation_with_poly, i, j, x, y):
         self.relation_with_poly = relation_with_poly
         self.loc_grid = (i, j)
+        self.i, self.j = i, j
         self.x, self.y = x, y
 
     def __repr__(self):
