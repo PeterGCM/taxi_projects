@@ -4,7 +4,7 @@ from __init__ import linkage_dir, edge_dir
 #
 from taxi_common.file_handling_functions import save_pickle_file, remove_create_dir
 from taxi_common.file_handling_functions import load_pickle_file, save_pkl_threading
-from taxi_common.file_handling_functions import check_path_exist
+from taxi_common.file_handling_functions import check_path_exist, check_dir_create
 #
 import datetime
 from dateutil.relativedelta import relativedelta
@@ -18,7 +18,7 @@ def process_files(yymm):
     linkage_yymm_dir = linkage_dir + '/%s' % yymm
     assert check_path_exist(linkage_yymm_dir)
     edge_yymm_dir = edge_dir + '/%s' % yymm
-    remove_create_dir(edge_yymm_dir)
+    check_dir_create(edge_yymm_dir)
     #
     # yyyy, mm = 2000 + int(yymm[:2]), int(yymm[2:])
     yyyy, mm = 2000 + 9, 1
@@ -73,7 +73,7 @@ def check_all_files_exists(linkage_yymm_dir, begin_date, end_date):
 
 def arrange_linkage(linkages, edge_weight):
     while linkages:
-        _did0, _did0_linkage = linkages.pop()
+        _did0, _, _did0_linkage = linkages.pop()
         for _did1, num_linkage in _did0_linkage.iteritems():
             did0, did1 = int(_did0), int(_did1)
             if did0 > did1:
