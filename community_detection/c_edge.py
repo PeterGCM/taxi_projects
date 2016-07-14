@@ -21,27 +21,31 @@ def process_files(yymm):
     remove_create_dir(edge_yymm_dir)
     #
     yyyy, mm = 2000 + int(yymm[:2]), int(yymm[2:])
-    assert check_all_files_exists(linkage_yymm_dir,
-                                  datetime.date(yyyy, mm, 1),
-                                  datetime.date(yyyy, mm, 1) + relativedelta(months=1) - datetime.timedelta(days=1))
     #
     handling_date = datetime.date(yyyy, mm, 1)
     next_month = handling_date + relativedelta(months=1)
     while handling_date < next_month:
         print handling_date
         yyyy, mm, dd = handling_date.year, handling_date.month, handling_date.day
+        edge_fn = edge_yymm_dir + '/%d%02d%02d.pkl' % (yyyy, mm, dd)
+        if check_path_exist(edge_fn):
+            continue
         #
+        linkage0_fn = linkage_yymm_dir + '/%d%02d%02d-0.pkl' % (yyyy, mm, dd)
+        linkage1_fn = linkage_yymm_dir + '/%d%02d%02d-1.pkl' % (yyyy, mm, dd)
+        if not check_path_exist(linkage0_fn) or not check_path_exist(linkage1_fn):
+            continue
         edge_weight = {}
         print 'start reading'
-        linkages0 = load_pickle_file(linkage_yymm_dir + '/%d%02d%02d-0.pkl' % (yyyy, mm, dd))
+        linkages0 = load_pickle_file(linkage0_fn)
         print 'handling 0'
         arrange_linkage(linkages0, edge_weight)
         print 'reading....'
-        linkages1 = load_pickle_file(linkage_yymm_dir + '/%d%02d%02d-1.pkl' % (yyyy, mm, dd))
+        linkages1 = load_pickle_file(linkage1_fn)
         print 'handling 1'
         arrange_linkage(linkages1, edge_weight)
         #
-        save_pkl_threading(edge_yymm_dir + '/%d%02d%02d.pkl' % (yyyy, mm, dd), edge_weight)
+        save_pkl_threading(edge_fn, edge_weight)
         #
         handling_date += datetime.timedelta(days=1)
 
