@@ -21,6 +21,7 @@ def write_text_file(path, msg, is_first=False):
 def save_pickle_file(path, _objects):
     with open(path, 'wb') as fp:
         pickle.dump(_objects, fp)
+    del _objects
 
 
 def load_pickle_file(path):

@@ -1,8 +1,8 @@
 import __init__
 #
 from __init__ import linkage_dir, edge_dir
+from __init__ import REMAINING_LINKAGE_RATIO
 #
-from taxi_common.file_handling_functions import save_pickle_file, remove_create_dir
 from taxi_common.file_handling_functions import load_pickle_file, save_pkl_threading
 from taxi_common.file_handling_functions import check_path_exist, check_dir_create
 #
@@ -73,8 +73,10 @@ def check_all_files_exists(linkage_yymm_dir, begin_date, end_date):
 
 def arrange_linkage(linkages, edge_weight):
     while linkages:
-        _did0, _, _did0_linkage = linkages.pop()
+        _did0, _did0_num_pickup, _did0_linkage = linkages.pop()
         for _did1, num_linkage in _did0_linkage.iteritems():
+            if num_linkage < _did0_num_pickup * REMAINING_LINKAGE_RATIO:
+                continue
             did0, did1 = int(_did0), int(_did1)
             if did0 > did1:
                 did0, did1 = int(_did1), int(_did0)
