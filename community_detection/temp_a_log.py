@@ -69,11 +69,6 @@ def process_file(yymm):
                     writer = csv.writer(w_csvfile)
                     writer.writerow([t, i, j, did])
             drivers_states[did] = state
-    cur_dt = datetime.datetime.fromtimestamp(t)
-    processed_fn = init_processed_file(cur_dt)
-    with open(processed_fn, 'a') as w_csvfile:
-        writer = csv.writer(w_csvfile)
-        writer.writerow([t, i, j, did])
 
 
 if __name__ == '__main__':
