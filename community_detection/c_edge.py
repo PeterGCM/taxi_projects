@@ -20,7 +20,8 @@ def process_files(yymm):
     edge_yymm_dir = edge_dir + '/%s' % yymm
     remove_create_dir(edge_yymm_dir)
     #
-    yyyy, mm = 2000 + int(yymm[:2]), int(yymm[2:])
+    # yyyy, mm = 2000 + int(yymm[:2]), int(yymm[2:])
+    yyyy, mm = 2000 + 9, 1
     #
     handling_date = datetime.date(yyyy, mm, 1)
     next_month = handling_date + relativedelta(months=1)
