@@ -29,6 +29,7 @@ def process_files(yymm):
         print handling_date
         yyyy, mm, dd = handling_date.year, handling_date.month, handling_date.day
         if dd == 16:
+            handling_date += datetime.timedelta(days=1)
             continue
         edge_fn = edge_yymm_dir + '/%d%02d%02d.pkl' % (yyyy, mm, dd)
         if check_path_exist(edge_fn):
