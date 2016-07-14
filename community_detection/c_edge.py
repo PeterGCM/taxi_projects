@@ -30,11 +30,13 @@ def process_files(yymm):
         yyyy, mm, dd = handling_date.year, handling_date.month, handling_date.day
         edge_fn = edge_yymm_dir + '/%d%02d%02d.pkl' % (yyyy, mm, dd)
         if check_path_exist(edge_fn):
+            handling_date += datetime.timedelta(days=1)
             continue
         #
         linkage0_fn = linkage_yymm_dir + '/%d%02d%02d-0.pkl' % (yyyy, mm, dd)
         linkage1_fn = linkage_yymm_dir + '/%d%02d%02d-1.pkl' % (yyyy, mm, dd)
         if not check_path_exist(linkage0_fn) or not check_path_exist(linkage1_fn):
+            handling_date += datetime.timedelta(days=1)
             continue
         edge_weight = {}
         print 'start reading'
