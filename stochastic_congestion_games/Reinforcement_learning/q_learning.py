@@ -6,14 +6,16 @@ from __init__ import Prob_SHOW
 from __init__ import ALPH, GAMMA
 from simulation import push_event, process_events, finish_simulation
 #
-from random import shuffle, sample
+from random import shuffle, sample, random, choice
 import numpy as np
 #
 zones, agents = {}, []
-P, S, A, fl, Re, Co, Mt = None, None, None, None, None, None
+P, S, A, fl, Re, Co, Mt = None, None, None, None, None, None, None
 #
 num_demand_generation = 0
 
+from random import seed
+seed(1)
 
 def run(num_agents, num_zones, time_horizon, _fl, _Re, _Co, _Mt, d0, problem_saving_dir):
     for x in [_fl, _Re, _Co, _Mt]:
@@ -26,7 +28,7 @@ def run(num_agents, num_zones, time_horizon, _fl, _Re, _Co, _Mt, d0, problem_sav
         z = scg_zone(i)
         zones[z.zid] = z
         for _ in xrange(num):
-            agent = scg_agent(count_agent, z)
+            agent = scg_agent(count_agent, z.zid)
             agents.append(agent)
             z.add_agent(agent)
             count_agent += 1
@@ -39,16 +41,37 @@ def run(num_agents, num_zones, time_horizon, _fl, _Re, _Co, _Mt, d0, problem_sav
 
 
 def take_action(agt):
-    max_Q_value, max_a = -1e400, None
-    for a in A:
-        Q_sa_value = agt.Q_sa[agt.s0, a]
-        if max_Q_value < Q_sa_value:
-            max_Q_value = Q_sa_value
-            max_a = a
+    action_taken = None
+    if num_demand_generation < 100000 and random() < 0.001:
+        action_taken = choice(A)
+    else:
+        # max_Q_value, max_a = -1e400, None
+        # # print 'Start', agt
+        # for a in A:
+        #     Q_sa_value = agt.Q_sa[agt.s0, a]
+        #
+        #     # print [agt.s0, a], Q_sa_value
+        #     print max_Q_value, Q_sa_value
+        #     if max_Q_value < Q_sa_value:
+        #         max_Q_value = Q_sa_value
+        #         max_a = a
+        max_Q_value, max_a = -1e400, None
+        for na in A:
+            total_N_sas = sum([agt.N_sas[agt.s0, na, _s] for _s in S])
+            weighted_Q_sa = 0.0
+            for ns in S:
+                weight = agt.N_sas[agt.s0, na, ns] / float(total_N_sas)
+                ns_max_Q_value = max([agt.Q_sa[ns, _a] for _a in A])
+                weighted_Q_sa += weight * ns_max_Q_value
+            if max_Q_value < weighted_Q_sa:
+                max_Q_value = weighted_Q_sa
+                max_a = na
+        assert max_a is not None
+        action_taken = max_a
     #
     agt.sim_state = MOVING
     zones[agt.s0].remove_agent(agt)
-    agt.a = max_a
+    agt.a = action_taken
     agt.cost = Co[agt.s0][agt.a]
     #
     push_event(Mt[agt.s0][agt.a], finish_action, agt)
@@ -79,11 +102,10 @@ def on_demand_arrival(_):
             agent_get_demand = waiting_agents
         # Process agents who get demand
         for i, agt in enumerate(agent_get_demand):
-            assert agt.zone_from == zfrom
             zones[agt.a].remove_agent(agt)
             agt.sim_state = POB
             agt.s1 = demands[i].zid
-            agt.cost = Co[agt.a][agt.s1]
+            agt.cost += Co[agt.a][agt.s1]
             agt.revenue = Re[agt.a][agt.s1]
             #
             push_event(Mt[agt.a][agt.s1], finish_transition, agt)
@@ -119,10 +141,12 @@ def finish_transition(agt):
 
 
 def display_q_values():
-    sa_statement = agents[0].keys()
+    sa_statement = agents[0].Q_sa.keys()
+    sa_statement.sort()
+    print sa_statement
     for agt in agents:
+        policy = []
         for s in S:
-            policy = []
             max_Q_value, max_a = -1e400, None
             for a in A:
                 Q_sa_value = agt.Q_sa[s, a]
@@ -162,27 +186,33 @@ class scg_agent(object):
         self.Q_convergence = False
         self.revenue, self.cost = 0.0, 0.0
         self.sim_state = IDLE
+        self.num_Q_update = 0
 
     def __repr__(self):
         return '(aid %d (%s), (s0, a, s1) = (%s, %s, %s)' % \
                (self.aid, str(self.sim_state), str(self.s0), str(self.a), str(self.s1))
 
     def update_Q_sa(self):
+        self.num_Q_update += 1
+        #
         s0, a = self.s0, self.a
-        s1 = self.s1 if self.s1 else self.s0
+        s1 = self.s0 if self.s1 is None else self.s1
         #
         max_Q_value = -1e400
         for na in A:
             total_N_sas = sum([self.N_sas[s1, na, _s] for _s in S])
+            weighted_Q_sa = 0.0
             for ns in S:
-                weight = self.N_sas[s1, a, ns] / float(total_N_sas)
+                weight = self.N_sas[s1, na, ns] / float(total_N_sas)
                 ns_max_Q_value = max([self.Q_sa[ns, _a] for _a in A])
-                if max_Q_value < weight * ns_max_Q_value:
-                    max_Q_value = weight * ns_max_Q_value
+                weighted_Q_sa += weight * ns_max_Q_value
+            if max_Q_value < weighted_Q_sa:
+                max_Q_value = weighted_Q_sa
         #
         Q_sa0 = self.Q_sa[s0, a]
         self.Q_sa[s0, a] += ALPH * ((self.revenue - self.cost) + GAMMA * max_Q_value - self.Q_sa[s0, a])
-        #
+        # self.Q_sa[s0, a] += (1 / float(self.num_Q_update)) * ((self.revenue - self.cost) + GAMMA * max_Q_value - self.Q_sa[s0, a])
+
         self.revenue, self.cost = 0.0, 0.0
         self.N_sas[s0, a, s1] += 1
         #
@@ -192,4 +222,5 @@ class scg_agent(object):
 if __name__ == '__main__':
     from stochastic_congestion_games.problems import p10
     num_agents, num_zones, time_horizon, fl, Re, Co, Ds, d0, problem_saving_dir = p10()
+    # num_agents = 1; d0 = [1, 0, 0]
     run(num_agents, num_zones, time_horizon, fl, Re, Co, Ds, d0, problem_saving_dir)
