@@ -15,15 +15,19 @@ def run():
     edge_weight = load_pickle_file('/Users/JerryHan88/PycharmProjects/taxi_projects/community_detection/data/edge/_0901/20090101.pkl')
     max_weight = max([v for v in edge_weight.itervalues()])
     filtered_ew = {}
+
     print 'start filtering'
+    thre = max_weight * 0.6539
+    print 'threshold: %f' % thre
     for k, v in edge_weight.iteritems():
-        if v < max_weight * 0.8:
+
+        if v < thre:
             continue
         filtered_ew[k] = v
     #
     # Generate a graph
     #
-    g = Graph()
+    g = Graph(directed=False)
     g.edge_properties["weight"] = g.new_edge_property("int")
     did_index, index_did = {}, {}
     num_drivers = 0

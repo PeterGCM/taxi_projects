@@ -11,7 +11,7 @@ import csv
 
 
 def run():
-    process_files('_0901')
+    process_files('0902')
 
 
 def process_files(yymm):

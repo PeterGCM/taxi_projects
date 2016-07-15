@@ -10,6 +10,7 @@ from taxi_common.file_handling_functions import remove_create_dir
 #
 from bisect import bisect
 import csv, datetime
+from dateutil.relativedelta import relativedelta
 
 
 def run():
@@ -36,6 +37,8 @@ def process_file(yymm):
         # {'longitude': 3, 'state': 6, 'vehicle-id': 1, 'time': 0, 'latitude': 4, 'speed': 5, 'driver-id': 2}
         hid = {h: i for i, h in enumerate(headers)}
         h_dt = datetime.datetime(2000 + int(yy), int(mm), 1, 0)
+        the_last_slot = h_dt + relativedelta(months=1) - datetime.timedelta(hours=HOUR12)
+        last_slot_writing = False
         processed_fn = init_processed_file(h_dt)
         drivers_states = {}
         x_points, y_points = get_singapore_grid_xy_points()
@@ -57,15 +60,13 @@ def process_file(yymm):
                 if h_dt + datetime.timedelta(hours=HOUR12) < cur_dt:
                     processed_fn = init_processed_file(h_dt)
                     h_dt = cur_dt
+                if not last_slot_writing and the_last_slot < cur_dt:
+                    processed_fn = init_processed_file(cur_dt)
+                    last_slot_writing = True
                 with open(processed_fn, 'a') as w_csvfile:
                     writer = csv.writer(w_csvfile)
                     writer.writerow([t, i, j, did])
             drivers_states[did] = state
-    cur_dt = datetime.datetime.fromtimestamp(t)
-    processed_fn = init_processed_file(cur_dt)
-    with open(processed_fn, 'a') as w_csvfile:
-        writer = csv.writer(w_csvfile)
-        writer.writerow([t, i, j, did])
 
 
 if __name__ == '__main__':
