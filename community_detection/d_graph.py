@@ -1,64 +1,62 @@
 import __init__
 
+from __init__ import edge_dir, graph_dir
+
 from graph_tool.all import *
-import numpy as np
-from taxi_common.file_handling_functions import load_pickle_file
+from taxi_common.file_handling_functions import load_pickle_file, get_all_files, remove_create_dir, remove_file
+
 
 def run():
-    # TODO
-    # Decide how many days will you consider
-    # Get the maximum weight
-    # Draw graphs by changing a threshold value about the minimum condition for weights
-    #     the maximum weight * [0.8, 0.4, 0.2]
+    process_files('0901')
 
-    print 'start loading'
-    edge_weight = load_pickle_file('/Users/JerryHan88/PycharmProjects/taxi_projects/community_detection/data/edge/_0901/20090101.pkl')
-    max_weight = max([v for v in edge_weight.itervalues()])
-    filtered_ew = {}
 
-    print 'start filtering'
-    thre = max_weight * 0.6539
-    print 'threshold: %f' % thre
-    for k, v in edge_weight.iteritems():
-
-        if v < thre:
-            continue
-        filtered_ew[k] = v
+def process_files(yymm):
+    edge_yymm_dir = edge_dir + '/%s' % yymm
+    graph_yymm_dir = graph_dir + '/%s' % yymm
+    remove_create_dir(graph_yymm_dir)
     #
-    # Generate a graph
+    aggregated_ew = {}
+    num_days, max_weight = 0, -1e400
+    N, E = set(), set()
+    for fn in get_all_files(edge_yymm_dir, '', '.pkl'):
+        num_days += 1
+        print 'read', fn
+        edge_weight = load_pickle_file('%s/%s' % (edge_yymm_dir, fn))
+        for (k0, k1), v in edge_weight.iteritems():
+            if not aggregated_ew.has_key((k0, k1)):
+                aggregated_ew[(k0, k1)] = 0
+            aggregated_ew[(k0, k1)] += v
+            N.add(k0); N.add(k1); E.add((k0, k1))
+            if max_weight < aggregated_ew[(k0, k1)]:
+                max_weight = aggregated_ew[(k0, k1)]
     #
-    g = Graph(directed=False)
-    g.edge_properties["weight"] = g.new_edge_property("int")
-    did_index, index_did = {}, {}
-    num_drivers = 0
-    for (did0, did1), num_relations in filtered_ew.iteritems():
-        if did0 not in did_index:
-            did_index[did0] = num_drivers
-            index_did[num_drivers] = did0
-            g.add_vertex()
-            num_drivers += 1
-        if did1 not in did_index:
-            did_index[did1] = num_drivers
-            index_did[num_drivers] = did1
-            g.add_vertex()
-            num_drivers += 1
-        v0, v1 = g.vertex(did_index[did0]), g.vertex(did_index[did1])
-        e = g.add_edge(v0, v1)
-        g.ep.weight[e] = num_relations
-    print 'start drawing graph'
-    graph_draw(g, output_size=(1200, 1200), output="filtered.pdf")
-
-
-    # graph_draw(g, pos=fruchterman_reingold_layout(g, n_iter=1000), output_size=(1200, 1200), output="lo_fruchter.pdf")
-
-
-    # for i, lo in enumerate([# sfdp_layout(g),
-    #                         arf_layout(g, max_iter=0),
-    #                       radial_tree_layout(g, g.vertex(0)),
-    #                       fruchterman_reingold_layout(g, n_iter=1000)]):
-
-    #     print i
-    #     graph_draw(g, pos=lo, output_size=(1200, 1200), output="lo%d.pdf" % i)
+    lb_weight = int(max_weight * 0.3)
+    ub_weight = int(max_weight * 0.6)
+    print 'bound', lb_weight, ub_weight
+    for threshold in range(lb_weight, ub_weight):
+        print threshold,
+        n, e = {}, 0
+        g = Graph(directed=False)
+        vprop = g.new_vertex_property('string')
+        for (k0, k1), v in aggregated_ew.iteritems():
+            if v < threshold:
+                continue
+            if k0 not in n:
+                n[k0] = g.add_vertex()
+                vprop[n[k0]] = str(k0)
+            if k1 not in n:
+                n[k1] = g.add_vertex()
+                vprop[n[k1]] = str(k1)
+            g.add_edge(n[k0], n[k1])
+            e += 1
+        print 'start drawing graph'
+        graph_fn = 'D(%d)-N(%d)-E(%d)-MEW(%d)-th(%d)-n(%d)-e(%d).pdf' % (num_days,
+                                                                        len(N), len(E), max_weight,
+                                                                        threshold, len(n), e)
+        if len(n) < 100:
+            graph_draw(g, vertex_text=vprop, vertex_font_size=10, output_size=(1200, 1200), output='%s/%s'%(graph_yymm_dir, graph_fn))
+        else:
+            graph_draw(g, output_size=(1200, 1200), output='%s/%s' % (graph_yymm_dir, graph_fn))
 
 
 if __name__ == '__main__':

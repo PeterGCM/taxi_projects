@@ -11,16 +11,11 @@ check_dir_create(taxi_data)
 logs_dir = taxi_data + '/logs'
 linkage_dir = taxi_data + '/linkage'
 edge_dir = taxi_data + '/edge'
-for _dir in [logs_dir, linkage_dir, edge_dir]:
+graph_dir = taxi_data + '/graph'
+for _dir in [logs_dir, linkage_dir, edge_dir, graph_dir]:
     check_dir_create(_dir)
 #
 FREE, POB = 0, 5
 THRESHOLD_VALUE = 30 * 60
 MIN_LINKAGE_NUM, MIN_LINKAGE_RATIO, REMAINING_LINKAGE_RATIO = 2, 0.2, 0.9
 ONE_HOUR, SIX_HOUR, EIGHT_HOUR, HOUR12, HOUR24 = 1, 6, 8, 12, 24
-#
-
-
-
-charts_dir = taxi_data + '/charts'
-#
