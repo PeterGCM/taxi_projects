@@ -22,10 +22,11 @@ def run():
         _data = [['did']]
         both_year_ftd = set(Y09_df['did']).intersection(set(Y10_df['did']))
         for cn in column_names:
-            _data[0] += ['Diff-%s' % cn,
-                         'Y10-%s-mean' % cn, 'Y09-%s-mean' % cn,
-                         'Y10-%s-sum' % cn, 'Y09-%s-sum' % cn,
-                         'Y10-%s-std' % cn, 'Y09-%s-std' % cn]
+            new_cn = cn.replace('-', '_')
+            _data[0] += ['diff_%s' % new_cn,
+                         'Y10_%s_mean' % new_cn, 'Y09_%s_mean' % new_cn,
+                         'Y10_%s_sum' % new_cn, 'Y09_%s_sum' % new_cn,
+                         'Y10_%s_std' % new_cn, 'Y09_%s_std' % new_cn]
         print len(both_year_ftd)
         for i, did in enumerate(both_year_ftd):
             Y09_did_df, Y10_did_df = Y09_df[(Y09_df['did'] == did)], Y10_df[(Y10_df['did'] == did)]

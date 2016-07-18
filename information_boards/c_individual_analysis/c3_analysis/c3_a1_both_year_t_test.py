@@ -39,7 +39,7 @@ def run():
             t_stats, p_value = stats.ttest_ind(Y10_values, Y09_values)
             _table.add_row([cn, Y10_mean - Y09_mean,
                             Y10_mean, Y09_mean, t_stats, p_value])
-        write_text_file(a1_table_dir + '/t-test-%s' % label, _table.get_string(), is_first=True)
+        write_text_file(a1_table_dir + '/t-test-%s.txt' % label, _table.get_string(), is_first=True)
 
 
 if __name__ == '__main__':

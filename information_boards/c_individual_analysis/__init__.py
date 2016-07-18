@@ -35,6 +35,9 @@ ftd_driver_stats_ns_fn = summary_dir + '/ftd-driver-stats-ns.csv'
 
 
 
+
+
+
 ftd_gen_stat_dir, ftd_gen_stat_prefix = full_time_drivers_dir + '/ftd_gen_stat', 'ftd-gen-stat-'
 ftd_prev_in_ap_stat_dir, ftd_prev_in_ap_stat_prefix = full_time_drivers_dir + '/ftd_prev_in_ap_stat', 'ftd-prev-in-ap-stat-'
 ftd_prev_in_ns_stat_dir, ftd_prev_in_ns_stat_prefix = full_time_drivers_dir + '/ftd_prev_in_ns_stat', 'ftd-prev-in-ns-stat-'

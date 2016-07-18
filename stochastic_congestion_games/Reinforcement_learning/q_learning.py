@@ -13,6 +13,7 @@ zones, agents = {}, []
 P, S, A, fl, Re, Co, Mt = None, None, None, None, None, None, None
 #
 num_demand_generation = 0
+is_simple_q_learning = True
 
 from random import seed
 seed(1)
@@ -22,18 +23,24 @@ def run(num_agents, num_zones, time_horizon, _fl, _Re, _Co, _Mt, d0, problem_sav
         assert len(x) == time_horizon
     global P, S, A, fl, Re, Co, Mt
     P, S, A, fl, Re, Co, Mt = range(num_agents), range(num_zones), range(num_zones), _fl[0], _Re[0], _Co[0], _Mt[0]
-    #
-    count_agent = 0
-    for i, num in enumerate(d0):
-        z = scg_zone(i)
-        zones[z.zid] = z
-        for _ in xrange(num):
-            agent = scg_agent(count_agent, z.zid)
-            agents.append(agent)
-            z.add_agent(agent)
-            count_agent += 1
-            #
-            push_event(0, take_action, agent)
+    # Generate zones
+    for i in xrange(num_zones):
+        zones[i] = scg_zone(i)
+    # Generate agents
+    i, count_agent = 0, 0
+    for j in xrange(num_agents):
+        count_agent += 1
+        agent = scg_agent(j)
+        zones[i].add_agent(agent)
+        if count_agent == d0[i]:
+            i += 1
+            count_agent = 0
+    # Set initial state and generate the first event
+    for zid, z in zones.iterkeys():
+        total_num_agents = len(z.agents)
+        for agt in agents.itervalues():
+            agt.s0 = zid if is_simple_q_learning else (zid, total_num_agents)
+            push_event(0, take_action, agt)
     assert num_agents == count_agent
     push_event(0, on_demand_arrival, None)
     #
@@ -45,16 +52,6 @@ def take_action(agt):
     if num_demand_generation < 100000 and random() < 0.001:
         action_taken = choice(A)
     else:
-        # max_Q_value, max_a = -1e400, None
-        # # print 'Start', agt
-        # for a in A:
-        #     Q_sa_value = agt.Q_sa[agt.s0, a]
-        #
-        #     # print [agt.s0, a], Q_sa_value
-        #     print max_Q_value, Q_sa_value
-        #     if max_Q_value < Q_sa_value:
-        #         max_Q_value = Q_sa_value
-        #         max_a = a
         max_Q_value, max_a = -1e400, None
         for na in A:
             total_N_sas = sum([agt.N_sas[agt.s0, na, _s] for _s in S])
@@ -104,15 +101,16 @@ def on_demand_arrival(_):
         for i, agt in enumerate(agent_get_demand):
             zones[agt.a].remove_agent(agt)
             agt.sim_state = POB
-            agt.s1 = demands[i].zid
-            agt.cost += Co[agt.a][agt.s1]
-            agt.revenue = Re[agt.a][agt.s1]
+            agt.dest_zone = demands[i]
             #
-            push_event(Mt[agt.a][agt.s1], finish_transition, agt)
+            push_event(Mt[agt.a][agt.dest_zone.zid], finish_transition, agt)
         # Process agents who do not get demand
         for agt in waiting_agents.difference(set(agent_get_demand)):
+            agt.s1 = agt.a if is_simple_q_learning else (agt.a, len(waiting_agents) - len(agent_get_demand))
             agt.update_Q_sa()
-            agt.s0, agt.a, agt.s1 = agt.a, None, None
+            #
+            agt.s0 = agt.s1
+            agt.a, agt.s1 = None, None
             zones[agt.s0].add_agent(agt)
             agt.sim_state = IDLE
             #
@@ -132,8 +130,14 @@ def on_demand_arrival(_):
 
 
 def finish_transition(agt):
+    zid = agt.dest_zone.zid
+    agt.cost += Co[agt.a][zid]
+    agt.revenue = Re[agt.a][zid]
+    agt.s1 = zid if is_simple_q_learning else (zid, len(zones[zid].agent))
     agt.update_Q_sa()
-    agt.s0, agt.a, agt.s1 = agt.s1, None, None
+    #
+    agt.s0 = agt.s1
+    agt.a, agt.s1 = None, None
     zones[agt.s0].add_agent(agt)
     agt.sim_state = IDLE
     #
@@ -173,9 +177,9 @@ class scg_zone(object):
 
 
 class scg_agent(object):
-    def __init__(self, aid, s0):
+    def __init__(self, aid):
         self.aid = aid
-        self.s0, self.a, self.s1 = s0, None, None
+        self.s0, self.a, self.s1 = None, None, None
         self.Q_sa = {}
         self.N_sas = {}
         for s0 in S:
@@ -183,6 +187,7 @@ class scg_agent(object):
                 self.Q_sa[s0, a] = 0.0
                 for s1 in S:
                     self.N_sas[s0, a, s1] = 1
+        self.dest_zone = None
         self.Q_convergence = False
         self.revenue, self.cost = 0.0, 0.0
         self.sim_state = IDLE
@@ -195,8 +200,7 @@ class scg_agent(object):
     def update_Q_sa(self):
         self.num_Q_update += 1
         #
-        s0, a = self.s0, self.a
-        s1 = self.s0 if self.s1 is None else self.s1
+        s0, a, s1 = self.s0, self.a, self.s1
         #
         max_Q_value = -1e400
         for na in A:
