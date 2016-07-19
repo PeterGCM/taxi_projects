@@ -13,7 +13,9 @@ zones, agents = {}, []
 P, S, A, fl, Re, Co, Mt = None, None, None, None, None, None, None
 #
 num_demand_generation = 0
-is_simple_q_learning = True
+is_simple_q_learning = False
+
+# is_simple_q_learning = True
 
 from random import seed
 seed(1)
@@ -22,7 +24,8 @@ def run(num_agents, num_zones, time_horizon, _fl, _Re, _Co, _Mt, d0, problem_sav
     for x in [_fl, _Re, _Co, _Mt]:
         assert len(x) == time_horizon
     global P, S, A, fl, Re, Co, Mt
-    P, S, A, fl, Re, Co, Mt = range(num_agents), range(num_zones), range(num_zones), _fl[0], _Re[0], _Co[0], _Mt[0]
+    P, A, fl, Re, Co, Mt = range(num_agents), range(num_zones), _fl[0], _Re[0], _Co[0], _Mt[0]
+    S = range(num_zones) if is_simple_q_learning else [(i, j) for i in range(num_zones) for j in range(num_agents)]
     # Generate zones
     for i in xrange(num_zones):
         zones[i] = scg_zone(i)
@@ -30,18 +33,18 @@ def run(num_agents, num_zones, time_horizon, _fl, _Re, _Co, _Mt, d0, problem_sav
     i, count_agent = 0, 0
     for j in xrange(num_agents):
         count_agent += 1
-        agent = scg_agent(j)
-        zones[i].add_agent(agent)
+        agt = scg_agent(j)
+        agents.append(agt)
+        zones[i].add_agent(agt)
         if count_agent == d0[i]:
             i += 1
             count_agent = 0
     # Set initial state and generate the first event
-    for zid, z in zones.iterkeys():
+    for zid, z in zones.iteritems():
         total_num_agents = len(z.agents)
-        for agt in agents.itervalues():
+        for agt in z.agents.itervalues():
             agt.s0 = zid if is_simple_q_learning else (zid, total_num_agents)
             push_event(0, take_action, agt)
-    assert num_agents == count_agent
     push_event(0, on_demand_arrival, None)
     #
     process_events()
@@ -49,7 +52,7 @@ def run(num_agents, num_zones, time_horizon, _fl, _Re, _Co, _Mt, d0, problem_sav
 
 def take_action(agt):
     action_taken = None
-    if num_demand_generation < 100000 and random() < 0.001:
+    if num_demand_generation < 1000000 and random() < 0.001:
         action_taken = choice(A)
     else:
         max_Q_value, max_a = -1e400, None
@@ -67,11 +70,17 @@ def take_action(agt):
         action_taken = max_a
     #
     agt.sim_state = MOVING
-    zones[agt.s0].remove_agent(agt)
     agt.a = action_taken
-    agt.cost = Co[agt.s0][agt.a]
+    if is_simple_q_learning:
+        zones[agt.s0].remove_agent(agt)
+        agt.cost = Co[agt.s0][agt.a]
+        mt = Mt[agt.s0][agt.a]
+    else:
+        zones[agt.s0[0]].remove_agent(agt)
+        agt.cost = Co[agt.s0[0]][agt.a]
+        mt = Mt[agt.s0[0]][agt.a]
     #
-    push_event(Mt[agt.s0][agt.a], finish_action, agt)
+    push_event(mt, finish_action, agt)
 
 
 def finish_action(agt):
@@ -106,12 +115,12 @@ def on_demand_arrival(_):
             push_event(Mt[agt.a][agt.dest_zone.zid], finish_transition, agt)
         # Process agents who do not get demand
         for agt in waiting_agents.difference(set(agent_get_demand)):
+            # zones[agt.a].add_agent(agt)
             agt.s1 = agt.a if is_simple_q_learning else (agt.a, len(waiting_agents) - len(agent_get_demand))
             agt.update_Q_sa()
             #
             agt.s0 = agt.s1
             agt.a, agt.s1 = None, None
-            zones[agt.s0].add_agent(agt)
             agt.sim_state = IDLE
             #
             push_event(0, take_action, agt)
@@ -133,12 +142,15 @@ def finish_transition(agt):
     zid = agt.dest_zone.zid
     agt.cost += Co[agt.a][zid]
     agt.revenue = Re[agt.a][zid]
-    agt.s1 = zid if is_simple_q_learning else (zid, len(zones[zid].agent))
+    agt.s1 = zid if is_simple_q_learning else (zid, len(zones[zid].agents))
     agt.update_Q_sa()
     #
     agt.s0 = agt.s1
     agt.a, agt.s1 = None, None
-    zones[agt.s0].add_agent(agt)
+    if is_simple_q_learning:
+        zones[agt.s0].add_agent(agt)
+    else:
+        zones[agt.s0[0]].add_agent(agt)
     agt.sim_state = IDLE
     #
     push_event(0, take_action, agt)

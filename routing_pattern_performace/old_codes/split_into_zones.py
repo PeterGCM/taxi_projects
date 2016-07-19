@@ -1,4 +1,4 @@
-from __init__ import singapore_poly_fn
+from routing_pattern_performace import singapore_poly_fn
 #
 from taxi_common._classes import zone #@UnresolvedImport
 from taxi_common.geo_functions import make_grid, generate_zones #@UnresolvedImport

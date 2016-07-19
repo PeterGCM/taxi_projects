@@ -1,4 +1,4 @@
-from __init__ import get_processed_trip_fn, get_timeslot
+from routing_pattern_performace import get_processed_trip_fn, get_timeslot
 
 import csv, datetime, time
 

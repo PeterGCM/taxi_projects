@@ -1,4 +1,4 @@
-import __init__
+import routing_pattern_performace
 from classes import rp_zone
 #
 from taxi_common.file_handling_functions import check_path_exist, load_pickle_file

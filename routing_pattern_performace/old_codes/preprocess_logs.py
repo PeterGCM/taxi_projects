@@ -1,4 +1,4 @@
-from __init__ import get_processed_log_fn, get_timeslot
+from routing_pattern_performace import get_processed_log_fn, get_timeslot
 #
 from classes import rp_driver
 #
@@ -43,7 +43,5 @@ def run(x_points, y_points, time_from, time_to):
                     writer.writerow([t, did, state, i, j, timeslot, state_duration])
 
 def get_csv_files(time_from, time_to):
-    #
-    # TODO
-    #
+
     return ['logs-0901-normal.csv']

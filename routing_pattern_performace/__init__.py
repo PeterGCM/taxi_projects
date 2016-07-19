@@ -1,9 +1,24 @@
-from __future__ import division
 import os, sys
-from math import ceil
+sys.path.append(os.path.dirname(os.path.realpath(__file__)) + '/..')
 #
-sys.path.append(os.getcwd() + '/..')
+from taxi_common.__init__ import get_taxi_home_path
+taxi_home = get_taxi_home_path()
 #
+from taxi_common.file_handling_functions import check_dir_create
+taxi_data = os.path.dirname(os.path.realpath(__file__)) + '/data'
+check_dir_create(taxi_data)
+#
+logs_dir = taxi_data + '/logs'
+trips_dir = taxi_data + '/trips'
+for _dir in [logs_dir, trips_dir]:
+    check_dir_create(_dir)
+
+FREE = 0
+HOUR1, HOUR12 = 1, 12
+
+
+
+
 grid_info_fn = 'hl_vl_zones.pkl'
 #
 get_processed_log_fn = lambda time_from, time_to: 'processed-log-%s-%s.csv' % (get_str_timeformat(time_from), get_str_timeformat(time_to))

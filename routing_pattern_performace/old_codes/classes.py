@@ -1,4 +1,4 @@
-import __init__  # @UnusedImport
+import routing_pattern_performace  # @UnusedImport
 
 from taxi_common._classes import zone  # @UnresolvedImport
 from taxi_common._classes import driver  # @UnresolvedImport

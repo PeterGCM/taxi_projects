@@ -52,12 +52,12 @@ def p10():
         fl = [[
                 [2, 2, 1],
                 [1, 1, 5],
-                [1, 2, 2]
+                [1, 2, 1]
                 ]]; assert len(fl) == time_horizon; assert len(fl[0]) == num_zones
         Re = [[
                 [3, 9, 5],
                 [3, 4, 4],
-                [4, 5, 3]
+                [4, 5, 9]
                 ]]; assert len(Re) == time_horizon; assert len(Re[0]) == num_zones
         Co = [[
                 [1, 3, 2],
