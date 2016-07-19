@@ -4,7 +4,7 @@ from __init__ import logs_dir, linkage_dir
 from __init__ import MIN_LINKAGE_NUM, MIN_LINKAGE_RATIO
 from _classes import cd_driver, cd_zone
 #
-from taxi_common.file_handling_functions import save_pkl_threading, remove_create_dir, get_all_files
+from taxi_common.file_handling_functions import save_pkl_threading, remove_create_dir, get_all_files, save_pickle_file
 from taxi_common.singapore_grid_zone import get_singapore_zones
 #
 import csv
@@ -12,7 +12,13 @@ import csv
 
 def run():
     # process_files('0902')
-    handle_a_timeslot('20090116-1')
+    from traceback import format_exc
+    try:
+        handle_a_timeslot('20090116-1')
+    except Exception as _:
+        with open('logging_Python.txt', 'w') as f:
+            f.write(format_exc())
+        raise
 
 
 def handle_a_timeslot(yyyymmdd_t):
@@ -62,7 +68,9 @@ def handle_a_timeslot(yyyymmdd_t):
                 continue
             filtered_linkage[did1] = num_linkage
         day_linkage.append((did0, d.num_pickup, filtered_linkage))
-    save_pkl_threading(linkage_yymm_dir + '/%s.pkl' % yyyymmdd_t, day_linkage)
+    print 'start saving'
+    save_pickle_file(linkage_yymm_dir + '/%s.pkl' % yyyymmdd_t, day_linkage)
+    print 'end saving'
     #
     for del_object in [day_linkage, zones, drivers]:
         del del_object
