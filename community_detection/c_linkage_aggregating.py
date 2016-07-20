@@ -11,7 +11,7 @@ from dateutil.relativedelta import relativedelta
 
 
 def run():
-    process_files('0901')
+    process_files('0902')
 
 
 def process_files(yymm):
