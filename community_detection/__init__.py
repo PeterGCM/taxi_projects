@@ -9,10 +9,10 @@ taxi_data = os.path.dirname(os.path.realpath(__file__)) + '/data'
 check_dir_create(taxi_data)
 #
 logs_dir = taxi_data + '/logs'
-linkage_dir = taxi_data + '/linkage'
-edge_dir = taxi_data + '/edge'
+lc_dir = taxi_data + '/linkage_counting'
+la_dir = taxi_data + '/linkage_aggregating'
 graph_dir = taxi_data + '/graph'
-for _dir in [logs_dir, linkage_dir, edge_dir, graph_dir]:
+for _dir in [logs_dir, lc_dir, la_dir, graph_dir]:
     check_dir_create(_dir)
 #
 FREE, POB = 0, 5

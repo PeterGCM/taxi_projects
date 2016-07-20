@@ -1,6 +1,6 @@
 import __init__
 #
-from __init__ import logs_dir, linkage_dir
+from __init__ import logs_dir, lc_dir
 from __init__ import MIN_LINKAGE_NUM, MIN_LINKAGE_RATIO
 from _classes import cd_driver, cd_zone
 #
@@ -23,7 +23,7 @@ def run():
 
 def handle_a_timeslot(yyyymmdd_t):
     yymm = yyyymmdd_t[len('20'):-len('dd-t')]
-    linkage_yymm_dir = linkage_dir + '/%s' % yymm
+    linkage_yymm_dir = lc_dir + '/%s' % yymm
     log_yymm_dir = logs_dir + '/%s' % yymm
     #
     drivers = {}
@@ -77,7 +77,7 @@ def handle_a_timeslot(yyyymmdd_t):
 
 
 def process_files(yymm):
-    linkage_yymm_dir = linkage_dir + '/%s' % yymm
+    linkage_yymm_dir = lc_dir + '/%s' % yymm
     remove_create_dir(linkage_yymm_dir)
     #
     out_boundary_logs_num = 0
