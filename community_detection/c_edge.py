@@ -11,7 +11,7 @@ from dateutil.relativedelta import relativedelta
 
 
 def run():
-    process_files('0902')
+    process_files('0901')
 
 
 def process_files(yymm):
@@ -20,8 +20,8 @@ def process_files(yymm):
     edge_yymm_dir = edge_dir + '/%s' % yymm
     check_dir_create(edge_yymm_dir)
     #
-    # yyyy, mm = 2000 + int(yymm[:2]), int(yymm[2:])
-    yyyy, mm = 2000 + 9, 1
+    yyyy, mm = 2000 + int(yymm[:2]), int(yymm[2:])
+    # yyyy, mm = 2000 + 9, 1
     #
     handling_date = datetime.date(yyyy, mm, 1)
     next_month = handling_date + relativedelta(months=1)
