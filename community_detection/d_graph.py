@@ -21,7 +21,7 @@ def process_files(yymm):
     remove_create_dir(graph_yymm_dir)
     #
     aggregated_ew = {}
-    num_days, max_weight = 0, -1e400
+    num_days, max_weight, min_weight = 0, -1e400, 1e400
     N, E = set(), set()
     for fn in get_all_files(la_yymm_dir, '', '.pkl'):
         num_days += 1
@@ -34,11 +34,13 @@ def process_files(yymm):
             N.add(k0); N.add(k1); E.add((k0, k1))
             if max_weight < aggregated_ew[(k0, k1)]:
                 max_weight = aggregated_ew[(k0, k1)]
+            if aggregated_ew[(k0, k1)] < min_weight:
+                min_weight = aggregated_ew[(k0, k1)]
     #
-    lb_weight = int(max_weight * 0.5)
-    ub_weight = int(max_weight * 0.95)
-    print 'bound', lb_weight, ub_weight
-    for threshold in range(lb_weight, ub_weight):
+    # lb_weight = int(max_weight * 0.5)
+    # ub_weight = int(max_weight * 0.95)
+    print 'bound', min_weight, max_weight
+    for threshold in range(min_weight, max_weight):
         print threshold,
         n, e = set(), 0
         g = []
