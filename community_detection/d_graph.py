@@ -6,7 +6,13 @@ from taxi_common.file_handling_functions import load_pickle_file, get_all_files,
 
 
 def run():
-    process_files('0901')
+    from traceback import format_exc
+    try:
+        process_files('0901')
+    except Exception as _:
+        with open('logging_Python.txt', 'w') as f:
+            f.write(format_exc())
+        raise
 
 
 def process_files(yymm):
