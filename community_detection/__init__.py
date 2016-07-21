@@ -12,7 +12,8 @@ logs_dir = taxi_data + '/logs'
 lc_dir = taxi_data + '/linkage_counting'
 la_dir = taxi_data + '/linkage_aggregating'
 graph_dir = taxi_data + '/graph'
-for _dir in [logs_dir, lc_dir, la_dir, graph_dir]:
+v_dir = taxi_data + '/visualization'
+for _dir in [logs_dir, lc_dir, la_dir, graph_dir, v_dir]:
     check_dir_create(_dir)
 #
 FREE, POB = 0, 5
