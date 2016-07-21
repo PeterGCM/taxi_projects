@@ -8,7 +8,7 @@ from taxi_common.file_handling_functions import load_pickle_file, get_all_files,
 def run():
     from traceback import format_exc
     try:
-        process_files('0901')
+        process_files('0902')
     except Exception as _:
         with open('logging_Python.txt', 'w') as f:
             f.write(format_exc())
