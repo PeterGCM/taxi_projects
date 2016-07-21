@@ -3,7 +3,7 @@ import __init__
 from __init__ import lc_dir, la_dir
 from __init__ import REMAINING_LINKAGE_RATIO
 #
-from taxi_common.file_handling_functions import load_pickle_file, save_pkl_threading
+from taxi_common.file_handling_functions import load_pickle_file, save_pkl_threading, save_pickle_file
 from taxi_common.file_handling_functions import check_path_exist, check_dir_create
 #
 import datetime
@@ -47,7 +47,8 @@ def process_files(yymm):
         print 'handling 1'
         arrange_linkage(linkages1, aggregated_linkage)
         #
-        save_pkl_threading(edge_fn, aggregated_linkage)
+        # save_pkl_threading(edge_fn, aggregated_linkage)
+        save_pickle_file(edge_fn, aggregated_linkage)
         #
         handling_date += datetime.timedelta(days=1)
 
