@@ -35,7 +35,7 @@ def day_aggregation_graph(yymm, begin_dt, end_dt):
     la_yymm_dir = la_dir + '/%s' % yymm
     graph_yymm_dir = graph_dir + '/%s_%02d-%02d' % (yymm, begin_dt.day, end_dt.day)
     remove_create_dir(graph_yymm_dir)
-    h_dt = datetime.date(begin_dt.year, begin_dt.month, begin_dt.day)
+    h_dt = datetime.datetime(begin_dt.year, begin_dt.month, begin_dt.day)
     aggregated_lk = {}
     num_days, max_weight, min_weight = 0, -1e400, 1e400
     N, E = set(), set()
