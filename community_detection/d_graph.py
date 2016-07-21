@@ -27,8 +27,8 @@ def process_within_month(yymm):
     middle_dt0 = first_dt + datetime.timedelta(days=until_middle) - datetime.timedelta(days=1)
     middle_dt1 = middle_dt0 + datetime.timedelta(days=1)
     #
-    day_aggregation_graph(yymm, middle_dt0, middle_dt0 + datetime.timedelta(days=1))
-    day_aggregation_graph(yymm, middle_dt0 + datetime.timedelta(days=2), middle_dt0 + datetime.timedelta(days=3))
+    day_aggregation_graph(yymm, middle_dt0, middle_dt0 + datetime.timedelta(days=2))
+    day_aggregation_graph(yymm, middle_dt0 + datetime.timedelta(days=3), middle_dt0 + datetime.timedelta(days=5))
     # day_aggregation_graph(yymm, first_dt, middle_dt0)
     # day_aggregation_graph(yymm, middle_dt1, last_dt)
 
