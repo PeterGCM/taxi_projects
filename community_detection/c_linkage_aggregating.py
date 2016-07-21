@@ -49,6 +49,8 @@ def process_files(yymm):
         #
         # save_pkl_threading(edge_fn, aggregated_linkage)
         save_pickle_file(edge_fn, aggregated_linkage)
+        # TODO
+        # solve a problem that the main thread is ended before the sub-thread (writing) finishes a process
         #
         handling_date += datetime.timedelta(days=1)
 

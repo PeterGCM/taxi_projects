@@ -127,6 +127,8 @@ def process_files(yymm):
                 filtered_linkage[did1] = num_linkage
             day_linkage.append((did0, d.num_pickup, filtered_linkage))
         save_pkl_threading(linkage_yymm_dir + '/%s.pkl' % fn[:-len('.csv')], day_linkage)
+        # TODO
+        # solve a problem that the main thread is ended before the sub-thread (writing) finishes a process
         #
         for del_object in [day_linkage, zones, drivers]:
             del del_object
