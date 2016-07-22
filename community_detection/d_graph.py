@@ -166,5 +166,5 @@ def process_files(yymm):
 
 
 if __name__ == '__main__':
-    process_within_month('0901')
-    # run()
+    # process_within_month('0901')
+    run()
