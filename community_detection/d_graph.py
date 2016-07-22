@@ -12,7 +12,7 @@ def run():
     try:
         # process_files('0901')
         # process_within_month('0901')
-        process_files_counting_day('0901')
+        process_files_counting_day('0902')
     except Exception as _:
         with open('logging_Python.txt', 'w') as f:
             f.write(format_exc())
