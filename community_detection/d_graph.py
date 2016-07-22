@@ -54,7 +54,7 @@ def process_files_counting_day(yymm):
             n.add(k0); n.add(k1)
             g.append((k0, k1))
             e += 1
-        graph_fn = 'D(%d)-N(%d)-maxD(%d)-minD(%d)-MEW(%d)-th(%d)-n(%d)-e(%d).pkl' % (num_days, len(N), max_num_days, min_num_days,
+        graph_fn = 'D(%d)-N(%d)-maxD(%d)-minD(%d)-th(%d)-n(%d)-e(%d).pkl' % (num_days, len(N), max_num_days, min_num_days,
                                                                          threshold, len(n), e)
         print 'graph saving'
         save_pickle_file('%s/%s' % (graph_yymm_dir, graph_fn), g)
@@ -166,5 +166,4 @@ def process_files(yymm):
 
 
 if __name__ == '__main__':
-    # process_within_month('0901')
     run()
