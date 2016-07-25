@@ -2,6 +2,8 @@ import __init__
 #
 from __init__ import taxi_home, logs_dir
 from __init__ import FREE, POB, HOUR12
+from __init__ import FRI, SAT, SUN
+from __init__ import PM2, PM4
 #
 from taxi_common.singapore_grid_zone import get_singapore_grid_xy_points
 from taxi_common.file_handling_functions import remove_create_dir
@@ -45,6 +47,13 @@ def process_file(yymm):
             if did == '-1':
                 continue
             t = eval(row[hid['time']])
+            cur_dt = datetime.datetime(t)
+            if cur_dt.weekday() in [FRI, SAT, SUN]:
+                continue
+            if cur_dt.hour < PM2:
+                continue
+            if PM4 < cur_dt.hour:
+                continue
             longitude, latitude = eval(row[hid['longitude']]), eval(row[hid['latitude']])
             state = int(row[hid['state']])
             if not drivers_states.has_key(did): drivers_states[did] = FREE
