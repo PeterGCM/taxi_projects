@@ -45,7 +45,7 @@ def process_files_counting_day(yymm):
                 if pairs_day_counting[(k0, k1)] < min_num_days:
                     min_num_days = pairs_day_counting[(k0, k1)]
 
-    for threshold in range(min_num_days, max_num_days):
+    for threshold in range(min_num_days, max_num_days + 1):
         print threshold,
         n, e = set(), 0
         g = []
