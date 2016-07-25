@@ -21,8 +21,8 @@ def process_file(yymm):
     yymm_dir = logs_dir + '/%s' % yymm
     remove_create_dir(yymm_dir)
     def init_processed_file(h_dt):
-        processed_fn = yymm_dir + '/%d%02d%02d-%d.csv' % \
-                                  (h_dt.year, h_dt.month, h_dt.day, h_dt.hour)
+        processed_fn = yymm_dir + '/%d%02d%02d.csv' % \
+                                  (h_dt.year, h_dt.month, h_dt.day)
         with open(processed_fn, 'wt') as w_csvfile:
             writer = csv.writer(w_csvfile)
             writer.writerow(['time', 'i', 'j', 'did'])
