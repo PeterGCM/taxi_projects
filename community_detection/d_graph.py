@@ -11,9 +11,9 @@ from dateutil.relativedelta import relativedelta
 def run():
     from traceback import format_exc
     try:
-        # process_files('0901')
+        process_files('0903')
         # process_within_month('0901')
-        process_files_counting_day('0903')
+        # process_files_counting_day('0903')
     except Exception as _:
         with open('logging_Python.txt', 'w') as f:
             f.write(format_exc())
@@ -59,6 +59,7 @@ def process_files_counting_day(yymm):
                                                                          threshold, len(n), e)
         print 'graph saving'
         save_pickle_file('%s/%s' % (graph_yymm_dir, graph_fn), g)
+
 
 def process_within_month(yymm):
     yy, mm = yymm[:2], yymm[2:]
