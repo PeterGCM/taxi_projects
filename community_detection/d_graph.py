@@ -7,12 +7,13 @@ from taxi_common.file_handling_functions import load_pickle_file, get_all_files,
 import datetime
 from dateutil.relativedelta import relativedelta
 
+
 def run():
     from traceback import format_exc
     try:
         # process_files('0901')
         # process_within_month('0901')
-        process_files_counting_day('0903')
+        process_files_counting_day('0904')
     except Exception as _:
         with open('logging_Python.txt', 'w') as f:
             f.write(format_exc())
