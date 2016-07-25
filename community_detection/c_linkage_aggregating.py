@@ -34,6 +34,9 @@ def process_files(yymm):
         #
         linkage_fn = linkage_yymm_dir + '/%d%02d%02d.pkl' % (yyyy, mm, dd)
 
+        if not check_path_exist(linkage_fn):
+            continue
+
         aggregated_linkage = {}
         print 'start reading'
         linkages = load_pickle_file(linkage_fn)
