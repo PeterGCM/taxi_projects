@@ -3,7 +3,7 @@ import __init__
 from __init__ import taxi_home, logs_dir
 from __init__ import FREE, POB, HOUR12
 from __init__ import FRI, SAT, SUN
-from __init__ import PM2, PM4
+from __init__ import PM2, PM3
 #
 from taxi_common.singapore_grid_zone import get_singapore_grid_xy_points
 from taxi_common.file_handling_functions import remove_create_dir
@@ -50,7 +50,7 @@ def process_file(yymm):
                 continue
             if cur_dt.hour < PM2:
                 continue
-            if PM4 < cur_dt.hour:
+            if PM3 < cur_dt.hour:
                 continue
             longitude, latitude = eval(row[hid['longitude']]), eval(row[hid['latitude']])
             state = int(row[hid['state']])
@@ -62,7 +62,7 @@ def process_file(yymm):
                 i, j = bisect(x_points, longitude) - 1, bisect(y_points, latitude) - 1
                 #
                 cur_dt = datetime.datetime.fromtimestamp(t)
-                if h_dt < cur_dt:
+                if h_dt.hour < cur_dt.hour:
                     processed_fn = init_processed_file(h_dt)
                     h_dt = cur_dt
                     print cur_dt
