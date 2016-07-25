@@ -62,7 +62,7 @@ def process_file(yymm):
                 i, j = bisect(x_points, longitude) - 1, bisect(y_points, latitude) - 1
                 #
                 cur_dt = datetime.datetime.fromtimestamp(t)
-                if h_dt.hour < cur_dt.hour:
+                if h_dt.day < cur_dt.day:
                     processed_fn = init_processed_file(h_dt)
                     h_dt = cur_dt
                     print cur_dt
