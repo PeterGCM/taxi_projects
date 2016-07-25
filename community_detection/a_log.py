@@ -47,7 +47,7 @@ def process_file(yymm):
             if did == '-1':
                 continue
             t = eval(row[hid['time']])
-            cur_dt = datetime.datetime(t)
+            cur_dt = datetime.datetime.fromtimestamp(t)
             if cur_dt.weekday() in [FRI, SAT, SUN]:
                 continue
             if cur_dt.hour < PM2:
