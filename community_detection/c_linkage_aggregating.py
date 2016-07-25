@@ -11,10 +11,41 @@ from dateutil.relativedelta import relativedelta
 
 
 def run():
-    process_files('0901')
+    process_files('0903')
 
 
 def process_files(yymm):
+    linkage_yymm_dir = lc_dir + '/%s' % yymm
+    assert check_path_exist(linkage_yymm_dir)
+    edge_yymm_dir = la_dir + '/%s' % yymm
+    check_dir_create(edge_yymm_dir)
+    #
+    yyyy, mm = 2000 + int(yymm[:2]), int(yymm[2:])
+    #
+    handling_date = datetime.date(yyyy, mm, 1)
+    next_month = handling_date + relativedelta(months=1)
+    while handling_date < next_month:
+        print handling_date
+        yyyy, mm, dd = handling_date.year, handling_date.month, handling_date.day
+        edge_fn = edge_yymm_dir + '/%d%02d%02d.pkl' % (yyyy, mm, dd)
+        if check_path_exist(edge_fn):
+            handling_date += datetime.timedelta(days=1)
+            continue
+        #
+        linkage_fn = linkage_yymm_dir + '/%d%02d%02d.pkl' % (yyyy, mm, dd)
+
+        aggregated_linkage = {}
+        print 'start reading'
+        linkages = load_pickle_file(linkage_fn)
+        print 'handling 0'
+        arrange_linkage(linkages, aggregated_linkage)
+        print 'reading....'
+        #
+        save_pickle_file(edge_fn, aggregated_linkage)
+        handling_date += datetime.timedelta(days=1)
+
+
+def process_files0(yymm):
     linkage_yymm_dir = lc_dir + '/%s' % yymm
     assert check_path_exist(linkage_yymm_dir)
     edge_yymm_dir = la_dir + '/%s' % yymm
