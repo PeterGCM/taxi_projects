@@ -15,7 +15,7 @@ def run():
     from traceback import format_exc
     try:
         # handle_a_timeslot('20090131-1')
-        process_files('0903')
+        process_files('0904')
     except Exception as _:
         with open('logging_Python.txt', 'w') as f:
             f.write(format_exc())
