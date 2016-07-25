@@ -14,8 +14,8 @@ def run():
     # process_files('0902')
     from traceback import format_exc
     try:
-        # handle_a_timeslot('20090131-1')
-        process_files('0904')
+        handle_a_timeslot('20090420')
+        # process_files('0904')
     except Exception as _:
         with open('logging_Python.txt', 'w') as f:
             f.write(format_exc())
@@ -23,7 +23,9 @@ def run():
 
 
 def handle_a_timeslot(yyyymmdd_t):
-    yymm = yyyymmdd_t[len('20'):-len('dd-t')]
+# def handle_a_timeslot(yyyymmdd):
+    yymm = yyyymmdd_t[len('20'):-len('dd')]
+    # yymm = yyyymmdd_t[len('20'):-len('dd-t')]
     linkage_yymm_dir = lc_dir + '/%s' % yymm
     log_yymm_dir = logs_dir + '/%s' % yymm
     #
@@ -134,7 +136,7 @@ def process_files(yymm):
         f.write('the total number of logs: %d' % (logs_num) + '\n')
         f.write('the total number of out boundary logs: %d' % (out_boundary_logs_num) + '\n')
 
-    from information_boards.file_handling_functions import thread_writing
+    from taxi_common.file_handling_functions import thread_writing
     if thread_writing:
         thread_writing.join()
 
