@@ -7,12 +7,13 @@ from taxi_common.file_handling_functions import load_pickle_file, get_all_files,
 import datetime
 from dateutil.relativedelta import relativedelta
 
+
 def run():
     from traceback import format_exc
     try:
-        # process_files('0901')
+        process_files('0904')
         # process_within_month('0901')
-        process_files_counting_day('0902')
+        # process_files_counting_day('0903')
     except Exception as _:
         with open('logging_Python.txt', 'w') as f:
             f.write(format_exc())
@@ -44,7 +45,7 @@ def process_files_counting_day(yymm):
                 if pairs_day_counting[(k0, k1)] < min_num_days:
                     min_num_days = pairs_day_counting[(k0, k1)]
 
-    for threshold in range(min_num_days, max_num_days):
+    for threshold in range(min_num_days, max_num_days + 1):
         print threshold,
         n, e = set(), 0
         g = []
@@ -58,6 +59,7 @@ def process_files_counting_day(yymm):
                                                                          threshold, len(n), e)
         print 'graph saving'
         save_pickle_file('%s/%s' % (graph_yymm_dir, graph_fn), g)
+
 
 def process_within_month(yymm):
     yy, mm = yymm[:2], yymm[2:]

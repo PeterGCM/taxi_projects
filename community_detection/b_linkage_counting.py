@@ -14,7 +14,8 @@ def run():
     # process_files('0902')
     from traceback import format_exc
     try:
-        handle_a_timeslot('20090131-1')
+        handle_a_timeslot('20090319')
+        # process_files('0904')
     except Exception as _:
         with open('logging_Python.txt', 'w') as f:
             f.write(format_exc())
@@ -22,7 +23,9 @@ def run():
 
 
 def handle_a_timeslot(yyyymmdd_t):
-    yymm = yyyymmdd_t[len('20'):-len('dd-t')]
+# def handle_a_timeslot(yyyymmdd):
+    yymm = yyyymmdd_t[len('20'):-len('dd')]
+    # yymm = yyyymmdd_t[len('20'):-len('dd-t')]
     linkage_yymm_dir = lc_dir + '/%s' % yymm
     log_yymm_dir = logs_dir + '/%s' % yymm
     #
@@ -127,14 +130,15 @@ def process_files(yymm):
                 filtered_linkage[did1] = num_linkage
             day_linkage.append((did0, d.num_pickup, filtered_linkage))
         save_pkl_threading(linkage_yymm_dir + '/%s.pkl' % fn[:-len('.csv')], day_linkage)
-        # TODO
-        # solve a problem that the main thread is ended before the sub-thread (writing) finishes a process
-        #
         for del_object in [day_linkage, zones, drivers]:
             del del_object
     with open(out_boundary_logs_fn, 'a') as f:
         f.write('the total number of logs: %d' % (logs_num) + '\n')
         f.write('the total number of out boundary logs: %d' % (out_boundary_logs_num) + '\n')
+
+    from taxi_common.file_handling_functions import thread_writing
+    if thread_writing:
+        thread_writing.join()
 
 
 def generate_zones():
