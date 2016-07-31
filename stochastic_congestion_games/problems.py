@@ -197,6 +197,32 @@ def problem_saving_table_representation(f, _data):
         f.write('%s\n' % _table.get_string())
 
 
+def simple_sc_game0(SEED_NUM):
+    print 'seed: %d' % SEED_NUM
+    seed(SEED_NUM)
+    #
+    # Define a problem
+    #
+    num_agents, S, A = 10, range(2), range(2)
+    Tr_sas = [
+        [[.2, .8],  # s0 = 0
+         [.3, .7]],
+        [[.5, .5],  # s0 = 1
+         [.7, .3]]
+    ]
+    r1 = [  # r1 is a reward function depending on state and action
+        [3, 3],  # s = 0
+        [3, 3],  # s = 1
+    ]
+    r2_const = [2, 2]
+    r2 = lambda a, num_a: r2_const[a] / float(num_a)  # r2 is a reward function depending on agents' action
+    R = lambda i, si, ags_A: r1[si][ags_A[i]] + r2(ags_A[i], len([a for a in ags_A if ags_A[i] == a]))
+    ags_S = [0, 1, 1, 0, 1, 1, 0, 1, 1, 0]; assert len(ags_S) == num_agents
+
+    return num_agents, S, A, Tr_sas, R, ags_S
+
+
+
 if __name__ == '__main__':
     p1()
 
