@@ -7,6 +7,7 @@ from __init__ import PM2, PM3
 #
 from taxi_common.singapore_grid_zone import get_singapore_grid_xy_points
 from taxi_common.file_handling_functions import remove_create_dir
+from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
 from bisect import bisect
 import csv, datetime
@@ -14,7 +15,12 @@ from dateutil.relativedelta import relativedelta
 
 
 def run():
-    process_file('0902')
+    init_multiprocessor()
+    count_num_jobs = 0
+    for mm in range(5,12):
+        put_task(process_file, ['09%02d' % mm])
+        count_num_jobs += 1
+    end_multiprocessor(count_num_jobs)
 
 
 def process_file(yymm):
