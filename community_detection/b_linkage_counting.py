@@ -14,8 +14,11 @@ def run():
     # process_files('0902')
     from traceback import format_exc
     try:
-        handle_a_timeslot('20090319')
-        # process_files('0904')
+        # handle_a_timeslot('20090319')
+        for mm in range(1,12):
+            if mm in [3,4]:
+                continue
+            process_files('09%02d' % mm)
     except Exception as _:
         with open('logging_Python.txt', 'w') as f:
             f.write(format_exc())
