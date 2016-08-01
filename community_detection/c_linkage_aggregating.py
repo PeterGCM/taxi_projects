@@ -11,7 +11,11 @@ from dateutil.relativedelta import relativedelta
 
 
 def run():
-    process_files('0904')
+    # process_files('0904')
+    for mm in range(1, 12):
+        if mm in [3, 4]:
+            continue
+        process_files('09%02d' % mm)
 
 
 def process_files(yymm):
