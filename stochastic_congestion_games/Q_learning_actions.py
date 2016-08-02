@@ -45,12 +45,15 @@ def run():
                 random_a = random.choice(A)
                 ags_A.append(random_a)
             else:
+                # TODO
+                #    2. consider max_Q_sa   or maxmin_Q_sa ??   (currently, just max_Q_sa)
                 si = ags_S[i]
                 max_Q_sa, argmax_a = -1e400, None
                 for ai in A:
-                    if max_Q_sa < ags_Q_sa[i][si, ai]:
-                        max_Q_sa = ags_Q_sa[i][si, ai]
-                        argmax_a = ai
+                    for i1 in xrange(num_agents):
+                        if max_Q_sa < i_Q_sa[s1, ai, i1 + 1]:
+                            max_Q_sa = i_Q_sa[s1, ai, i1 + 1]
+                            argmax_a = ai
                 ags_A.append(argmax_a)
         #
         # Count the number of action of agents
@@ -69,7 +72,7 @@ def run():
             # TODO
             # Discuss this part with Prof. Pradeep
             #    1. num_ai_actions   is can be considered as dynamic state defining
-            #    2. consider max_Q_sa   or maxmin_Q_sa ??   (currently, just max_Q_sa
+            #    2. consider max_Q_sa   or maxmin_Q_sa ??   (currently, just max_Q_sa)
             #
             max_Q_sa = -1e400
             i_Q_sa = ags_Q_sa[i]
