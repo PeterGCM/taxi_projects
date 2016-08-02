@@ -11,7 +11,8 @@ from dateutil.relativedelta import relativedelta
 def run():
     from traceback import format_exc
     try:
-        process_files('0904')
+        for mm in range(1, 12):
+            process_files_counting_day('09%02d' % mm)
         # process_within_month('0901')
         # process_files_counting_day('0903')
     except Exception as _:
@@ -22,7 +23,7 @@ def run():
 
 def process_files_counting_day(yymm):
     la_yymm_dir = la_dir + '/%s' % yymm
-    graph_yymm_dir = graph_dir + '/%s_cd' % yymm
+    graph_yymm_dir = graph_dir + '/%s' % yymm
     remove_create_dir(graph_yymm_dir)
     #
     num_days, max_num_days, min_num_days = 0, -1e400, 1e400
