@@ -12,6 +12,7 @@ def run():
     for mm in range(1, 12):
         num_months += 1
         yymm = '09%02d' % mm
+        print yymm
         graph_yymm_dir = graph_dir + '/_%s' % yymm
         assert len(get_all_files(graph_yymm_dir, '', '.pkl')) == 1
         fn = get_all_files(graph_yymm_dir, '', '.pkl').pop()
