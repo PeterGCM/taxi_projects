@@ -1,67 +1,66 @@
 import __init__
-#
-from __init__ import lc_dir, la_dir
 
-from community_analysis.__init__ import logs_dir, ld_dir
+from __init__ import la_dir, graph_dir
 #
-from taxi_common.file_handling_functions import load_pickle_file, save_pkl_threading, save_pickle_file
-from taxi_common.file_handling_functions import check_path_exist, check_dir_create
+from taxi_common.file_handling_functions import load_pickle_file, get_all_files, remove_create_dir, save_pickle_file
 #
-import datetime
-from dateutil.relativedelta import relativedelta
 
 
 def run():
-    for mm in range(1, 12):
-        process_files('09%02d' % mm)
+    from traceback import format_exc
+    try:
+        for mm in range(1, 12):
+            process_files_counting_day('09%02d' % mm)
+    except Exception as _:
+        with open('logging_Python.txt', 'w') as f:
+            f.write(format_exc())
+        raise
 
 
-def process_files(yymm):
-    linkage_yymm_dir = ld_dir + '/%s' % yymm
-    assert check_path_exist(linkage_yymm_dir)
-    edge_yymm_dir = la_dir + '/%s' % yymm
-    check_dir_create(edge_yymm_dir)
+def process_files_counting_day(yymm):
+    la_yymm_dir = la_dir + '/%s' % yymm
+    graph_yymm_dir = graph_dir + '/_%s' % yymm
+    remove_create_dir(graph_yymm_dir)
     #
-    yyyy, mm = 2000 + int(yymm[:2]), int(yymm[2:])
-    #
-    handling_date = datetime.date(yyyy, mm, 1)
-    next_month = handling_date + relativedelta(months=1)
-    while handling_date < next_month:
-        print handling_date,
-        yyyy, mm, dd = handling_date.year, handling_date.month, handling_date.day
-        edge_fn = edge_yymm_dir + '/%d%02d%02d.pkl' % (yyyy, mm, dd)
-        if check_path_exist(edge_fn):
-            handling_date += datetime.timedelta(days=1)
+    num_days, max_num_days, min_num_days = 0, -1e400, 1e400
+    pairs_day_counting = {}
+    N = set()
+    for fn in get_all_files(la_yymm_dir, '', '.pkl'):
+        daily_pairs = set()
+        num_days += 1
+        print 'read', fn
+        edge_weight = load_pickle_file('%s/%s' % (la_yymm_dir, fn))
+        for (k0, k1), v in edge_weight.iteritems():
+            N.add(k0); N.add(k1)
+            if (k0, k1) not in daily_pairs:
+                daily_pairs.add((k0, k1))
+                if (k0, k1) not in pairs_day_counting:
+                    pairs_day_counting[(k0, k1)] = 0
+                pairs_day_counting[(k0, k1)] += 1
+                if max_num_days < pairs_day_counting[(k0, k1)]:
+                    max_num_days = pairs_day_counting[(k0, k1)]
+                if pairs_day_counting[(k0, k1)] < min_num_days:
+                    min_num_days = pairs_day_counting[(k0, k1)]
+
+    n, e = set(), 0
+    g = []
+    threshold = 2
+    for (k0, k1), v in pairs_day_counting.iteritems():
+        if v < threshold:
             continue
-        #
-        linkage_fn = linkage_yymm_dir + '/%d%02d%02d.pkl' % (yyyy, mm, dd)
-        if not check_path_exist(linkage_fn):
-            handling_date += datetime.timedelta(days=1)
-            continue
-        aggregated_linkage = {}
-        print 'start reading',
-        linkages = load_pickle_file(linkage_fn)
-        print 'handling',
-        arrange_linkage(linkages, aggregated_linkage)
-        print 'reading....'
-        #
-        save_pickle_file(edge_fn, aggregated_linkage)
-        handling_date += datetime.timedelta(days=1)
-
-
-def arrange_linkage(linkages, aggregated_linkage):
-    while linkages:
-        _did0, _did0_num_pickup, _did0_linkage = linkages.pop()
-        for _did1, num_linkage in _did0_linkage.iteritems():
-            if num_linkage < _did0_num_pickup * REMAINING_LINKAGE_RATIO:
-                continue
-            did0, did1 = int(_did0), int(_did1)
-            if did0 > did1:
-                did0, did1 = int(_did1), int(_did0)
-            if not aggregated_linkage.has_key((did0, did1)):
-                aggregated_linkage[(did0, did1)] = 0
-            aggregated_linkage[(did0, did1)] += num_linkage
-
+        n.add(k0); n.add(k1)
+        g.append([(k0, k1), v])
+        e += 1
+    graph_fn = 'D(%d)-N(%d)-maxD(%d)-minD(%d)-th(%d)-n(%d)-e(%d).pkl' % (num_days, len(N), max_num_days, min_num_days,
+                                                                     threshold, len(n), e)
+    print 'graph saving'
+    save_pickle_file('%s/%s' % (graph_yymm_dir, graph_fn), g)
 
 if __name__ == '__main__':
-    run()
+    from traceback import format_exc
+    try:
+        run()
+    except Exception as _:
+        with open('logging_Python.txt', 'w') as f:
+            f.write(format_exc())
+        raise
