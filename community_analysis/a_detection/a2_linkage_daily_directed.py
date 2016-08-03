@@ -1,10 +1,8 @@
 import __init__
 #
-
 from __init__ import MIN_DAILY_LINKAGE
 from _classes import cd_driver, cd_zone
-
-from community_analysis.__init__ import logs_dir, lc_dir
+from community_analysis.__init__ import logs_dir, ld_dir
 #
 from taxi_common.file_handling_functions import save_pkl_threading, remove_create_dir, get_all_files, save_pickle_file
 from taxi_common.singapore_grid_zone import get_singapore_zones
@@ -13,22 +11,12 @@ import csv
 
 
 def run():
-    # process_files('0902')
-    from traceback import format_exc
-    try:
-        # handle_a_timeslot('20090319')
-        for mm in range(1,12):
-            if mm in [3,4]:
-                continue
-            process_files('09%02d' % mm)
-    except Exception as _:
-        with open('logging_Python.txt', 'w') as f:
-            f.write(format_exc())
-        raise
+    for mm in range(1,12):
+        process_files('09%02d' % mm)
 
 
 def process_files(yymm):
-    linkage_yymm_dir = lc_dir + '/%s' % yymm
+    linkage_yymm_dir = ld_dir + '/%s' % yymm
     remove_create_dir(linkage_yymm_dir)
     #
     out_boundary_logs_num = 0
@@ -98,4 +86,10 @@ def generate_zones():
 
 
 if __name__ == '__main__':
-    run()
+    from traceback import format_exc
+    try:
+        run()
+    except Exception as _:
+        with open('logging_Python.txt', 'w') as f:
+            f.write(format_exc())
+        raise
