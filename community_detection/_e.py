@@ -18,7 +18,7 @@ def run():
         fn = get_all_files(graph_yymm_dir, '', '.pkl').pop()
         print 'read', yymm, fn
         edge_weight = load_pickle_file('%s/%s' % (graph_yymm_dir, fn))
-        for (k0, k1), num_days in edge_weight.iteritems():
+        for (k0, k1), num_days in edge_weight:
             N.add(k0); N.add(k1)
             if (k0, k1) not in pairs_day_counting:
                 pairs_day_counting[(k0, k1)] = 0
