@@ -10,7 +10,8 @@ check_dir_create(taxi_data)
 #
 logs_dir = taxi_data + '/logs'
 ld_dir = taxi_data + '/linkage_daily'
-for _dir in [logs_dir, ld_dir]:
+lm_dir = taxi_data + '/linkage_monthly'
+for _dir in [logs_dir, ld_dir, lm_dir]:
     check_dir_create(_dir)
 
 

@@ -4,7 +4,7 @@ from __init__ import MIN_DAILY_LINKAGE
 from _classes import cd_driver, cd_zone
 from community_analysis.__init__ import logs_dir, ld_dir
 #
-from taxi_common.file_handling_functions import save_pkl_threading, remove_create_dir, get_all_files, save_pickle_file
+from taxi_common.file_handling_functions import save_pkl_threading, remove_create_dir, get_all_files
 from taxi_common.singapore_grid_zone import get_singapore_zones
 #
 import csv
