@@ -3,8 +3,11 @@ import __init__
 from __init__ import MIN_MONTHLY_LINKAGE
 from community_analysis.__init__ import ld_dir, lm_dir
 #
-from taxi_common.file_handling_functions import load_pickle_file, get_all_files, check_dir_create, save_pickle_file
+from taxi_common.file_handling_functions import load_pickle_file, get_all_files, save_pickle_file, remove_create_dir
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
+
+lm_yyyy_dir = lm_dir + '/2009'
+remove_create_dir(lm_yyyy_dir)
 
 
 def run():
@@ -19,8 +22,6 @@ def run():
 
 def process_files(yymm):
     ld_yymm_dir = ld_dir + '/%s' % yymm
-    lm_yyyy_dir = lm_dir + '/20%s' % yymm[:2]
-    check_dir_create(lm_yyyy_dir)
     #
     num_days, max_num_days, min_num_days = 0, -1e400, 1e400
     pairs_day_counting = {}
