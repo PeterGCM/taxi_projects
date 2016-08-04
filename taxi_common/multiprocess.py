@@ -3,8 +3,7 @@ from __future__ import division
 import multiprocessing as mp
 
 _tasks, _results = mp.JoinableQueue(), mp.Queue()
-_num_workers = mp.cpu_count() - 1
-# _num_workers = 8
+
 
 class Worker(mp.Process):
     def __init__(self, task_queue, result_queue):
@@ -34,10 +33,10 @@ class Task(object):
         return self.call_back(*self.args)
 
 
-def init_multiprocessor():
+def init_multiprocessor(num_workers):
     # Init multiple process
-    global _tasks, _results, _num_workers
-    workers = [ Worker(_tasks, _results) for _ in xrange(_num_workers) ]
+    global _tasks, _results
+    workers = [Worker(_tasks, _results) for _ in xrange(num_workers)]
     for w in workers:
         w.start()
 

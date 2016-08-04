@@ -4,11 +4,17 @@ from __init__ import MIN_MONTHLY_LINKAGE
 from community_analysis.__init__ import ld_dir, lm_dir
 #
 from taxi_common.file_handling_functions import load_pickle_file, get_all_files, check_dir_create, save_pickle_file
+from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 
 
 def run():
+    init_multiprocessor(3)
+    count_num_jobs = 0
     for mm in range(1, 12):
-        process_files('09%02d' % mm)
+        yymm = '09%02d' % mm
+        put_task(process_files, [yymm])
+        count_num_jobs += 1
+    end_multiprocessor(count_num_jobs)
 
 
 def process_files(yymm):
