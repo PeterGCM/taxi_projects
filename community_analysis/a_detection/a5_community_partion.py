@@ -8,7 +8,8 @@ import networkx as nx
 
 from taxi_common.file_handling_functions import load_pickle_file, get_all_files
 
-MIN_AN_DAYS = 25
+MIN_AN_DAYS = 23
+
 
 def run():
     yyyy = '2009'
