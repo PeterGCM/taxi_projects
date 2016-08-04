@@ -11,7 +11,7 @@ remove_create_dir(lm_yyyy_dir)
 
 
 def run():
-    init_multiprocessor(3)
+    init_multiprocessor(1)
     count_num_jobs = 0
     for mm in range(1, 12):
         yymm = '09%02d' % mm
