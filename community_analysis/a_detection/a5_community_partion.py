@@ -11,9 +11,10 @@ from taxi_common.file_handling_functions import load_pickle_file, get_all_files
 
 def run():
     yyyy = '2009'
-    print 'start'
+    print 'start',
     assert len(get_all_files(la_dir, '', '.pkl')) == 1
     fn = get_all_files(la_dir, '', '.pkl').pop()
+    print fn
     print 'pkl file loading ...',
     pairs_day_counting = load_pickle_file('%s/%s' % (la_dir, fn))
     print 'finished'
