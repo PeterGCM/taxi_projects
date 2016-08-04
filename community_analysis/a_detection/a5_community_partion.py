@@ -11,8 +11,6 @@ from taxi_common.file_handling_functions import load_pickle_file, get_all_files,
 
 def run():
     yyyy = '2009'
-    print 'hi'
-    assert False
     assert len(get_all_files(la_dir, '', '.pkl')) == 1
     fn = get_all_files(la_dir, '', '.pkl').pop()
     print 'pkl file loading ...',
