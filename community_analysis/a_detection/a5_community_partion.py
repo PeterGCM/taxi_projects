@@ -11,11 +11,10 @@ from taxi_common.file_handling_functions import load_pickle_file, get_all_files,
 
 def run():
     yyyy = '2009'
-    la_yyyy_dir = la_dir + '/%s' % yyyy
-    assert len(get_all_files(la_yyyy_dir, '', '.pkl')) == 1
-    fn = get_all_files(la_yyyy_dir, '', '.pkl').pop()
+    assert len(get_all_files(la_dir, '', '.pkl')) == 1
+    fn = get_all_files(la_dir, '', '.pkl').pop()
     print 'pkl file loading ...',
-    pairs_day_counting = load_pickle_file('%s/%s' % (la_yyyy_dir, fn))
+    pairs_day_counting = load_pickle_file('%s/%s' % (la_dir, fn))
     print 'finished'
     print 'Graph constructing ...',
     G = nx.Graph()
