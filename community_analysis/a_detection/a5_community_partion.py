@@ -6,7 +6,7 @@ import community
 import networkx as nx
 # import matplotlib.pyplot as plt
 
-from taxi_common.file_handling_functions import load_pickle_file, get_all_files, remove_create_dir, remove_file
+from taxi_common.file_handling_functions import load_pickle_file, get_all_files
 
 
 def run():
@@ -22,7 +22,7 @@ def run():
         G.add_edge(k0, k1, weight=num_days)
     print 'finished'
     print 'Whole graph pickling ...',
-    nx.write_gpickle(G, '%s/%s-whole.pkl'(pg_dir, yyyy))
+    nx.write_gpickle(G, '%s/%s-whole.pkl' % (pg_dir, yyyy))
     print 'finished'
     # first compute the best partition
     print 'Partitioning ...',
@@ -38,7 +38,7 @@ def run():
                       if partition[nodes] == com]
         # read_gpickle(path)
         print count, 'Saving sub-graph ...',
-        nx.write_gpickle(G.subgraph(list_nodes), '%s/%s-PD(%d).pkl' (pg_dir, yyyy, count))
+        nx.write_gpickle(G.subgraph(list_nodes), '%s/%s-PD(%d).pkl' % (pg_dir, yyyy, count))
         print 'finished'
         # G.edges()
         # nx.draw_networkx_nodes(G, pos, list_nodes, node_size=20,
