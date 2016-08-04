@@ -3,22 +3,22 @@ import __init__
 from __init__ import MIN_MONTHLY_LINKAGE
 from community_analysis.__init__ import ld_dir, lm_dir
 #
-from taxi_common.file_handling_functions import load_pickle_file, get_all_files, save_pickle_file, remove_create_dir
-from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
+from taxi_common.file_handling_functions import load_pickle_file, get_all_files, \
+                                                save_pickle_file, remove_create_dir, \
+                                                save_pkl_threading
 
 lm_yyyy_dir = lm_dir + '/2009'
 remove_create_dir(lm_yyyy_dir)
 
 
 def run():
-    init_multiprocessor(1)
-    count_num_jobs = 0
     for mm in range(1, 12):
         yymm = '09%02d' % mm
-        put_task(process_files, [yymm])
-        count_num_jobs += 1
-    end_multiprocessor(count_num_jobs)
+        process_files(yymm)
 
+    from taxi_common.file_handling_functions import thread_writing
+    if thread_writing:
+        thread_writing.join()
 
 def process_files(yymm):
     ld_yymm_dir = ld_dir + '/%s' % yymm
@@ -50,7 +50,7 @@ def process_files(yymm):
         lm.append([(k0, k1), v])
     lm_fn = '%s-D(%d)-N(%d)-E(%d).pkl' % (yymm, num_days, len(N), len(lm))
     print 'lm saving'
-    save_pickle_file('%s/%s' % (lm_yyyy_dir, lm_fn), lm)
+    save_pkl_threading('%s/%s' % (lm_yyyy_dir, lm_fn), lm)
 
 if __name__ == '__main__':
     from traceback import format_exc
