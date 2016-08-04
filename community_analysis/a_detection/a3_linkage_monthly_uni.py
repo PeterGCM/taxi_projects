@@ -41,7 +41,7 @@ def process_files(yymm):
             continue
         N.add(k0); N.add(k1)
         lm.append([(k0, k1), v])
-    lm_fn = '%s-D(%d)-N(%d)-n(%d)-e(%d).pkl' % (yymm, num_days, len(N), len(lm))
+    lm_fn = '%s-D(%d)-N(%d)-E(%d).pkl' % (yymm, num_days, len(N), len(lm))
     print 'lm saving'
     save_pickle_file('%s/%s' % (lm_yyyy_dir, lm_fn), lm)
 
