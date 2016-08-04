@@ -8,7 +8,7 @@ import networkx as nx
 
 from taxi_common.file_handling_functions import load_pickle_file, get_all_files
 
-MIN_AN_DAYS = 50
+MIN_AN_DAYS = 30
 
 def run():
     yyyy = '2009'
@@ -16,10 +16,10 @@ def run():
     assert len(get_all_files(la_dir, '', '.pkl')) == 1
     fn = get_all_files(la_dir, '', '.pkl').pop()
     print fn
-    print 'pkl file loading ...',
+    print 'pkl file loading ...'
     pairs_day_counting = load_pickle_file('%s/%s' % (la_dir, fn))
     print 'finished'
-    print 'Graph constructing ...',
+    print 'Graph constructing ...'
     G = nx.Graph()
     for (k0, k1), num_days in pairs_day_counting.iteritems():
         if num_days < MIN_AN_DAYS:
@@ -29,11 +29,11 @@ def run():
     del pairs_day_counting
 
     print 'finished'
-    print 'Whole graph pickling ...',
+    print 'Whole graph pickling ...'
     nx.write_gpickle(G, '%s/%s-TH(%d)-whole.pkl' % (pg_dir, yyyy, MIN_AN_DAYS))
     print 'finished'
     # first compute the best partition
-    print 'Partitioning ...',
+    print 'Partitioning ...'
     partition = community.best_partition(G)
     print 'finished'
     # drawing
@@ -45,7 +45,7 @@ def run():
         list_nodes = [nodes for nodes in partition.keys()
                       if partition[nodes] == com]
         # read_gpickle(path)
-        print count, 'Saving sub-graph ...',
+        print count, 'Saving sub-graph ...'
         nx.write_gpickle(G.subgraph(list_nodes), '%s/%s-TH(%d)-PD(%d).pkl' % (pg_dir, yyyy, MIN_AN_DAYS, count))
         print 'finished'
         # G.edges()
