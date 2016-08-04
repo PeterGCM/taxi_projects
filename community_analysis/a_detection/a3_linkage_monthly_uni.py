@@ -7,6 +7,8 @@ from taxi_common.file_handling_functions import load_pickle_file, get_all_files,
                                                 save_pickle_file, remove_create_dir, \
                                                 save_pkl_threading
 
+
+
 lm_yyyy_dir = lm_dir + '/2009'
 remove_create_dir(lm_yyyy_dir)
 
@@ -15,7 +17,7 @@ def run():
     for mm in range(1, 12):
         yymm = '09%02d' % mm
         process_files(yymm)
-
+    #
     from taxi_common.file_handling_functions import thread_writing
     if thread_writing:
         thread_writing.join()

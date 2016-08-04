@@ -21,9 +21,9 @@ def run():
             pairs_day_counting[(k0, k1)] += num_days
             if max_num_days < pairs_day_counting[(k0, k1)]:
                 max_num_days = pairs_day_counting[(k0, k1)]
-    graph_fn = '%s-N(%d)-E(%d)-maxD(%d).pkl' % (yyyy, len(N), len(pairs_day_counting), max_num_days)
+    fn = '%s-N(%d)-E(%d)-maxD(%d).pkl' % (yyyy, len(N), len(pairs_day_counting), max_num_days)
     print 'Saving'
-    save_pickle_file('%s/%s' % (la_dir, graph_fn), pairs_day_counting)
+    save_pickle_file('%s/%s' % (la_dir, fn), pairs_day_counting)
 
 
 if __name__ == '__main__':
