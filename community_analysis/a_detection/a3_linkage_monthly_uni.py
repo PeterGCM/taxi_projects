@@ -41,7 +41,6 @@ def process_files(yymm):
                     if not pairs_day_counting.has_key((did0, did1)):
                         pairs_day_counting[(did0, did1)] = 0
                     pairs_day_counting[(did0, did1)] += 1
-                    pairs_day_counting[(did0, did1)] += 1
     N, lm = set(), []
     for (k0, k1), v in pairs_day_counting.iteritems():
         if v < MIN_MONTHLY_LINKAGE:
