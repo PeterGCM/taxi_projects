@@ -64,7 +64,7 @@ def run(problem):
                 ags_A.append(random_a)
             else:
                 # TODO
-                #    2. consider max_Q_sa   or maxmin_Q_sa ??   (currently, just max_Q_sa)
+                #    1. consider max_Q_sa   or maxmin_Q_sa ??   (currently, just max_Q_sa)
                 si = ags_S[i]
                 i_Q_sa = ags_Q_sa[i]
                 max_Q_sa, argmax_a = -1e400, None
@@ -90,8 +90,7 @@ def run(problem):
             num_ai_actions = num_same_actions[ai]
             # TODO
             # Discuss this part with Prof. Pradeep
-            #    1. num_ai_actions   is can be considered as dynamic state defining
-            #    2. consider max_Q_sa   or maxmin_Q_sa ??   (currently, just max_Q_sa)
+            #    1. consider max_Q_sa   or maxmin_Q_sa ??   (currently, just max_Q_sa)
             #
             max_Q_sa = -1e400
             i_Q_sa = ags_Q_sa[i0]

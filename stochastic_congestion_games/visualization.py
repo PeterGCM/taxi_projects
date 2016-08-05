@@ -1,25 +1,26 @@
 import __init__
 #
-from __init__ import taxi_data
 
 from taxi_common.charts import multiple_line_chart
 from taxi_common.charts import line_3D
 #
 import csv
 
-
-fn = '%s/sc_game1_seed(3).csv' % taxi_data
+_dir = '/Users/JerryHan88/PycharmProjects/taxi_projects/stochastic_congestion_games/data/Qa/sc_game2'
+_Q = _dir.split('/')[-2]
+_prob = _dir.split('/')[-1]
+fn = '%s/history.csv' % _dir
 #
 # state
 #
-ags_S_num = []
+ags_S_num, ags_A_num = [], []
 iter_counter = set()
 UNIT = 1000
 with open(fn, 'rb') as r_csvfile:
     reader = csv.reader(r_csvfile)
     headers = reader.next()
     hid = {h: i for i, h in enumerate(headers)}
-    fn1 = '%s/sc_game1_seed(3)_summary.csv' % taxi_data
+    fn1 = '%s/summary_%s_%s.csv' % (_dir, _Q, _prob)
     with open(fn1, 'wt') as w_csvfile:
         writer = csv.writer(w_csvfile)
         new_headers = ['iter','state','action']
@@ -29,19 +30,22 @@ with open(fn, 'rb') as r_csvfile:
         if iter_num not in iter_counter:
             iter_counter.add(iter_num)
             ags_S_num.append([0] * 2)
-        ags_S_num[-1][eval(row[hid['action']])] += 1
-        if iter_num != 0 and iter_num % UNIT == 0 and sum(ags_S_num[-1]) == 10:
+            ags_A_num.append([0] * 2)
+        ags_S_num[-1][eval(row[hid['state']])] += 1
+        ags_A_num[-1][eval(row[hid['action']])] += 1
+        if iter_num != 0 and iter_num % UNIT == 0 and sum(ags_A_num[-1]) == 10:
             print 'start arrange'
-            xyz = []
-            for i, x in enumerate(ags_S_num):
+            s_xyz, a_xyz = [], []
+            for i, a_dist in enumerate(ags_A_num):
                 _iter = i + (iter_num / UNIT - 1) * UNIT
-                xyz.append([_iter] + x)
+                s_dist = ags_S_num[i]
+                s_xyz.append([_iter] + s_dist)
+                a_xyz.append([_iter] + a_dist)
                 with open(fn1, 'a') as w_csvfile:
                     writer = csv.writer(w_csvfile)
-                    writer.writerow([_iter, x, x])
-            line_3D((12, 6), '', 'iteration', 'a0', 'a1', xyz, taxi_data + '/fig_%d' % (iter_num / UNIT -1))
-            # line_3D((12, 6), '', 'iteration', 'a0', 'a1', xyz)
-            ags_S_num = []
-    # line_3D((18, 6), '', 'iteration', 'a0', 'a1', xyz)
+                    writer.writerow([_iter, s_dist, a_dist])
+            line_3D((12, 6), '', 'iteration', 's0', 's1', s_xyz, '%s/%s_%s_s_%d' % (_dir, _Q, _prob, iter_num / UNIT -1))
+            line_3D((12, 6), '', 'iteration', 'a0', 'a1', a_xyz, '%s/%s_%s_a_%d' % (_dir, _Q, _prob, iter_num / UNIT -1))
+            ags_S_num, ags_A_num = [], []
 print 'finish arrangement'
 
