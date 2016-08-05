@@ -10,7 +10,6 @@ import numpy as np
 
 
 def sc_game0():
-    print 'seed: %d' % SEED_NUM
     seed(SEED_NUM)
     #
     # Define a problem
@@ -35,7 +34,6 @@ def sc_game0():
 
 
 def sc_game1():
-    print 'seed: %d' % SEED_NUM
     seed(SEED_NUM)
     #
     # Define a problem
@@ -109,74 +107,73 @@ def sc_game3():
     return num_agents, S, A, Tr_sas, R, ags_S
 
 
-problem_saving_dir = None
+# problem_saving_dir = None
+#
+#
+# def p0():
+#     # Manually generated problem
+#     # This is only for Reinforcement learning because this problem has single time slot
+#     global problem_saving_dir
+#     problem_saving_dir = problem_dir + '/Problem0'
+#     if not check_path_exist(problem_saving_dir):
+#         check_dir_create(problem_saving_dir)
+#         num_agents, num_zones, time_horizon = 10, 2, 1
+#         fl = [[
+#                 [2, 2],
+#                 [7, 8]
+#                 ]]; assert len(fl) == time_horizon; assert len(fl[0]) == num_zones
+#         Re = [[
+#                 [2, 10],
+#                 [8, 3]
+#                 ]]; assert len(Re) == time_horizon; assert len(Re[0]) == num_zones
+#         Co = [[
+#                 [1, 4],
+#                 [3, 2]
+#                 ]]; assert len(Co) == time_horizon; assert len(Co[0]) == num_zones
+#         Mt =  [[
+#                 [1, 2],
+#                 [3, 1]
+#                 ]]; assert len(Mt) == time_horizon; assert len(Mt[0]) == num_zones
+#         d0 = [8, 2]; assert sum(d0) == num_agents
+#         save_pickle_file(problem_saving_dir + '/p0.pkl', [num_agents, num_zones, time_horizon, fl, Re, Co, Mt, d0])
+#     else:
+#         num_agents, num_zones, time_horizon, fl, Re, Co, Ds, d0 = load_pickle_file(problem_saving_dir + '/p0.pkl')
+#     return num_agents, num_zones, time_horizon, fl, Re, Co, Ds, d0, problem_saving_dir
 
 
-def p0():
-    # Manually generated problem
-    # This is only for Reinforcement learning because this problem has single time slot
-    global problem_saving_dir
-    problem_saving_dir = problem_dir + '/Problem0'
-    if not check_path_exist(problem_saving_dir):
-        check_dir_create(problem_saving_dir)
-        num_agents, num_zones, time_horizon = 10, 2, 1
-        fl = [[
-                [2, 2],
-                [7, 8]
-                ]]; assert len(fl) == time_horizon; assert len(fl[0]) == num_zones
-        Re = [[
-                [2, 10],
-                [8, 3]
-                ]]; assert len(Re) == time_horizon; assert len(Re[0]) == num_zones
-        Co = [[
-                [1, 4],
-                [3, 2]
-                ]]; assert len(Co) == time_horizon; assert len(Co[0]) == num_zones
-        Mt =  [[
-                [1, 2],
-                [3, 1]
-                ]]; assert len(Mt) == time_horizon; assert len(Mt[0]) == num_zones
-        d0 = [8, 2]; assert sum(d0) == num_agents
-        save_pickle_file(problem_saving_dir + '/p0.pkl', [num_agents, num_zones, time_horizon, fl, Re, Co, Mt, d0])
-    else:
-        num_agents, num_zones, time_horizon, fl, Re, Co, Ds, d0 = load_pickle_file(problem_saving_dir + '/p0.pkl')
-    return num_agents, num_zones, time_horizon, fl, Re, Co, Ds, d0, problem_saving_dir
-
-
-def p10():
-    # Manually generated problem
-    # This is only for Reinforcement learning because this problem has single time slot
-    global problem_saving_dir
-    problem_saving_dir = problem_dir + '/Problem10'
-    if not check_path_exist(problem_saving_dir):
-        check_dir_create(problem_saving_dir)
-        num_agents, num_zones, time_horizon = 10, 3, 1
-        fl = [[
-                [2, 2, 1],
-                [1, 1, 5],
-                [1, 2, 1]
-                ]]; assert len(fl) == time_horizon; assert len(fl[0]) == num_zones
-        Re = [[
-                [3, 9, 5],
-                [3, 4, 4],
-                [4, 5, 9]
-                ]]; assert len(Re) == time_horizon; assert len(Re[0]) == num_zones
-        Co = [[
-                [1, 3, 2],
-                [2, 0, 1],
-                [3, 2, 1]
-                ]]; assert len(Co) == time_horizon; assert len(Co[0]) == num_zones
-        Mt = [[
-                [1, 2, 2],
-                [1, 2, 2],
-                [3, 1, 1]
-                ]]; assert len(Mt) == time_horizon; assert len(Mt[0]) == num_zones
-        d0 = [7, 2, 1]; assert sum(d0) == num_agents
-        save_pickle_file(problem_saving_dir + '/p10.pkl', [num_agents, num_zones, time_horizon, fl, Re, Co, Mt, d0])
-    else:
-        num_agents, num_zones, time_horizon, fl, Re, Co, Mt, d0 = load_pickle_file(problem_saving_dir + '/p10.pkl')
-    return num_agents, num_zones, time_horizon, fl, Re, Co, Mt, d0, problem_saving_dir
-
+# def p10():
+#     # Manually generated problem
+#     # This is only for Reinforcement learning because this problem has single time slot
+#     global problem_saving_dir
+#     problem_saving_dir = problem_dir + '/Problem10'
+#     if not check_path_exist(problem_saving_dir):
+#         check_dir_create(problem_saving_dir)
+#         num_agents, num_zones, time_horizon = 10, 3, 1
+#         fl = [[
+#                 [2, 2, 1],
+#                 [1, 1, 5],
+#                 [1, 2, 1]
+#                 ]]; assert len(fl) == time_horizon; assert len(fl[0]) == num_zones
+#         Re = [[
+#                 [3, 9, 5],
+#                 [3, 4, 4],
+#                 [4, 5, 9]
+#                 ]]; assert len(Re) == time_horizon; assert len(Re[0]) == num_zones
+#         Co = [[
+#                 [1, 3, 2],
+#                 [2, 0, 1],
+#                 [3, 2, 1]
+#                 ]]; assert len(Co) == time_horizon; assert len(Co[0]) == num_zones
+#         Mt = [[
+#                 [1, 2, 2],
+#                 [1, 2, 2],
+#                 [3, 1, 1]
+#                 ]]; assert len(Mt) == time_horizon; assert len(Mt[0]) == num_zones
+#         d0 = [7, 2, 1]; assert sum(d0) == num_agents
+#         save_pickle_file(problem_saving_dir + '/p10.pkl', [num_agents, num_zones, time_horizon, fl, Re, Co, Mt, d0])
+#     else:
+#         num_agents, num_zones, time_horizon, fl, Re, Co, Mt, d0 = load_pickle_file(problem_saving_dir + '/p10.pkl')
+#     return num_agents, num_zones, time_horizon, fl, Re, Co, Mt, d0, problem_saving_dir
 #
 #
 # def p1():
