@@ -83,7 +83,7 @@ def run(problem):
                 if max_Q_sa < i_Q_sa[s1, a1]:
                     max_Q_sa = i_Q_sa[s1, a1]
             Q_sa0 = i_Q_sa[s0, ai]
-            reward = R(i0, ags_S, ags_A)
+            reward = R(i, s0, ags_A)
             i_Q_sa[s0, ai] += ALPH * (reward + GAMMA * max_Q_sa - i_Q_sa[s0, ai])
             #
             # Check convergence
