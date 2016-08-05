@@ -78,7 +78,7 @@ def run(problem):
         # Count the number of state of agents
         #
         # current states
-        num_cur_state = []
+        num_cur_state = [0] * len(S)
         for s0 in ags_S:
             num_cur_state[s0] += 1
         # next states
