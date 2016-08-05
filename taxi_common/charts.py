@@ -3,10 +3,11 @@ from __future__ import division
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.mlab as mlab
+from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.path import Path
 import matplotlib.patches as patches
 import matplotlib.ticker as tkr
-from file_handling_functions import check_dir_create, write_text_file
+from file_handling_functions import write_text_file
 
 _rgb = lambda r, g, b: (r / float(255), g / float(255), b / float(255))
 
@@ -279,15 +280,22 @@ class x_twin_chart(object):
         plt.show()
 
 class line_3D(object):
-    def __init__(self, _figsize, _title, _xlabel, _ylabel, _zlabel, _data):
+    def __init__(self, _figsize, _title, _xlabel, _ylabel, _zlabel, _data, save_fn=None):
         fig = plt.figure(figsize=_figsize)
         ax = fig.gca(projection='3d')
         ax.set_title(_title); ax.set_xlabel(_xlabel); ax.set_ylabel(_ylabel); ax.set_zlabel(_zlabel)
-        for xyz in _data:
-            x, y, z = zip(*xyz)
-            ax.plot(x, y, z)
-            ax.legend()
-        plt.show()
+        # for x, y, z in _data:
+            # x, y, z = zip(*xyz)
+
+        # ax.set_xlim(0, 10)
+        ax.set_ylim(0, 10)
+        ax.set_zlim(0, 10)
+        ax.view_init(0, -20)
+        ax.plot(*zip(*_data))
+        if save_fn:
+            plt.savefig(save_fn + '.pdf')
+        else:
+            plt.show()
 
 class bar_table(object):
     def __init__(self, _figsize, _title, _ylabel, row_labels, col_labels, table_data, save_fn=None):

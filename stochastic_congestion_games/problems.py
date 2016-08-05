@@ -1,11 +1,113 @@
 import stochastic_congestion_games.__init__
 #
+from __init__ import SEED_NUM
 from stochastic_congestion_games.__init__ import problem_dir
 from taxi_common.file_handling_functions import check_dir_create, check_path_exist, save_pickle_file, load_pickle_file
 #
 from random import randrange, seed
 from prettytable import PrettyTable
 import numpy as np
+
+
+def sc_game0():
+    print 'seed: %d' % SEED_NUM
+    seed(SEED_NUM)
+    #
+    # Define a problem
+    #
+    num_agents, S, A = 5, range(2), range(2)
+    Tr_sas = [
+        [[.2, .8],  # s0 = 0
+         [.3, .7]],
+        [[.5, .5],  # s0 = 1
+         [.7, .3]]
+    ]
+    r1 = [  # r1 is a reward function depending on state and action
+        [0, 0],  # s = 0
+        [0, 0],  # s = 1
+    ]
+    r2_const = [2, 3]
+    r2 = lambda a, num_a: r2_const[a] / float(num_a)  # r2 is a reward function depending on agents' action
+    R = lambda i, si, ags_A: r1[si][ags_A[i]] + r2(ags_A[i], len([a for a in ags_A if ags_A[i] == a]))
+    ags_S = [0, 1, 1, 0, 1]; assert len(ags_S) == num_agents
+
+    return num_agents, S, A, Tr_sas, R, ags_S
+
+
+def sc_game1():
+    print 'seed: %d' % SEED_NUM
+    seed(SEED_NUM)
+    #
+    # Define a problem
+    #
+    num_agents, S, A = 5, range(2), range(2)
+    Tr_sas = [
+        [[.2, .8],  # s0 = 0
+         [.3, .7]],
+        [[.5, .5],  # s0 = 1
+         [.7, .3]]
+    ]
+    r1 = [  # r1 is a reward function depending on state and action
+        [-1, -2],  # s = 0
+        [-1, -1],  # s = 1
+    ]
+    r2_const = [2, 3]
+    r2 = lambda a, num_a: r2_const[a] / float(num_a)  # r2 is a reward function depending on agents' action
+    R = lambda i, si, ags_A: r1[si][ags_A[i]] + r2(ags_A[i], len([a for a in ags_A if ags_A[i] == a]))
+    ags_S = [0, 1, 1, 0, 1]; assert len(ags_S) == num_agents
+
+    return num_agents, S, A, Tr_sas, R, ags_S
+
+
+def sc_game2():
+    print 'seed: %d' % SEED_NUM
+    seed(SEED_NUM)
+    #
+    # Define a problem
+    #
+    num_agents, S, A = 10, range(2), range(2)
+    Tr_sas = [
+        [[.2, .8],  # s0 = 0
+         [.3, .7]],
+        [[.5, .5],  # s0 = 1
+         [.7, .3]]
+    ]
+    r1 = [  # r1 is a reward function depending on state and action
+        [0, 0],  # s = 0
+        [0, 0],  # s = 1
+    ]
+    r2_const = [8, 2]
+    r2 = lambda a, num_a: r2_const[a] / float(num_a)  # r2 is a reward function depending on agents' action
+    R = lambda i, si, ags_A: r1[si][ags_A[i]] + r2(ags_A[i], len([a for a in ags_A if ags_A[i] == a]))
+    ags_S = [0, 1, 1, 0, 1, 0, 1, 1, 0, 1]; assert len(ags_S) == num_agents
+
+    return num_agents, S, A, Tr_sas, R, ags_S
+
+
+def sc_game3():
+    print 'seed: %d' % SEED_NUM
+    seed(SEED_NUM)
+    #
+    # Define a problem
+    #
+    num_agents, S, A = 10, range(2), range(2)
+    Tr_sas = [
+        [[.2, .8],  # s0 = 0
+         [.3, .7]],
+        [[.5, .5],  # s0 = 1
+         [.7, .3]]
+    ]
+    r1 = [  # r1 is a reward function depending on state and action
+        [-1, -2],  # s = 0
+        [-3, -1],  # s = 1
+    ]
+    r2_const = [8, 2]
+    r2 = lambda a, num_a: r2_const[a] / float(num_a)  # r2 is a reward function depending on agents' action
+    R = lambda i, si, ags_A: r1[si][ags_A[i]] + r2(ags_A[i], len([a for a in ags_A if ags_A[i] == a]))
+    ags_S = [0, 1, 1, 0, 1, 0, 1, 1, 0, 1]; assert len(ags_S) == num_agents
+
+    return num_agents, S, A, Tr_sas, R, ags_S
+
 
 problem_saving_dir = None
 
@@ -195,33 +297,6 @@ def problem_saving_table_representation(f, _data):
         for FROM in xrange(num_zones):
             _table.add_row([FROM] + [_data[t][FROM][TO] for TO in xrange(num_zones)])
         f.write('%s\n' % _table.get_string())
-
-
-def simple_sc_game0(SEED_NUM):
-    print 'seed: %d' % SEED_NUM
-    seed(SEED_NUM)
-    #
-    # Define a problem
-    #
-    num_agents, S, A = 10, range(2), range(2)
-    Tr_sas = [
-        [[.2, .8],  # s0 = 0
-         [.3, .7]],
-        [[.5, .5],  # s0 = 1
-         [.7, .3]]
-    ]
-    r1 = [  # r1 is a reward function depending on state and action
-        [3, 3],  # s = 0
-        [3, 3],  # s = 1
-    ]
-    r2_const = [2, 2]
-    r2 = lambda a, num_a: r2_const[a] / float(num_a)  # r2 is a reward function depending on agents' action
-    R = lambda i, si, ags_A: r1[si][ags_A[i]] + r2(ags_A[i], len([a for a in ags_A if ags_A[i] == a]))
-    ags_S = [0, 1, 1, 0, 1, 1, 0, 1, 1, 0]; assert len(ags_S) == num_agents
-
-    return num_agents, S, A, Tr_sas, R, ags_S
-
-
 
 if __name__ == '__main__':
     p1()
