@@ -73,7 +73,7 @@ def run(problem):
         # Update Q-values
         #
         ags_convergence = [False] * num_agents
-        for i in xrange(num_agents):
+        for i0 in xrange(num_agents):
             s0, ai = ags_S[i0], ags_A[i0]
             s1 = 0 if random.random() < Tr_sas[s0][ai][0] else 1  # This can be applicable when only two actions are considered
             #
@@ -88,11 +88,11 @@ def run(problem):
             #
             # Check convergence
             #
-            ags_convergence[i] = True if abs(Q_sa0 - i_Q_sa[s0, ai]) < EPSILON else False
+            ags_convergence[i0] = True if abs(Q_sa0 - i_Q_sa[s0, ai]) < EPSILON else False
             #
             # State transition
             #
-            ags_S[i] = s1
+            ags_S[i0] = s1
             #
             # Save history
             #
