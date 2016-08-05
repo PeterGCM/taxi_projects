@@ -50,6 +50,10 @@ def run(problem):
     #
     while True:
         iter_count += 1
+        # current states
+        num_cur_state = [0] * len(S)
+        for s0 in ags_S:
+            num_cur_state[s0] += 1
         #
         # Agents choose a best action which give the maximum Q-value at their current state
         #
@@ -77,10 +81,6 @@ def run(problem):
         #
         # Count the number of state of agents
         #
-        # current states
-        num_cur_state = [0] * len(S)
-        for s0 in ags_S:
-            num_cur_state[s0] += 1
         # next states
         next_states = []
         for i, max_ai in enumerate(ags_A):
@@ -104,7 +104,7 @@ def run(problem):
                 if max_Q_sa < i_Q_sa[s1, a1, num_s1]:
                     max_Q_sa = i_Q_sa[s1, a1, num_s1]
             Q_sa0 = i_Q_sa[s0, ai, num_s0]
-            reward = R(i0, s0, ags_A)
+            reward = R(i0, ags_S, ags_A)
             i_Q_sa[s0, ai, num_s0] += ALPH * (reward + GAMMA * max_Q_sa - i_Q_sa[s0, ai, num_s0])
             #
             # Check convergence

@@ -6,7 +6,7 @@ from taxi_common.charts import line_3D
 #
 import csv
 
-_dir = '/Users/JerryHan88/PycharmProjects/taxi_projects/stochastic_congestion_games/data/Qa/sc_game2'
+_dir = '/Users/JerryHan88/PycharmProjects/taxi_projects/stochastic_congestion_games/data/Qst/sc_game2'
 _Q = _dir.split('/')[-2]
 _prob = _dir.split('/')[-1]
 fn = '%s/history.csv' % _dir

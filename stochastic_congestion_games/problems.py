@@ -26,8 +26,8 @@ def sc_game0():
         [0, 0],  # s = 1
     ]
     r2_const = [2, 3]
-    r2 = lambda a, num_a: r2_const[a] / float(num_a)  # r2 is a reward function depending on agents' action
-    R = lambda i, si, ags_A: r1[si][ags_A[i]] + r2(ags_A[i], len([a for a in ags_A if ags_A[i] == a]))
+    r2 = lambda s, num_s: r2_const[s] / float(num_s)  # r2 is a reward function depending on agents' action
+    R = lambda i, ags_S, ags_A: r1[ags_S[i]][ags_A[i]] + r2(ags_S[i], len([s for s in ags_S if ags_S[i] == s]))
     ags_S = [0, 1, 1, 0, 1]; assert len(ags_S) == num_agents
 
     return num_agents, S, A, Tr_sas, R, ags_S
@@ -50,8 +50,8 @@ def sc_game1():
         [-1, -1],  # s = 1
     ]
     r2_const = [2, 3]
-    r2 = lambda a, num_a: r2_const[a] / float(num_a)  # r2 is a reward function depending on agents' action
-    R = lambda i, si, ags_A: r1[si][ags_A[i]] + r2(ags_A[i], len([a for a in ags_A if ags_A[i] == a]))
+    r2 = lambda s, num_s: r2_const[s] / float(num_s)  # r2 is a reward function depending on agents' action
+    R = lambda i, ags_S, ags_A: r1[ags_S[i]][ags_A[i]] + r2(ags_S[i], len([s for s in ags_S if ags_S[i] == s]))
     ags_S = [0, 1, 1, 0, 1]; assert len(ags_S) == num_agents
 
     return num_agents, S, A, Tr_sas, R, ags_S
@@ -75,8 +75,8 @@ def sc_game2():
         [0, 0],  # s = 1
     ]
     r2_const = [8, 2]
-    r2 = lambda a, num_a: r2_const[a] / float(num_a)  # r2 is a reward function depending on agents' action
-    R = lambda i, si, ags_A: r1[si][ags_A[i]] + r2(ags_A[i], len([a for a in ags_A if ags_A[i] == a]))
+    r2 = lambda s, num_s: r2_const[s] / float(num_s)  # r2 is a reward function depending on agents' action
+    R = lambda i, ags_S, ags_A: r1[ags_S[i]][ags_A[i]] + r2(ags_S[i], len([s for s in ags_S if ags_S[i] == s]))
     ags_S = [0, 1, 1, 0, 1, 0, 1, 1, 0, 1]; assert len(ags_S) == num_agents
 
     return num_agents, S, A, Tr_sas, R, ags_S
@@ -100,8 +100,8 @@ def sc_game3():
         [-3, -1],  # s = 1
     ]
     r2_const = [8, 2]
-    r2 = lambda a, num_a: r2_const[a] / float(num_a)  # r2 is a reward function depending on agents' action
-    R = lambda i, si, ags_A: r1[si][ags_A[i]] + r2(ags_A[i], len([a for a in ags_A if ags_A[i] == a]))
+    r2 = lambda s, num_s: r2_const[s] / float(num_s)  # r2 is a reward function depending on agents' action
+    R = lambda i, ags_S, ags_A: r1[ags_S[i]][ags_A[i]] + r2(ags_S[i], len([s for s in ags_S if ags_S[i] == s]))
     ags_S = [0, 1, 1, 0, 1, 0, 1, 1, 0, 1]; assert len(ags_S) == num_agents
 
     return num_agents, S, A, Tr_sas, R, ags_S
