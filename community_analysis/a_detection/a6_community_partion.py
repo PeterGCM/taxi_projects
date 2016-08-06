@@ -4,9 +4,8 @@ from community_analysis.__init__ import la_dir, pg_dir
 
 import community
 import networkx as nx
-# import matplotlib.pyplot as plt
 
-from taxi_common.file_handling_functions import load_pickle_file, get_all_files
+from taxi_common.file_handling_functions import load_pickle_file, get_all_files, check_dir_create
 
 MIN_AN_DAYS = 23
 
@@ -28,10 +27,10 @@ def run():
         G.add_edge(k0, k1, weight=num_days)
 
     del pairs_day_counting
-
+    pg_th_dir = '%s/%s-TH(%d)' % (pg_dir, yyyy, MIN_AN_DAYS); check_dir_create(pg_th_dir)
     print 'finished'
     print 'Whole graph pickling ...'
-    nx.write_gpickle(G, '%s/%s-TH(%d)-whole.pkl' % (pg_dir, yyyy, MIN_AN_DAYS))
+    nx.write_gpickle(G, '%s/%s-TH(%d)-whole.pkl' % (pg_th_dir, yyyy, MIN_AN_DAYS))
     print 'finished'
     # first compute the best partition
     print 'Partitioning ...'

@@ -5,20 +5,16 @@ from taxi_common.__init__ import get_taxi_home_path
 taxi_home = get_taxi_home_path()
 #
 from taxi_common.file_handling_functions import check_dir_create
-taxi_data = os.path.dirname(os.path.realpath(__file__)) + '/data'
-check_dir_create(taxi_data)
+taxi_data = os.path.dirname(os.path.realpath(__file__)) + '/data'; check_dir_create(taxi_data)
+charts_dir = taxi_data + '/charts'; check_dir_create(charts_dir)
 #
-logs_dir = taxi_data + '/logs'
-ld_dir = taxi_data + '/linkage_daily'
-lm_dir = taxi_data + '/linkage_monthly'
-la_dir = taxi_data + '/linkage_annually'
-pg_dir = taxi_data + '/partitioned_group'
-for _dir in [logs_dir, ld_dir, lm_dir, la_dir, pg_dir]:
-    check_dir_create(_dir)
+logs_dir = taxi_data + '/logs'; check_dir_create(logs_dir)
+ld_dir = taxi_data + '/linkage_daily'; check_dir_create(ld_dir)
+lm_dir = taxi_data + '/linkage_monthly'; check_dir_create(lm_dir)
+la_dir = taxi_data + '/linkage_annually'; check_dir_create(la_dir)
+pg_dir = taxi_data + '/partitioned_group'; check_dir_create(pg_dir)
 #
-FREE, POB = 0, 5
-THRESHOLD_VALUE = 30 * 60
-MIN_LINKAGE_NUM, MIN_LINKAGE_RATIO, REMAINING_LINKAGE_RATIO = 2, 0.2, 0.9
-ONE_HOUR, SIX_HOUR, EIGHT_HOUR, HOUR12, HOUR24 = 1, 6, 8, 12, 24
+trips_dir = taxi_data + '/trips'; check_dir_create(trips_dir)
+#
 MON, TUE, WED, THR, FRI, SAT, SUN = range(7)
 PM2, PM3 = 14, 15
