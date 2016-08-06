@@ -28,7 +28,7 @@ def process_file(yymm):
     yyyy = str(2000 + int(yy))
     normal_file = taxi_home + '/%s/%s/trips/trips-%s-normal.csv' % (yyyy, mm, yymm)
     ext_file = taxi_home + '/%s/%s/trips/trips-%s-normal-ext.csv' % (yyyy, mm, yymm)
-    fn = '%s/%s%s.csv' % (trips_dir, trip_prefix, yymm)
+    fn = '%s/%s%s.csv' % (yyyy_dir, trip_prefix, yymm)
     with open(fn, 'wt') as w_csvfile:
         writer = csv.writer(w_csvfile)
         new_headers = ['did',

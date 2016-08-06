@@ -1,7 +1,7 @@
 import __init__
-
+#
 from community_analysis.__init__ import la_dir, pg_dir
-
+#
 import community
 import networkx as nx
 
@@ -36,33 +36,16 @@ def run():
     print 'Partitioning ...'
     partition = community.best_partition(G)
     print 'finished'
-    # drawing
-    size = float(len(set(partition.values())))
-    pos = nx.spring_layout(G)
-    count = 0.
-    for com in set(partition.values()):
-        count = count + 1.
+    for i, com in enumerate(set(partition.values())):
         list_nodes = [nodes for nodes in partition.keys()
                       if partition[nodes] == com]
-        # read_gpickle(path)
-        print count, 'Saving sub-graph ...'
-        nx.write_gpickle(G.subgraph(list_nodes), '%s/%s-TH(%d)-PD(%d).pkl' % (pg_dir, yyyy, MIN_AN_DAYS, count))
+        print i, 'Saving sub-graph ...'
+        nx.write_gpickle(G.subgraph(list_nodes), '%s/%s-TH(%d)-PD(%d).pkl' % (pg_dir, yyyy, MIN_AN_DAYS, i))
         print 'finished'
-        # G.edges()
-        # nx.draw_networkx_nodes(G, pos, list_nodes, node_size=20,
-        #                        node_color=str(count / size), with_labels=True)
-    # print 'node drawing finished'
-    # nx.draw_networkx_edges(G, pos, alpha=0.5)
-    # print 'edge drawing finished'
-    # plt.show()
-
-
-
 
 
 if __name__ == '__main__':
     from traceback import format_exc
-
     try:
         run()
     except Exception as _:

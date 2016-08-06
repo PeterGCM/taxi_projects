@@ -6,7 +6,7 @@ from taxi_common.charts import line_3D
 #
 import csv
 
-_dir = '/Users/JerryHan88/PycharmProjects/taxi_projects/stochastic_congestion_games/data/Qst/sc_game2'
+_dir = '/Users/JerryHan88/PycharmProjects/taxi_projects/stochastic_congestion_games/data/Qs/sc_game1'
 _Q = _dir.split('/')[-2]
 _prob = _dir.split('/')[-1]
 fn = '%s/history.csv' % _dir
@@ -33,7 +33,7 @@ with open(fn, 'rb') as r_csvfile:
             ags_A_num.append([0] * 2)
         ags_S_num[-1][eval(row[hid['state']])] += 1
         ags_A_num[-1][eval(row[hid['action']])] += 1
-        if iter_num != 0 and iter_num % UNIT == 0 and sum(ags_A_num[-1]) == 10:
+        if iter_num != 0 and iter_num % UNIT == 0 and sum(ags_A_num[-1]) == 5:
             print 'start arrange'
             s_xyz, a_xyz = [], []
             for i, a_dist in enumerate(ags_A_num):
