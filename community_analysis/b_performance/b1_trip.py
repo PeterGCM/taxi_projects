@@ -14,7 +14,7 @@ import csv, datetime
 def run():
     global yyyy_dir
     yyyy_dir = trips_dir + '/%s' % 2009; remove_create_dir(yyyy_dir)
-    init_multiprocessor(10)
+    init_multiprocessor(11)
     count_num_jobs = 0
     for mm in range(5, 12):
         put_task(process_file, ['09%02d' % mm])
