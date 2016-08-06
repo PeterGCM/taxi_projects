@@ -1,12 +1,12 @@
-import __init__
+import sc_games
 
-from __init__ import taxi_data
-from problems import sc_game0, sc_game1, sc_game2, sc_game3
+from sc_games import taxi_data
+from sc_games.problems import sc_game0, sc_game1, sc_game2, sc_game3
 
-from __init__ import ALPH, GAMMA, EPSILON
-from __init__ import MAX_ITER_NUM
-from __init__ import EXPLORE_DURATION
-from __init__ import algo_names, get_current_pyname
+from sc_games import ALPH, GAMMA, EPSILON
+from sc_games import MAX_ITER_NUM
+from sc_games import EXPLORE_DURATION
+from sc_games import algo_names, get_current_pyname
 
 from taxi_common.file_handling_functions import check_dir_create
 
@@ -50,10 +50,6 @@ def run(problem):
     #
     while True:
         iter_count += 1
-        # current states
-        num_cur_state = [0] * len(S)
-        for s0 in ags_S:
-            num_cur_state[s0] += 1
         #
         # Agents choose a best action which give the maximum Q-value at their current state
         #
@@ -67,48 +63,46 @@ def run(problem):
                 random_a = random.choice(A)
                 ags_A.append(random_a)
             else:
-                # TODO
                 #    1. consider max_Q_sa   or maxmin_Q_sa ??   (currently, just max_Q_sa)
                 si = ags_S[i]
                 i_Q_sa = ags_Q_sa[i]
                 max_Q_sa, argmax_a = -1e400, None
                 for ai in A:
-                    if max_Q_sa < i_Q_sa[si, ai, num_cur_state[si]]:
-                        max_Q_sa = i_Q_sa[si, ai, num_cur_state[si]]
-                        argmax_a = ai
+                    for i1 in xrange(num_agents + 1):
+                        if max_Q_sa < i_Q_sa[si, ai, i1]:
+                            max_Q_sa = i_Q_sa[si, ai, i1]
+                            argmax_a = ai
                 ags_A.append(argmax_a)
         #
-        # Count the number of state of agents
+        # Count the number of action of agents
         #
-        # next states
-        next_states = []
-        for i, max_ai in enumerate(ags_A):
-            s1 = 0 if random.random() < Tr_sas[ags_S[i]][max_ai][0] else 1
-            next_states.append(s1)
-        num_next_state = [0] * len(S)
-        for s1 in next_states:
-            num_next_state[s1] += 1
+        num_same_actions = [0] * len(A)
+        for a in ags_A:
+            num_same_actions[a] += 1
         #
         # Update Q-values
         #
         ags_convergence = [False] * num_agents
         for i0 in xrange(num_agents):
             s0, ai = ags_S[i0], ags_A[i0]
-            num_s0 = num_cur_state[s0]
-            s1 = next_states[i0]
-            num_s1 = num_next_state[s1]
+            s1 = 0 if random.random() < Tr_sas[s0][ai][0] else 1  # This can be applicable when only two actions are considered
+            num_ai_actions = num_same_actions[ai]
+            # Discuss this part with Prof. Pradeep
+            #    1. consider max_Q_sa   or maxmin_Q_sa ??   (currently, just max_Q_sa)
+            #
             max_Q_sa = -1e400
             i_Q_sa = ags_Q_sa[i0]
             for a1 in A:
-                if max_Q_sa < i_Q_sa[s1, a1, num_s1]:
-                    max_Q_sa = i_Q_sa[s1, a1, num_s1]
-            Q_sa0 = i_Q_sa[s0, ai, num_s0]
+                for i1 in xrange(num_agents + 1):
+                    if max_Q_sa < i_Q_sa[s1, a1, i1]:
+                        max_Q_sa = i_Q_sa[s1, a1, i1]
+            Q_sa0 = i_Q_sa[s0, ai, num_ai_actions]
             reward = R(i0, s0, ags_A)
-            i_Q_sa[s0, ai, num_s0] += ALPH * (reward + GAMMA * max_Q_sa - i_Q_sa[s0, ai, num_s0])
+            i_Q_sa[s0, ai, num_ai_actions] += ALPH * (reward + GAMMA * max_Q_sa - i_Q_sa[s0, ai, num_ai_actions])
             #
             # Check convergence
             #
-            ags_convergence[i0] = True if abs(Q_sa0 - i_Q_sa[s0, ai, num_s0]) < EPSILON else False
+            ags_convergence[i0] = True if abs(Q_sa0 - i_Q_sa[s0, ai, num_ai_actions]) < EPSILON else False
             #
             # State transition
             #
