@@ -14,7 +14,6 @@ EXPLORE_DURATION = 2000
 
 algo_names = {'Q_learning_states.py': 'Qst',
               'Q_learning_states1.py': 'Qst1',
-              'Q_learning_actions.py': 'Qa',
               'Q_learning_simple.py': 'Qs'}
 
 def get_current_pyname():
