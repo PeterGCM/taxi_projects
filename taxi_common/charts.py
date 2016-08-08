@@ -296,6 +296,7 @@ class line_3D(object):
             plt.savefig(save_fn + '.pdf')
         else:
             plt.show()
+        plt.close(fig)
 
 class bar_table(object):
     def __init__(self, _figsize, _title, _ylabel, row_labels, col_labels, table_data, save_fn=None):
