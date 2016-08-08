@@ -25,7 +25,7 @@ def sc_game0():
                         (-1, 0),
                         (-2, 0)]; assert len(reward_constants) == len(A)
     R = lambda si, ai, ds: reward_constants[ai][0] * ds + reward_constants[ai][1]
-    ags_S = [0, 1, 1, 0, 1]; assert len(ags_S) == num_agents
+    ags_S = [0, 1, 1]; assert len(ags_S) == num_agents
     return num_agents, S, A, Tr_sas, R, ags_S
 
 
