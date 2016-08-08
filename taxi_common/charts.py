@@ -276,8 +276,8 @@ class x_twin_chart(object):
             for i, ys in enumerate(multi_y_data2):
                 write_text_file(txt_path_fn, '%s: %s' %(y_legend_labels2[i], str(ys)))    
             write_text_file(txt_path_fn, '')
-            
         plt.show()
+
 
 class line_3D(object):
     def __init__(self, _figsize, _title, _xlabel, _ylabel, _zlabel, _data, save_fn=None):
@@ -297,6 +297,7 @@ class line_3D(object):
         else:
             plt.show()
         plt.close(fig)
+
 
 class bar_table(object):
     def __init__(self, _figsize, _title, _ylabel, row_labels, col_labels, table_data, save_fn=None):
@@ -582,7 +583,7 @@ class one_grid_chart(object):
         right_top = (x + grid_charts.HALF_UNIT, y + grid_charts.HALF_UNIT)
         right_bottom = (x + grid_charts.HALF_UNIT, y - grid_charts.HALF_UNIT)
         ignored = left_bottom
-        return [left_bottom, left_top  , right_top , right_bottom, ignored]
+        return [left_bottom, left_top, right_top, right_bottom, ignored]
 
 def comma_formating(x, pos):  # formatter function takes tick label and tick position
 #     return int(x)

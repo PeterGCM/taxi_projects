@@ -37,7 +37,7 @@ def run(problem):
         writer.writerow(new_headers)
         for i in xrange(num_agents):
             i_Q_sa = ags_Q_sa[i]
-            instance = [iter_count, i, ags_S[i], 0]
+            instance = [iter_count, i, ags_S[i], 0, 0]
             for s in S:
                 for a in A:
                     instance.append(i_Q_sa[s, a])
@@ -109,7 +109,9 @@ def run(problem):
 
 
 if __name__ == '__main__':
-    for prob in [sc_game0,
-                 # sc_game1, sc_game2, sc_game3
+    for prob in [
+                 # sc_game0,
+                 sc_game1,
+                 # sc_game2, sc_game3
                  ]:
         run(prob)

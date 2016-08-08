@@ -32,20 +32,41 @@ def sc_game0():
 def sc_game1():
     seed(SEED_NUM)
     #
-    num_agents, S, A = 5, range(2), range(2)
+    num_agents, S, A = 3, range(2), range(2)
     Tr_sas = [
-        [[.2, .8],  # s0 = 0
-         [.3, .7]],
-        [[.5, .5],  # s0 = 1
-         [.7, .3]]
+        [[1.0, .0],  # s0 = 0
+         [.0, 1.0]],
+        [[1.0, .0],  # s0 = 1
+         [.0, 1.0]]
     ]
+    # Only dependent on the number of state
     reward_constants = [ # Reward depends on action and the number of agent same state
                          # The first constant is relate to the number of state, another is just constant
-                        (-2, 2),
-                        (-3, 5)]; assert len(reward_constants) == len(A)
+                        (-1, 0),
+                        (-2.5, 0)]; assert len(reward_constants) == len(A)
     R = lambda si, ai, ds: reward_constants[ai][0] * ds + reward_constants[ai][1]
-    ags_S = [0, 1, 1, 0, 1]; assert len(ags_S) == num_agents
+    ags_S = [0, 1, 1]; assert len(ags_S) == num_agents
     return num_agents, S, A, Tr_sas, R, ags_S
+
+
+
+# def sc_game1():
+#     seed(SEED_NUM)
+#     #
+#     num_agents, S, A = 5, range(2), range(2)
+#     Tr_sas = [
+#         [[.2, .8],  # s0 = 0
+#          [.3, .7]],
+#         [[.5, .5],  # s0 = 1
+#          [.7, .3]]
+#     ]
+#     reward_constants = [ # Reward depends on action and the number of agent same state
+#                          # The first constant is relate to the number of state, another is just constant
+#                         (-2, 2),
+#                         (-3, 5)]; assert len(reward_constants) == len(A)
+#     R = lambda si, ai, ds: reward_constants[ai][0] * ds + reward_constants[ai][1]
+#     ags_S = [0, 1, 1, 0, 1]; assert len(ags_S) == num_agents
+#     return num_agents, S, A, Tr_sas, R, ags_S
 
 
 def sc_game2():

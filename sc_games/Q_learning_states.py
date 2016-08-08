@@ -105,7 +105,7 @@ def run(problem):
             #
             with open(fn, 'a') as w_csvfile:
                 writer = csv.writer(w_csvfile)
-                instance = [iter_count, i0, si, ds[si],ai]
+                instance = [iter_count, i0, si, ds[si], ai]
                 for s in S:
                     for i in xrange(1, num_agents + 1):
                         for a in A:
@@ -119,7 +119,9 @@ def run(problem):
 
 
 if __name__ == '__main__':
-    for prob in [sc_game0,
-                 # sc_game1, sc_game2, sc_game3
+    for prob in [
+                 # sc_game0,
+                 sc_game1,
+                 # sc_game2, sc_game3
                  ]:
         run(prob)
