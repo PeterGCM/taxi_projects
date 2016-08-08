@@ -14,10 +14,10 @@ def sc_game0():
     #
     num_agents, S, A = 5, range(2), range(2)
     Tr_sas = [
-        [[.2, .8],  # s0 = 0
-         [.3, .7]],
+        [[.5, .5],  # s0 = 0
+         [.5, .5]],
         [[.5, .5],  # s0 = 1
-         [.7, .3]]
+         [.5, .5]]
     ]
     # Only dependent on the number of state
     reward_constants = [ # Reward depends on action and the number of agent same state

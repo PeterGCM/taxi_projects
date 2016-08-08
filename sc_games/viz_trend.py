@@ -12,8 +12,11 @@ UNIT = 1000
 
 
 def run():
-    for al in algo_names.itervalues():
-        for prob in [sc_game0, sc_game1, sc_game2, sc_game3]:
+    for al in ['Qs', 'Qst']:
+        # algo_names.itervalues()
+        for prob in [sc_game0,
+                     # sc_game1, sc_game2, sc_game3
+                     ]:
             num_agents, _, _, _, _, _ = prob()
             _dir = '%s/%s/%s' % (taxi_data, al, prob.__name__)
             fn = '%s/history.csv' % _dir
