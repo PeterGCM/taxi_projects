@@ -98,7 +98,7 @@ def run(problem):
                     max_Q_sa = i_Q_sa[_si, _ds[_si], _ai]
             reward = R(si, ai, ds[si])
             i_Q_sa[si, ds[si], ai] += ALPH * (reward + GAMMA * max_Q_sa - i_Q_sa[si, ds[si], ai])
-            ags_convergence[i0] = True if abs(Q_sa0 - i_Q_sa[si, ai, ds[si]]) < EPSILON else False
+            ags_convergence[i0] = True if abs(Q_sa0 - i_Q_sa[si, ds[si], ai]) < EPSILON else False
             ags_S[i0] = _si
             #
             # Save history
