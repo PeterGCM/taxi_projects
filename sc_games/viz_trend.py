@@ -3,6 +3,7 @@ import __init__
 from __init__ import taxi_data, algo_names
 from problems import sc_game0, sc_game1, sc_game2, sc_game3
 #
+from taxi_common.file_handling_functions import check_dir_create
 from taxi_common.charts import line_3D
 #
 import csv
@@ -16,7 +17,7 @@ def run():
             num_agents, _, _, _, _, _ = prob()
             _dir = '%s/%s/%s' % (taxi_data, al, prob.__name__)
             fn = '%s/history.csv' % _dir
-            trend_fig_dir = '%s/trend_fig' % (_dir)
+            trend_fig_dir = '%s/trend_fig' % (_dir); check_dir_create(trend_fig_dir)
             #
             ags_S_num, ags_A_num = [], []
             iter_counter = set()
