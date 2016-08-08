@@ -24,7 +24,7 @@ def run(problem):
     for _ in xrange(num_agents):
         Q_sa = {}
         for s in S:
-            for i in xrange(num_agents + 1):
+            for i in xrange(1, num_agents + 1):
                 for a in A:
                     Q_sa[s, i, a] = 0
         ags_Q_sa.append(Q_sa)
@@ -33,7 +33,7 @@ def run(problem):
         writer = csv.writer(w_csvfile)
         new_headers = ['iter','agent','state','action']
         for s in S:
-            for i in xrange(num_agents + 1):
+            for i in xrange(1, num_agents + 1):
                 for a in A:
                     new_headers.append('Q(%d,%d,%d)'%(s, i, a))
         writer.writerow(new_headers)
@@ -41,7 +41,7 @@ def run(problem):
             i_Q_sa = ags_Q_sa[i]
             instance = [iter_count, i, ags_S[i], 0]
             for s in S:
-                for i in xrange(num_agents + 1):
+                for i in xrange(1, num_agents + 1):
                     for a in A:
                         instance.append(i_Q_sa[s, i, a])
             writer.writerow(instance)
@@ -107,8 +107,7 @@ def run(problem):
                 writer = csv.writer(w_csvfile)
                 instance = [iter_count, i0, si, ai]
                 for s in S:
-
-                    for i in xrange(num_agents + 1):
+                    for i in xrange(1, num_agents + 1):
                         for a in A:
                             instance.append(i_Q_sa[s, i, a])
                 writer.writerow(instance)

@@ -65,7 +65,7 @@ def run():
                                 for ds in range(num_agents + 1):
                                     max_Q, argmax_a = -1e400, None
                                     for a in A:
-                                        Q_value = eval(row[hid['Q(%d,%d,%d)' % (s, a, i)]])
+                                        Q_value = eval(row[hid['Q(%d,%d,%d)' % (s, i, a)]])
                                         if max_Q < Q_value:
                                             max_Q, argmax_a = Q_value, a
                                     assert -1e400 < max_Q
