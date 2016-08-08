@@ -9,8 +9,12 @@ import csv
 
 
 def run():
-    for al in algo_names.itervalues():
-        for prob in [sc_game0, sc_game1, sc_game2, sc_game3]:
+    for al in [  # 'Qs',
+        'Qst']:
+    # for al in algo_names.itervalues():
+        for prob in [sc_game0,
+                     # sc_game1, sc_game2, sc_game3
+                     ]:
             num_agents, S, A, _, _, _ = prob()
             _dir = '%s/%s/%s' % (taxi_data, al, prob.__name__)
             fn = '%s/history.csv' % _dir
@@ -64,8 +68,8 @@ def run():
                                         Q_value = eval(row[hid['Q(%d,%d,%d)' % (s, a, i)]])
                                         if max_Q < Q_value:
                                             max_Q, argmax_a = Q_value, a
-                                        assert -1e400 < max_Q
-                                        writer.writerow([i, s, ds, argmax_a])
+                                    assert -1e400 < max_Q
+                                    writer.writerow([i, s, ds, argmax_a])
 
 
 if __name__ == '__main__':
