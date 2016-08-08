@@ -54,7 +54,7 @@ def run():
                                 assert -1e400 < max_Q
                                 writer.writerow([i,s,argmax_a])
                 else:
-                    assert len(hid) == len(['iter', 'agent', 'state', 'action']) + len(S) * (num_agents + 1) * len(A)
+                    assert len(hid) == len(['iter', 'agent', 'state', 'action']) + len(S) * num_agents * len(A)
                     with open(fn2, 'wt') as w_csvfile:
                         writer = csv.writer(w_csvfile)
                         new_headers = ['agent','s','ds','best-a']
@@ -62,10 +62,10 @@ def run():
                         for row in reader:
                             i = eval(row[hid['agent']])
                             for s in S:
-                                for ds in range(num_agents + 1):
+                                for ds in range(1, num_agents + 1):
                                     max_Q, argmax_a = -1e400, None
                                     for a in A:
-                                        Q_value = eval(row[hid['Q(%d,%d,%d)' % (s, i, a)]])
+                                        Q_value = eval(row[hid['Q(%d,%d,%d)' % (s, ds, a)]])
                                         if max_Q < Q_value:
                                             max_Q, argmax_a = Q_value, a
                                     assert -1e400 < max_Q

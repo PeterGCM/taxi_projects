@@ -12,7 +12,7 @@ import numpy as np
 def sc_game0():
     seed(SEED_NUM)
     #
-    num_agents, S, A = 5, range(2), range(2)
+    num_agents, S, A = 3, range(2), range(2)
     Tr_sas = [
         [[.5, .5],  # s0 = 0
          [.5, .5]],
@@ -22,7 +22,7 @@ def sc_game0():
     # Only dependent on the number of state
     reward_constants = [ # Reward depends on action and the number of agent same state
                          # The first constant is relate to the number of state, another is just constant
-                        (-2, 0),
+                        (-1, 0),
                         (-2, 0)]; assert len(reward_constants) == len(A)
     R = lambda si, ai, ds: reward_constants[ai][0] * ds + reward_constants[ai][1]
     ags_S = [0, 1, 1, 0, 1]; assert len(ags_S) == num_agents
