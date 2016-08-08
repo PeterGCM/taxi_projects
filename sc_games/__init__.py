@@ -10,7 +10,7 @@ taxi_data = os.path.dirname(os.path.realpath(__file__)) + '/data'; check_dir_cre
 SEED_NUM = 3
 ALPH, GAMMA, EPSILON = .9, .9, .00000001
 MAX_ITER_NUM = 100000
-EXPLORE_DURATION = 2000
+EXPLORE_DURATION = 10000
 
 algo_names = {'Q_learning_states.py': 'Qst',
               'Q_learning_states1.py': 'Qst1',

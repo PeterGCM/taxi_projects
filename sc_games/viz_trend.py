@@ -12,7 +12,8 @@ UNIT = 1000
 
 
 def run():
-    for al in ['Qs', 'Qst']:
+    for al in [#'Qs',
+               'Qst']:
         # algo_names.itervalues()
         for prob in [sc_game0,
                      # sc_game1, sc_game2, sc_game3
