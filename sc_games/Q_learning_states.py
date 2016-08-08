@@ -60,7 +60,7 @@ def run(problem):
         ags_A = []
         for i in xrange(num_agents):
             r = random.random()
-            if iter_count < EXPLORE_DURATION and r < 0.008:
+            if iter_count < EXPLORE_DURATION and r < 0.01:
                 #
                 # Exploration
                 #
