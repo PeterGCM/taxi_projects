@@ -30,7 +30,7 @@ def run(problem):
     fn = '%s/history.csv' % (prob_dir)
     with open(fn, 'wt') as w_csvfile:
         writer = csv.writer(w_csvfile)
-        new_headers = ['iter','agent','state','action']
+        new_headers = ['iter', 'agent', 'state', 'dist', 'action']
         for s in S:
             for a in A:
                 new_headers.append('Q(%d,%d)'%(s, a))
@@ -95,7 +95,8 @@ def run(problem):
             #
             with open(fn, 'a') as w_csvfile:
                 writer = csv.writer(w_csvfile)
-                instance = [iter_count, i0, si, ai]
+                # instance = [iter_count, i0, si, ai]
+                instance = [iter_count, i0, si, ds[si], ai]
                 for s in S:
                     for a in A:  
                         instance.append(i_Q_sa[s, a])
