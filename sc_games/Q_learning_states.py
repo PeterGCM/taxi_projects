@@ -28,7 +28,7 @@ def run(problem):
                 for a in A:
                     Q_sa[s, i, a] = 0
         ags_Q_sa.append(Q_sa)
-    fn = '%s/history_%s_%s.csv' % (prob_dir, algo_dir, prob_dir)
+    fn = '%s/history_%s_%s.csv' % (prob_dir, algo_names[get_current_pyname()], problem.__name__)
     with open(fn, 'wt') as w_csvfile:
         writer = csv.writer(w_csvfile)
         new_headers = ['iter','agent','state','dist','action']
