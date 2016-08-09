@@ -33,8 +33,8 @@ def run():
         missing_counter = 0
         for k in group.iterkeys():
             check_dir_create('%s/%s/%s' % (gtrips_dir, target, yymm))
-            fn = '%s/%s/%s/%sG(%d).csv' % (gtrips_dir, target, yymm, group_trip_prefix, k)
-            with open(fn, 'wt') as w_csvfile:
+            gtrip_fn = '%s/%s/%s/%sG(%d).csv' % (gtrips_dir, target, yymm, group_trip_prefix, k)
+            with open(gtrip_fn, 'wt') as w_csvfile:
                 writer = csv.writer(w_csvfile)
                 new_headers = ['did',
                                'start-time', 'end-time',
