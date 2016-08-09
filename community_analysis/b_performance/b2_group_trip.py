@@ -25,22 +25,23 @@ def run():
         for n in nxG.nodes():
             group[PD_num].append(n)
             nid_group[n] = PD_num
-    for k in group.iterkeys():
-        check_dir_create('%s/%s' % (gtrips_dir, target))
-        fn = '%s/%s/%sG(%d).csv' % (gtrips_dir, target, group_trip_prefix, k)
-        with open(fn, 'wt') as w_csvfile:
-            writer = csv.writer(w_csvfile)
-            new_headers = ['did',
-                           'start-time', 'end-time',
-                           'start-long', 'start-lat',
-                           'end-long', 'end-lat',
-                           'duration', 'fare']
-            writer.writerow(new_headers)
+
     #
     yyyy_dir = '%s/%d' % (trips_dir, yyyy)
     for fn in get_all_files(yyyy_dir, '', '.csv'):
-        print fn
+        _, yymm = fn[:-len('.csv')].split('-')
         missing_counter = 0
+        for k in group.iterkeys():
+            check_dir_create('%s/%s/%s' % (gtrips_dir, target, yymm))
+            fn = '%s/%s/%s/%sG(%d).csv' % (gtrips_dir, target, yymm, group_trip_prefix, k)
+            with open(fn, 'wt') as w_csvfile:
+                writer = csv.writer(w_csvfile)
+                new_headers = ['did',
+                               'start-time', 'end-time',
+                               'start-long', 'start-lat',
+                               'end-long', 'end-lat',
+                               'duration', 'fare']
+                writer.writerow(new_headers)
         with open('%s/%s' % (yyyy_dir, fn), 'rb') as r_csvfile:
             reader = csv.reader(r_csvfile)
             headers = reader.next()
@@ -51,7 +52,7 @@ def run():
                     missing_counter += 1
                     continue
                 k = nid_group[did]
-                gtrip_fn = '%s/%s/%sG(%d).csv' % (gtrips_dir, target, group_trip_prefix, k)
+                gtrip_fn = '%s/%s/%s/%sG(%d).csv' % (gtrips_dir, target, yymm, group_trip_prefix, k)
                 with open(gtrip_fn, 'a') as w_csvfile:
                     writer = csv.writer(w_csvfile)
                     writer.writerow(row)
