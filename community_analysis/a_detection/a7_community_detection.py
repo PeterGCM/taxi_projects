@@ -22,6 +22,7 @@ def run():
         new_headers = ['fname','num_nodes','num_edges','tie-strength','%d-top-centrality-nodes' % MIN_NODES]
         writer.writerow(new_headers)
     print 'finish init'
+    #
     whole_fn = None
     labels, group = [], []
     nx_nid_ig_nid = {}

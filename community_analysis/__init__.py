@@ -15,6 +15,7 @@ la_dir = taxi_data + '/linkage_annually'; check_dir_create(la_dir)
 pg_dir = taxi_data + '/partitioned_group'; check_dir_create(pg_dir)
 #
 trips_dir = taxi_data + '/trips'; check_dir_create(trips_dir)
+gtrips_dir = taxi_data + '/gtrips'; check_dir_create(gtrips_dir)
 #
 MON, TUE, WED, THR, FRI, SAT, SUN = range(7)
 PM2, PM3 = 14, 15
