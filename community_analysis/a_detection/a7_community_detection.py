@@ -4,10 +4,9 @@ from community_analysis.__init__ import pg_dir
 #
 from taxi_common.file_handling_functions import save_pickle_file, get_all_files, check_dir_create
 #
-import igraph as ig
 import networkx as nx
-import csv
-
+import igraph as ig
+import csv, datetime
 
 MIN_NODES = 5
 
@@ -15,7 +14,7 @@ MIN_NODES = 5
 def run():
     target = '2009-TH(23)'
     target_dir = '%s/%s' % (pg_dir, target)
-
+    #
     summary_fn = '%s/%s_summary.csv' % (target_dir, target)
     glayout_fn = '%s/%s_glayout.csv' % (target_dir, target)
     with open(summary_fn, 'wt') as w_csvfile:
@@ -57,9 +56,11 @@ def run():
     #
     nxG = nx.read_gpickle('%s/%s' % (target_dir, whole_fn))
     print 'finish loading', whole_fn
-    import datetime
     print datetime.datetime.now()
-    igG = ig.Graph([(nx_nid_ig_nid[n0], nx_nid_ig_nid[n1]) for (n0, n1) in nxG.edges()])
+    Edges = [(nx_nid_ig_nid[n0], nx_nid_ig_nid[n1]) for (n0, n1) in nxG.edges()]
+    print 'finish edge converting', len(Edges)
+    print datetime.datetime.now()
+    igG = ig.Graph(Edges, directed=False)
     layt = igG.layout('kk', dim=3)
     print 'finish layout calculation'
     print datetime.datetime.now()
