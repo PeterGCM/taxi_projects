@@ -65,7 +65,7 @@ def run():
     print 'finish layout calculation'
     print datetime.datetime.now()
     #
-    save_pickle_file(glayout_fn, [labels, group, layt])
+    save_pickle_file(glayout_fn, [labels, group, layt, Edges])
     for x in sorted(summary, key=lambda x:x[-2], reverse=True):
         with open(summary_fn, 'a') as w_csvfile:
             writer = csv.writer(w_csvfile)
