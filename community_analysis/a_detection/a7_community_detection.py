@@ -22,14 +22,14 @@ def run():
         writer = csv.writer(w_csvfile)
         new_headers = ['fname','num_nodes','num_edges','tie-strength','%d-top-centrality-nodes' % MIN_NODES]
         writer.writerow(new_headers)
-
+    print 'finish init'
     whole_fn = None
-    graph_data = {'nodes' : [], 'links' : []}
     labels, group = [], []
     nx_nid_ig_nid = {}
     count, ig_nid = 0, 0
     summary = []
     for fn in get_all_files(target_dir, '', '.pkl'):
+        print fn
         if fn.endswith('whole.pkl'):
             whole_fn = fn
             continue
@@ -53,10 +53,16 @@ def run():
             continue
         top_nodes, _ = zip(*sorted(nx.degree_centrality(nxG).items(), key=lambda x:x[-1], reverse=True)[:5])
         summary.append(['%s/%s' % (target_dir, fn), num_nodes, num_edges, sum(weight) / float(num_nodes), top_nodes])
+    print 'finish preprocessing'
     #
     nxG = nx.read_gpickle('%s/%s' % (target_dir, whole_fn))
+    print 'finish loading', whole_fn
+    import datetime
+    print datetime.datetime.now()
     igG = ig.Graph([(nx_nid_ig_nid[n0], nx_nid_ig_nid[n1]) for (n0, n1) in nxG.edges()])
     layt = igG.layout('kk', dim=3)
+    print 'finish layout calculation'
+    print datetime.datetime.now()
     #
     save_pickle_file(glayout_fn, [labels, group, layt])
     for x in sorted(summary, key=lambda x:x[-2], reverse=True):
