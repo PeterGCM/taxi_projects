@@ -64,20 +64,20 @@ def run():
                         line_3D((6, 6), '', 'iteration', 'a0', 'a1', a_xyz, '%s/%s_%s_a_%d' % (trend_fig_dir, al, prob.__name__, iter_num / UNIT -1))
                         ags_S_num, ags_A_num = [], []
 
-            print 'start arrange'
-            s_xyz, a_xyz = [], []
-            for i, a_dist in enumerate(ags_A_num):
-                _iter = i + (iter_num / UNIT - 1) * UNIT
-                s_dist = ags_S_num[i]
-                s_xyz.append([_iter] + s_dist)
-                a_xyz.append([_iter] + a_dist)
-                with open(fn1, 'a') as w_csvfile:
-                    writer = csv.writer(w_csvfile)
-                    writer.writerow([_iter, s_dist, a_dist])
-            line_3D((6, 6), '', 'iteration', 's0', 's1', s_xyz, '%s/%s_%s_s_%d' % (trend_fig_dir, al, prob.__name__, -1))
-            line_3D((6, 6), '', 'iteration', 'a0', 'a1', a_xyz, '%s/%s_%s_a_%d' % (trend_fig_dir, al, prob.__name__, -1))
-            ags_S_num, ags_A_num = [], []
-            print 'finish arrangement'
+            # print 'start arrange'
+            # s_xyz, a_xyz = [], []
+            # for i, a_dist in enumerate(ags_A_num):
+            #     _iter = i + (iter_num / UNIT - 1) * UNIT
+            #     s_dist = ags_S_num[i]
+            #     s_xyz.append([_iter] + s_dist)
+            #     a_xyz.append([_iter] + a_dist)
+            #     with open(fn1, 'a') as w_csvfile:
+            #         writer = csv.writer(w_csvfile)
+            #         writer.writerow([_iter, s_dist, a_dist])
+            # line_3D((6, 6), '', 'iteration', 's0', 's1', s_xyz, '%s/%s_%s_s_%d' % (trend_fig_dir, al, prob.__name__, -1))
+            # line_3D((6, 6), '', 'iteration', 'a0', 'a1', a_xyz, '%s/%s_%s_a_%d' % (trend_fig_dir, al, prob.__name__, -1))
+            # ags_S_num, ags_A_num = [], []
+            # print 'finish arrangement'
 
 if __name__ == '__main__':
     run()

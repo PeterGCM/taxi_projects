@@ -20,7 +20,7 @@ def run():
                      ]:
             num_agents, S, A, _, _, _ = prob()
             _dir = '%s/%s/%s' % (taxi_data, al, prob.__name__)
-            fn = '%s/history.csv' % _dir
+            fn = '%s/history_%s_%s.csv' % (_dir, al, prob.__name__)
             fn1 = '%s/last_iter_%s_%s.csv' % (_dir, al, prob.__name__)
             if not check_path_exist(fn1):
                 with open(fn, 'rb') as r_csvfile:
@@ -41,7 +41,7 @@ def run():
                 reader = csv.reader(r_csvfile)
                 headers = reader.next()
                 hid = {h: i for i, h in enumerate(headers)}
-                if len(hid) == len(['iter', 'agent', 'state', 'action']) + len(S) * len(A):
+                if len(hid) == len(['iter', 'agent', 'state', 'dist', 'action']) + len(S) * len(A):
                     with open(fn2, 'wt') as w_csvfile:
                         writer = csv.writer(w_csvfile)
                         new_headers = ['agent','s','best-a']
@@ -57,7 +57,7 @@ def run():
                                 assert -1e400 < max_Q
                                 writer.writerow([i,s,argmax_a])
                 else:
-                    assert len(hid) == len(['iter', 'agent', 'state', 'action']) + len(S) * num_agents * len(A)
+                    assert len(hid) == len(['iter', 'agent', 'state', 'dist', 'action']) + len(S) * num_agents * len(A), hid
                     with open(fn2, 'wt') as w_csvfile:
                         writer = csv.writer(w_csvfile)
                         new_headers = ['agent','s','ds','best-a']
