@@ -124,8 +124,8 @@ def run(problem):
 
 if __name__ == '__main__':
     for prob in [
-                 # sc_game0,
+                 sc_game0,
                  sc_game1,
-                 # sc_game2, sc_game3
+                 sc_game2, sc_game3
                  ]:
         run(prob)
