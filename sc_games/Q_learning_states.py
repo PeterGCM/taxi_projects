@@ -39,7 +39,7 @@ def run(problem):
         writer.writerow(new_headers)
         for i in xrange(num_agents):
             i_Q_sa = ags_Q_sa[i]
-            instance = [iter_count, i, ags_S[i], 0]
+            instance = [iter_count, i, ags_S[i],0, 0]
             for s in S:
                 for i in xrange(1, num_agents + 1):
                     for a in A:
