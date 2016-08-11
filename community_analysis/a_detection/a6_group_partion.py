@@ -22,12 +22,13 @@ def run():
     print 'Graph constructing ...'
     G = nx.Graph()
     for (k0, k1), num_days in pairs_day_counting.iteritems():
-        if num_days < MIN_AN_DAYS:
-            continue
+        # if num_days < MIN_AN_DAYS:
+        #     continue
         G.add_edge(k0, k1, weight=num_days)
 
     del pairs_day_counting
-    pg_th_dir = '%s/%s-TH(%d)' % (pg_dir, yyyy, MIN_AN_DAYS); check_dir_create(pg_th_dir)
+    # pg_th_dir = '%s/%s-TH(%d)' % (pg_dir, yyyy, MIN_AN_DAYS); check_dir_create(pg_th_dir)
+    pg_th_dir = '%s/%s' % (pg_dir, yyyy); check_dir_create(pg_th_dir)
     print 'finished'
     print 'Whole graph pickling ...'
     nx.write_gpickle(G, '%s/%s-TH(%d)-whole.pkl' % (pg_th_dir, yyyy, MIN_AN_DAYS))
