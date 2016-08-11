@@ -13,7 +13,7 @@ def run():
     N = set()
     for fn in get_all_files(lm_yyyy_dir, '', '.pkl'):
         lm = load_pickle_file('%s/%s' % (lm_yyyy_dir, fn))
-        _, D, _, _, _ = lm[:-len('.pkl')]
+        _, D, _, _, _ = lm[:-len('.pkl')].split('-')
         day_counting += int(D)
         print 'load', fn
         for (k0, k1), num_days in lm:
