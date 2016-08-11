@@ -6,13 +6,18 @@ from community_analysis.__init__ import logs_dir, ld_dir
 #
 from taxi_common.file_handling_functions import save_pkl_threading, remove_create_dir, get_all_files
 from taxi_common.singapore_grid_zone import get_singapore_zones
+from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
 import csv
 
 
 def run():
+    init_multiprocessor(4)
+    count_num_jobs = 0
     for mm in range(1,12):
-        process_files('09%02d' % mm)
+        put_task(process_files, ['09%02d' % mm])
+        count_num_jobs += 1
+    end_multiprocessor(count_num_jobs)
 
 
 def process_files(yymm):
