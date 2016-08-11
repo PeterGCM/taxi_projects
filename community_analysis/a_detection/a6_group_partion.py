@@ -37,11 +37,15 @@ def run():
     print 'Partitioning ...'
     partition = community.best_partition(G)
     print 'finished'
+    com_count = 0
     for i, com in enumerate(set(partition.values())):
         list_nodes = [nodes for nodes in partition.keys()
                       if partition[nodes] == com]
+        if len(list_nodes) < 10:
+            continue
+        com_count += 1
         print i, 'Saving sub-graph ...'
-        nx.write_gpickle(G.subgraph(list_nodes), '%s/%s-COM(%d).pkl' % (pg_dir, yyyy, i))
+        nx.write_gpickle(G.subgraph(list_nodes), '%s/%s-COM(%d).pkl' % (pg_th_dir, yyyy, com_count))
         print 'finished'
 
 

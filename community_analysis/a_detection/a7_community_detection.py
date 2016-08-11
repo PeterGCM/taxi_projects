@@ -49,10 +49,14 @@ def run():
         #
         _, _, weight = zip(*list(nxG.edges_iter(data='weight', default=1)))
         num_nodes, num_edges = len(nxN), len(weight)
-        if num_nodes < MIN_NODES:
-            continue
+        # if num_nodes < MIN_NODES:
+        #     continue
         top_nodes, _ = zip(*sorted(nx.degree_centrality(nxG).items(), key=lambda x:x[-1], reverse=True)[:5])
         summary.append(['%s/%s' % (target_dir, fn), num_nodes, num_edges, sum(weight) / float(num_nodes), top_nodes])
+    for x in sorted(summary, key=lambda x:x[-2], reverse=True):
+        with open(summary_fn, 'a') as w_csvfile:
+            writer = csv.writer(w_csvfile)
+            writer.writerow(x)
     print 'finish preprocessing'
     #
     nxG = nx.read_gpickle('%s/%s' % (target_dir, whole_fn))
@@ -67,10 +71,7 @@ def run():
     print datetime.datetime.now()
     #
     save_pickle_file(glayout_fn, [labels, group, layt, Edges])
-    for x in sorted(summary, key=lambda x:x[-2], reverse=True):
-        with open(summary_fn, 'a') as w_csvfile:
-            writer = csv.writer(w_csvfile)
-            writer.writerow(x)
+
 
 
 if __name__ == '__main__':
