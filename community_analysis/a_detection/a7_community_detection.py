@@ -12,14 +12,14 @@ MIN_NODES = 5
 
 
 def run():
-    target = '2009-TH(23)'
+    target = '2009'
     target_dir = '%s/%s' % (pg_dir, target)
     #
     summary_fn = '%s/%s_summary.csv' % (target_dir, target)
     glayout_fn = '%s/%s_glayout.csv' % (target_dir, target)
     with open(summary_fn, 'wt') as w_csvfile:
         writer = csv.writer(w_csvfile)
-        new_headers = ['fname','num_nodes','num_edges','tie-strength','%d-top-centrality-nodes' % MIN_NODES]
+        new_headers = ['fname', 'num_nodes', 'num_edges', 'tie-strength', '%d-top-centrality-nodes' % MIN_NODES]
         writer.writerow(new_headers)
     print 'finish init'
     #

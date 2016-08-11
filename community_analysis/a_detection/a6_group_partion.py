@@ -31,7 +31,7 @@ def run():
     pg_th_dir = '%s/%s' % (pg_dir, yyyy); check_dir_create(pg_th_dir)
     print 'finished'
     print 'Whole graph pickling ...'
-    nx.write_gpickle(G, '%s/%s-TH(%d)-whole.pkl' % (pg_th_dir, yyyy, MIN_AN_DAYS))
+    nx.write_gpickle(G, '%s/%s-whole.pkl' % (pg_th_dir, yyyy))
     print 'finished'
     # first compute the best partition
     print 'Partitioning ...'
@@ -41,7 +41,7 @@ def run():
         list_nodes = [nodes for nodes in partition.keys()
                       if partition[nodes] == com]
         print i, 'Saving sub-graph ...'
-        nx.write_gpickle(G.subgraph(list_nodes), '%s/%s-TH(%d)-PD(%d).pkl' % (pg_dir, yyyy, MIN_AN_DAYS, i))
+        nx.write_gpickle(G.subgraph(list_nodes), '%s/%s-COM(%d).pkl' % (pg_dir, yyyy, i))
         print 'finished'
 
 
