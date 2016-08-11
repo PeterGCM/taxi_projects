@@ -12,7 +12,7 @@ import csv
 
 
 def run():
-    init_multiprocessor(4)
+    init_multiprocessor(6)
     count_num_jobs = 0
     for mm in range(1,12):
         put_task(process_files, ['09%02d' % mm])
