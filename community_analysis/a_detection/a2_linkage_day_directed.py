@@ -1,6 +1,6 @@
 import __init__
 #
-from __init__ import MIN_DAILY_LINKAGE
+from __init__ import MIN_DAILY_LINKAGE, REMAINING_LINKAGE_RATIO
 from _classes import cd_driver, cd_zone
 from community_analysis.__init__ import logs_dir, ld_dir
 #
@@ -61,7 +61,7 @@ def process_files(yymm):
         for did0, d in drivers.iteritems():
             filtered_linkage = {}
             for did1, num_linkage in d.linkage.iteritems():
-                if num_linkage < MIN_DAILY_LINKAGE:
+                if num_linkage < MIN_DAILY_LINKAGE or num_linkage < d.num_pickup * REMAINING_LINKAGE_RATIO:
                     continue
                 filtered_linkage[did1] = num_linkage
             day_linkage.append((did0, d.num_pickup, filtered_linkage))

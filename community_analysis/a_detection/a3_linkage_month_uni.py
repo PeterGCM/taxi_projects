@@ -35,6 +35,10 @@ def process_files(yymm):
         while daily_linkage:
             _did0, _did0_num_pickup, _did0_linkage = daily_linkage.pop()
             for _did1, num_linkage in _did0_linkage.iteritems():
+                if num_linkage < MIN_DAILY_LINKAGE:
+                    continue
+
+
                 did0, did1 = int(_did0), int(_did1)
                 if did0 > did1:
                     did0, did1 = int(_did1), int(_did0)
