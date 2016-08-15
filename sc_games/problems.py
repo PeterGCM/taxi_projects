@@ -46,6 +46,31 @@ def sc_game1():
                         (2.5, 0)]; assert len(reward_constants) == len(A)
     R = lambda si, ai, ds: reward_constants[ai][0] / float(ds) + reward_constants[ai][1]
     ags_S = [0, 1, 1]; assert len(ags_S) == num_agents
+    #
+    #
+    #
+    from __init__ import ALPH, GAMMA, EPSILON
+    # V = {}
+    # Vds_max = {}
+    # for ds in range(1, num_agents + 1):
+    #     for a in A:
+    #         V[ds, a] = 0
+    #     Vds_max[ds] = 0
+    # while True:
+    #     v_max = -1e400
+    #     for ds in range(1, num_agents + 1):
+    #         _v = R(None, ds, 0) + R(None, num_agents - ds, 1)
+
+
+
+
+
+
+
+
+
+
+
     return num_agents, S, A, Tr_sas, R, ags_S
 
 
@@ -89,4 +114,4 @@ def sc_game3():
     return num_agents, S, A, Tr_sas, R, ags_S
 
 if __name__ == '__main__':
-    sc_game3()
+    sc_game1()

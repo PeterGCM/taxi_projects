@@ -12,7 +12,6 @@ def run():
     for al in [
               'Qs',
               'Qst',
-              'Qst1',
                 ]:
     # for al in algo_names.itervalues():
         for prob in [
@@ -45,37 +44,57 @@ def run():
                 headers = reader.next()
                 hid = {h: i for i, h in enumerate(headers)}
                 if len(hid) == len(['iter', 'agent', 'state', 'dist', 'action']) + len(S) * len(A):
+                    best_a = {}
+                    for row in reader:
+                        i = eval(row[hid['agent']])
+                        for s in S:
+                            max_Q, argmax_a = -1e400, None
+                            for a in A:
+                                Q_value = eval(row[hid['Q(%d,%d)' % (s, a)]])
+                                if max_Q < Q_value:
+                                    max_Q, argmax_a = Q_value, a
+                            assert -1e400 < max_Q
+                            best_a[i, s] = argmax_a
                     with open(fn2, 'wt') as w_csvfile:
                         writer = csv.writer(w_csvfile)
-                        new_headers = ['agent','s','best-a']
+                        new_headers = ['s \ agent']
+                        new_headers += ['%d' % i for i in range(num_agents)]
+                        new_headers += ['num_a1']
                         writer.writerow(new_headers)
-                        for row in reader:
-                            i = eval(row[hid['agent']])
-                            for s in S:
+                        for s in S:
+                            row = [s]
+                            for i in range(num_agents):
+                                row.append(best_a[i, s])
+                            row += [sum(row[1:])]
+                            writer.writerow(row)
+                else:
+                    assert len(hid) == len(['iter', 'agent', 'state', 'dist', 'action']) + len(S) * num_agents * len(A), hid
+                    best_a = {}
+                    for row in reader:
+                        i = eval(row[hid['agent']])
+                        for s in S:
+                            for ds in range(1, num_agents + 1):
                                 max_Q, argmax_a = -1e400, None
                                 for a in A:
-                                    Q_value = eval(row[hid['Q(%d,%d)' % (s, a)]])
+                                    Q_value = eval(row[hid['Q(%d,%d,%d)' % (s, ds, a)]])
                                     if max_Q < Q_value:
                                         max_Q, argmax_a = Q_value, a
                                 assert -1e400 < max_Q
-                                writer.writerow([i,s,argmax_a])
-                else:
-                    assert len(hid) == len(['iter', 'agent', 'state', 'dist', 'action']) + len(S) * num_agents * len(A), hid
+                                best_a[i, s, ds] = argmax_a
+
                     with open(fn2, 'wt') as w_csvfile:
                         writer = csv.writer(w_csvfile)
-                        new_headers = ['agent','s','ds','best-a']
+                        new_headers = ['(s, ds) \ agent']
+                        new_headers += ['%d' % i for i in range(num_agents)]
+                        new_headers += ['num_a1']
                         writer.writerow(new_headers)
-                        for row in reader:
-                            i = eval(row[hid['agent']])
-                            for s in S:
-                                for ds in range(1, num_agents + 1):
-                                    max_Q, argmax_a = -1e400, None
-                                    for a in A:
-                                        Q_value = eval(row[hid['Q(%d,%d,%d)' % (s, ds, a)]])
-                                        if max_Q < Q_value:
-                                            max_Q, argmax_a = Q_value, a
-                                    assert -1e400 < max_Q
-                                    writer.writerow([i, s, ds, argmax_a])
+                        for s in S:
+                            for ds in range(1, num_agents + 1):
+                                row = [(s, ds)]
+                                for i in range(num_agents):
+                                    row.append(best_a[i, s, ds])
+                                row += [sum(row[1:])]
+                                writer.writerow(row)
 
 
 if __name__ == '__main__':
