@@ -8,7 +8,7 @@ import csv
 
 def run():
     for al in [
-        'Qs',
+        # 'Qs',
         'Qst',
     ]:
         for prob in [
