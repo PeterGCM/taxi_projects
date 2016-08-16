@@ -8,14 +8,14 @@ import csv
 
 def run():
     for al in [
-        # 'Qs',
+        'Qs',
         'Qst',
     ]:
         for prob in [
-            # sc_game0,
-            # sc_game1,
-            # sc_game2,
-            sc_game3
+            sc_game0,
+            sc_game1,
+            sc_game2,
+            # sc_game3
         ]:
             num_agents, S, A, _, _, _ = prob()
             _dir = '%s/%s/%s' % (taxi_data, al, prob.__name__)
