@@ -48,12 +48,12 @@ def process_files(yymm):
         daily_linkage = load_pickle_file('%s/%s' % (yymm_dir, fn))
         while daily_linkage:
             _did0, _did0_num_pickup, _did0_linkage = daily_linkage.pop()
-            if _did0 not in com_nid:
+            if int(_did0) not in com_nid:
                 continue
             for _did1, num_linkage in _did0_linkage.iteritems():
-                if _did1 not in com_nid:
+                if int(_did1) not in com_nid:
                     continue
-                k = (_did0, _did1)
+                k = (int(_did0), int(_did1))
                 if not mon_di_linkage.has_key(k):
                     mon_di_linkage.has_key[k] = 0
                 mon_di_linkage.has_key[k] += num_linkage
