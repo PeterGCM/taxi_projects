@@ -24,15 +24,14 @@ def run():
     #
     cl_yyyy_dir = '%s/%s' % (com_log_dir, target);check_dir_create(cl_yyyy_dir)
     nid_cfn = {}
-    for _, path in top_five_com:
-        fn = get_fn_only(path)
+    for _, fn in top_five_com:
         _, com_name = fn[:-len('.pkl')].split('-')
         com_log_fn = '%s/%s-log-%s.csv' % (cl_yyyy_dir, target, com_name)
         with open(com_log_fn, 'wt') as w_csvfile:
             writer = csv.writer(w_csvfile)
             writer.writerow(['time', 'i', 'j', 'did'])
         #
-        for nid in nx.read_gpickle(path).nodes():
+        for nid in nx.read_gpickle('%s/%s/%s' % (pg_dir, target, fn)).nodes():
             nid_cfn[nid] = com_log_fn
     print 'Finish selecting top five communities'
     for m in range(1, 12):
