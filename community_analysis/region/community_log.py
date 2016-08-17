@@ -24,7 +24,6 @@ def run():
     #
     cl_yyyy_dir = '%s/%s' % (com_log_dir, target);check_dir_create(cl_yyyy_dir)
     nid_cfn = {}
-    print ''
     for _, path in top_five_com:
         fn = get_fn_only(path)
         _, com_name = fn[:-len('.pkl')].split('-')
@@ -35,10 +34,11 @@ def run():
         #
         for nid in nx.read_gpickle(path).nodes():
             nid_cfn[nid] = com_log_fn
-
+    print 'Finish selecting top five communities'
     for m in range(1, 12):
         yymm_dir = '%s/09%02d' % (logs_dir, m)
         for fn in get_all_files(yymm_dir, '', '.csv'):
+            print 'Start handling', fn
             with open('%s/%s' % (yymm_dir, fn), 'rb') as r_csvfile:
                 reader = csv.reader(r_csvfile)
                 headers = reader.next()
@@ -51,7 +51,7 @@ def run():
                     with open(com_log_fn, 'a') as w_csvfile:
                         writer = csv.writer(w_csvfile)
                         writer.writerow([row[hid['time']], row[hid['i']], row[hid['j']], did])
-
+            print 'End handling', fn
 
 if __name__ == '__main__':
     run()
