@@ -36,7 +36,8 @@ def run():
     print 'Finish selecting top five communities'
     for m in range(1, 12):
         yymm_dir = '%s/09%02d' % (logs_dir, m)
-        for fn in get_all_files(yymm_dir, '', '.csv'):
+        for day in sorted([int(fn[:-len('.csv')]) for fn in get_all_files(yymm_dir, '', '.csv')]):
+            fn = '%d.csv' % day
             print 'Start handling', fn
             with open('%s/%s' % (yymm_dir, fn), 'rb') as r_csvfile:
                 reader = csv.reader(r_csvfile)
