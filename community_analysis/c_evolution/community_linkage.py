@@ -57,8 +57,8 @@ def process_files(yymm):
                     continue
                 k = (did0, did1)
                 if not mon_di_linkage.has_key(k):
-                    mon_di_linkage.has_key[k] = 0
-                mon_di_linkage.has_key[k] += num_linkage
+                    mon_di_linkage[k] = 0
+                mon_di_linkage[k] += num_linkage
     com_linkage_fn = '%s/%s-linkage-community.pkl' % (cl_yyyy_dir, yymm)
     save_pickle_file(com_linkage_fn, mon_di_linkage)
 
