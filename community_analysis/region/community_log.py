@@ -23,16 +23,16 @@ def run():
     top_five_com = sorted(com_sgth_fname,reverse=True)[:5]
     #
     cl_yyyy_dir = '%s/%s' % (com_log_dir, target);check_dir_create(cl_yyyy_dir)
-    nid_cfn = {}
+    com_log_fn = '%s/%s-log-community.csv' % (cl_yyyy_dir, target)
+    with open(com_log_fn, 'wt') as w_csvfile:
+        writer = csv.writer(w_csvfile)
+        writer.writerow(['time', 'i', 'j', 'did', 'community'])
+    nid_cn = {}
     for _, fn in top_five_com:
         _, com_name = fn[:-len('.pkl')].split('-')
-        com_log_fn = '%s/%s-log-%s.csv' % (cl_yyyy_dir, target, com_name)
-        with open(com_log_fn, 'wt') as w_csvfile:
-            writer = csv.writer(w_csvfile)
-            writer.writerow(['time', 'i', 'j', 'did'])
         #
         for nid in nx.read_gpickle('%s/%s/%s' % (pg_dir, target, fn)).nodes():
-            nid_cfn[nid] = com_log_fn
+            nid_cn[nid] = com_name
     print 'Finish selecting top five communities'
     for m in range(1, 12):
         yymm_dir = '%s/09%02d' % (logs_dir, m)
@@ -45,12 +45,11 @@ def run():
                 hid = {h: i for i, h in enumerate(headers)}
                 for row in reader:
                     did = eval(row[hid['did']])
-                    if not nid_cfn.has_key(did):
+                    if not nid_cn.has_key(did):
                         continue
-                    com_log_fn = nid_cfn[did]
                     with open(com_log_fn, 'a') as w_csvfile:
                         writer = csv.writer(w_csvfile)
-                        writer.writerow([row[hid['time']], row[hid['i']], row[hid['j']], did])
+                        writer.writerow([row[hid['time']], row[hid['i']], row[hid['j']], did, nid_cn[did]])
             print 'End handling', fn
 
 if __name__ == '__main__':
