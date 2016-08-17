@@ -2,7 +2,7 @@ import __init__
 #
 from community_analysis.__init__ import pg_dir, com_log_dir, logs_dir
 #
-from taxi_common.file_handling_functions import check_dir_create, get_all_directories, get_all_files, get_fn_only
+from taxi_common.file_handling_functions import check_dir_create, get_all_files
 #
 import csv
 import networkx as nx
@@ -22,7 +22,7 @@ def run():
             com_sgth_fname.append([eval(row[hid['tie-strength']]), row[hid['fname']]])
     top_five_com = sorted(com_sgth_fname,reverse=True)[:5]
     #
-    cl_yyyy_dir = '%s/%s' % (com_log_dir, target);check_dir_create(cl_yyyy_dir)
+    cl_yyyy_dir = '%s/%s' % (com_log_dir, target); check_dir_create(cl_yyyy_dir)
     com_log_fn = '%s/%s-log-community.csv' % (cl_yyyy_dir, target)
     with open(com_log_fn, 'wt') as w_csvfile:
         writer = csv.writer(w_csvfile)

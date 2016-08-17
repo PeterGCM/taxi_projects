@@ -3,6 +3,8 @@ import wx, time
 
 ENLARGE_SCALE = 10000
 PEN_THICKNESS = 100000
+
+
 def run(singapore_poly_points, lines):
     app = wx.App()
     app.frame = MainFrame(singapore_poly_points, lines)
@@ -136,3 +138,21 @@ class MyPanel(wx.Panel):
 #         gc.SetFont(wx.Font(30, wx.SWISS, wx.NORMAL, wx.NORMAL))
 #         gc.DrawText(st, 10, 150)
 
+if __name__ == '__main__':
+    from singapore_grid_zone import generate_singapore_grid, get_singapore_poly_points
+
+    hl_unit, vl_unit, x_points, y_points = generate_singapore_grid()
+    # h_len = x_points[-1] - x_points[0]
+    # v_len = y_points[-1] - y_points[0]
+    # print v_len
+    lines = []
+    for x in x_points:
+        sx, sy, ex, ey = x, y_points[0], x, y_points[-1]
+        lines.append([sx, sy, ex, ey])
+    for y in y_points:
+        sx, sy, ex, ey = x_points[0], y, x_points[-1], y
+        lines.append([sx, sy, ex, ey])
+    # print hl_unit, vl_unit, x_points, y_points
+    # assert False
+    singapore_poly_points = get_singapore_poly_points()
+    run(singapore_poly_points, lines)
