@@ -69,8 +69,8 @@ def get_all_files(path, filtering_prefix, filtering_postfix):
     return [fn for fn in os.listdir(path) if fn.startswith(filtering_prefix) and fn.endswith(filtering_postfix)]
 
 
-def get_all_directories(_path):
-    return [dn for dn in os.listdir(_path) if os.path.isdir('%s/%s' % (_path, dn))]
+def get_all_directories(path):
+    return [dn for dn in os.listdir(path) if os.path.isdir('%s/%s' % (path, dn))]
 
 if __name__ == '__main__':
     pass

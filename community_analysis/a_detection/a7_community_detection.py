@@ -16,6 +16,8 @@ def run():
     target_dir = '%s/%s' % (pg_dir, target)
     #
     summary_fn = '%s/%s_summary.csv' % (target_dir, target)
+    # TODO
+    # Save coordinate of each community
     glayout_fn = '%s/%s_glayout.pkl' % (target_dir, target)
     with open(summary_fn, 'wt') as w_csvfile:
         writer = csv.writer(w_csvfile)

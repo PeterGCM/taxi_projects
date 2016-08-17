@@ -17,5 +17,8 @@ pg_dir = taxi_data + '/partitioned_group'; check_dir_create(pg_dir)
 trips_dir = taxi_data + '/trips'; check_dir_create(trips_dir)
 gtrips_dir = taxi_data + '/gtrips'; check_dir_create(gtrips_dir)
 #
+com_log_dir = taxi_data + '/com_logs'; check_dir_create(com_log_dir)
+
+#
 MON, TUE, WED, THR, FRI, SAT, SUN = range(7)
 PM2, PM3 = 14, 15
