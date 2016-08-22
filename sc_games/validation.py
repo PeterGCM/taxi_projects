@@ -50,7 +50,7 @@ def run():
                                 agent_policy[_s] = [eval(last_row[hid['D(%d,%d,%d)' % (_s, _ds, _a)]]) for _a in A]
                 print agent_policy
                 policies.append(agent_policy)
-            save_pickle_file(policies_fn, policies)
+            # save_pickle_file(policies_fn, policies)
             #
             experiment_fn = '%s/experiment_%s_%s.csv' % (_dir, al, prob.__name__)
             with open(experiment_fn, 'wb') as w_csvfile:
