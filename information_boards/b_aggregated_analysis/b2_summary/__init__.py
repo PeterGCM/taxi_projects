@@ -8,6 +8,6 @@ from b_aggregated_analysis import __init__
 #
 ALL, AP, AP_GEN, NS, NS_GEN = 'A', 'AP', 'AP_GEN', 'NS', 'NS_GEN'
 #
-GEN_DUR, GEN_FARE, \
-AP_DUR, AP_FARE, AP_QUEUE, \
-NS_DUR, NS_FARE, NS_QUEUE = range(8)
+ALL_DUR, ALL_FARE, ALL_NUM, \
+AP_DUR, AP_FARE, AP_QUEUE, AP_NUM, \
+NS_DUR, NS_FARE, NS_QUEUE, NS_NUM = range(11)
