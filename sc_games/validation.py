@@ -19,8 +19,8 @@ def run():
         for prob in [
                      # sc_game0,
                      # sc_game1,
-                     # sc_game2,
-                     sc_game3
+                     sc_game2,
+                     # sc_game3
                      ]:
             num_agents, S, A, Tr_sas, R, ags_S = prob()
             _dir = '%s/%s/%s' % (taxi_data, al, prob.__name__)
