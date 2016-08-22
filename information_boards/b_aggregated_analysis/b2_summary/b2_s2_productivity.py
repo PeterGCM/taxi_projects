@@ -58,7 +58,8 @@ def run():
         writer = csv.writer(w_csvfile)
         header = ['yy', 'mm', 'dd', 'hh',
                     'all-num',
-                        'all-duration', 'all-fare',
+                        'all-total-duration', 'all-total-fare',
+                        'all-avg-duration', 'all-avg-fare',
                     'ap-num',
                         'atotal-duration', 'aavg-duration',
                         'atotal-fare', 'aavg-fare',
