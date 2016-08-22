@@ -76,7 +76,8 @@ def run():
                     'ns-gen-num',
                         'ns-gtotal-duration', 'ns-gavg-duration',
                         'ns-gtotal-fare', 'ns-gavg-fare',
-                        'ns-gen-productivity']
+                        'ns-gen-productivity',
+                     'key']
         writer.writerow(header)
         for k in time_period_order:
             all_total_dur, all_total_fare, all_num, \
@@ -159,7 +160,8 @@ def run():
                              ns_gen_num,
                                 ns_gen_total_dur, ap_gen_avg_dur,
                                 ns_gen_total_fare, ns_gen_avg_fare,
-                                ns_gen_prod])
+                                ns_gen_prod,
+                             k])
     #
     save_pickle_file(zero_duration_timeslots, zero_dur)
     
