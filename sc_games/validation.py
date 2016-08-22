@@ -8,7 +8,7 @@ from taxi_common.file_handling_functions import check_path_exist, save_pickle_fi
 #
 import csv
 import numpy as np
-
+import random
 
 def run():
     for al in [
@@ -76,14 +76,12 @@ def run():
                 for i in xrange(num_agents):
                     i_policy = policies[i]
                     si = ags_S[i]
-                    chosen_a = None
                     if len(hid) == len(['iter', 'state', 'dist', 'action']) + len(S) * len(A):
                         poly_dist = i_policy[si]
-                        chosen_a = np.random.choice(len(A), 1, poly_dist)
                     else:
                         assert len(hid) == len(['iter', 'state', 'dist', 'action']) + len(S) * num_agents * len(A), hid
                         poly_dist = i_policy[si, ds[si]]
-                        chosen_a = np.random.choice(len(A), 1, poly_dist)
+                    chosen_a = list(np.random.choice(len(A), 1, poly_dist)).pop()
                     reward = R(si, chosen_a, ds[si])
                     ags_reward_sum[i] += reward
                     new_row += [si, ds[si], chosen_a, reward, ags_reward_sum[i] / float(num_iter)]
@@ -97,6 +95,10 @@ def run():
                 with open(experiment_fn, 'a') as w_csvfile:
                     writer = csv.writer(w_csvfile)
                     writer.writerow(new_row)
+
+                for i in xrange(num_agents):
+                    ags_S[i] = 0 if random.random() < Tr_sas[ags_S[i]][ags_A[i]][0] else 1
+
 
 
 if __name__ == '__main__':
