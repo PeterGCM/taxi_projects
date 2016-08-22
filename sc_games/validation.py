@@ -37,7 +37,6 @@ def run():
                     reader = csv.reader(r_csvfile)
                     headers = reader.next()
                     hid = {h: i for i, h in enumerate(headers)}
-                    print hid
                     last_row = None
                     for row in reader:
                         last_row = row
@@ -48,8 +47,7 @@ def run():
                         assert len(hid) == len(['iter', 'state', 'dist', 'action']) + len(S) * num_agents * len(A), hid
                         for _s in S:
                             for _ds in xrange(1, num_agents + 1):
-                                agent_policy[_s] = [eval(last_row[hid['D(%d,%d,%d)' % (_s, _ds, _a)]]) for _a in A]
-                print agent_policy
+                                agent_policy[_s, _ds] = [eval(last_row[hid['D(%d,%d,%d)' % (_s, _ds, _a)]]) for _a in A]
                 policies.append(agent_policy)
             # save_pickle_file(policies_fn, policies)
             #
