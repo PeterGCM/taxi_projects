@@ -48,6 +48,8 @@ def run():
                         for _s in S:
                             for _ds in xrange(1, num_agents + 1):
                                 agent_policy[_s, _ds] = [eval(last_row[hid['D(%d,%d,%d)' % (_s, _ds, _a)]]) for _a in A]
+                                if agent_policy[_s, _ds, 0] == agent_policy[_s, _ds, 1]:
+                                    agent_policy[_s, _ds] = [.5, .5]
                 policies.append(agent_policy)
             save_pickle_file(policies_fn, policies)
             #
