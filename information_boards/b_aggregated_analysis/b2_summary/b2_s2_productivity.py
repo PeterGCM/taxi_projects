@@ -84,6 +84,7 @@ def run():
             ap_total_dur, ap_total_fare, ap_total_queue, ap_num, \
             ns_total_dur, ns_total_fare, ns_total_queue, ns_num = hp_summary[k]
             #
+            all_avg_dur, all_avg_fare = all_total_dur / float(all_num), all_total_fare / float(all_num)
             if all_total_dur == 0:
                 zero_dur.append([ALL, k])
             #
@@ -142,7 +143,8 @@ def run():
             #
             writer.writerow([yy, mm, dd, hh,
                              all_num,
-                                all_total_dur, all_total_fare,
+                                all_total_dur, all_avg_dur,
+                                all_total_fare, all_avg_fare,
                              ap_num,
                                 ap_total_dur, ap_avg_dur,
                                 ap_total_fare, ap_avg_fare,
