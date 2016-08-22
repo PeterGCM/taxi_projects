@@ -24,7 +24,7 @@ def run():
                      ]:
             num_agents, S, A, Tr_sas, R, ags_S = prob()
             _dir = '%s/%s/%s' % (taxi_data, al, prob.__name__)
-            policies_fn = '%s/polices_%s_%s.csv' % (_dir, al, prob.__name__)
+            policies_fn = '%s/polices_%s_%s.pkl' % (_dir, al, prob.__name__)
             # if check_path_exist(policies_fn):
             #     policies = load_pickle_file(policies_fn)
             # else:
@@ -49,7 +49,7 @@ def run():
                             for _ds in xrange(1, num_agents + 1):
                                 agent_policy[_s, _ds] = [eval(last_row[hid['D(%d,%d,%d)' % (_s, _ds, _a)]]) for _a in A]
                 policies.append(agent_policy)
-            # save_pickle_file(policies_fn, policies)
+            save_pickle_file(policies_fn, policies)
             #
             experiment_fn = '%s/experiment_%s_%s.csv' % (_dir, al, prob.__name__)
             with open(experiment_fn, 'wb') as w_csvfile:
@@ -61,7 +61,7 @@ def run():
                                     'agt%d-avg-reward' % i]
                 new_headers += ['current-total-reward', 'avg-total-reard']
                 writer.writerow(new_headers)
-            num_agents, S, A, Tr_sas, R, ags_S
+            # num_agents, S, A, Tr_sas, R, ags_S
             #
             # Simulation
             #
@@ -81,7 +81,8 @@ def run():
                     else:
                         assert len(hid) == len(['iter', 'state', 'dist', 'action']) + len(S) * num_agents * len(A), hid
                         poly_dist = i_policy[si, ds[si]]
-                    chosen_a = list(np.random.choice(len(A), 1, poly_dist)).pop()
+                    # chosen_a = list(np.random.choice(len(A), 1, poly_dist)).pop()
+                    chosen_a = 0 if random.random() < poly_dist[0] else 1
                     reward = R(si, chosen_a, ds[si])
                     ags_reward_sum[i] += reward
                     new_row += [si, ds[si], chosen_a, reward, ags_reward_sum[i] / float(num_iter)]
