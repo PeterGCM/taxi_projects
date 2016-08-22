@@ -37,6 +37,7 @@ def run():
                     reader = csv.reader(r_csvfile)
                     headers = reader.next()
                     hid = {h: i for i, h in enumerate(headers)}
+                    print hid
                     last_row = None
                     for row in reader:
                         last_row = row
