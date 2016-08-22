@@ -60,6 +60,7 @@ def run():
                     'all-num',
                         'all-total-duration', 'all-avg-duration',
                         'all-total-fare', 'all-avg-fare',
+                        'all-productivity',
                     'ap-num',
                         'atotal-duration', 'aavg-duration',
                         'atotal-fare', 'aavg-fare',
@@ -87,10 +88,14 @@ def run():
             #
             if all_num == 0:
                 all_avg_dur, all_avg_fare = -1, -1
+                all_prod = -1
             else:
                 all_avg_dur, all_avg_fare = all_total_dur / float(all_num), all_total_fare / float(all_num)
                 if all_total_dur == 0:
                     zero_dur.append([ALL, k])
+                    all_prod = -1
+                else:
+                    all_prod = all_total_fare / float(all_total_dur)
             #
             yy, mm, dd, hh = k
             if ap_num == 0:
