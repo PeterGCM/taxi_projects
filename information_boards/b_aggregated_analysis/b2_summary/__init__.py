@@ -6,7 +6,7 @@ from b_aggregated_analysis import __init__
 #
 # Labeling for zero duration
 #
-ALL, AP, AP_GEN, NS, NS_GEN = 'A', 'AP', 'AP_GEN' 'NS', 'NS_GEN'
+ALL, AP, AP_GEN, NS, NS_GEN = 'A', 'AP', 'AP_GEN', 'NS', 'NS_GEN'
 #
 GEN_DUR, GEN_FARE, \
 AP_DUR, AP_FARE, AP_QUEUE, \
