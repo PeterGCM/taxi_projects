@@ -12,8 +12,8 @@ import random
 
 def run():
     for al in [
-              'Qs',
-              # 'Qst',
+              # 'Qs',
+              'Qst',
                 ]:
     # for al in algo_names.itervalues():
         for prob in [
