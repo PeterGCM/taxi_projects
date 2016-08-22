@@ -72,6 +72,7 @@ def run():
                         'ntotal-duration', 'navg-duration',
                         'ntotal-fare', 'navg-fare',
                         'ntotal-queueing', 'navg-queueing',
+                        'ns-productivity',
                     'ns-gen-num',
                         'ns-gtotal-duration', 'ns-gavg-duration',
                         'ns-gtotal-fare', 'ns-gavg-fare',
