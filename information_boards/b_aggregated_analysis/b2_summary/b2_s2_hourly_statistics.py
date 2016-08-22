@@ -154,6 +154,7 @@ def run():
                              all_num,
                                 all_total_dur, all_avg_dur,
                                 all_total_fare, all_avg_fare,
+                                all_prod,
                              ap_num,
                                 ap_total_dur, ap_avg_dur,
                                 ap_total_fare, ap_avg_fare,
