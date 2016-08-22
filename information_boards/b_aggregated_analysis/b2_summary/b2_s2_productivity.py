@@ -86,8 +86,12 @@ def run():
             ns_total_dur, ns_total_fare, ns_total_queue, ns_num = hp_summary[k]
             #
             all_avg_dur, all_avg_fare = all_total_dur / float(all_num), all_total_fare / float(all_num)
-            if all_total_dur == 0:
-                zero_dur.append([ALL, k])
+            if all_num == 0:
+                all_avg_dur, all_avg_fare = -1, -1
+            else:
+                all_avg_dur, all_avg_fare = all_total_dur / float(all_num), all_total_fare / float(all_num)
+                if all_total_dur == 0:
+                    zero_dur.append([ALL, k])
             #
             yy, mm, dd, hh = k
             if ap_num == 0:
