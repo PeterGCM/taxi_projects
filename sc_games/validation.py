@@ -25,32 +25,32 @@ def run():
             num_agents, S, A, Tr_sas, R, ags_S = prob()
             _dir = '%s/%s/%s' % (taxi_data, al, prob.__name__)
             policies_fn = '%s/polices_%s_%s.csv' % (_dir, al, prob.__name__)
-            if check_path_exist(policies_fn):
-                policies = load_pickle_file(policies_fn)
-            else:
-                policies = []
-                for i in range(num_agents):
-                    #
-                    fn = '%s/agent%d_adist_%s_%s.csv' % (_dir, i, al, prob.__name__)
-                    agent_policy = {}
-                    with open(fn, 'rb') as r_csvfile:
-                        reader = csv.reader(r_csvfile)
-                        headers = reader.next()
-                        hid = {h: i for i, h in enumerate(headers)}
-                        last_row = None
-                        for row in reader:
-                            last_row = row
-                        if len(hid) == len(['iter', 'state', 'dist', 'action']) + len(S) * len(A):
-                            for _s in S:
-                                agent_policy[_s] = [eval(last_row[hid['D(%d,%d)' % (_s, _a)]]) for _a in A]
-                        else:
-                            assert len(hid) == len(['iter', 'state', 'dist', 'action']) + len(S) * num_agents * len(A), hid
-                            for _s in S:
-                                for _ds in xrange(1, num_agents + 1):
-                                    agent_policy[_s] = [eval(last_row[hid['D(%d,%d,%d)' % (_s, _ds, _a)]]) for _a in A]
-                    print agent_policy
-                    policies.append(agent_policy)
-                save_pickle_file(policies_fn, policies)
+            # if check_path_exist(policies_fn):
+            #     policies = load_pickle_file(policies_fn)
+            # else:
+            policies = []
+            for i in range(num_agents):
+                #
+                fn = '%s/agent%d_adist_%s_%s.csv' % (_dir, i, al, prob.__name__)
+                agent_policy = {}
+                with open(fn, 'rb') as r_csvfile:
+                    reader = csv.reader(r_csvfile)
+                    headers = reader.next()
+                    hid = {h: i for i, h in enumerate(headers)}
+                    last_row = None
+                    for row in reader:
+                        last_row = row
+                    if len(hid) == len(['iter', 'state', 'dist', 'action']) + len(S) * len(A):
+                        for _s in S:
+                            agent_policy[_s] = [eval(last_row[hid['D(%d,%d)' % (_s, _a)]]) for _a in A]
+                    else:
+                        assert len(hid) == len(['iter', 'state', 'dist', 'action']) + len(S) * num_agents * len(A), hid
+                        for _s in S:
+                            for _ds in xrange(1, num_agents + 1):
+                                agent_policy[_s] = [eval(last_row[hid['D(%d,%d,%d)' % (_s, _ds, _a)]]) for _a in A]
+                print agent_policy
+                policies.append(agent_policy)
+            save_pickle_file(policies_fn, policies)
             #
             experiment_fn = '%s/experiment_%s_%s.csv' % (_dir, al, prob.__name__)
             with open(experiment_fn, 'wb') as w_csvfile:
