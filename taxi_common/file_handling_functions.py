@@ -66,7 +66,7 @@ def remove_create_dir(path):
 
 
 def get_all_files(path, filtering_prefix, filtering_postfix):
-    return [fn for fn in os.listdir(path) if fn.startswith(filtering_prefix) and fn.endswith(filtering_postfix)]
+    return sorted([fn for fn in os.listdir(path) if fn.startswith(filtering_prefix) and fn.endswith(filtering_postfix)])
 
 
 def get_all_directories(path):

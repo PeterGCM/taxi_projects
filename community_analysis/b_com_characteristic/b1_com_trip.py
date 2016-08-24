@@ -54,6 +54,7 @@ def run():
         writer.writerow(['time', 'yy', 'mm', 'did', 'cnum', 'si', 'sj', 'ei', 'ej', 'distance', 'duration', 'fare'])
     for m in range(1, 12):
         yymm = target[-2:] + '%02d' % m
+        print yymm
         yymm_dir = '%s/%s' % (trip_dir, yymm)
         for fn in get_all_files(yymm_dir, '', '.csv'):
             with open('%s/%s' % (yymm_dir, fn), 'rb') as r_csvfile:

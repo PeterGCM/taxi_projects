@@ -19,6 +19,7 @@ com_trip_dir = taxi_data + '/ctrips'; check_dir_create(com_trip_dir)
 #
 com_log_dir = taxi_data + '/com_logs'; check_dir_create(com_log_dir)
 com_linkage_dir = taxi_data + '/com_linkage'; check_dir_create(com_linkage_dir)
+cevol_dir = taxi_data + '/cevol'; check_dir_create(cevol_dir)
 
 #
 MON, TUE, WED, THR, FRI, SAT, SUN = range(7)
