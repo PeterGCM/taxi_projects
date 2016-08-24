@@ -3,7 +3,7 @@ import __init__
 from __init__ import whole_trip_prefix
 from community_analysis.__init__ import FRI, SAT, SUN
 from community_analysis.__init__ import PM2, PM3
-from community_analysis.__init__ import taxi_home, trips_dir
+from community_analysis.__init__ import taxi_home, trip_dir
 #
 from taxi_common.file_handling_functions import remove_create_dir
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
@@ -13,7 +13,7 @@ import csv, datetime
 
 def run():
     global yyyy_dir
-    yyyy_dir = trips_dir + '/%s' % 2009; remove_create_dir(yyyy_dir)
+    yyyy_dir = trip_dir + '/%s' % 2009; remove_create_dir(yyyy_dir)
     init_multiprocessor(11)
     count_num_jobs = 0
     for mm in range(1, 12):

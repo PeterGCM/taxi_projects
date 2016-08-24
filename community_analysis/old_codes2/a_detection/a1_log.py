@@ -3,7 +3,7 @@ import __init__
 from __init__ import FREE, POB
 from community_analysis.__init__ import FRI, SAT, SUN
 from community_analysis.__init__ import PM2, PM3
-from community_analysis.__init__ import taxi_home, logs_dir
+from community_analysis.__init__ import taxi_home, log_dir
 #
 from taxi_common.singapore_grid_zone import get_singapore_grid_xy_points
 from taxi_common.file_handling_functions import remove_create_dir
@@ -23,7 +23,7 @@ def run():
 
 
 def process_file(yymm):
-    yymm_dir = logs_dir + '/%s' % yymm
+    yymm_dir = log_dir + '/%s' % yymm
     remove_create_dir(yymm_dir)
     def init_processed_file(h_dt):
         processed_fn = yymm_dir + '/%d%02d%02d.csv' % \

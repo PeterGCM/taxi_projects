@@ -1,6 +1,6 @@
 import __init__
 #
-from community_analysis.__init__ import pg_dir, com_log_dir, logs_dir
+from community_analysis.__init__ import pg_dir, com_log_dir, log_dir
 #
 from taxi_common.file_handling_functions import check_dir_create, get_all_files
 #
@@ -35,7 +35,7 @@ def run():
             nid_cn[nid] = com_name
     print 'Finish selecting top five communities'
     for m in range(1, 12):
-        yymm_dir = '%s/09%02d' % (logs_dir, m)
+        yymm_dir = '%s/09%02d' % (log_dir, m)
         for day in sorted([int(fn[:-len('.csv')]) for fn in get_all_files(yymm_dir, '', '.csv')]):
             fn = '%d.csv' % day
             print 'Start handling', fn

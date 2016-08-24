@@ -1,7 +1,7 @@
 import __init__
 #
 from __init__ import whole_trip_prefix, group_trip_prefix
-from community_analysis.__init__ import pg_dir, trips_dir, gtrips_dir
+from community_analysis.__init__ import pg_dir, trip_dir, gtrips_dir
 #
 from taxi_common.file_handling_functions import get_all_files, check_dir_create
 #
@@ -26,7 +26,7 @@ def run():
             group[PD_num].append(n)
             nid_group[n] = PD_num
     #
-    yyyy_dir = '%s/%d' % (trips_dir, yyyy)
+    yyyy_dir = '%s/%d' % (trip_dir, yyyy)
     for fn in get_all_files(yyyy_dir, '', '.csv'):
         _, yymm = fn[:-len('.csv')].split('-')
         missing_counter = 0
