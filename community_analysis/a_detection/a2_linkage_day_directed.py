@@ -2,7 +2,7 @@ import __init__
 #
 from __init__ import MIN_DAILY_LINKAGE, REMAINING_LINKAGE_RATIO
 from _classes import cd_driver, cd_zone
-from community_analysis.__init__ import logs_dir, ld_dir
+from community_analysis.__init__ import trips_dir, ld_dir
 #
 from taxi_common.file_handling_functions import save_pkl_threading, remove_create_dir, get_all_files
 from taxi_common.singapore_grid_zone import get_singapore_zones
@@ -29,7 +29,7 @@ def process_files(yymm):
     out_boundary_logs_fn = linkage_yymm_dir + '/out_boundary.txt'
     with open(out_boundary_logs_fn, 'w') as f:
         f.write('time,did,i,j,zone_defined' + '\n')
-    log_yymm_dir = logs_dir + '/%s' % yymm
+    log_yymm_dir = trips_dir + '/%s' % yymm
     for fn in get_all_files(log_yymm_dir, '', '.csv'):
         drivers = {}
         zones = generate_zones()
@@ -42,7 +42,7 @@ def process_files(yymm):
                 t = eval(row[hid['time']])
                 did = row[hid['did']]
                 # Find a targeted zone
-                i, j = int(row[hid['i']]), int(row[hid['j']])
+                i, j = int(row[hid['si']]), int(row[hid['sj']])
                 try:
                     z = zones[(i, j)]
                     #
