@@ -17,7 +17,8 @@ def run():
     for fn in get_all_files(target_dir, '2009-', '.pkl'):
         if fn.endswith('whole.pkl'):
             continue
-        _, _, PD = fn[:-len('.pkl')].split('-')
+        print fn
+        _, PD = fn[:-len('.pkl')].split('-')
         PD_num = eval(PD[len('COM('):-len(')')])
         print fn, PD_num
         nxG = nx.read_gpickle('%s/%s' % (target_dir, fn))
