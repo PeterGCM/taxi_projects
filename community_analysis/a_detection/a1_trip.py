@@ -1,9 +1,8 @@
 import __init__
 #
-from __init__ import FREE, POB
+from __init__ import KM2
 from community_analysis.__init__ import FRI, SAT, SUN
 from community_analysis.__init__ import PM2, PM3
-from community_analysis.__init__ import KM2
 from community_analysis.__init__ import taxi_home, logs_dir
 #
 from taxi_common.singapore_grid_zone import get_singapore_grid_xy_points
