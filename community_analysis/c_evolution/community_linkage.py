@@ -10,7 +10,7 @@ import networkx as nx
 
 
 def run():
-    init_multiprocessor(6)
+    init_multiprocessor(11)
     count_num_jobs = 0
     for mm in range(1, 12):
         put_task(process_files, ['09%02d' % mm])
@@ -37,8 +37,7 @@ def process_files(yymm):
         #
         for nid in nx.read_gpickle('%s/%s/%s' % (pg_dir, target, fn)).nodes():
             com_nid.add(nid)
-    cl_yyyy_dir = '%s/%s' % (com_linkage_dir, target);
-    check_dir_create(cl_yyyy_dir)
+    cl_yyyy_dir = '%s/%s' % (com_linkage_dir, target); check_dir_create(cl_yyyy_dir)
 
     yymm_dir = '%s/%s' % (ld_dir, yymm)
     mon_di_linkage = {}

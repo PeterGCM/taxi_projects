@@ -3,7 +3,7 @@ import __init__
 from __init__ import KM2
 from community_analysis.__init__ import FRI, SAT, SUN
 from community_analysis.__init__ import PM2, PM3
-from community_analysis.__init__ import taxi_home, logs_dir
+from community_analysis.__init__ import taxi_home, trips_dir
 #
 from taxi_common.singapore_grid_zone import get_singapore_grid_xy_points
 from taxi_common.file_handling_functions import remove_create_dir
@@ -14,11 +14,16 @@ import csv, datetime
 
 
 def run():
-    process_file('0901')
+    init_multiprocessor(11)
+    count_num_jobs = 0
+    for mm in range(1, 12):
+        put_task(process_file, ['09%02d' % mm])
+        count_num_jobs += 1
+    end_multiprocessor(count_num_jobs)
 
 
 def process_file(yymm):
-    yymm_dir = logs_dir + '/%s' % yymm
+    yymm_dir = trips_dir + '/%s' % yymm
     remove_create_dir(yymm_dir)
     def init_processed_file(h_dt):
         processed_fn = yymm_dir + '/%d%02d%02d.csv' % \
@@ -79,7 +84,6 @@ def process_file(yymm):
                     print cur_dt
                 with open(processed_fn, 'a') as w_csvfile:
                     writer = csv.writer(w_csvfile)
-                    writer.writerow(['time', 'did', 'si', 'sj', 'ei', 'ej', 'distance', 'duration', 'fare'])
                     writer.writerow([t, did, si, sj, ei, ej, dist, row1[hid1['duration']], row1[hid1['fare']]])
 
 

@@ -11,21 +11,20 @@ import csv
 
 def run():
     yyyy = 2009
-    target = '%d-TH(23)' % yyyy
+    target = '%d' % yyyy
     target_dir = '%s/%s' % (pg_dir, target)
     group, nid_group = {}, {}
-    for fn in get_all_files(target_dir, '', '.pkl'):
+    for fn in get_all_files(target_dir, '2009-', '.pkl'):
         if fn.endswith('whole.pkl'):
             continue
         _, _, PD = fn[:-len('.pkl')].split('-')
-        PD_num = eval(PD[len('PD('):-len(')')])
+        PD_num = eval(PD[len('COM('):-len(')')])
         print fn, PD_num
         nxG = nx.read_gpickle('%s/%s' % (target_dir, fn))
         group[PD_num] = []
         for n in nxG.nodes():
             group[PD_num].append(n)
             nid_group[n] = PD_num
-
     #
     yyyy_dir = '%s/%d' % (trips_dir, yyyy)
     for fn in get_all_files(yyyy_dir, '', '.csv'):
