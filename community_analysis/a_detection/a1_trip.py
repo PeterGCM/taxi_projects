@@ -30,7 +30,7 @@ def process_file(yymm):
                                   (h_dt.year, h_dt.month, h_dt.day)
         with open(processed_fn, 'wt') as w_csvfile:
             writer = csv.writer(w_csvfile)
-            writer.writerow(['time', 'did', 'si', 'sj', 'ei', 'ej', 'duration', 'distance', 'fare'])
+            writer.writerow(['time', 'did', 'si', 'sj', 'ei', 'ej', 'distance', 'duration', 'fare'])
         return processed_fn
     #
     x_points, y_points = get_singapore_grid_xy_points()
