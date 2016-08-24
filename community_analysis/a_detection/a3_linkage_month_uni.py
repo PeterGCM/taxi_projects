@@ -19,7 +19,7 @@ def run():
         put_task(process_files, ['09%02d' % mm])
         count_num_jobs += 1
     end_multiprocessor(count_num_jobs)
-    #
+
 
 def process_files(yymm):
     ld_yymm_dir = ld_dir + '/%s' % yymm
