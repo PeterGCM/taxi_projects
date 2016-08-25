@@ -17,7 +17,7 @@ Q_LIMIT_MIN = 0
 #
 DAY_OF_WEEK = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 TIME_SLOTS = range(24)
-
+AM2, AM5 = 2, 5
 # summary and charts directory
 summary_dir = taxi_data + '/summary'
 charts_dir = taxi_data + '/charts'

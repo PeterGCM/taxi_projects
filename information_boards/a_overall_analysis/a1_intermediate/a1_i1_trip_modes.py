@@ -4,18 +4,19 @@ from information_boards.__init__ import  taxi_home
 from information_boards.__init__ import DIn_PIn, DIn_POut, DOut_PIn, DOut_POut
 from information_boards.__init__ import ap_poly, ns_poly
 from information_boards.__init__ import IN, OUT
-from a_overall_analysis.__init__ import trips_dir, trip_prefix  # @UnresolvedImport
+from information_boards.__init__ import AM2, AM5
+from a_overall_analysis.__init__ import trips_dir, trip_prefix
 #
-from taxi_common.file_handling_functions import remove_create_dir  # @UnresolvedImport
+from taxi_common.file_handling_functions import remove_create_dir
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
-import csv
+import csv, datetime
 
 
 def run():
     remove_create_dir(trips_dir)
     #
-    init_multiprocessor()
+    init_multiprocessor(11)
     count_num_jobs = 0
     for y in xrange(9, 11):
         for m in xrange(1, 13):
@@ -68,6 +69,14 @@ def process_file(yymm):
                     c_sl_ap, c_el_ap = ap_poly.is_including((s_long, s_lat)), ap_poly.is_including((e_long, e_lat))
                     c_sl_ns, c_el_ns = ns_poly.is_including((s_long, s_lat)), ns_poly.is_including((e_long, e_lat))
                     did = row2[hid2['driver-id']]
+                    #
+                    # Only consider trips whose start time is before 2 AM and after 6 AM
+                    #
+                    t = eval(row1[hid1['start-time']])
+                    cur_dt = datetime.datetime.fromtimestamp(t)
+                    if AM2 <= cur_dt.hour and cur_dt.hour <= AM5:
+                        continue
+                    #
                     if not vehicle_prev_trip_position_time.has_key(vid):
                         # ASSUMPTION
                         # If this trip is the driver's first trip in a month,
