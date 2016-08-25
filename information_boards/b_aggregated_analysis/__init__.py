@@ -34,9 +34,9 @@ ns_ep_dir, ns_ep_prefix = ep_dir + '/ns_ep', 'ns-ep-'
 #
 # Shift
 #
-shifts_dir, shift_prefix = taxi_data + '/shifts', 'shift-hour-state-'
-shift_pro_dur_dir, shift_pro_dur_prefix = shifts_dir + '/shift_pro_dur', 'shift-pro-dur-'
-vehicle_sharing_dir, vehicle_sharing_prefix = shifts_dir + '/vehicle_sharing', 'vehicle-sharing-'
+shifts_dir, shift_prefix = '/home/sfcheng/toolbox/results', 'shift-hour-state-'
+shift_pro_dur_dir, shift_pro_dur_prefix = taxi_data + '/shift_pro_dur', 'shift-pro-dur-'
+vehicle_sharing_dir, vehicle_sharing_prefix = shift_pro_dur_dir + '/vehicle_sharing', 'vehicle-sharing-'
 #
 # Productivity
 #
