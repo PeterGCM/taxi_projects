@@ -14,7 +14,7 @@ import csv, gzip
 def run():
     remove_create_dir(shift_pro_dur_dir); remove_create_dir(vehicle_sharing_dir)
     #
-    init_multiprocessor(11)
+    init_multiprocessor(3)
     count_num_jobs = 0
     for y in xrange(9, 11):
         for m in xrange(1, 13):
