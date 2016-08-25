@@ -14,19 +14,19 @@ import csv, gzip
 def run():
     remove_create_dir(shift_pro_dur_dir); remove_create_dir(vehicle_sharing_dir)
     #
-    # init_multiprocessor(11)
-    # count_num_jobs = 0
-    # for y in xrange(9, 11):
-    #     for m in xrange(1, 13):
-    #         yymm = '%02d%02d' % (y, m)
-    #         if yymm in ['0912', '1010']:
-    #             continue
-    #         # process_file(yymm)
-    #         put_task(process_file, [yymm])
-    #         count_num_jobs += 1
-    # end_multiprocessor(count_num_jobs)
+    init_multiprocessor(11)
+    count_num_jobs = 0
+    for y in xrange(9, 11):
+        for m in xrange(1, 13):
+            yymm = '%02d%02d' % (y, m)
+            if yymm in ['0912', '1010']:
+                continue
+            # process_file(yymm)
+            put_task(process_file, [yymm])
+            count_num_jobs += 1
+    end_multiprocessor(count_num_jobs)
 
-    process_file('0901')
+    # process_file('0901')
 
 
 def process_file(yymm):
