@@ -17,7 +17,6 @@ Q_LIMIT_MIN = 0
 #
 DAY_OF_WEEK = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 TIME_SLOTS = range(24)
-AM2, AM5 = 2, 5
 # summary and charts directory
 summary_dir = taxi_data + '/summary'
 charts_dir = taxi_data + '/charts'
@@ -28,3 +27,6 @@ from taxi_common.geo_functions import read_generate_polygon
 ap_poly_fn = os.path.dirname(os.path.realpath(__file__)) + '/src/airport_polygon'
 ns_poly_fn = os.path.dirname(os.path.realpath(__file__)) + '/src/night_safari_polygon'
 ap_poly, ns_poly = read_generate_polygon(ap_poly_fn), read_generate_polygon(ns_poly_fn)
+# For meaningless data filtering
+AM2, AM5 = 2, 5
+error_period = [('9', '3', '15', '1'), ('10', '3', '17', '1'), ('10', '7', '4', '6'), ('10', '7', '4', '7'), ('10', '7', '4', '8')]

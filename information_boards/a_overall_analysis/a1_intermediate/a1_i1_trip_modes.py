@@ -1,6 +1,6 @@
 import __init__
 #
-from information_boards.__init__ import  taxi_home
+from information_boards.__init__ import taxi_home
 from information_boards.__init__ import DIn_PIn, DIn_POut, DOut_PIn, DOut_POut
 from information_boards.__init__ import ap_poly, ns_poly
 from information_boards.__init__ import IN, OUT
