@@ -13,7 +13,7 @@ import csv
 def run():
     remove_create_dir(logs_dir)
     #
-    init_multiprocessor()
+    init_multiprocessor(11)
     count_num_jobs = 0
     for y in xrange(9, 11):
         for m in xrange(1, 13):
