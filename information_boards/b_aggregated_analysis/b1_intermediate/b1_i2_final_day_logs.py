@@ -1,9 +1,10 @@
 import __init__
 #
+from __init__ import HOUR1
 from b_aggregated_analysis.__init__ import logs_dir, log_prefix
 from b_aggregated_analysis.__init__ import logs_last_day_dir, log_last_day_prefix
 #
-from taxi_common.file_handling_functions import remove_create_dir, get_all_files
+from taxi_common.file_handling_functions import remove_create_dir, get_all_files, get_created_time
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
 import datetime, time, csv
@@ -21,6 +22,9 @@ def run():
                 # both years data are corrupted
                 continue
             # process_files(yymm)
+            log_fpath = '%s/%s%s.csv' % (logs_dir, log_prefix, yymm)
+            if HOUR1 < (time.time() - get_created_time(log_fpath)):
+                continue
             put_task(process_file, [yymm])
             count_num_jobs += 1
     end_multiprocessor(count_num_jobs)
@@ -37,7 +41,8 @@ def process_file(yymm):
     cur_m_last_day = next_m_first_day - datetime.timedelta(days=1)
     dd = '%02d' % cur_m_last_day.day
     last_day_timestamp = time.mktime(cur_m_last_day.timetuple())
-    with open('%s/%s%s.csv' % (logs_dir, log_prefix, yymm), 'rb') as r_csvfile:
+    log_fpath = '%s/%s%s.csv' % (logs_dir, log_prefix, yymm)
+    with open(log_fpath, 'rb') as r_csvfile:
         reader = csv.reader(r_csvfile)
         headers = reader.next()
         hid = {h: i for i, h in enumerate(headers)}

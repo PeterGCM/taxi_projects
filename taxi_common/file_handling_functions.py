@@ -72,6 +72,11 @@ def get_all_files(path, filtering_prefix, filtering_postfix):
 def get_all_directories(path):
     return [dn for dn in os.listdir(path) if os.path.isdir('%s/%s' % (path, dn))]
 
+
+def get_created_time(path):
+    return os.path.getctime(path)
+
+
 if __name__ == '__main__':
     pass
                                   

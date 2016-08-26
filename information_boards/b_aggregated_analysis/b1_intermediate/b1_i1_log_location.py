@@ -26,9 +26,10 @@ def run():
             fpath = '%s/%s%s.csv' % (logs_dir, log_prefix, yymm)
             if check_path_exist(fpath):
                 continue
+            print fpath
             # process_files(yymm)
-            put_task(process_file, [yymm])
-            count_num_jobs += 1
+            # put_task(process_file, [yymm])
+            # count_num_jobs += 1
     end_multiprocessor(count_num_jobs)
 
 
