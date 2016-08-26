@@ -13,12 +13,12 @@ import csv
 def run():
     # remove_create_dir(logs_dir)
     #
-    init_multiprocessor(4)
+    init_multiprocessor(8)
     count_num_jobs = 0
-    # for y in xrange(9, 11):
-    #     for m in xrange(1, 13):
-    for y in xrange(10, 9, -1):
-        for m in range(12, 0, -1):
+    for y in xrange(9, 11):
+        for m in xrange(1, 13):
+    # for y in xrange(10, 9, -1):
+    #     for m in range(12, 0, -1):
             yymm = '%02d%02d' % (y, m)
             if yymm in ['0912', '1010']:
                 # both years data are corrupted
