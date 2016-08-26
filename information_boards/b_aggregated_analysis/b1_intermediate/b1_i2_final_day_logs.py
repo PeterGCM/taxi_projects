@@ -4,7 +4,7 @@ from __init__ import HOUR1
 from b_aggregated_analysis.__init__ import logs_dir, log_prefix
 from b_aggregated_analysis.__init__ import logs_last_day_dir, log_last_day_prefix
 #
-from taxi_common.file_handling_functions import remove_create_dir, get_all_files, get_created_time, check_dir_create
+from taxi_common.file_handling_functions import check_path_exist, get_all_files, get_created_time, check_dir_create
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
 import datetime, time, csv
@@ -41,12 +41,16 @@ def process_file(yymm):
     next_m_first_day = datetime.datetime(next_y, next_m, 1, 0)
     cur_m_last_day = next_m_first_day - datetime.timedelta(days=1)
     dd = '%02d' % cur_m_last_day.day
+    ll_fpath = '%s/%s%s%s.csv' % (logs_last_day_dir, log_last_day_prefix, yymm, dd)
+    if check_path_exist(ll_fpath):
+        return None
+    #
     last_day_timestamp = time.mktime(cur_m_last_day.timetuple())
     with open('%s/%s%s.csv' % (logs_dir, log_prefix, yymm), 'rb') as r_csvfile:
         reader = csv.reader(r_csvfile)
         headers = reader.next()
         hid = {h: i for i, h in enumerate(headers)}
-        with open('%s/%s%s%s.csv' % (logs_last_day_dir, log_last_day_prefix, yymm, dd), 'wt') as w_csvfile:
+        with open(ll_fpath, 'wb') as w_csvfile:
             writer = csv.writer(w_csvfile)
             writer.writerow(headers)
             for row in reader:        
