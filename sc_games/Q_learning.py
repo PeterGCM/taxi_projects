@@ -151,7 +151,7 @@ class sensitive_agent(object):
         # Save history
         self.iter_num += 1
         with open(self.hr_fpath, 'a') as w_csvfile:
-            writer = csv.writer(w_csvfile)
+            writer = csv.writer(w_csvfile, lineterminator='\n')
             instance = [self.iter_num, _si, _dsi, ai, reward]
             for s in self.S:
                 for ds in xrange(1, self.num_agents + 1):
