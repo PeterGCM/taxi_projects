@@ -4,7 +4,7 @@ from sc_games import taxi_data
 from sc_games import ALPH, GAMMA, EPSILON
 from sc_games import MAX_ITER_NUM
 from sc_games import EXPLORE_DURATION
-from sc_games import algo_names, get_current_pyname
+from sc_games.old_codes1 import algo_names, get_current_pyname
 from problems import sc_game0, sc_game1, sc_game2, sc_game3
 #
 from taxi_common.file_handling_functions import check_dir_create
