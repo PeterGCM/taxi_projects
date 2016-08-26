@@ -17,8 +17,6 @@ def run():
     count_num_jobs = 0
     for y in xrange(9, 11):
         for m in xrange(1, 13):
-    # for y in xrange(10, 9, -1):
-    #     for m in range(12, 0, -1):
             yymm = '%02d%02d' % (y, m)
             if yymm in ['0912', '1010']:
                 # both years data are corrupted
@@ -26,10 +24,10 @@ def run():
             fpath = '%s/%s%s.csv' % (logs_dir, log_prefix, yymm)
             if check_path_exist(fpath):
                 continue
-            print fpath
+            # print fpath
             # process_files(yymm)
-            # put_task(process_file, [yymm])
-            # count_num_jobs += 1
+            put_task(process_file, [yymm])
+            count_num_jobs += 1
     end_multiprocessor(count_num_jobs)
 
 
