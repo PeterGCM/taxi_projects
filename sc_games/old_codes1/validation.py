@@ -1,7 +1,7 @@
-import __init__
+import sc_games
 #
-from __init__ import taxi_data, algo_names
-from __init__ import MAX_ITER_NUM
+from sc_games import taxi_data, algo_names
+from sc_games import MAX_ITER_NUM
 from problems import sc_game0, sc_game1, sc_game2, sc_game3
 #
 from taxi_common.file_handling_functions import check_path_exist, save_pickle_file, load_pickle_file

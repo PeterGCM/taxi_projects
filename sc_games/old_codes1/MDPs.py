@@ -1,10 +1,10 @@
-import __init__
+import sc_games
 #
-from __init__ import taxi_data
-from __init__ import ALPH, GAMMA, EPSILON
-from __init__ import MAX_ITER_NUM
-from __init__ import EXPLORE_DURATION
-from __init__ import algo_names, get_current_pyname
+from sc_games import taxi_data
+from sc_games import ALPH, GAMMA, EPSILON
+from sc_games import MAX_ITER_NUM
+from sc_games import EXPLORE_DURATION
+from sc_games import algo_names, get_current_pyname
 from problems import sc_game0, sc_game1, sc_game2, sc_game3
 #
 from taxi_common.file_handling_functions import check_dir_create

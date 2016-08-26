@@ -1,6 +1,6 @@
 import stochastic_congestion_games.__init__
 #
-from __init__ import SEED_NUM
+from sc_games import SEED_NUM
 from stochastic_congestion_games.__init__ import problem_dir
 from taxi_common.file_handling_functions import check_dir_create, check_path_exist, save_pickle_file, load_pickle_file
 #

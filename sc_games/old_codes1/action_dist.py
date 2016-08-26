@@ -1,6 +1,6 @@
-import __init__
+import sc_games
 #
-from __init__ import taxi_data
+from sc_games import taxi_data
 from problems import sc_game0, sc_game1, sc_game2, sc_game3
 
 import csv

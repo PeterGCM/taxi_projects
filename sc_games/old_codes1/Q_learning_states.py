@@ -1,10 +1,10 @@
-import __init__
+import sc_games
 #
-from __init__ import taxi_data
-from __init__ import ALPH, GAMMA, EPSILON
-from __init__ import MAX_ITER_NUM
-from __init__ import EXPLORE_DURATION
-from __init__ import algo_names, get_current_pyname
+from sc_games import taxi_data
+from sc_games import ALPH, GAMMA, EPSILON
+from sc_games import MAX_ITER_NUM
+from sc_games import EXPLORE_DURATION
+from sc_games import algo_names, get_current_pyname
 from problems import sc_game0, sc_game1, sc_game2, sc_game3
 #
 from taxi_common.file_handling_functions import check_dir_create
@@ -78,22 +78,18 @@ def run(problem):
         #
         # Simulation for estimate next states
         #
-
+        sim_next_states = []
+        for _i in xrange(num_agents):
+            sim_next_states.append(0 if random.random() < Tr_sas[ags_S[_i]][ags_A[_i]][0] else 1)
+        _ds = [0] * len(S)
+        for _s in sim_next_states:
+            _ds[_s] += 1
         #
         # Update Q-values
         #
         ags_convergence = [False] * num_agents
         for i0 in xrange(num_agents):
-            si, ai = ags_S[i0], ags_A[i0]
-            #
-            sim_next_states = []
-            for _i in xrange(num_agents):
-                sim_next_states.append(0 if random.random() < Tr_sas[ags_S[_i]][ags_A[_i]][0] else 1)
-            _ds = [0] * len(S)
-            for _s in sim_next_states:
-                _ds[_s] += 1
-            _si = sim_next_states[i0]
-            #
+            si, ai, _si = ags_S[i0], ags_A[i0], sim_next_states[i0]
             Q_sa0 = i_Q_sa[si, ds[si], ai]
             max_Q_sa = -1e400
             i_Q_sa = ags_Q_sa[i0]

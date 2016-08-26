@@ -1,10 +1,10 @@
-import __init__
+import sc_games
 #
-from __init__ import taxi_data
-from __init__ import ALPH, GAMMA, EPSILON
-from __init__ import MAX_ITER_NUM
-from __init__ import EXPLORE_DURATION
-from __init__ import algo_names, get_current_pyname
+from sc_games import taxi_data
+from sc_games import ALPH, GAMMA, EPSILON
+from sc_games import MAX_ITER_NUM
+from sc_games import EXPLORE_DURATION
+from sc_games import algo_names, get_current_pyname
 from problems import sc_game0, sc_game1, sc_game2, sc_game3
 #
 from taxi_common.file_handling_functions import check_dir_create
@@ -24,23 +24,26 @@ def run(problem):
     for _ in xrange(num_agents):
         Q_sa = {}
         for s in S:
-            for a in A:
-                Q_sa[s, a] = 0
+            for i in xrange(1, num_agents + 1):
+                for a in A:
+                    Q_sa[s, i, a] = 0
         ags_Q_sa.append(Q_sa)
     fn = '%s/history_%s_%s.csv' % (prob_dir, algo_names[get_current_pyname()], problem.__name__)
     with open(fn, 'wt') as w_csvfile:
         writer = csv.writer(w_csvfile)
-        new_headers = ['iter', 'agent', 'state', 'dist', 'action']
+        new_headers = ['iter','agent','state','dist','action']
         for s in S:
-            for a in A:
-                new_headers.append('Q(%d,%d)'%(s, a))
+            for i in xrange(1, num_agents + 1):
+                for a in A:
+                    new_headers.append('Q(%d,%d,%d)'%(s, i, a))
         writer.writerow(new_headers)
         for i in xrange(num_agents):
             i_Q_sa = ags_Q_sa[i]
-            instance = [iter_count, i, ags_S[i], 0, 0]
+            instance = [iter_count, i, ags_S[i],0, 0]
             for s in S:
-                for a in A:
-                    instance.append(i_Q_sa[s, a])
+                for i in xrange(1, num_agents + 1):
+                    for a in A:
+                        instance.append(i_Q_sa[s, i, a])
             writer.writerow(instance)
     #
     # Start stochastic congestion games
@@ -57,7 +60,7 @@ def run(problem):
         ags_A = []
         for i in xrange(num_agents):
             r = random.random()
-            if iter_count < EXPLORE_DURATION and r < 0.008:
+            if iter_count < EXPLORE_DURATION and r < 0.01:
                 #
                 # Exploration
                 #
@@ -68,38 +71,49 @@ def run(problem):
                 i_Q_sa = ags_Q_sa[i]
                 max_Q_sa, argmax_a = -1e400, None
                 for ai in A:
-                    if max_Q_sa < i_Q_sa[si, ai]:
-                        max_Q_sa = i_Q_sa[si, ai]
+                    if max_Q_sa < i_Q_sa[si, ds[si], ai]:
+                        max_Q_sa = i_Q_sa[si, ds[si], ai]
                         argmax_a = ai
                 ags_A.append(argmax_a)
+        #
+        # Simulation for estimate next states
+        #
+
         #
         # Update Q-values
         #
         ags_convergence = [False] * num_agents
         for i0 in xrange(num_agents):
             si, ai = ags_S[i0], ags_A[i0]
-            _si = 0 if random.random() < Tr_sas[si][ai][0] else 1  # This can be applicable when only two actions are considered
             #
+            sim_next_states = []
+            for _i in xrange(num_agents):
+                sim_next_states.append(0 if random.random() < Tr_sas[ags_S[_i]][ags_A[_i]][0] else 1)
+            _ds = [0] * len(S)
+            for _s in sim_next_states:
+                _ds[_s] += 1
+            _si = sim_next_states[i0]
+            #
+            Q_sa0 = i_Q_sa[si, ds[si], ai]
             max_Q_sa = -1e400
             i_Q_sa = ags_Q_sa[i0]
             for _ai in A:
-                if max_Q_sa < i_Q_sa[_si, _ai]:
-                    max_Q_sa = i_Q_sa[_si, _ai]
-            Q_sa0 = i_Q_sa[si, ai]
+                if max_Q_sa < i_Q_sa[_si, _ds[_si], _ai]:
+                    max_Q_sa = i_Q_sa[_si, _ds[_si], _ai]
             reward = R(si, ai, ds[si])
-            i_Q_sa[si, ai] += ALPH * (reward + GAMMA * max_Q_sa - i_Q_sa[si, ai])
-            ags_convergence[i0] = True if abs(Q_sa0 - i_Q_sa[si, ai]) < EPSILON else False
+            i_Q_sa[si, ds[si], ai] += ALPH * (reward + GAMMA * max_Q_sa - i_Q_sa[si, ds[si], ai])
+            ags_convergence[i0] = True if abs(Q_sa0 - i_Q_sa[si, ds[si], ai]) < EPSILON else False
             ags_S[i0] = _si
             #
             # Save history
             #
             with open(fn, 'a') as w_csvfile:
                 writer = csv.writer(w_csvfile)
-                # instance = [iter_count, i0, si, ai]
                 instance = [iter_count, i0, si, ds[si], ai]
                 for s in S:
-                    for a in A:  
-                        instance.append(i_Q_sa[s, a])
+                    for i in xrange(1, num_agents + 1):
+                        for a in A:
+                            instance.append(i_Q_sa[s, i, a])
                 writer.writerow(instance)
         #
         # Check convergence
