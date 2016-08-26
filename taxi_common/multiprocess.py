@@ -48,7 +48,7 @@ def put_task(f, args):
 def end_multiprocessor(num_tasks):
     global _tasks
     # end procedure for multi processor
-    # for _ in xrange(num_tasks):
-    #     _tasks.put(None)
+    for _ in xrange(num_tasks):
+        _tasks.put(None)
     # Wait for all of the tasks to finish
     _tasks.join()
