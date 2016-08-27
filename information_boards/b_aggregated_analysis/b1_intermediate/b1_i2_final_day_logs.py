@@ -10,8 +10,6 @@ from taxi_common.multiprocess import init_multiprocessor, put_task, end_multipro
 import datetime, time, csv
 
 
-assert False
-
 def run():
     check_dir_create(logs_last_day_dir)
     #
