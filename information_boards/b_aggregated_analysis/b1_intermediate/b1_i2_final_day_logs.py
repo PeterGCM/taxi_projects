@@ -21,9 +21,6 @@ def run():
             if yymm in ['0912', '1010']:
                 # both years data_20160826 are corrupted
                 continue
-            log_fpath = '%s/%s%s.csv' % (logs_dir, log_prefix, yymm)
-            if (time.time() - get_created_time(log_fpath)) < HOUR1:
-                continue
             process_file(yymm)
             # put_task(process_file, [yymm])
             # count_num_jobs += 1
@@ -46,12 +43,15 @@ def process_file(yymm):
         return None
     #
     last_day_timestamp = time.mktime(cur_m_last_day.timetuple())
-    with open('%s/%s%s.csv' % (logs_dir, log_prefix, yymm), 'rb') as r_csvfile:
+    log_fpath = '%s/%s%s.csv' % (logs_dir, log_prefix, yymm)
+    if (time.time() - get_created_time(log_fpath)) < HOUR1:
+        return None
+    with open(log_fpath, 'rb') as r_csvfile:
         reader = csv.reader(r_csvfile)
         headers = reader.next()
         hid = {h: i for i, h in enumerate(headers)}
         with open(ll_fpath, 'wb') as w_csvfile:
-            writer = csv.writer(w_csvfile)
+            writer = csv.writer(w_csvfile, lineterminator='\n')
             writer.writerow(headers)
             for row in reader:        
                 t = eval(row[hid['time']])

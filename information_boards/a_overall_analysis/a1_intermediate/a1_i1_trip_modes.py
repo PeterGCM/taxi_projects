@@ -1,4 +1,4 @@
-import information_boards.a_overall_analysis.a1_intermediate
+import __init__
 #
 from information_boards.a_overall_analysis import trips_dir, trip_prefix
 from information_boards import taxi_home
@@ -38,7 +38,7 @@ def process_file(yymm):
     #
     vehicle_prev_trip_position_time = {}
     with open('%s/%s%s.csv' % (trips_dir, trip_prefix, yymm), 'wt') as w_csvfile:
-        writer = csv.writer(w_csvfile)
+        writer = csv.writer(w_csvfile, lineterminator='\n')
         new_headers = ['tid', 'vid', 'did', 'start-time', 'end-time',
                        'duration', 'fare',
                        'ap-trip-mode', 'ns-trip-mode',

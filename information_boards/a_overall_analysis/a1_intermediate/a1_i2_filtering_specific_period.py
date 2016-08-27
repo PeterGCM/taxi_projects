@@ -1,4 +1,4 @@
-import information_boards.a_overall_analysis.a1_intermediate
+import __init__
 #
 from information_boards.a_overall_analysis import trips_dir, trip_prefix
 from information_boards import error_period
@@ -17,7 +17,7 @@ def run():
             headers = reader.next()
             hid = {h: i for i, h in enumerate(headers)}
             with open(temp_fpath, 'wb') as w_csvfile:
-                writer = csv.writer(w_csvfile)
+                writer = csv.writer(w_csvfile, lineterminator='\n')
                 writer.writerow(headers)
                 for row in reader:
                     t = eval(row[hid['start-time']])

@@ -1,21 +1,22 @@
-import information_boards.b_aggregated_analysis.b1_intermediate
+import __init__
 #
+from information_boards.b_aggregated_analysis.b1_intermediate import HOUR1
 from information_boards.b_aggregated_analysis import logs_dir, log_prefix
 from information_boards.b_aggregated_analysis import logs_last_day_dir, log_last_day_prefix
 from information_boards.b_aggregated_analysis import ap_crossing_dir, ap_crossing_prefix
 from information_boards.b_aggregated_analysis import ns_crossing_dir, ns_crossing_prefix
 from information_boards import IN, OUT
 #
-from taxi_common.file_handling_functions import get_all_files, save_pickle_file, remove_create_dir
+from taxi_common.file_handling_functions import get_all_files, save_pickle_file, remove_create_dir, check_path_exist, get_created_time
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
-import csv
+import csv, time
 
 
 def run():
-    remove_create_dir(ap_crossing_dir); remove_create_dir(ns_crossing_dir)
+    check_path_exist(ap_crossing_dir); check_path_exist(ns_crossing_dir)
     #
-    init_multiprocessor()
+    # init_multiprocessor()
     count_num_jobs = 0
     for y in xrange(9, 11):
         for m in xrange(1, 13):
@@ -23,12 +24,17 @@ def run():
             if yymm in ['0912', '1010']:
                 # both years data are corrupted
                 continue
-            # process_files(yymm)
-            put_task(process_file, [yymm])
+            process_file(yymm)
+            # put_task(process_file, [yymm])
             count_num_jobs += 1
+    # end_multiprocessor(count_num_jobs)
 
 
 def process_file(yymm):
+    ap_pkl_fpath = '%s/%s%s.pkl' % (ap_crossing_dir, ap_crossing_prefix, yymm)
+    ns_pkl_fpath = '%s/%s%s.pkl' % (ns_crossing_dir, ns_crossing_prefix, yymm)
+    if check_path_exist(ap_pkl_fpath) and check_path_exist(ns_pkl_fpath):
+        return None
     print 'handle the file; %s' % yymm
     veh_ap_crossing_time, veh_last_log_ap_or_not = {}, {}
     veh_ns_crossing_time, veh_last_log_ns_or_not = {}, {}
@@ -45,6 +51,8 @@ def process_file(yymm):
                 break
         assert prev_fn, yymm
         path_to_last_day_csv_file = '%s/%s' % (logs_last_day_dir, prev_fn)
+        if (time.time() - get_created_time(path_to_last_day_csv_file)) < HOUR1:
+            return None
         veh_ap_crossing_time, veh_last_log_ap_or_not, veh_ns_crossing_time, veh_last_log_ns_or_not = \
                         record_crossing_time(path_to_last_day_csv_file, veh_ap_crossing_time, veh_last_log_ap_or_not,
                                              veh_ns_crossing_time, veh_last_log_ns_or_not)
@@ -53,8 +61,8 @@ def process_file(yymm):
             record_crossing_time(path_to_csv_file, veh_ap_crossing_time, veh_last_log_ap_or_not,
                                  veh_ns_crossing_time, veh_last_log_ns_or_not)
     #
-    save_pickle_file('%s/%s%s.pkl' % (ap_crossing_dir, ap_crossing_prefix, yymm), veh_ap_crossing_time)
-    save_pickle_file('%s/%s%s.pkl' % (ns_crossing_dir, ns_crossing_prefix, yymm), veh_ns_crossing_time)
+    save_pickle_file(ap_pkl_fpath, veh_ap_crossing_time)
+    save_pickle_file(ns_pkl_fpath, veh_ns_crossing_time)
     print 'end the file; %s' % yymm
 
 
