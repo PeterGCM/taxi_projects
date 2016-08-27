@@ -7,14 +7,14 @@ from information_boards.b_aggregated_analysis import ap_crossing_dir, ap_crossin
 from information_boards.b_aggregated_analysis import ns_crossing_dir, ns_crossing_prefix
 from information_boards import IN, OUT
 #
-from taxi_common.file_handling_functions import get_all_files, save_pickle_file, remove_create_dir, check_path_exist, get_created_time
+from taxi_common.file_handling_functions import get_all_files, save_pickle_file, check_dir_create, check_path_exist, get_created_time
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
 import csv, time
 
 
 def run():
-    check_path_exist(ap_crossing_dir); check_path_exist(ns_crossing_dir)
+    check_dir_create(ap_crossing_dir); check_dir_create(ns_crossing_dir)
     #
     # init_multiprocessor()
     count_num_jobs = 0
