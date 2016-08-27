@@ -5,7 +5,7 @@ import information_boards.__init__
 #
 from taxi_common.file_handling_functions import check_dir_create
 #
-# full time drivers data
+# full time drivers data_20160826
 #
 from information_boards.__init__ import taxi_data, summary_dir
 check_dir_create(taxi_data)

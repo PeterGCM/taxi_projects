@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 
 
 def run():
-    G = nx.read_gpickle('/Users/JerryHan88/PycharmProjects/taxi_projects/community_analysis/data/partitioned_group/2009-TH(30)-whole.pkl')
+    G = nx.read_gpickle('/Users/JerryHan88/PycharmProjects/taxi_projects/community_analysis/data_20160826/partitioned_group/2009-TH(30)-whole.pkl')
     # first compute the best partition
     partition = community.best_partition(G)
     print 'Partitioning finished'

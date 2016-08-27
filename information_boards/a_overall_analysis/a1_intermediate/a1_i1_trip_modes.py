@@ -1,11 +1,11 @@
-import __init__
+import information_boards.a_overall_analysis.a1_intermediate
 #
-from information_boards.__init__ import taxi_home
-from information_boards.__init__ import DIn_PIn, DIn_POut, DOut_PIn, DOut_POut
-from information_boards.__init__ import ap_poly, ns_poly
-from information_boards.__init__ import IN, OUT
-from information_boards.__init__ import AM2, AM5
-from a_overall_analysis.__init__ import trips_dir, trip_prefix
+from information_boards.a_overall_analysis import trips_dir, trip_prefix
+from information_boards import taxi_home
+from information_boards import DIn_PIn, DIn_POut, DOut_PIn, DOut_POut
+from information_boards import ap_poly, ns_poly
+from information_boards import IN, OUT
+from information_boards import AM2, AM5
 #
 from taxi_common.file_handling_functions import remove_create_dir
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor

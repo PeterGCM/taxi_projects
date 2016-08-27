@@ -9,8 +9,8 @@ taxi_data = os.path.dirname(os.path.realpath(__file__)) + '/data'; check_dir_cre
 #
 SEED_NUM = 3
 ALPH, GAMMA, EPSILON = .9, .9, .00000001
-MAX_ITER_NUM = 50000
-BIG_M = 100
+MAX_ITER_NUM = 30000
+BIG_M = 200
 EXPLORE_DURATION = MAX_ITER_NUM * 0.4
 
 

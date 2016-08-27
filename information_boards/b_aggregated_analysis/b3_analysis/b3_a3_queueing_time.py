@@ -37,7 +37,7 @@ def draw_cumulative_histogram(Y09, Y10, fn_postfix):
     temp_Y09, temp_Y10 = [x / float(SEC60) for x in Y09['queueing-time']], [x / float(SEC60) for x in Y10['queueing-time']]
     filtering_boundary = 120
     x1, x2 = [x for x in temp_Y09 if x < filtering_boundary], [x for x in temp_Y10 if x < filtering_boundary]
-    print '----------------------the number of filtered data (%s)' % fn_postfix
+    print '----------------------the number of filtered data_20160826 (%s)' % fn_postfix
     print 'Y09: %d(%.2f%%), Y10: %d(%.2f%%)' % (len(temp_Y09) - len(x1),
                                             (len(temp_Y09) - len(x1)) / float(len(temp_Y09)) * 100,
                                             len(temp_Y10) - len(x2),

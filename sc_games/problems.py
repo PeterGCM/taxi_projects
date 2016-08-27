@@ -69,6 +69,34 @@ def scG_threeState():
     return num_agents, S, A, Tr_sas, R, ags_S
 
 
+
+
+
+
+def sc_game4():
+    seed(SEED_NUM)
+    #
+    num_agents, S, A = 10, range(2), range(2)
+    Tr_sas = [
+        [[.8, .2],  # s0 = 0
+         [.1, .9]],
+        [[.7, .3],  # s0 = 1
+         [.2, .8]]
+    ]
+    # Only dependent on the number of state
+    reward_constants = [ # Reward depends on action and the number of agent same state
+                         # The first constant is relate to the number of state, another is just constant
+                        (8, 2),
+                        (12, 5)]; assert len(reward_constants) == len(A)
+    # R = lambda si, ai, ds: reward_constants[ai][0] / float(ds) + reward_constants[ai][1]
+    def R(si, ai, ds):
+        actual_reward = reward_constants[ai][0] / float(ds) + reward_constants[ai][1]
+        variance = actual_reward * 0.1
+        return np.random.uniform(actual_reward - variance, actual_reward + variance)
+    ags_S = [0, 1, 1, 0, 1, 1, 0, 1, 1, 1]; assert len(ags_S) == num_agents
+    return num_agents, S, A, Tr_sas, R, ags_S
+
+
 def validate_transition(Tr_sas, S, A):
     for _s in S:
         for a in A:

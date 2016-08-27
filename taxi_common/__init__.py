@@ -29,7 +29,7 @@ else:
     print 'This python is not 2.7 version'
     assert False
 #
-tc_data = os.path.dirname(os.path.realpath(__file__)) + '/data'
+tc_data = os.path.dirname(os.path.realpath(__file__)) + '/data_20160826'
 singapore_poly_fn = tc_data + '/Singapore_polygon'
 singapore_grid_xy_points = tc_data + '/Singapore_grid_xy_points.pkl'
 singapore_zones = tc_data + '/Singapore_zones.pkl'

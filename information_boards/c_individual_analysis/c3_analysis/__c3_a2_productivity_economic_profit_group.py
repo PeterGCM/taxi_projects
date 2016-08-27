@@ -22,7 +22,7 @@ def run():
     check_dir_create(tables_dir)
     write_text_file(ftd_group_analysis, 'Init', True)
     #
-    # Load data
+    # Load data_20160826
     #
     y09_gen_d_prod_for_ap, y10_gen_d_prod_for_ap = load_picle_file(ftd_general_prod_db_for_ap)
     y09_gen_d_prod_for_ns, y10_gen_d_prod_for_ns = load_picle_file(ftd_general_prod_db_for_ns)

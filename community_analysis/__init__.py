@@ -5,7 +5,7 @@ from taxi_common.__init__ import get_taxi_home_path
 taxi_home = get_taxi_home_path()
 #
 from taxi_common.file_handling_functions import check_dir_create
-taxi_data = os.path.dirname(os.path.realpath(__file__)) + '/data'; check_dir_create(taxi_data)
+taxi_data = os.path.dirname(os.path.realpath(__file__)) + '/data_20160826'; check_dir_create(taxi_data)
 charts_dir = taxi_data + '/charts'; check_dir_create(charts_dir)
 #
 log_dir = taxi_data + '/logs'; check_dir_create(log_dir)

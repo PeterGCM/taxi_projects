@@ -1,10 +1,10 @@
-import __init__
+import information_boards.b_aggregated_analysis.b1_intermediate
 #
-from information_boards.__init__ import IN, OUT
-from b_aggregated_analysis.__init__ import logs_dir, log_prefix
-from b_aggregated_analysis.__init__ import logs_last_day_dir, log_last_day_prefix
-from b_aggregated_analysis.__init__ import ap_crossing_dir, ap_crossing_prefix
-from b_aggregated_analysis.__init__ import ns_crossing_dir, ns_crossing_prefix
+from information_boards.b_aggregated_analysis import logs_dir, log_prefix
+from information_boards.b_aggregated_analysis import logs_last_day_dir, log_last_day_prefix
+from information_boards.b_aggregated_analysis import ap_crossing_dir, ap_crossing_prefix
+from information_boards.b_aggregated_analysis import ns_crossing_dir, ns_crossing_prefix
+from information_boards import IN, OUT
 #
 from taxi_common.file_handling_functions import get_all_files, save_pickle_file, remove_create_dir
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor

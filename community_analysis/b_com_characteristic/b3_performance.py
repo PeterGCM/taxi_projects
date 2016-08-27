@@ -9,11 +9,11 @@ import numpy as np
 
 
 def run():
-    target_dir = '/Users/JerryHan88/PycharmProjects/taxi_projects/community_analysis/data/gtrips/2009-TH(23)/0901'
+    target_dir = '/Users/JerryHan88/PycharmProjects/taxi_projects/community_analysis/data_20160826/gtrips/2009-TH(23)/0901'
     num_com = len(get_all_files(target_dir, '', '.csv'))
     com_fare = {i : [] for i in range(1, num_com + 1)}
     for mm in range(1, 12):
-        target_dir = '/Users/JerryHan88/PycharmProjects/taxi_projects/community_analysis/data/gtrips/2009-TH(23)/09%02d' % mm
+        target_dir = '/Users/JerryHan88/PycharmProjects/taxi_projects/community_analysis/data_20160826/gtrips/2009-TH(23)/09%02d' % mm
         assert num_com == len(get_all_files(target_dir, '', '.csv'))
         for i in range(1, num_com + 1):
             df = pd.read_csv('%s/gtrips-G(%d).csv' % (target_dir, i))

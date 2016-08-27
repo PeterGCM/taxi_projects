@@ -1,8 +1,8 @@
-import __init__
+import information_boards.b_aggregated_analysis.b1_intermediate
 #
-from __init__ import HOUR1
-from b_aggregated_analysis.__init__ import logs_dir, log_prefix
-from b_aggregated_analysis.__init__ import logs_last_day_dir, log_last_day_prefix
+from information_boards.b_aggregated_analysis.b1_intermediate import HOUR1
+from information_boards.b_aggregated_analysis import logs_dir, log_prefix
+from information_boards.b_aggregated_analysis import logs_last_day_dir, log_last_day_prefix
 #
 from taxi_common.file_handling_functions import check_path_exist, get_all_files, get_created_time, check_dir_create
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
@@ -19,7 +19,7 @@ def run():
         for m in xrange(1, 13):
             yymm = '%02d%02d' % (y, m)
             if yymm in ['0912', '1010']:
-                # both years data are corrupted
+                # both years data_20160826 are corrupted
                 continue
             log_fpath = '%s/%s%s.csv' % (logs_dir, log_prefix, yymm)
             if (time.time() - get_created_time(log_fpath)) < HOUR1:

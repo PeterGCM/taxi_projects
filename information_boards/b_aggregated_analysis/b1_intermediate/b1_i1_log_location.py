@@ -1,8 +1,8 @@
-import __init__
+import information_boards.b_aggregated_analysis.b1_intermediate
 #
-from information_boards.__init__ import  taxi_home
-from information_boards.__init__ import ap_poly, ns_poly
-from b_aggregated_analysis.__init__ import logs_dir, log_prefix
+from information_boards.b_aggregated_analysis import logs_dir, log_prefix
+from information_boards import taxi_home
+from information_boards import ap_poly, ns_poly
 #
 from taxi_common.file_handling_functions import remove_create_dir, check_path_exist
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
@@ -19,7 +19,7 @@ def run():
         for m in xrange(1, 13):
             yymm = '%02d%02d' % (y, m)
             if yymm in ['0912', '1010']:
-                # both years data are corrupted
+                # both years data_20160826 are corrupted
                 continue
             fpath = '%s/%s%s.csv' % (logs_dir, log_prefix, yymm)
             if check_path_exist(fpath):

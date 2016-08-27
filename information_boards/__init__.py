@@ -5,7 +5,7 @@ from taxi_common.__init__ import get_taxi_home_path
 taxi_home = get_taxi_home_path()
 #
 from taxi_common.file_handling_functions import check_dir_create
-taxi_data = os.path.dirname(os.path.realpath(__file__)) + '/data'
+taxi_data = os.path.dirname(os.path.realpath(__file__)) + '/data_20160826'
 check_dir_create(taxi_data)
 # Trip mode
 DIn_PIn, DIn_POut, DOut_PIn, DOut_POut = range(4)
@@ -27,6 +27,6 @@ from taxi_common.geo_functions import read_generate_polygon
 ap_poly_fn = os.path.dirname(os.path.realpath(__file__)) + '/src/airport_polygon'
 ns_poly_fn = os.path.dirname(os.path.realpath(__file__)) + '/src/night_safari_polygon'
 ap_poly, ns_poly = read_generate_polygon(ap_poly_fn), read_generate_polygon(ns_poly_fn)
-# For meaningless data filtering
+# For meaningless data_20160826 filtering
 AM2, AM5 = 2, 5
 error_period = [('9', '3', '15', '1'), ('10', '3', '17', '1'), ('10', '7', '4', '6'), ('10', '7', '4', '7'), ('10', '7', '4', '8')]

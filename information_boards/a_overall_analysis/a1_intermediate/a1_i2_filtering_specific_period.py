@@ -1,7 +1,7 @@
-import __init__
+import information_boards.a_overall_analysis.a1_intermediate
 #
-from information_boards.__init__ import error_period
-from a_overall_analysis.__init__ import trips_dir, trip_prefix
+from information_boards.a_overall_analysis import trips_dir, trip_prefix
+from information_boards import error_period
 #
 import csv, datetime
 
