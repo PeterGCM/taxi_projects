@@ -81,7 +81,7 @@ class normal_agent(object):
         problem_name = hr_dir.split('/')[-1]
         self.hr_fpath = '%s/%s-normal-agent%d.csv' % (hr_dir, problem_name, agt_id)
         with open(self.hr_fpath, 'wb') as w_csvfile:
-            writer = csv.writer(w_csvfile)
+            writer = csv.writer(w_csvfile, lineterminator='\n')
             new_headers = ['iter', 's', 'ds', 'a', 'reward']
             for s in S:
                 for a in A:
@@ -119,17 +119,17 @@ class sensitive_agent(object):
         self.S, self.A, self.num_agents = S, A, num_agents
         self.Q_sa = {}
         for s in S:
-            for i in xrange(1, num_agents + 1):
+            for i in xrange(num_agents + 1):
                 for a in A:
                     self.Q_sa[s, i, a] = BIG_M
         self.iter_num = 0
         problem_name = hr_dir.split('/')[-1]
         self.hr_fpath = '%s/%s-sensitive-agent%d.csv' % (hr_dir, problem_name, agt_id)
         with open(self.hr_fpath, 'wb') as w_csvfile:
-            writer = csv.writer(w_csvfile)
+            writer = csv.writer(w_csvfile, lineterminator='\n')
             new_headers = ['iter', 's', 'ds', 'a', 'reward']
             for s in S:
-                for i in xrange(1, num_agents + 1):
+                for i in xrange(num_agents + 1):
                     for a in A:
                         new_headers.append('Q(%d,%d,%d)' % (s, i, a))
             writer.writerow(new_headers)
@@ -154,7 +154,7 @@ class sensitive_agent(object):
             writer = csv.writer(w_csvfile, lineterminator='\n')
             instance = [self.iter_num, _si, _dsi, ai, reward]
             for s in self.S:
-                for ds in xrange(1, self.num_agents + 1):
+                for ds in xrange(self.num_agents + 1):
                     for a in self.A:
                         instance.append(self.Q_sa[s, ds, a])
             writer.writerow(instance)

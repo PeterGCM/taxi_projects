@@ -16,7 +16,7 @@ import csv, time
 def run():
     check_dir_create(ap_crossing_dir); check_dir_create(ns_crossing_dir)
     #
-    # init_multiprocessor()
+    init_multiprocessor(2)
     count_num_jobs = 0
     for y in xrange(9, 11):
         for m in xrange(1, 13):
@@ -24,10 +24,10 @@ def run():
             if yymm in ['0912', '1010']:
                 # both years data are corrupted
                 continue
-            process_file(yymm)
-            # put_task(process_file, [yymm])
+            # process_file(yymm)
+            put_task(process_file, [yymm])
             count_num_jobs += 1
-    # end_multiprocessor(count_num_jobs)
+    end_multiprocessor(count_num_jobs)
 
 
 def process_file(yymm):
