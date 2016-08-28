@@ -33,15 +33,14 @@ def run():
 
 
 def process_file(yymm):
-    print 'handle the file; %s' % yymm
-    #
-    # Load pickle files
-    #
     ap_pkl_file_path = '%s/%s%s.pkl' % (ap_crossing_dir, ap_crossing_prefix, yymm)
     ns_pkl_file_path = '%s/%s%s.pkl' % (ns_crossing_dir, ns_crossing_prefix, yymm)
     if not (check_path_exist(ap_pkl_file_path) and check_path_exist(ns_pkl_file_path)):
         return None
-
+    print 'handle the file; %s' % yymm
+    #
+    # Load pickle files
+    #
     ap_crossing_time, ns_crossing_time = load_pickle_file(ap_pkl_file_path), load_pickle_file(ns_pkl_file_path)
     #
     # Initiate csv files
