@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import __init__
 #
 from information_boards import DIn_PIn, DIn_POut, DOut_PIn, DOut_POut
@@ -53,10 +54,10 @@ def process_file(yymm):
     for fpath in [ap_trip_fpath, ns_trip_fpath]:
         with open(fpath, 'wt') as w_csvfile:
                 writer = csv.writer(w_csvfile, lineterminator='\n')
-                new_headers = ["tid", "vid", "did",
-                               "start-time", "end-time", "duration",
-                               "fare", "prev-trip-end-time",
-                               "trip-mode", "queue—join-time", "queueing-time"]
+                new_headers = ['tid', 'vid', 'did',
+                               'start-time', 'end-time', 'duration',
+                               'fare', 'prev-trip-end-time',
+                               'trip-mode', 'queue—join-time', 'queueing-time']
                 writer.writerow(new_headers)
     #
     with open('%s/%s%s.csv' % (trips_dir, trip_prefix, yymm), 'rb') as r_csvfile:
