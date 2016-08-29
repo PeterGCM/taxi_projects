@@ -28,7 +28,6 @@ def run():
 
 
 def process_file(yymm):
-    print 'handle the file; %s' % yymm
     y, m = int('20' + yymm[:2]), int(yymm[2:])
     # find the next month's first day
     if m == 12:
@@ -41,6 +40,7 @@ def process_file(yymm):
     ll_fpath = '%s/%s%s%s.csv' % (logs_last_day_dir, log_last_day_prefix, yymm, dd)
     if check_path_exist(ll_fpath):
         return None
+    print 'handle the file; %s' % yymm
     #
     last_day_timestamp = time.mktime(cur_m_last_day.timetuple())
     log_fpath = '%s/%s%s.csv' % (logs_dir, log_prefix, yymm)
