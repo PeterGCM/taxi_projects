@@ -44,8 +44,8 @@ def process_file(yymm):
     #
     last_day_timestamp = time.mktime(cur_m_last_day.timetuple())
     log_fpath = '%s/%s%s.csv' % (logs_dir, log_prefix, yymm)
-    if (time.time() - get_created_time(log_fpath)) < HOUR1:
-        return None
+    # if (time.time() - get_created_time(log_fpath)) < HOUR1:
+    #     return None
     with open(log_fpath, 'rb') as r_csvfile:
         reader = csv.reader(r_csvfile)
         headers = reader.next()
