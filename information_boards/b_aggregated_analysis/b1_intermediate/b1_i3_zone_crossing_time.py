@@ -51,8 +51,8 @@ def process_file(yymm):
                 break
         assert prev_fn, yymm
         path_to_last_day_csv_file = '%s/%s' % (logs_last_day_dir, prev_fn)
-        if (time.time() - get_created_time(path_to_last_day_csv_file)) < HOUR1:
-            return None
+        # if (time.time() - get_created_time(path_to_last_day_csv_file)) < HOUR1:
+        #     return None
         veh_ap_crossing_time, veh_last_log_ap_or_not, veh_ns_crossing_time, veh_last_log_ns_or_not = \
                         record_crossing_time(path_to_last_day_csv_file, veh_ap_crossing_time, veh_last_log_ap_or_not,
                                              veh_ns_crossing_time, veh_last_log_ns_or_not)
