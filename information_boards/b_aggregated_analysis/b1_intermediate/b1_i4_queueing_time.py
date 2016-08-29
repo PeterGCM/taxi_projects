@@ -27,7 +27,7 @@ def run():
             if yymm in ['0912', '1010']:
                 # both years data are corrupted
                 continue
-            process_file(yymm)
+            # process_file(yymm)
             put_task(process_file, [yymm])
             count_num_jobs += 1
     end_multiprocessor(count_num_jobs)
