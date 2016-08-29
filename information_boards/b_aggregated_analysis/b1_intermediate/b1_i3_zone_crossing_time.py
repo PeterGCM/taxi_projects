@@ -16,7 +16,7 @@ import csv, time
 def run():
     check_dir_create(ap_crossing_dir); check_dir_create(ns_crossing_dir)
     #
-    init_multiprocessor(2)
+    init_multiprocessor(11)
     count_num_jobs = 0
     for y in xrange(9, 11):
         for m in xrange(1, 13):
