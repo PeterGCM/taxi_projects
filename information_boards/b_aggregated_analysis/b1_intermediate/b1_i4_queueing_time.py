@@ -19,8 +19,8 @@ from bisect import bisect
 def run():
     check_dir_create(ap_trips_dir); check_dir_create(ns_trips_dir)
     #
-    # init_multiprocessor(2)
-    # count_num_jobs = 0
+    init_multiprocessor(5)
+    count_num_jobs = 0
     for y in xrange(9, 11):
         for m in xrange(1, 13):
             yymm = '%02d%02d' % (y, m)
@@ -29,8 +29,8 @@ def run():
                 continue
             process_file(yymm)
             put_task(process_file, [yymm])
-            # count_num_jobs += 1
-    # end_multiprocessor(count_num_jobs)
+            count_num_jobs += 1
+    end_multiprocessor(count_num_jobs)
 
 
 def process_file(yymm):
