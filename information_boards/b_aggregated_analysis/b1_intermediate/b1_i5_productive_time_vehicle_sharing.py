@@ -1,20 +1,20 @@
 import __init__
 #
-from information_boards.__init__ import AM2, AM5
-from b_aggregated_analysis.__init__ import shifts_dir, shift_prefix
-from b_aggregated_analysis.__init__ import shift_pro_dur_dir, shift_pro_dur_prefix
-from b_aggregated_analysis.__init__ import vehicle_sharing_dir, vehicle_sharing_prefix
+from information_boards import AM2, AM5
+from information_boards.b_aggregated_analysis import shifts_dir, shift_prefix
+from information_boards.b_aggregated_analysis import shift_pro_dur_dir, shift_pro_dur_prefix
+from information_boards.b_aggregated_analysis import vehicle_sharing_dir, vehicle_sharing_prefix
 #
-from taxi_common.file_handling_functions import remove_create_dir, save_pickle_file
+from taxi_common.file_handling_functions import remove_create_dir, save_pickle_file, check_dir_create
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
 import csv, gzip
 
 
 def run():
-    remove_create_dir(shift_pro_dur_dir); remove_create_dir(vehicle_sharing_dir)
+    check_dir_create(shift_pro_dur_dir); check_dir_create(vehicle_sharing_dir)
     #
-    init_multiprocessor(8)
+    init_multiprocessor(11)
     count_num_jobs = 0
     for y in xrange(9, 11):
         for m in xrange(1, 13):
