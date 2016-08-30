@@ -1,4 +1,4 @@
-import sc_games
+import __init__
 #
 from sc_games import taxi_data
 from sc_games import ALPH, GAMMA, MAX_ITER_NUM, BIG_M
