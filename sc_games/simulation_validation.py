@@ -8,7 +8,7 @@ from handling_distribution import choose_index_wDist
 from taxi_common.file_handling_functions import get_all_files
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
-import csv
+import csv, random
 
 
 def run():
@@ -19,6 +19,8 @@ def run():
         problem_dir = '%s/%s' % (taxi_data, prob.__name__);
         num_agents, S, A, _, _, _ = prob()
         for policy_fn in get_all_files(problem_dir, 'policy', 'csv'):
+            # if policy_fn in ['policy-MDPs.csv', 'policy-pure-normal-agents.csv']:
+            #     continue
             print policy_fn
             approach_name = policy_fn[len('policy-'):-len('.csv')]
             policies = []
@@ -85,7 +87,10 @@ def experiment(prob, problem_dir, approach_name, is_sensitive, policies):
                 else:
                     assert is_sensitive
                     poly_dist = i_policy[si, ds[si]]
-                chosen_a = choose_index_wDist(poly_dist)
+                if sum(poly_dist) == 0:
+                    chosen_a == random.randrange(len(poly_dist))
+                else:
+                    chosen_a = choose_index_wDist(poly_dist)
                 reward = R(ds[si], chosen_a)
                 ags_reward_sum[i] += reward
                 new_row += [si, ds[si], chosen_a, reward, ags_reward_sum[i] / float(num_iter)]
