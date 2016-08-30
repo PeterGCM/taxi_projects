@@ -3,6 +3,7 @@ import sc_games
 from sc_games import SEED_NUM, EPSILON
 #
 from random import seed
+import numpy as np
 
 
 def scG_twoState():
