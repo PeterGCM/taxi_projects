@@ -10,7 +10,7 @@ from information_boards.b_aggregated_analysis.b1_intermediate import ALL_DUR, AL
 from information_boards.b_aggregated_analysis.b1_intermediate import AP_DUR, AP_FARE, AP_QUEUE, AP_NUM
 from information_boards.b_aggregated_analysis.b1_intermediate import NS_DUR, NS_FARE, NS_QUEUE, NS_NUM
 #
-from taxi_common.file_handling_functions import remove_create_dir, check_dir_create
+from taxi_common.file_handling_functions import remove_create_dir, check_dir_create, check_path_exist
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
 import csv, time, datetime
@@ -33,6 +33,10 @@ def run():
 
 
 def process_files(yymm):
+    productivity_fpath = '%s/%s%s.csv' % (productivity_dir, productivity_prefix, yymm)
+    if check_path_exist(productivity_fpath):
+        return None
+
     print 'handle the file; %s' % yymm
     begin_datetime = datetime.datetime(2009, 1, 1, 0)
     last_datetime = datetime.datetime(2011, 2, 1, 0)
@@ -88,7 +92,7 @@ def process_files(yymm):
                 sum_queueing_time(hourly_stats, st_ts, qt, id_QUEUE)
     # Generate .csv file
     print yymm, 'Generate .csv file'
-    with open('%s/%s%s.csv' % (productivity_dir, productivity_prefix, yymm), 'wt') as w_csvfile:
+    with open(productivity_fpath, 'wb') as w_csvfile:
         writer = csv.writer(w_csvfile, lineterminator='\n')
         header = ['yy', 'mm', 'dd', 'hh',
                   'all-duration', 'all-fare', 'all-num',

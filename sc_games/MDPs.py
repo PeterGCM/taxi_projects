@@ -1,19 +1,54 @@
 import __init__
 #
+from sc_games import taxi_data
 from sc_games import ALPH, GAMMA, EPSILON
 from sc_games import MAX_ITER_NUM
 from sc_games import NUM_SIMULATION, WARMUP_ITER
 from problems import scG_twoState, scG_threeState
 from handling_distribution import choose_index_wDist
 #
-from taxi_common.file_handling_functions import check_dir_create
+from taxi_common.file_handling_functions import check_dir_create, check_path_exist
 #
 import random, csv
 from gurobipy import *
 
 
 def run():
-    num_agents, S, A, Tr_sas, R, ags_S0 = scG_threeState()
+    # num_agents, S, A, Tr_sas, R, ags_S0 = scG_threeState()
+
+    policy = generate_policy(scG_threeState)
+
+
+
+def generate_policy(prob):
+    num_agents, S, A, _, _, _ = prob()
+    problem_dir = '%s/%s' % (taxi_data, prob.__name__);
+    check_dir_create(problem_dir)
+    agts_policy = solve_MDPs(prob)
+
+    as_fpath = '%s/policy-%s.csv' % (problem_dir, 'MDPs')
+
+    if not check_path_exist(as_fpath):
+        with open(as_fpath, 'wb') as w_csvfile:
+            writer = csv.writer(w_csvfile, lineterminator='\n')
+            new_header = ['agent'] + ordered_Q_labels
+            writer.writerow(new_header)
+    last_row.pop(0)
+    with open(as_fpath, 'a') as w_csvfile:
+        writer = csv.writer(w_csvfile, lineterminator='\n')
+        new_row = [agt_id] + last_row
+        writer.writerow(new_row)
+
+
+    print state_space
+
+
+
+
+
+
+def solve_MDPs(prob):
+    num_agents, S, A, Tr_sas, R, ags_S0 = prob()
     sa_distribution = {}
     for _s in S:
         for a in A:
@@ -112,8 +147,9 @@ def run():
             break
         num_iter += 1
         print num_iter
-    for policy in agts_policy:
-        print policy
+    # for policy in agts_policy:
+    #     print policy
+    return agts_policy
 
 
 def single_sim_run(num_agents, S, ags_S0, agts_policy, sa_distribution):
