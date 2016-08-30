@@ -10,22 +10,15 @@ from information_boards.b_aggregated_analysis.b1_intermediate import ALL_DUR, AL
 from information_boards.b_aggregated_analysis.b1_intermediate import AP_DUR, AP_FARE, AP_QUEUE, AP_NUM
 from information_boards.b_aggregated_analysis.b1_intermediate import NS_DUR, NS_FARE, NS_QUEUE, NS_NUM
 #
-from taxi_common.file_handling_functions import remove_create_dir
+from taxi_common.file_handling_functions import remove_create_dir, check_dir_create
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
 import csv, time, datetime
 
 
 def run():
-    remove_create_dir(productivity_dir)
-
-    # init_multiprocessor()
-    # count_num_jobs = 0
-    # for yymm in ['1006', '1007', '1008', '1009', '1011', '1012']:
-    #     put_task(process_files, [yymm])
-    #     count_num_jobs += 1
-    # end_multiprocessor(count_num_jobs)
-
+    check_dir_create(productivity_dir)
+    #
     init_multiprocessor(11)
     count_num_jobs = 0
     for y in xrange(9, 11):
