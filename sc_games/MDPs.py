@@ -4,7 +4,7 @@ from sc_games import taxi_data
 from sc_games import ALPH, GAMMA, EPSILON
 from sc_games import MAX_ITER_NUM
 from sc_games import NUM_SIMULATION, WARMUP_ITER
-from problems import scG_twoState, scG_threeState
+from problems import scG_twoState, scG_threeState, scG_fiveState, scG_fiveState_RD
 from handling_distribution import choose_index_wDist
 #
 from taxi_common.file_handling_functions import check_dir_create, check_path_exist
@@ -14,10 +14,8 @@ from gurobipy import *
 
 
 def run():
-    # num_agents, S, A, Tr_sas, R, ags_S0 = scG_threeState()
-
-    policy = generate_policy(scG_threeState)
-
+    for prob in [scG_twoState, scG_threeState, scG_fiveState, scG_fiveState_RD]:
+        generate_policy(prob)
 
 
 def generate_policy(prob):
@@ -27,24 +25,24 @@ def generate_policy(prob):
     agts_policy = solve_MDPs(prob)
 
     as_fpath = '%s/policy-%s.csv' % (problem_dir, 'MDPs')
-
-    if not check_path_exist(as_fpath):
-        with open(as_fpath, 'wb') as w_csvfile:
-            writer = csv.writer(w_csvfile, lineterminator='\n')
-            new_header = ['agent'] + ordered_Q_labels
-            writer.writerow(new_header)
-    last_row.pop(0)
-    with open(as_fpath, 'a') as w_csvfile:
+    ordered_Q_labels = []
+    for s in S:
+        for ds in xrange(num_agents + 1):
+            for a in A:
+                ordered_Q_labels.append('Q(%d,%d,%d)' % (s, ds, a))
+    with open(as_fpath, 'wb') as w_csvfile:
         writer = csv.writer(w_csvfile, lineterminator='\n')
-        new_row = [agt_id] + last_row
-        writer.writerow(new_row)
-
-
-    print state_space
-
-
-
-
+        new_header = ['agent'] + ordered_Q_labels
+        writer.writerow(new_header)
+    for i, policy in enumerate(agts_policy):
+        with open(as_fpath, 'a') as w_csvfile:
+            writer = csv.writer(w_csvfile, lineterminator='\n')
+            new_row = [i]
+            for s in S:
+                for ds in xrange(num_agents + 1):
+                    for a in A:
+                        new_row.append(policy[s, ds][a])
+            writer.writerow(new_row)
 
 
 def solve_MDPs(prob):

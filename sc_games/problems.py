@@ -129,6 +129,8 @@ def scG_fiveState():
                 ];assert len(reward_constants) == len(A)
 
     def R(ds, ai):
+        if ds == 0:
+            return 0
         actual_reward = reward_constants[ai][0] / float(ds) + reward_constants[ai][1]
         return actual_reward
 
@@ -189,6 +191,8 @@ def scG_fiveState_RD():
                 ];assert len(reward_constants) == len(A)
 
     def R(ds, ai):
+        if ds == 0:
+            return 0
         actual_reward = reward_constants[ai][0] / float(ds) + reward_constants[ai][1]
         variance = actual_reward * 0.1
         return np.random.uniform(actual_reward - variance, actual_reward + variance)
