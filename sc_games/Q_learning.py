@@ -17,6 +17,8 @@ def run():
 
     for prob in [scG_twoState, scG_threeState, scG_fiveState, scG_fiveState_RD]:
         for agent_type, dir_name in [(normal_agent, 'pure-normal-agents'), (sensitive_agent, 'pure-sensitive-agents')]:
+            num_agents, S, A, _, _, _ = prob()
+            problem_dir = '%s/%s' % (taxi_data, prob.__name__); check_dir_create(problem_dir)
             put_task(multi_processors_instance, [prob, dir_name, agent_type])
             count_num_jobs += 1
     end_multiprocessor(count_num_jobs)
@@ -33,8 +35,7 @@ def run():
 
 def multi_processors_instance(prob, dir_name, agent_type):
     num_agents, S, A, _, _, _ = prob()
-    problem_dir = '%s/%s' % (taxi_data, prob.__name__);
-    check_dir_create(problem_dir)
+    problem_dir = '%s/%s' % (taxi_data, prob.__name__)
     hr_dir = '%s/%s' % (problem_dir, dir_name);
     check_dir_create(hr_dir)
     agents = [agent_type(hr_dir, i, S, A, num_agents) for i in xrange(num_agents)]
