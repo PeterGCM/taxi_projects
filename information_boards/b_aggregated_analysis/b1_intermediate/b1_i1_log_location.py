@@ -4,14 +4,14 @@ from information_boards.b_aggregated_analysis import logs_dir, log_prefix
 from information_boards import taxi_home
 from information_boards import ap_poly, ns_poly
 #
-from taxi_common.file_handling_functions import remove_create_dir, check_path_exist
+from taxi_common.file_handling_functions import remove_create_dir, check_path_exist, check_dir_create
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
 import csv
 
 
 def run():
-    # remove_create_dir(logs_dir)
+    check_dir_create(logs_dir)
     #
     init_multiprocessor(8)
     count_num_jobs = 0
@@ -21,10 +21,6 @@ def run():
             if yymm in ['0912', '1010']:
                 # both years data_20160826 are corrupted
                 continue
-            fpath = '%s/%s%s.csv' % (logs_dir, log_prefix, yymm)
-            if check_path_exist(fpath):
-                continue
-            # print fpath
             # process_files(yymm)
             put_task(process_file, [yymm])
             count_num_jobs += 1
@@ -32,6 +28,11 @@ def run():
 
 
 def process_file(yymm):
+    fpath = '%s/%s%s.csv' % (logs_dir, log_prefix, yymm)
+    if check_path_exist(fpath):
+        return None
+
+
     print 'handle the file; %s' % yymm
     yy, mm = yymm[:2], yymm[-2:]
     #
@@ -39,7 +40,7 @@ def process_file(yymm):
         reader = csv.reader(r_csvfile)
         headers = reader.next()
         hid = {h: i for i, h in enumerate(headers)}
-        with open('%s/%s%s.csv' % (logs_dir, log_prefix, yymm), 'wt') as w_csvfile:
+        with open(fpath, 'wt') as w_csvfile:
             writer = csv.writer(w_csvfile, lineterminator='\n')
             new_headers = ['time', 'vid', 'did', 'ap-or-not', 'ns-or-not']
             writer.writerow(new_headers)

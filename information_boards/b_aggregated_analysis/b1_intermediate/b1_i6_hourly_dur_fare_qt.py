@@ -89,7 +89,7 @@ def process_files(yymm):
     # Generate .csv file
     print yymm, 'Generate .csv file'
     with open('%s/%s%s.csv' % (productivity_dir, productivity_prefix, yymm), 'wt') as w_csvfile:
-        writer = csv.writer(w_csvfile)
+        writer = csv.writer(w_csvfile, lineterminator='\n')
         header = ['yy', 'mm', 'dd', 'hh',
                   'all-duration', 'all-fare', 'all-num',
                   'ap-duration', 'ap-fare', 'ap-queueing-time', 'ap-num',

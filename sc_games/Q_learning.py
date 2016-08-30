@@ -2,26 +2,121 @@ import sc_games
 #
 from sc_games import taxi_data
 from sc_games import ALPH, GAMMA, MAX_ITER_NUM, BIG_M
-from problems import scG_twoState, scG_threeState
+from problems import scG_twoState, scG_threeState, scG_fiveState, scG_fiveState_RD
 from handling_distribution import choose_index_wDist
 #
-from taxi_common.file_handling_functions import check_dir_create
+from taxi_common.file_handling_functions import check_dir_create, get_parent_dir, get_fn_only, get_all_files, check_path_exist
+from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
 import csv
 
 
 def run():
-    num_agents, S, A, _, _, _ = scG_twoState()
-    # hr_dir = '%s_%s' % ('%s/%s' % (taxi_data, scG_twoState.__name__), 'pAgent'); check_dir_create(hr_dir)
-    # agents = [normal_agent(hr_dir, i, S, A) for i in xrange(num_agents)]
-    hr_dir = '%s_%s' % ('%s/%s' % (taxi_data, scG_twoState.__name__), 'psAgent');
-    check_dir_create(hr_dir)
-    agents = [sensitive_agent(hr_dir, i, S, A, num_agents) for i in xrange(num_agents)]
+    init_multiprocessor(4)
+    count_num_jobs = 0
+
+    for prob in [scG_twoState, scG_threeState, scG_fiveState, scG_fiveState_RD]:
+        for agent_type, dir_name in [(normal_agent, 'pure-normal-agents'), (sensitive_agent, 'pure-sensitive-agents')]:
+            put_task(multi_processors_instance, [prob, dir_name, agent_type])
+            count_num_jobs += 1
+    end_multiprocessor(count_num_jobs)
+
+    # num_agents, S, A, _, _, _ = scG_twoState()
+    # problem_dir = '%s/%s' % (taxi_data, scG_twoState.__name__); check_dir_create(problem_dir)
+    # hr_dir = '%s/%s' % (problem_dir, 'pure-simple-agents'); check_dir_create(hr_dir)
+    # hr_dir = '%s/%s' % (problem_dir, 'pure-sensitive-agents'); check_dir_create(hr_dir)
+    # agents = [sensitive_agent(hr_dir, i, S, A, num_agents) for i in xrange(num_agents)]
     #
-    start_learning(scG_twoState, agents)
+    # start_learning(scG_twoState, agents)
+    # generate_policy(hr_dir)
+
+
+def multi_processors_instance(prob, dir_name, agent_type):
+    num_agents, S, A, _, _, _ = prob()
+    problem_dir = '%s/%s' % (taxi_data, prob.__name__);
+    check_dir_create(problem_dir)
+    hr_dir = '%s/%s' % (problem_dir, dir_name);
+    check_dir_create(hr_dir)
+    agents = [agent_type(hr_dir, i, S, A, num_agents) for i in xrange(num_agents)]
+    start_learning(prob, agents)
+    generate_policy(hr_dir)
+
+
+def generate_policy(hr_dir):
+    parent_dir = get_parent_dir(hr_dir)
+    approach_name = get_fn_only(hr_dir)
+    as_fpath = '%s/policy-%s.csv' % (parent_dir, approach_name)
+    for agt_history_fn in get_all_files(hr_dir, '', '.csv'):
+        agt_dist_fpath = '%s/%s-dist.csv' % (hr_dir, agt_history_fn[:-len('.csv')])
+        agt_id = eval(agt_history_fn[:-len('.csv')].split('-')[-1][len('agent'):])
+        #
+        with open('%s/%s' % (hr_dir, agt_history_fn), 'rb') as r_csvfile:
+            reader = csv.reader(r_csvfile)
+            headers = reader.next()
+            hid = {h: i for i, h in enumerate(headers)}
+            Q_labels = [k for k in hid.iterkeys() if k.startswith('Q')]
+            is_normal_agent = True if len(eval(Q_labels[0][len('Q'):])) == 2 else False
+            state_space, action_space = set(), set()
+            ordered_Q_labels = []
+            C_sa = {}
+            if is_normal_agent:
+                for Ql in Q_labels:
+                    s, a = map(eval, Ql[len('Q('):-len(')')].split(','))
+                    state_space.add(s)
+                    action_space.add(a)
+                state_space, action_space = sorted(list(state_space)), sorted(list(action_space))
+                for s in state_space:
+                    for a in action_space:
+                        ordered_Q_labels.append('Q(%d,%d)' % (s, a))
+                        C_sa[s, a] = 0
+            else:
+                for Ql in Q_labels:
+                    s, ds, a = map(eval, Ql[len('Q('):-len(')')].split(','))
+                    state_space.add((s, ds))
+                    action_space.add(a)
+                state_space, action_space = sorted(list(state_space)), sorted(list(action_space))
+                for s, ds in state_space:
+                    for a in action_space:
+                        ordered_Q_labels.append('Q(%d,%d,%d)' % (s, ds, a))
+                        C_sa[(s, ds), a] = 0
+            #
+            last_row = None
+            with open(agt_dist_fpath, 'wb') as w_csvfile:
+                writer = csv.writer(w_csvfile, lineterminator='\n')
+                new_header = ['iter'] + ordered_Q_labels
+                writer.writerow(new_header)
+                for row in reader:
+                    _iter = eval(row[hid['iter']])
+                    s, ds, a = eval(row[hid['s']]), eval(row[hid['ds']]), eval(row[hid['a']])
+                    css = s if is_normal_agent else (s, ds)
+                    C_sa[css, a] += 1
+                    #
+                    new_row = [_iter]
+                    for s in state_space:
+                        state_count = 0
+                        for a in action_space:
+                            state_count += C_sa[s, a]
+                        for a in action_space:
+                            if state_count == 0:
+                                new_row.append(0)
+                            else:
+                                new_row.append(C_sa[s, a] / float(state_count))
+                    writer.writerow(new_row)
+                    last_row = new_row
+        if not check_path_exist(as_fpath):
+            with open(as_fpath, 'wb') as w_csvfile:
+                writer = csv.writer(w_csvfile, lineterminator='\n')
+                new_header = ['agent'] + ordered_Q_labels
+                writer.writerow(new_header)
+        last_row.pop(0)
+        with open(as_fpath, 'a') as w_csvfile:
+            writer = csv.writer(w_csvfile, lineterminator='\n')
+            new_row = [agt_id] + last_row
+            writer.writerow(new_row)
 
 
 def start_learning(problem, agents):
+    print 'start learning'
     num_agents, S, A, Tr_sas, R, ags_S = problem()
     #
     sa_distribution = {}

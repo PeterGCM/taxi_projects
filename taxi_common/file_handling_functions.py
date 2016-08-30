@@ -49,6 +49,10 @@ def get_fn_only(path):
     return tail
 
 
+def get_parent_dir(path):
+    parent_dir, tail = os.path.split(path)
+    return parent_dir
+
 def check_dir_create(path):
     if not os.path.exists(path):
         os.makedirs(path)

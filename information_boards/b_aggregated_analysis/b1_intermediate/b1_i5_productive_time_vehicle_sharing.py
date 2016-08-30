@@ -26,8 +26,6 @@ def run():
             count_num_jobs += 1
     end_multiprocessor(count_num_jobs)
 
-    # process_file('0901')
-
 
 def process_file(yymm):
     print 'handle the file; %s' % yymm
@@ -39,7 +37,7 @@ def process_file(yymm):
         headers = reader.next()
         hid = {h : i for i, h in enumerate(headers)}
         with open('%s/%s%s.csv' % (shift_pro_dur_dir, shift_pro_dur_prefix, yymm), 'wb') as w_csvfile:
-            writer = csv.writer(w_csvfile)
+            writer = csv.writer(w_csvfile, lineterminator='\n')
             new_headers = ['yy', 'mm', 'dd', 'hh', 'vid', 'did', 'pro-dur']
             writer.writerow(new_headers)
             for row in reader:
