@@ -25,6 +25,8 @@ def generate_policy(prob):
     agts_policy = solve_MDPs(prob)
 
     as_fpath = '%s/policy-%s.csv' % (problem_dir, 'MDPs')
+    if check_path_exist(as_fpath):
+        return None
     ordered_Q_labels = []
     for s in S:
         for ds in xrange(num_agents + 1):
