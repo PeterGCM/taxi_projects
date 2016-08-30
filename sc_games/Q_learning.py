@@ -12,7 +12,7 @@ import csv
 
 
 def run():
-    init_multiprocessor(4)
+    init_multiprocessor(11)
     count_num_jobs = 0
 
     for prob in [scG_twoState, scG_threeState, scG_fiveState, scG_fiveState_RD]:
