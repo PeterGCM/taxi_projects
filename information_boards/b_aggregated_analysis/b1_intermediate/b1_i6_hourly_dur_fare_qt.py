@@ -1,14 +1,14 @@
 import __init__
 #
-from information_boards.__init__ import SEC3600
-from a_overall_analysis.__init__ import trips_dir, trip_prefix
-from b_aggregated_analysis.__init__ import shift_pro_dur_dir, shift_pro_dur_prefix
-from b_aggregated_analysis.__init__ import ap_trips_dir, ap_trip_prefix
-from b_aggregated_analysis.__init__ import ns_trips_dir, ns_trip_prefix
-from b_aggregated_analysis.__init__ import productivity_dir, productivity_prefix
-from __init__ import ALL_DUR, ALL_FARE, ALL_NUM
-from __init__ import AP_DUR, AP_FARE, AP_QUEUE, AP_NUM
-from __init__ import NS_DUR, NS_FARE, NS_QUEUE, NS_NUM
+from information_boards import SEC3600
+from information_boards.a_overall_analysis import trips_dir, trip_prefix
+from information_boards.b_aggregated_analysis import shift_pro_dur_dir, shift_pro_dur_prefix
+from information_boards.b_aggregated_analysis import ap_trips_dir, ap_trip_prefix
+from information_boards.b_aggregated_analysis import ns_trips_dir, ns_trip_prefix
+from information_boards.b_aggregated_analysis import productivity_dir, productivity_prefix
+from information_boards.b_aggregated_analysis.b1_intermediate import ALL_DUR, ALL_FARE, ALL_NUM
+from information_boards.b_aggregated_analysis.b1_intermediate import AP_DUR, AP_FARE, AP_QUEUE, AP_NUM
+from information_boards.b_aggregated_analysis.b1_intermediate import NS_DUR, NS_FARE, NS_QUEUE, NS_NUM
 #
 from taxi_common.file_handling_functions import remove_create_dir
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
@@ -177,6 +177,7 @@ def sum_queueing_time(hourly_total, st_ts, qt, id_QUEUE):
             hourly_total[(tg_dt.year, tg_dt.month,
                           tg_dt.day, tg_dt.hour)][id_QUEUE] += SEC3600
             tg_dt += datetime.timedelta(hours=1)
+
 
 if __name__ == '__main__':
     run()

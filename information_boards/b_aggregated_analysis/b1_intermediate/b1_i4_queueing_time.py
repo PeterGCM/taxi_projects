@@ -38,7 +38,6 @@ def process_file(yymm):
     ns_pkl_file_path = '%s/%s%s.pkl' % (ns_crossing_dir, ns_crossing_prefix, yymm)
     if not (check_path_exist(ap_pkl_file_path) and check_path_exist(ns_pkl_file_path)):
         return None
-    print 'handle the file; %s' % yymm
     #
     # Load pickle files
     #
@@ -50,7 +49,7 @@ def process_file(yymm):
     ns_trip_fpath = '%s/%s%s.csv' % (ns_trips_dir, ns_trip_prefix, yymm)
     if check_path_exist(ap_trip_fpath) and check_path_exist(ns_trip_fpath):
         return None
-
+    print 'handle the file; %s' % yymm
     for fpath in [ap_trip_fpath, ns_trip_fpath]:
         with open(fpath, 'wt') as w_csvfile:
                 writer = csv.writer(w_csvfile, lineterminator='\n')

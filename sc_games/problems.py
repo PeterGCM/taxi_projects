@@ -25,7 +25,11 @@ def scG_twoState():
                          # The first constant is relate to the number of state, another is just constant
                         (8, 2),
                         (12, 5)]; assert len(reward_constants) == len(A)
-    R = lambda ds, ai : reward_constants[ai][0] / float(ds) + reward_constants[ai][1]
+    def R(ds, ai):
+        if ds == 0:
+            return 0
+        actual_reward = reward_constants[ai][0] / float(ds) + reward_constants[ai][1]
+        return actual_reward
     ags_S = [0, 1, 1, 0, 1, 1, 0, 1, 1, 1]; assert len(ags_S) == num_agents
     return num_agents, S, A, Tr_sas, R, ags_S
 
@@ -61,6 +65,8 @@ def scG_threeState():
                 ];assert len(reward_constants) == len(A)
 
     def R(ds, ai):
+        if ds == 0:
+            return 0
         actual_reward = reward_constants[ai][0] / float(ds) + reward_constants[ai][1]
         return actual_reward
 

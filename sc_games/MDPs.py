@@ -9,10 +9,11 @@ from handling_distribution import choose_index_wDist
 from taxi_common.file_handling_functions import check_dir_create
 #
 import random, csv
+from gurobipy import *
 
 
 def run():
-    num_agents, S, A, Tr_sas, R, ags_S = scG_twoState()
+    num_agents, S, A, Tr_sas, R, ags_S0 = scG_threeState()
     sa_distribution = {}
     for _s in S:
         for a in A:
@@ -24,7 +25,7 @@ def run():
     for _ in range(num_agents):
         policy = {}
         for _s in S:
-            for _ds in range(1, num_agents + 1):
+            for _ds in xrange(num_agents + 1):
                 policy[_s, _ds] = [1 / float(len(A)) for _ in A]
         agts_policy.append(policy)
     #
@@ -34,26 +35,27 @@ def run():
     while True:
         #
         chosen_agent = num_iter % num_agents
+        old_policy = agts_policy[chosen_agent]
         # simulation
         sim_iter = 0
         while sim_iter < WARMUP_ITER:
-            single_sim_run(num_agents, S, ags_S, agts_policy, sa_distribution)
+            ags_S = single_sim_run(num_agents, S, ags_S0, agts_policy, sa_distribution)
             sim_iter += 1
-        C_s_ds = [[0 for _ in xrange(num_agents + 1)] for _ in S]
+        C_s_ds = {(s, ds): 0 for ds in xrange(num_agents + 1) for s in S}
         for _ in xrange(NUM_SIMULATION):
-            single_sim_run(num_agents, S, ags_S, agts_policy, sa_distribution)
+            ags_S = single_sim_run(num_agents, S, ags_S, agts_policy, sa_distribution)
             ds_ = [0] * len(S)
             for si_ in ags_S:
                 ds_[si_] += 1
             #
             for s in S:
-                C_s_ds[s][ds_[s]] += 1
+                C_s_ds[s, ds_[s]] += 1
         P_s_ds = {}
         delta_s_ds = {}
         P_sds_a_sds = {}
         for _s in S:
             for _ds in xrange(num_agents + 1):
-                P_s_ds[_s, _ds] = C_s_ds[_s][_ds] / float(NUM_SIMULATION)
+                P_s_ds[_s, _ds] = C_s_ds[_s, _ds] / float(NUM_SIMULATION)
                 delta_s_ds[_s, _ds] = P_s_ds[_s, _ds] * (1 / float(len(S)))
                 #
         for _s in S:
@@ -63,30 +65,69 @@ def run():
                         for ds_ in xrange(num_agents + 1):
                             P_sds_a_sds[_s, _ds, a, s_, ds_] = Tr_sas[_s, a, s_] * P_s_ds[s_, ds_]
         # Solve MDPs
-
-        # Update agt policy
-
-        assert False
-
-
-
-
+        m = Model()
+        # Add variables
+        dv = {}
+        for s in S:
+            for ds in xrange(num_agents + 1):
+                for a in A:
+                    dv[s, ds, a] = m.addVar(lb=0.0, name='x(%d,%d,%d)' % (s, ds, a))
+        # Process pending updates
+        m.update()
+        # Set objective function
+        obj = LinExpr()
+        for s in S:
+            for ds in xrange(num_agents + 1):
+                for a in A:
+                    obj += P_s_ds[s, ds] * R(ds, a) * dv[s, ds, a]
+        m.setObjective(obj, GRB.MAXIMIZE);
+        # Add constraints
+        for _s in S:
+            for _ds in xrange(num_agents + 1):
+                m.addConstr(quicksum(dv[_s, _ds, a] for a in A)
+                            - GAMMA * quicksum(P_sds_a_sds[_s, _ds, a, s_, ds_] * dv[s, ds, a] for a in A for ds_ in xrange(num_agents + 1) for s_ in S)
+                            == delta_s_ds[_s, _ds])
+        # Solve model
+        m.optimize()
+        #
+        assert m.status == GRB.Status.OPTIMAL, 'Errors while optimization'
+        # Generate a new policy
+        new_policy = {}
+        for s_ in S:
+            for ds_ in xrange(num_agents + 1):
+                action_sum = sum([dv[s_, ds_, a].X for a in A])
+                if action_sum == 0:
+                    new_policy[s_, ds_] = [1 / float(len(A)) for _ in A]
+                else:
+                    new_policy[s_, ds_] = [dv[s_, ds_, a].X / float(action_sum) for a in A]
+                assert abs(sum(new_policy[s_, ds_]) - 1.0) < EPSILON
+        is_updated = False
+        for s in S:
+            for ds in xrange(num_agents + 1):
+                for a in A:
+                    if EPSILON < abs(old_policy[s, ds][a] - new_policy[s, ds][a]):
+                        is_updated = True
+        agts_policy[chosen_agent] = new_policy
+        if not is_updated:
+            break
         num_iter += 1
+        print num_iter
+    for policy in agts_policy:
+        print policy
 
 
-
-
-
-def single_sim_run(num_agents, S, ags_S, agts_policy, sa_distribution):
+def single_sim_run(num_agents, S, ags_S0, agts_policy, sa_distribution):
+    ags_S = ags_S0[:]
     _ds = [0] * len(S)
     for _si in ags_S:
         _ds[_si] += 1
-    for i in range(num_agents):
+    for i in xrange(num_agents):
         _si = ags_S[i]
         _dsi = _ds[_si]
         ai = choose_index_wDist(agts_policy[i][_si, _dsi])
         si_ = choose_index_wDist(sa_distribution[_si, ai])
         ags_S[i] = si_
+    return ags_S
 
 
 
