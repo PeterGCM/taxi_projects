@@ -19,7 +19,7 @@ from bisect import bisect
 def run():
     check_dir_create(ap_trips_dir); check_dir_create(ns_trips_dir)
     #
-    init_multiprocessor(5)
+    init_multiprocessor(11)
     count_num_jobs = 0
     for y in xrange(9, 11):
         for m in xrange(1, 13):
