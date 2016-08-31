@@ -41,7 +41,7 @@ vehicle_sharing_dir, vehicle_sharing_prefix = shift_pro_dur_dir + '/vehicle_shar
 # Productivity
 #
 productivity_dir, productivity_prefix = taxi_data + '/productivity', 'productivity-'
-hourly_productivity_fn = summary_dir + '/productivity.csv'
+hourly_stats_fpath = summary_dir + '/hourly_stats.csv'
 zero_duration_timeslots = summary_dir + '/zero-duration-time-slots.pkl'
 #
 #

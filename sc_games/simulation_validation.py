@@ -12,8 +12,8 @@ import csv, random
 
 
 def run():
-    init_multiprocessor(11)
-    count_num_jobs = 0
+    # init_multiprocessor(11)
+    # count_num_jobs = 0
 
     for prob in [scG_twoState, scG_threeState, scG_fiveState, scG_fiveState_RD]:
         problem_dir = '%s/%s' % (taxi_data, prob.__name__);
@@ -45,10 +45,10 @@ def run():
                         for s in S:
                             policy[s] = [eval(row[hid['Q(%d,%d)' % (s, a)]]) for a in A]
                         policies.append(policy)
-            # experiment(prob, problem_dir, approach_name, is_sensitive, policies)
-            put_task(experiment, [prob, problem_dir, approach_name, is_sensitive, policies])
-            count_num_jobs += 1
-    end_multiprocessor(count_num_jobs)
+            experiment(prob, problem_dir, approach_name, is_sensitive, policies)
+    #         put_task(experiment, [prob, problem_dir, approach_name, is_sensitive, policies])
+    #         count_num_jobs += 1
+    # end_multiprocessor(count_num_jobs)
 
 
 def experiment(prob, problem_dir, approach_name, is_sensitive, policies):

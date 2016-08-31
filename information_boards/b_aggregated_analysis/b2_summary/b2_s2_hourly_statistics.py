@@ -1,11 +1,13 @@
 import __init__
 #
-from b_aggregated_analysis.__init__ import productivity_dir, productivity_prefix
-from b_aggregated_analysis.__init__ import hourly_productivity_fn, zero_duration_timeslots
-from __init__ import ALL_DUR, ALL_FARE, ALL_NUM
-from __init__ import AP_DUR, AP_FARE, AP_QUEUE, AP_NUM
-from __init__ import NS_DUR, NS_FARE, NS_QUEUE, NS_NUM
-from __init__ import ALL, AP, AP_GEN, NS, NS_GEN
+from information_boards.b_aggregated_analysis.b2_summary import ALL_DUR, ALL_FARE, ALL_NUM
+from information_boards.b_aggregated_analysis.b2_summary import AP_DUR, AP_FARE, AP_QUEUE, AP_NUM
+from information_boards.b_aggregated_analysis.b2_summary import NS_DUR, NS_FARE, NS_QUEUE, NS_NUM
+from information_boards.b_aggregated_analysis.b2_summary import ALL, AP, AP_GEN, NS, NS_GEN
+from information_boards.b_aggregated_analysis import productivity_dir, productivity_prefix
+from information_boards.b_aggregated_analysis import hourly_stats_fpath, zero_duration_timeslots
+from information_boards import AM2, AM5
+from information_boards import error_period
 #
 from taxi_common.file_handling_functions import check_dir_create, get_all_files, save_pickle_file
 #
@@ -13,6 +15,14 @@ import datetime, csv
 
 
 def run():
+    ignoring_periods = []
+    for ys, ms, ds, hs in error_period:
+        yyyy = 2000 + int(ys)
+        mm, dd, hh = map(int, [ms, ds, hs])
+        k = (yyyy, mm, dd, hh)
+        ignoring_periods.append(k)
+    print ignoring_periods
+    assert False
     cur_timestamp = datetime.datetime(2008, 12, 31, 23)
     last_timestamp = datetime.datetime(2011, 1, 1, 0)
     hp_summary, time_period_order = {}, []
@@ -21,6 +31,16 @@ def run():
         yyyy, mm, dd, hh = cur_timestamp.year, cur_timestamp.month, cur_timestamp.day, cur_timestamp.hour
         if yyyy == 2009 and mm == 12: continue
         if yyyy == 2010 and mm == 10: continue
+        if yyyy == 2011: continue
+        if AM2 <= hh and hh <= AM5: continue
+        need2skip = False
+        for ys, ms, ds, hs in error_period:
+            yyyy0 = 2000 + int(ys)
+            mm0, dd0, hh0 = map(int, [ms, ds, hs])
+            if (yyyy == yyyy0) and (mm == mm0) and (dd == dd0) and (hh == hh0):
+                need2skip = True
+        if need2skip: continue
+        #
         k = (str(yyyy - 2000), str(mm), str(dd), str(hh))
         hp_summary[k] = [0 for _ in range(len([ALL_DUR, ALL_FARE, ALL_NUM, \
                                                AP_DUR, AP_FARE, AP_QUEUE, AP_NUM, \
@@ -54,7 +74,7 @@ def run():
     # Summary
     print 'summary'
     zero_dur = []
-    with open(hourly_productivity_fn, 'wt') as w_csvfile:
+    with open(hourly_stats_fpath, 'wt') as w_csvfile:
         writer = csv.writer(w_csvfile)
         header = ['yy', 'mm', 'dd', 'hh',
                     'all-num',
