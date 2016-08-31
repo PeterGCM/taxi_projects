@@ -21,8 +21,6 @@ def run():
         mm, dd, hh = map(int, [ms, ds, hs])
         k = (yyyy, mm, dd, hh)
         ignoring_periods.append(k)
-    print ignoring_periods
-    assert False
     cur_timestamp = datetime.datetime(2008, 12, 31, 23)
     last_timestamp = datetime.datetime(2011, 1, 1, 0)
     hp_summary, time_period_order = {}, []
