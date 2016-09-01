@@ -1,50 +1,53 @@
 import __init__
 #
-from __init__ import METER1000
 from _classes import zone
 #
 from math import ceil
 from shapely.geometry import Polygon, Point
-from geopy.distance import vincenty
+from geopy.distance import vincenty, VincentyDistance
+#
+NORTH, EAST, SHOUTH, WEST = 0, 90, 180, 270
+METER1000 = 1000
 
 
-def make_grid(zone_unit_km, min_long, max_long, min_lat, max_lat, consider_visualization=False):
-    western_end, eastern_end = (min_long, (min_lat + max_lat) / float(2)), (max_long, (min_lat + max_lat) / float(2))
-    southern_end, northern_end = ((min_lat + max_lat) / float(2), min_lat), ((min_lat + max_lat) / float(2), max_lat)
-    hl_length, vl_length = max_long - min_long, max_lat - min_lat
-    #
-    width_km = (vincenty(western_end, eastern_end).meters) / float(METER1000) * zone_unit_km
-    height_km = (vincenty(southern_end, northern_end).meters) / float(METER1000) * zone_unit_km
-    hl_unit, vl_unit = hl_length / float(width_km), vl_length / float(height_km)
-    #
-    num_cols, num_rows = int(ceil(width_km)), int(ceil(height_km))
-    #
-    x_points = [min_long + i * hl_unit for i in xrange(num_cols)]
-    y_points = [min_lat + j * vl_unit for j in xrange(num_rows)]
-    #
-    if consider_visualization:
-        return hl_unit, vl_unit, x_points, y_points, hl_length, vl_length
-    else:
-        return hl_unit, vl_unit, x_points, y_points
+def make_grid(zone_unit_km, min_long, max_long, min_lat, max_lat):
+    mover = VincentyDistance(kilometers=zone_unit_km)
+    x = min_long
+    x_points = []
+    while x < max_long:
+        x_points.append(x)
+        #
+        p0 = [min_lat, x]
+        moved_point = mover.destination(point=p0, bearing=EAST)
+        x = moved_point.longitude
+    y = min_lat
+    y_points = []
+    while y < max_lat:
+        y_points.append(y)
+        #
+        p0 = [y, min_long]
+        moved_point = mover.destination(point=p0, bearing=NORTH)
+        y = moved_point.latitude
+    return x_points, y_points
 
 
-def generate_zones(poly_points, hl_unit, vl_unit, x_points, y_points):
+def generate_zones(poly_points, xaxis_unit, yaxis_unit, x_points, y_points):
     poly = Polygon(poly_points)
     zones = {}
     for i, x in enumerate(x_points):
         for j, y in enumerate(y_points):
-            zone_poly = Polygon([[x, y],
-                                 [x + hl_unit, y],
-                                 [x + hl_unit, y + vl_unit],
-                                 [x, y + vl_unit]]
-                                )
+            leftBottom, rightBottom = (x, y), (x + xaxis_unit, y)
+            rightTop, leftTop = (x + xaxis_unit, y + yaxis_unit), (x, y + yaxis_unit)
+            polyPoints_gps = [leftBottom, rightBottom, rightTop, leftTop]
+            cCoor_gps = (x + xaxis_unit / float(2), y + yaxis_unit / float(2))
+            zone_poly = Polygon(polyPoints_gps)
             if poly.contains(zone_poly):
-                relation = zone.IN 
+                boundary_relation = zone.IN
             elif poly.intersects(zone_poly):
-                relation = zone.INTERSECT
+                boundary_relation = zone.INTERSECT
             else:
-                relation = zone.OUT
-            zones[(i, j)] = zone(relation, i, j, x, y)
+                boundary_relation = zone.OUT
+            zones[(i, j)] = zone(boundary_relation, i, j, cCoor_gps, polyPoints_gps)
     return zones
 
 

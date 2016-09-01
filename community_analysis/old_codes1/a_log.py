@@ -5,7 +5,7 @@ from __init__ import FREE, POB, HOUR12
 from __init__ import FRI, SAT, SUN
 from __init__ import PM2, PM3
 #
-from taxi_common.singapore_grid_zone import get_singapore_grid_xy_points
+from taxi_common.sg_grid_zone import get_sg_grid_xy_points
 from taxi_common.file_handling_functions import remove_create_dir
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
@@ -45,7 +45,7 @@ def process_file(yymm):
         h_dt = datetime.datetime(2000 + int(yy), int(mm), 1, 0)
         processed_fn = init_processed_file(h_dt)
         drivers_states = {}
-        x_points, y_points = get_singapore_grid_xy_points()
+        x_points, y_points = get_sg_grid_xy_points()
         for row in reader:
             did = row[hid['driver-id']]
             if did == '-1':
@@ -102,7 +102,7 @@ def process_file0(yymm):
         last_slot_writing = False
         processed_fn = init_processed_file(h_dt)
         drivers_states = {}
-        x_points, y_points = get_singapore_grid_xy_points()
+        x_points, y_points = get_sg_grid_xy_points()
         for row in reader:
             did = row[hid['driver-id']]
             if did == '-1':

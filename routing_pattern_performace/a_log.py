@@ -3,7 +3,7 @@ import __init__
 from __init__ import taxi_home, logs_dir
 from __init__ import FREE, HOUR1
 #
-from taxi_common.singapore_grid_zone import get_singapore_grid_xy_points
+from taxi_common.sg_grid_zone import get_sg_grid_xy_points
 from taxi_common.file_handling_functions import remove_create_dir
 #
 from bisect import bisect
@@ -39,7 +39,7 @@ def process_files(yymm):
         last_slot_writing = False
         processed_fn = init_processed_file(h_dt)
         drivers_lts = {} # drivers the last logging time stame
-        x_points, y_points = get_singapore_grid_xy_points()
+        x_points, y_points = get_sg_grid_xy_points()
         for row in reader:
             did = row[hid['driver-id']]
             if did == '-1':

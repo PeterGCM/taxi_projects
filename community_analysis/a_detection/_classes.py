@@ -7,8 +7,8 @@ from __init__ import THRESHOLD_VALUE
 
 
 class cd_zone(zone):
-    def __init__(self, relation_with_poly, i, j, x, y):
-        zone.__init__(self, relation_with_poly, i, j, x, y)
+    def __init__(self, boundary_relation_with_poly, gi, gj, x, y):
+        zone.__init__(self, boundary_relation_with_poly, gi, gj, x, y)
         self.logQ = []
 
     def add_driver_in_logQ(self, t, d):

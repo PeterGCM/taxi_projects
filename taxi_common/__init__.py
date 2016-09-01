@@ -30,14 +30,14 @@ else:
     assert False
 shifts_dir, shift_prefix = '/home/sfcheng/toolbox/results', 'shift-hour-state-'
 #
+ZONE_UNIT_KM = 0.5
+#
 tc_data = os.path.dirname(os.path.realpath(__file__)) + '/data'
-singapore_poly_fn = tc_data + '/Singapore_polygon'
-singapore_grid_xy_points = tc_data + '/Singapore_grid_xy_points.pkl'
-singapore_zones = tc_data + '/Singapore_zones.pkl'
+sg_poly_fpath = '%s/%s' % (tc_data, 'Singapore_polygon')
+sg_grid_xy_points = tc_data + '/sg_grid_xy_points(%.1fkm).pkl' % ZONE_UNIT_KM
+sg_zones = tc_data + '/sg_zones(%.1fkm).pkl' % ZONE_UNIT_KM
 full_time_driver_dir, ft_drivers_prefix = '%s/%s' % (tc_data, 'full_time_drivers'), 'ft-drivers-'
 #
-ZONE_UNIT_KM = 0.5
-METER1000 = 1000
 
 
 def get_taxi_home_path():

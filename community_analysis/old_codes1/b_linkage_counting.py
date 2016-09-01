@@ -5,7 +5,7 @@ from __init__ import MIN_LINKAGE_NUM, MIN_LINKAGE_RATIO
 from _classes import cd_driver, cd_zone
 #
 from taxi_common.file_handling_functions import save_pkl_threading, remove_create_dir, get_all_files, save_pickle_file
-from taxi_common.singapore_grid_zone import get_singapore_zones
+from taxi_common.sg_grid_zone import get_sg_zones
 #
 import csv
 
@@ -146,7 +146,7 @@ def process_files(yymm):
 
 def generate_zones():
     zones = {}
-    basic_zones = get_singapore_zones()
+    basic_zones = get_sg_zones()
     for k, z in basic_zones.iteritems():
         zones[k] = cd_zone(z.relation_with_poly, z.i, z.j, z.x, z.y)
     return zones

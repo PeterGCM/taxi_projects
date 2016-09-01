@@ -4,11 +4,11 @@ import __init__
 class zone(object):
     IN, INTERSECT, OUT = range(3)
 
-    def __init__(self, relation_with_poly, i, j, x, y):
-        self.relation_with_poly = relation_with_poly
-        self.loc_grid = (i, j)
-        self.i, self.j = i, j
-        self.x, self.y = x, y
+    def __init__(self, boundary_relation_with_poly, gi, gj, cCoor_gps, polyPoints_gps):
+        self.relation_with_poly = boundary_relation_with_poly
+        self.loc_grid = (gi, gj)
+        self.i, self.j = gi, gj
+        self.cCoor_gps, self.polyPoints_gps = cCoor_gps, polyPoints_gps
 
     def __repr__(self):
         return 'zone %s' % str(self.loc_grid)
