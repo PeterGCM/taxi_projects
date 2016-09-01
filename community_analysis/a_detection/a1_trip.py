@@ -5,7 +5,7 @@ from community_analysis import FRI, SAT, SUN
 from community_analysis import PM2, PM11
 from community_analysis import taxi_home, trip_dir
 #
-from taxi_common.file_handling_functions import remove_create_dir, load_pickle_file
+from taxi_common.file_handling_functions import remove_create_dir, load_pickle_file, check_dir_create
 from taxi_common.sg_grid_zone import get_sg_grid_xy_points
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 from taxi_common import full_time_driver_dir, ft_drivers_prefix
@@ -15,6 +15,8 @@ import csv, datetime
 
 
 def run():
+    check_dir_create(trip_dir)
+    #
     init_multiprocessor(11)
     count_num_jobs = 0
     for mm in range(1, 12):
@@ -36,7 +38,7 @@ def process_file(yymm):
         with open(processed_fn, 'wt') as w_csvfile:
             writer = csv.writer(w_csvfile)
             writer.writerow(['time', 'did',
-                             'start-long', 'start-lat', 'end-long', 'end-lat'
+                             'start-long', 'start-lat', 'end-long', 'end-lat',
                              'distance', 'duration', 'fare',
                              'si', 'sj', 'ei', 'ej'])
         return processed_fn

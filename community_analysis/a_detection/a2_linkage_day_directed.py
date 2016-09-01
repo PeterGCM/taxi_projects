@@ -12,12 +12,14 @@ import csv
 
 
 def run():
-    init_multiprocessor(8)
-    count_num_jobs = 0
+    # init_multiprocessor(8)
+    # count_num_jobs = 0
     for mm in range(1,12):
-        put_task(process_files, ['09%02d' % mm])
-        count_num_jobs += 1
-    end_multiprocessor(count_num_jobs)
+        yymm = '09%02d' % mm
+        process_files(yymm)
+    #     put_task(process_files, [yymm])
+    #     count_num_jobs += 1
+    # end_multiprocessor(count_num_jobs)
 
 
 def process_files(yymm):
