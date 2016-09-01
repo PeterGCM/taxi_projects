@@ -26,6 +26,7 @@ def run():
 
 
 def process_file(yymm):
+    print 'handle the file; %s' % yymm
     ft_drivers = load_pickle_file('%s/%s%s.pkl' % (full_time_driver_dir, ft_drivers_prefix, yymm))
     yymm_dir = trip_dir + '/%s' % yymm
     remove_create_dir(yymm_dir)
