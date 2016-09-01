@@ -28,12 +28,14 @@ if py_vinfo.major == 2 and py_vinfo.minor == 7:
 else:
     print 'This python is not 2.7 version'
     assert False
+shifts_dir, shift_prefix = '/home/sfcheng/toolbox/results', 'shift-hour-state-'
 #
-tc_data = os.path.dirname(os.path.realpath(__file__)) + '/data_20160826'
+tc_data = os.path.dirname(os.path.realpath(__file__)) + '/data'
 singapore_poly_fn = tc_data + '/Singapore_polygon'
 singapore_grid_xy_points = tc_data + '/Singapore_grid_xy_points.pkl'
 singapore_zones = tc_data + '/Singapore_zones.pkl'
-
+full_time_driver_dir, ft_drivers_prefix = '%s/%s' % (tc_data, 'full_time_drivers'), 'ft-drivers-'
+#
 ZONE_UNIT_KM = 0.5
 METER1000 = 1000
 

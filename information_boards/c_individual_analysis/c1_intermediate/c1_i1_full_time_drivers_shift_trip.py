@@ -1,13 +1,13 @@
 import __init__
 #
-from a_overall_analysis.__init__ import trips_dir, trip_prefix
-from b_aggregated_analysis.__init__ import zero_duration_timeslots
-from b_aggregated_analysis.__init__ import shift_pro_dur_dir, shift_pro_dur_prefix
-from b_aggregated_analysis.__init__ import vehicle_sharing_dir, vehicle_sharing_prefix
-from b_aggregated_analysis.b2_summary.__init__ import GENERAL
-from c_individual_analysis.__init__ import ftd_trips_dir, ftd_trips_prefix
-from c_individual_analysis.__init__ import ftd_shift_dir, ftd_shift_prefix
-from c_individual_analysis.__init__ import ftd_list_dir, ftd_list_prefix
+from information_boards.b_aggregated_analysis.b2_summary import GENERAL
+from information_boards.b_aggregated_analysis import zero_duration_timeslots
+from information_boards.b_aggregated_analysis import shift_pro_dur_dir, shift_pro_dur_prefix
+from information_boards.b_aggregated_analysis import vehicle_sharing_dir, vehicle_sharing_prefix
+from information_boards.a_overall_analysis import trips_dir, trip_prefix
+from information_boards.c_individual_analysis import ftd_trips_dir, ftd_trips_prefix
+from information_boards.c_individual_analysis import ftd_shift_dir, ftd_shift_prefix
+from information_boards.c_individual_analysis import ftd_list_dir, ftd_list_prefix
 #
 from taxi_common.file_handling_functions import load_pickle_file, remove_create_dir, save_pickle_file
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
