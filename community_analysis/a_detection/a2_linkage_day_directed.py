@@ -86,7 +86,7 @@ def generate_zones():
     zones = {}
     basic_zones = get_sg_zones()
     for k, z in basic_zones.iteritems():
-        zones[k] = cd_zone(z.relation_with_poly, z.i, z.j, z.x, z.y)
+        zones[k] = cd_zone(z.relation_with_poly, z.i, z.j, z.cCoor_gps, z.polyPoints_gps)
     return zones
 
 
