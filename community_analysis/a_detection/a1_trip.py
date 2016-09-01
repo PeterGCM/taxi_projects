@@ -2,7 +2,7 @@ import __init__
 #
 from community_analysis.a_detection import KM2
 from community_analysis import FRI, SAT, SUN
-from community_analysis import PM2, PM9
+from community_analysis import PM2, PM11
 from community_analysis import taxi_home, trip_dir
 #
 from taxi_common.file_handling_functions import remove_create_dir, load_pickle_file
@@ -76,7 +76,7 @@ def process_file(yymm):
                     continue
                 if cur_dt.hour < PM2:
                     continue
-                if PM9 < cur_dt.hour:
+                if PM11 < cur_dt.hour:
                     continue
                 #
                 dist = eval(row1[hid1['distance']])
