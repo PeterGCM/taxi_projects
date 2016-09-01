@@ -15,21 +15,18 @@ import csv, datetime
 
 
 def run():
-    # init_multiprocessor(11)
-    # count_num_jobs = 0
+    init_multiprocessor(11)
+    count_num_jobs = 0
     for mm in range(1, 12):
         yymm = '09%02d' % mm
-        process_file(yymm)
-    #     put_task(process_file, [yymm])
-    #     count_num_jobs += 1
-    # end_multiprocessor(count_num_jobs)
+        # process_file(yymm)
+        put_task(process_file, [yymm])
+        count_num_jobs += 1
+    end_multiprocessor(count_num_jobs)
 
 
 def process_file(yymm):
     ft_drivers = load_pickle_file('%s/%s%s.pkl' % (full_time_driver_dir, ft_drivers_prefix, yymm))
-    print len(ft_drivers)
-    print type(ft_drivers[0]), ft_drivers[0]
-    assert False
     yymm_dir = trip_dir + '/%s' % yymm
     remove_create_dir(yymm_dir)
     def init_processed_file(h_dt):
@@ -70,6 +67,8 @@ def process_file(yymm):
                 if did == '-1':
                     continue
                 #
+                if did not in ft_drivers:
+                    continue
                 t = eval(row1[hid1['start-time']])
                 cur_dt = datetime.datetime.fromtimestamp(t)
                 if cur_dt.weekday() in [FRI, SAT, SUN]:
