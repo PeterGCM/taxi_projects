@@ -1,6 +1,6 @@
 import __init__
 #
-from __init__ import MIN_DAILY_LINKAGE, REMAINING_LINKAGE_RATIO
+from __init__ import MIN_DAILY_LINKAGE
 from _classes import cd_driver, cd_zone
 from community_analysis.__init__ import trip_dir, ld_dir
 #
@@ -12,7 +12,7 @@ import csv
 
 
 def run():
-    init_multiprocessor(6)
+    init_multiprocessor(8)
     count_num_jobs = 0
     for mm in range(1,12):
         put_task(process_files, ['09%02d' % mm])
@@ -66,7 +66,7 @@ def process_files(yymm):
         for did0, d in drivers.iteritems():
             filtered_linkage = {}
             for did1, num_linkage in d.linkage.iteritems():
-                if num_linkage < MIN_DAILY_LINKAGE or num_linkage < d.num_pickup * REMAINING_LINKAGE_RATIO:
+                if num_linkage < MIN_DAILY_LINKAGE:
                     continue
                 filtered_linkage[did1] = num_linkage
             day_linkage.append((did0, d.num_pickup, filtered_linkage))
