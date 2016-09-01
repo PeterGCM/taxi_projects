@@ -51,10 +51,10 @@ def get_sg_zones():
 
 def get_sg_grid_xy_points():
     if not check_path_exist(sg_grid_xy_points):
-        hl_unit, vl_unit, x_points, y_points = generate_sg_grid()
-        save_pickle_file(sg_grid_xy_points, [hl_unit, vl_unit, x_points, y_points])
+        x_points, y_points = generate_sg_grid()
+        save_pickle_file(sg_grid_xy_points, [x_points, y_points])
     else:
-        _, _, x_points, y_points = load_pickle_file(sg_grid_xy_points)
+        x_points, y_points = load_pickle_file(sg_grid_xy_points)
     return x_points, y_points
 
 
