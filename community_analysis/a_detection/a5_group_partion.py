@@ -2,15 +2,14 @@ import __init__
 #
 from community_analysis.__init__ import la_dir, pg_dir
 #
+from taxi_common.file_handling_functions import load_pickle_file, get_all_files, check_dir_create
+#
 import community
 import networkx as nx
 
-from taxi_common.file_handling_functions import load_pickle_file, get_all_files, check_dir_create
-
-MIN_AN_DAYS = 23
-
 
 def run():
+
     yyyy = '2009'
     print 'start',
     assert len(get_all_files(la_dir, '', '.pkl')) == 1
@@ -22,12 +21,9 @@ def run():
     print 'Graph constructing ...'
     G = nx.Graph()
     for (k0, k1), num_days in pairs_day_counting.iteritems():
-        # if num_days < MIN_AN_DAYS:
-        #     continue
         G.add_edge(k0, k1, weight=num_days)
 
     del pairs_day_counting
-    # pg_th_dir = '%s/%s-TH(%d)' % (pg_dir, yyyy, MIN_AN_DAYS); check_dir_create(pg_th_dir)
     pg_th_dir = '%s/%s' % (pg_dir, yyyy); check_dir_create(pg_th_dir)
     print 'finished'
     print 'Whole graph pickling ...'

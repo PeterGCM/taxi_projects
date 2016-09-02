@@ -1,4 +1,4 @@
-import __init__
+import community_analysis.a_detection
 #
 from community_analysis.__init__ import charts_dir, la_dir
 #

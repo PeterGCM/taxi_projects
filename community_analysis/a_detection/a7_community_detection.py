@@ -51,8 +51,6 @@ def run():
         #
         _, _, weight = zip(*list(nxG.edges_iter(data='weight', default=1)))
         num_nodes, num_edges = len(nxN), len(weight)
-        # if num_nodes < MIN_NODES:
-        #     continue
         top_nodes, _ = zip(*sorted(nx.degree_centrality(nxG).items(), key=lambda x:x[-1], reverse=True)[:5])
         summary.append([fn, num_nodes, num_edges, sum(weight) / float(num_nodes), top_nodes])
     for x in sorted(summary, key=lambda x:x[-2], reverse=True):

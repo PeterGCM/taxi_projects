@@ -36,7 +36,7 @@ def process_file(yymm):
         processed_fn = yymm_dir + '/%d%02d%02d.csv' % \
                                   (h_dt.year, h_dt.month, h_dt.day)
         with open(processed_fn, 'wt') as w_csvfile:
-            writer = csv.writer(w_csvfile)
+            writer = csv.writer(w_csvfile, lineterminator='\n')
             writer.writerow(['time', 'did',
                              'start-long', 'start-lat', 'end-long', 'end-lat',
                              'distance', 'duration', 'fare',
@@ -95,7 +95,7 @@ def process_file(yymm):
                     h_dt = cur_dt
                     print cur_dt
                 with open(processed_fn, 'a') as w_csvfile:
-                    writer = csv.writer(w_csvfile)
+                    writer = csv.writer(w_csvfile, lineterminator='\n')
                     writer.writerow([t, did,
                                      s_long, s_lat, e_long, e_lat,
                                      dist, row1[hid1['duration']], row1[hid1['fare']],
