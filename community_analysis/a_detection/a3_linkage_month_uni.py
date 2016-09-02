@@ -1,19 +1,17 @@
 import __init__
 #
-from __init__ import MIN_MONTHLY_LINKAGE, REMAINING_LINKAGE_RATIO
-from community_analysis.__init__ import ld_dir, lm_dir
+from community_analysis.a_detection import MIN_MONTHLY_LINKAGE
+from community_analysis import ld_dir, lm_dir
 #
 from taxi_common.file_handling_functions import load_pickle_file, get_all_files, \
-                                                save_pickle_file, remove_create_dir, \
-                                                save_pkl_threading
+                                                save_pickle_file, remove_create_dir
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
-
-lm_yyyy_dir = lm_dir + '/2009'
-remove_create_dir(lm_yyyy_dir)
 
 
 def run():
-    init_multiprocessor(6)
+    remove_create_dir(lm_dir)
+    #
+    init_multiprocessor(8)
     count_num_jobs = 0
     for mm in range(1, 12):
         put_task(process_files, ['09%02d' % mm])
@@ -47,13 +45,13 @@ def process_files(yymm):
 
     N, lm = set(), []
     for (k0, k1), v in pairs_day_counting.iteritems():
-        if v < MIN_MONTHLY_LINKAGE or v < max_num_days * REMAINING_LINKAGE_RATIO:
+        if v < MIN_MONTHLY_LINKAGE:
             continue
         N.add(k0); N.add(k1)
         lm.append([(k0, k1), v])
     lm_fn = '%s-D(%d)-MD(%d)-N(%d)-E(%d).pkl' % (yymm, num_days, max_num_days, len(N), len(lm))
     print 'lm saving'
-    save_pickle_file('%s/%s' % (lm_yyyy_dir, lm_fn), lm)
+    save_pickle_file('%s/%s' % (lm_dir, lm_fn), lm)
 
 if __name__ == '__main__':
     from traceback import format_exc

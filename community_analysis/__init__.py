@@ -6,11 +6,10 @@ taxi_home = get_taxi_home_path()
 #
 from taxi_common.file_handling_functions import check_dir_create
 taxi_data = os.path.dirname(os.path.realpath(__file__)) + '/data'; check_dir_create(taxi_data)
-# charts_dir = taxi_data + '/charts'; check_dir_create(charts_dir)
 #
 trip_dir = '%s/%s' % (taxi_data, 'trips')
-ld_dir = taxi_data + '/linkage_daily'
-# lm_dir = taxi_data + '/linkage_monthly'; check_dir_create(lm_dir)
+ld_dir = '%s/%s' % (taxi_data, 'linkage_daily')
+lm_dir = '%s/%s' % (taxi_data, 'linkage_monthly')
 # la_dir = taxi_data + '/linkage_annually'; check_dir_create(la_dir)
 # pg_dir = taxi_data + '/partitioned_group'; check_dir_create(pg_dir)
 #
