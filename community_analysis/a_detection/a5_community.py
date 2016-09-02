@@ -16,7 +16,6 @@ def run():
     check_dir_create(com_dir)
     #
     yyyy = '2009'
-    assert len(get_all_files(la_dir, yyyy, '.pkl')) == 1
     for la_fn in get_all_files(la_dir, '%s-CD' % yyyy, '.pkl'):
         _, _, str_thD, _, _ = la_fn[:-len('.pkl')].split('-')
         thD = int(str_thD[len('thD('):-len(')')])
