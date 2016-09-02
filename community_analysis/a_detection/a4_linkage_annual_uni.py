@@ -23,7 +23,6 @@ def run():
             if (k0, k1) not in pairs_day_counting:
                 pairs_day_counting[(k0, k1)] = 0
             pairs_day_counting[(k0, k1)] += num_days
-
     th_day = int(day_counting * REMAINING_LINKAGE_RATIO)
     filtered_pairs = {}
     N = set()
@@ -31,7 +30,7 @@ def run():
         if num_days < th_day:
             continue
         N.add(k0); N.add(k1)
-        filtered_pairs[(k0, k1)] += num_days
+        filtered_pairs[(k0, k1)] = num_days
     #
     fn = '%s-CD(%d)-thD(%d)-N(%d)-E(%d).pkl' % (yyyy, day_counting, th_day, len(N), len(filtered_pairs))
     print 'Saving'
