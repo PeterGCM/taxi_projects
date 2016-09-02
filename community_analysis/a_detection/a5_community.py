@@ -40,7 +40,7 @@ def run():
         del pairs_day_counting
         #
         print 'Whole graph pickling ...'
-        nx.write_gpickle(nxG, '%s/%s-whole.pkl' % (com_dir, yyyy))
+        nx.write_gpickle(nxG, '%s/%s-whole.pkl' % (thD_dir, yyyy))
         n_label, n_comId = [], []
         nxId_igId = {}
         ig_nid = 0
