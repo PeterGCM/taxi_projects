@@ -3,7 +3,6 @@ import __init__
 from information_boards import AM2, AM5
 from information_boards.b_aggregated_analysis import shifts_dir, shift_prefix
 from information_boards.b_aggregated_analysis import shift_pro_dur_dir, shift_pro_dur_prefix
-from information_boards.b_aggregated_analysis import vehicle_sharing_dir, vehicle_sharing_prefix
 #
 from taxi_common.file_handling_functions import remove_create_dir, save_pickle_file, check_dir_create
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
@@ -12,7 +11,7 @@ import csv, gzip
 
 
 def run():
-    check_dir_create(shift_pro_dur_dir); check_dir_create(vehicle_sharing_dir)
+    check_dir_create(shift_pro_dur_dir)
     #
     init_multiprocessor(11)
     count_num_jobs = 0
@@ -52,10 +51,6 @@ def process_file(yymm):
                 productive_duration = sum(int(row[hid[dur]]) for dur in productive_state)
                 writer.writerow([row[hid['year']][-2:], row[hid['month']], row[hid['day']], row[hid['hour']],
                                  vid, did, productive_duration])
-                if not vehicle_sharing.has_key(vid):
-                    vehicle_sharing[vid] = set()
-                vehicle_sharing[vid].add(did)
-    save_pickle_file('%s/%s%s.pkl' % (vehicle_sharing_dir, vehicle_sharing_prefix, yymm), vehicle_sharing)
     print 'end the file; %s' % yymm
     
 if __name__ == '__main__':

@@ -7,25 +7,20 @@ from information_boards.b_aggregated_analysis import vehicle_sharing_dir, vehicl
 from information_boards.a_overall_analysis import trips_dir, trip_prefix
 from information_boards.c_individual_analysis import ftd_trips_dir, ftd_trips_prefix
 from information_boards.c_individual_analysis import ftd_shift_dir, ftd_shift_prefix
-from information_boards.c_individual_analysis import ftd_list_dir, ftd_list_prefix
 #
+from taxi_common import full_time_driver_dir, ft_drivers_prefix
 from taxi_common.file_handling_functions import load_pickle_file, remove_create_dir, save_pickle_file
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
 import csv, datetime
 #
-omitted_timeslots = [] 
-for l, ts in load_pickle_file(zero_duration_timeslots):
-    if l == GENERAL:
-        yyyy, mm, dd, hh = 2000 + eval(ts[0]), eval(ts[1]), eval(ts[2]), eval(ts[3])
-        omitted_timeslots.append((yyyy, mm, dd, hh))
 
 
 def run():
-    for path in [ftd_trips_dir, ftd_shift_dir, ftd_list_dir]:
+    for path in [ftd_trips_dir, ftd_shift_dir]:
         remove_create_dir(path)
-
-    init_multiprocessor()
+    #
+    init_multiprocessor(11)
     count_num_jobs = 0
     for y in xrange(9, 11):
         for m in xrange(1, 13):
@@ -37,10 +32,10 @@ def run():
             count_num_jobs += 1
     end_multiprocessor(count_num_jobs)
 
+
 def process_files(yymm):
     print 'handle the file; %s' % yymm
-    is_driver_vehicle = load_pickle_file('%s/%s%s.pkl' % (vehicle_sharing_dir, vehicle_sharing_prefix, yymm))
-    full_time_drivers = set()
+    ft_drivers = load_pickle_file('%s/%s%s.pkl' % (full_time_driver_dir, ft_drivers_prefix, yymm))
     with open('%s/%s%s.csv' % (shift_pro_dur_dir, shift_pro_dur_prefix, yymm), 'rt') as r_csvfile:
         reader = csv.reader(r_csvfile)
         headers = reader.next()
@@ -49,10 +44,10 @@ def process_files(yymm):
             writer = csv.writer(w_csvfile)
             writer.writerow(headers)
             for row in reader:
-                if len(is_driver_vehicle[row[hid['vid']]]) > 1:
+                did = row[hid['did']]
+                if did not in ft_drivers:
                     continue
                 writer.writerow(row)
-                full_time_drivers.add(int(row[hid['did']]))
     #
     with open('%s/%s%s.csv' % (trips_dir, trip_prefix, yymm), 'rb') as r_csvfile:
         reader = csv.reader(r_csvfile)
@@ -65,23 +60,19 @@ def process_files(yymm):
             #
             # filter out trips data based on two factors;
             #   1. full time driver
-            #   2. time slots when log data corrupted
             #
             for row in reader:
                 st_ts = eval(row[hid['start-time']])
                 st_dt = datetime.datetime.fromtimestamp(st_ts)
                 k = (st_dt.year, st_dt.month, st_dt.day, st_dt.hour)
-                if k in omitted_timeslots:
-                    continue
-                did = int(row[hid['did']])
-                if did not in full_time_drivers:
+                did = row[hid['did']]
+                if did not in ft_drivers:
                     continue
                 writer.writerow([row[hid['did']],
                                  row[hid['start-time']],
                                  row[hid['duration']],
                                  row[hid['fare']]])
     #
-    save_pickle_file('%s/%s%s.pkl' % (ftd_list_dir, ftd_list_prefix, yymm), list(full_time_drivers))
     print 'end the file; %s' % yymm
 
 if __name__ == '__main__':
