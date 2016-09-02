@@ -1,10 +1,10 @@
 import __init__
 #
-from __init__ import MIN_DAILY_LINKAGE
-from _classes import cd_driver, cd_zone
-from community_analysis.__init__ import trip_dir, ld_dir
+from community_analysis.a_detection import MIN_DAILY_LINKAGE
+from community_analysis.a_detection._classes import cd_driver, cd_zone
+from community_analysis import trip_dir, ld_dir
 #
-from taxi_common.file_handling_functions import save_pkl_threading, remove_create_dir, get_all_files
+from taxi_common.file_handling_functions import save_pkl_threading, remove_create_dir, get_all_files, check_dir_create
 from taxi_common.sg_grid_zone import get_sg_zones
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
@@ -12,17 +12,20 @@ import csv
 
 
 def run():
-    # init_multiprocessor(8)
-    # count_num_jobs = 0
+    check_dir_create(ld_dir)
+    init_multiprocessor(8)
+    count_num_jobs = 0
     for mm in range(1,12):
         yymm = '09%02d' % mm
-        process_files(yymm)
-    #     put_task(process_files, [yymm])
-    #     count_num_jobs += 1
-    # end_multiprocessor(count_num_jobs)
+        # process_files(yymm)
+        put_task(process_files, [yymm])
+        count_num_jobs += 1
+    end_multiprocessor(count_num_jobs)
 
 
 def process_files(yymm):
+    print 'handle the file; %s' % yymm
+    #
     linkage_yymm_dir = ld_dir + '/%s' % yymm
     remove_create_dir(linkage_yymm_dir)
     #

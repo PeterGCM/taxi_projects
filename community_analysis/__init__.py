@@ -9,7 +9,7 @@ taxi_data = os.path.dirname(os.path.realpath(__file__)) + '/data'; check_dir_cre
 # charts_dir = taxi_data + '/charts'; check_dir_create(charts_dir)
 #
 trip_dir = '%s/%s' % (taxi_data, 'trips')
-# ld_dir = taxi_data + '/linkage_daily'; check_dir_create(ld_dir)
+ld_dir = taxi_data + '/linkage_daily'
 # lm_dir = taxi_data + '/linkage_monthly'; check_dir_create(lm_dir)
 # la_dir = taxi_data + '/linkage_annually'; check_dir_create(la_dir)
 # pg_dir = taxi_data + '/partitioned_group'; check_dir_create(pg_dir)
