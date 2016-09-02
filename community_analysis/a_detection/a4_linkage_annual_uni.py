@@ -4,11 +4,11 @@ from community_analysis.a_detection import REMAINING_LINKAGE_RATIO
 from community_analysis import lm_dir, la_dir
 #
 from taxi_common.file_handling_functions import load_pickle_file, get_all_files, \
-                                                save_pickle_file, remove_create_dir
+                                                save_pickle_file, check_dir_create
 
 
 def run():
-    remove_create_dir(la_dir)
+    check_dir_create(la_dir)
     #
     yyyy = '2009'
     day_counting = 0
