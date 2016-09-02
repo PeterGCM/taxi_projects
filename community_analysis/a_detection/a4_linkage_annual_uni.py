@@ -15,7 +15,7 @@ def run():
     pairs_day_counting = {}
 
     for fn in get_all_files(lm_dir, '', '.pkl'):
-        _, D, _, _, _ = fn[:-len('.pkl')].split('-')
+        _, D, _, _ = fn[:-len('.pkl')].split('-')
         day_counting += int(D[len('D('):-len(')')])
         lm = load_pickle_file('%s/%s' % (lm_dir, fn))
         print 'load', fn
