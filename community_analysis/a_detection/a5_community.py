@@ -16,6 +16,7 @@ def run():
     yyyy = '2009'
     assert len(get_all_files(la_dir, yyyy, '.pkl')) == 1
     la_fn = get_all_files(la_dir, '', '.pkl').pop()
+
     summary_fpath = '%s/%s-community-summary.csv' % (com_dir, yyyy)
     glayout_fpath = '%s/%s-glayout.pkl' % (com_dir, yyyy)
     with open(summary_fpath, 'wb') as w_csvfile:
