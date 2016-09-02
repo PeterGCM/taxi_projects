@@ -1,10 +1,10 @@
 import __init__
 #
-from community_analysis.a_detection import REMAINING_LINKAGE_RATIO
 from community_analysis import lm_dir, la_dir
 #
 from taxi_common.file_handling_functions import load_pickle_file, get_all_files, \
-                                                save_pickle_file, check_dir_create
+                                                save_pickle_file, check_dir_create, \
+                                                check_path_exist
 
 
 def run():
@@ -23,18 +23,22 @@ def run():
             if (k0, k1) not in pairs_day_counting:
                 pairs_day_counting[(k0, k1)] = 0
             pairs_day_counting[(k0, k1)] += num_days
-    th_day = int(day_counting * REMAINING_LINKAGE_RATIO)
-    filtered_pairs = {}
-    N = set()
-    for (k0, k1), num_days in pairs_day_counting.iteritems():
-        if num_days < th_day:
+
+    for ratio in [0.45, 0.5]:
+        th_day = int(day_counting * ratio)
+        fpath = '%s/%s-CD(%d)-thD(%d)-N(%d)-E(%d).pkl' % (la_dir, yyyy, day_counting, th_day, len(N), len(filtered_pairs))
+        if check_path_exist(fpath):
             continue
-        N.add(k0); N.add(k1)
-        filtered_pairs[(k0, k1)] = num_days
-    #
-    fn = '%s-CD(%d)-thD(%d)-N(%d)-E(%d).pkl' % (yyyy, day_counting, th_day, len(N), len(filtered_pairs))
-    print 'Saving'
-    save_pickle_file('%s/%s' % (la_dir, fn), filtered_pairs)
+        filtered_pairs = {}
+        N = set()
+        for (k0, k1), num_days in pairs_day_counting.iteritems():
+            if num_days < th_day:
+                continue
+            N.add(k0); N.add(k1)
+            filtered_pairs[(k0, k1)] = num_days
+        #
+        print 'Saving'
+        save_pickle_file(fpath, filtered_pairs)
 
 
 if __name__ == '__main__':
