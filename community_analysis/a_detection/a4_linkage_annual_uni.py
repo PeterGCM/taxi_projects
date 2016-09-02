@@ -1,20 +1,22 @@
 import __init__
 #
-from community_analysis.__init__ import lm_dir, la_dir
+from community_analysis import lm_dir, la_dir
 #
-from taxi_common.file_handling_functions import load_pickle_file, get_all_files, check_dir_create, save_pickle_file
+from taxi_common.file_handling_functions import load_pickle_file, get_all_files, \
+                                                save_pickle_file, remove_create_dir
 
 
 def run():
+    remove_create_dir(la_dir)
+    #
     yyyy = '2009'
-    lm_yyyy_dir = lm_dir + '/%s' % yyyy
     day_counting, max_num_days = 0, -1e400
     pairs_day_counting = {}
     N = set()
-    for fn in get_all_files(lm_yyyy_dir, '', '.pkl'):
+    for fn in get_all_files(lm_dir, '', '.pkl'):
         _, D, _, _, _ = fn[:-len('.pkl')].split('-')
         day_counting += int(D[len('D('):-len(')')])
-        lm = load_pickle_file('%s/%s' % (lm_yyyy_dir, fn))
+        lm = load_pickle_file('%s/%s' % (lm_dir, fn))
         print 'load', fn
         for (k0, k1), num_days in lm:
             N.add(k0); N.add(k1)

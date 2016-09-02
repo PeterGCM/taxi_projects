@@ -13,6 +13,7 @@ import csv
 
 def run():
     check_dir_create(ld_dir)
+    #
     init_multiprocessor(8)
     count_num_jobs = 0
     for mm in range(1,12):
