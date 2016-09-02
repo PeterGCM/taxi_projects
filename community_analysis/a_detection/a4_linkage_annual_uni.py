@@ -26,9 +26,6 @@ def run():
 
     for ratio in [0.45, 0.5]:
         th_day = int(day_counting * ratio)
-        fpath = '%s/%s-CD(%d)-thD(%d)-N(%d)-E(%d).pkl' % (la_dir, yyyy, day_counting, th_day, len(N), len(filtered_pairs))
-        if check_path_exist(fpath):
-            continue
         filtered_pairs = {}
         N = set()
         for (k0, k1), num_days in pairs_day_counting.iteritems():
@@ -37,6 +34,10 @@ def run():
             N.add(k0); N.add(k1)
             filtered_pairs[(k0, k1)] = num_days
         #
+        fpath = '%s/%s-CD(%d)-thD(%d)-N(%d)-E(%d).pkl' % (
+        la_dir, yyyy, day_counting, th_day, len(N), len(filtered_pairs))
+        if check_path_exist(fpath):
+            continue
         print 'Saving'
         save_pickle_file(fpath, filtered_pairs)
 

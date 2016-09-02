@@ -20,11 +20,12 @@ def run():
         _, _, str_thD, _, _ = la_fn[:-len('.pkl')].split('-')
         thD = int(str_thD[len('thD('):-len(')')])
         thD_dir = '%s/%s' % (com_dir, '2009-CD(%d)' % thD)
-        if check_path_exist(thD_dir):
-            continue
-        check_dir_create(thD_dir)
         summary_fpath = '%s/%s-community-summary.csv' % (thD_dir, yyyy)
         glayout_fpath = '%s/%s-glayout.pkl' % (thD_dir, yyyy)
+        if check_path_exist(glayout_fpath):
+            continue
+        elif not check_path_exist(thD_dir):
+            check_dir_create(thD_dir)
         #
         with open(summary_fpath, 'wb') as w_csvfile:
             writer = csv.writer(w_csvfile, lineterminator='\n')
@@ -60,24 +61,29 @@ def run():
                 writer = csv.writer(w_csvfile, lineterminator='\n')
                 writer.writerow([com_name, num_nodes, num_edges, sum(weight) / float(num_nodes)])
             #
-        #     print i, 'labeling...'
-        #     for n in sub_nxG.nodes():
-        #         n_label.append(n)
-        #         n_comId.append(i)
-        #         nxId_igId[n] = ig_nid
-        #         ig_nid += 1
-        # #
-        # print 'Layout calculating...'
-        # print datetime.datetime.now()
-        # Edges = [(nxId_igId[n0], nxId_igId[n1]) for (n0, n1) in nxG.edges()]
-        # print 'finish edge converting', len(Edges)
-        # print datetime.datetime.now()
-        # igG = ig.Graph(Edges, directed=False)
-        # layt = igG.layout('kk', dim=3)
-        # print 'finish layout calculation'
-        # print datetime.datetime.now()
-        # #
-        # save_pickle_file(glayout_fpath, [n_label, n_comId, layt, Edges])
+            print i, 'labeling...'
+            for n in sub_nxG.nodes():
+                n_label.append(n)
+                n_comId.append(i)
+                nxId_igId[n] = ig_nid
+                ig_nid += 1
+        #
+        if len(nxG.nodes()) < 1500:
+            print 'Layout calculating...'
+            print datetime.datetime.now()
+            Edges = [(nxId_igId[n0], nxId_igId[n1]) for (n0, n1) in nxG.edges()]
+            print 'finish edge converting', len(Edges)
+            print datetime.datetime.now()
+            igG = ig.Graph(Edges, directed=False)
+            layt = igG.layout('kk', dim=3)
+            print 'finish layout calculation'
+            print datetime.datetime.now()
+            #
+            save_pickle_file(glayout_fpath, [n_label, n_comId, layt, Edges])
+        else:
+            save_pickle_file(glayout_fpath, [])
+
+
 
 
 if __name__ == '__main__':
