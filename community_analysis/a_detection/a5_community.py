@@ -52,7 +52,7 @@ def run():
             print i, 'Saving sub-graph ...'
             sub_nxG = nxG.subgraph(list_nodes)
             com_name = 'COM(%d)' % i
-            nx.write_gpickle(sub_nxG, '%s/%s-%s.pkl' % (com_dir, yyyy, com_name))
+            nx.write_gpickle(sub_nxG, '%s/%s-%s.pkl' % (thD_dir, yyyy, com_name))
 
             _, _, weight = zip(*list(sub_nxG.edges_iter(data='weight', default=1)))
             num_nodes, num_edges = len(sub_nxG), len(weight)
