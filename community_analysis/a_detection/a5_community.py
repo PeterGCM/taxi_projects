@@ -60,24 +60,24 @@ def run():
                 writer = csv.writer(w_csvfile, lineterminator='\n')
                 writer.writerow([com_name, num_nodes, num_edges, sum(weight) / float(num_nodes)])
             #
-            print i, 'labeling...'
-            for n in sub_nxG.nodes():
-                n_label.append(n)
-                n_comId.append(i)
-                nxId_igId[n] = ig_nid
-                ig_nid += 1
-        #
-        print 'Layout calculating...'
-        print datetime.datetime.now()
-        Edges = [(nxId_igId[n0], nxId_igId[n1]) for (n0, n1) in nxG.edges()]
-        print 'finish edge converting', len(Edges)
-        print datetime.datetime.now()
-        igG = ig.Graph(Edges, directed=False)
-        layt = igG.layout('kk', dim=3)
-        print 'finish layout calculation'
-        print datetime.datetime.now()
-        #
-        save_pickle_file(glayout_fpath, [n_label, n_comId, layt, Edges])
+        #     print i, 'labeling...'
+        #     for n in sub_nxG.nodes():
+        #         n_label.append(n)
+        #         n_comId.append(i)
+        #         nxId_igId[n] = ig_nid
+        #         ig_nid += 1
+        # #
+        # print 'Layout calculating...'
+        # print datetime.datetime.now()
+        # Edges = [(nxId_igId[n0], nxId_igId[n1]) for (n0, n1) in nxG.edges()]
+        # print 'finish edge converting', len(Edges)
+        # print datetime.datetime.now()
+        # igG = ig.Graph(Edges, directed=False)
+        # layt = igG.layout('kk', dim=3)
+        # print 'finish layout calculation'
+        # print datetime.datetime.now()
+        # #
+        # save_pickle_file(glayout_fpath, [n_label, n_comId, layt, Edges])
 
 
 if __name__ == '__main__':
