@@ -25,6 +25,8 @@ def run():
             pairs_day_counting[(k0, k1)] += num_days
             if max_num_days < pairs_day_counting[(k0, k1)]:
                 max_num_days = pairs_day_counting[(k0, k1)]
+
+
     fn = '%s-CD(%d)-MD(%d)-N(%d)-E(%d).pkl' % (yyyy, day_counting, max_num_days, len(N), len(pairs_day_counting))
     print 'Saving'
     save_pickle_file('%s/%s' % (la_dir, fn), pairs_day_counting)

@@ -33,10 +33,10 @@ def run():
     #
     print 'Whole graph pickling ...'
     nx.write_gpickle(nxG, '%s/%s-whole.pkl' % (com_dir, yyyy))
-    print 'Partitioning ...'
     n_label, n_comId = [], []
     nxId_igId = {}
     ig_nid = 0
+    print 'Partitioning ...'
     partition = community.best_partition(nxG)
     for i, com in enumerate(set(partition.values())):
         list_nodes = [nodes for nodes in partition.keys()
