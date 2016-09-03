@@ -21,7 +21,7 @@ def run():
         #
         with open(stat_fpath, 'wb') as w_csvfile:
             writer = csv.writer(w_csvfile, lineterminator='\n')
-            headers = ['yy', 'mm', 'did'
+            headers = ['yy', 'mm', 'did',
                        'all-num', 'all-dur', 'all-fare',
                        '%s-num' % loc, '%s-dur' % loc, '%s-fare' % loc, '%s-ep' % loc, '%s-queueing-time' % loc,
                        '%sIn-num' % loc, '%sIn-dur' % loc, '%sIn-fare' % loc, '%sIn-ep' % loc, '%sIn-queueing-time' % loc,
@@ -82,9 +82,9 @@ def process_files(stat_fpath, yymm, ep_dir, ep_prefix):
             writer = csv.writer(w_csvfile, lineterminator='\n')
             writer.writerow([yy, mm, did,
                              all_num, pro_dur, all_fare,
-                             loc_num, loc_dur, loc_fare, loc_fare, loc_ep, loc_qtime,
-                             locIn_num, locIn_dur, locIn_fare, locIn_fare, locIn_ep, locIn_qtime,
-                             locOut_num, locOut_dur, locOut_fare, locOut_fare, locOut_ep, locOut_qtime])
+                             loc_num, loc_dur, loc_fare, loc_ep, loc_qtime,
+                             locIn_num, locIn_dur, locIn_fare, locIn_ep, locIn_qtime,
+                             locOut_num, locOut_dur, locOut_fare, locOut_ep, locOut_qtime])
 
 
 if __name__ == '__main__':
