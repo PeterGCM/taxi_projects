@@ -37,6 +37,8 @@ def run():
 
 
 def process_files(stat_fpath, yymm, ep_dir, ep_prefix):
+    print 'handle the file; %s' % yymm
+    #
     shift_df = pd.read_csv('%s/%s%s.csv' % (ftd_shift_dir, ftd_shift_prefix, yymm))
     all_trip_df = pd.read_csv('%s/%s%s.csv' % (ftd_trips_dir, ftd_trips_prefix, yymm))
     loc_trip_df = pd.read_csv('%s/%s%s.csv' % (ep_dir, ep_prefix, yymm))
