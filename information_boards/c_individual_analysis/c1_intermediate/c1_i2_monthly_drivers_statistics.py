@@ -1,14 +1,14 @@
 import __init__
 #
-from information_boards.__init__ import DIn_PIn, DOut_PIn
-from information_boards.__init__ import SEC60
-from b_aggregated_analysis.__init__ import ap_ep_dir, ap_ep_prefix
-from b_aggregated_analysis.__init__ import ns_ep_dir, ns_ep_prefix
-from c_individual_analysis.__init__ import ftd_trips_dir, ftd_trips_prefix
-from c_individual_analysis.__init__ import ftd_shift_dir, ftd_shift_prefix
-from c_individual_analysis.__init__ import ftd_list_dir, ftd_list_prefix
-from c_individual_analysis.__init__ import ftd_stat_ap_trip_dir, ftd_stat_ap_trip_prefix
-from c_individual_analysis.__init__ import ftd_stat_ns_trip_dir, ftd_stat_ns_trip_prefix
+from information_boards import DIn_PIn, DOut_PIn
+from information_boards import SEC60
+from information_boards.b_aggregated_analysis import ap_ep_dir, ap_ep_prefix
+from information_boards.b_aggregated_analysis import ns_ep_dir, ns_ep_prefix
+from information_boards.c_individual_analysis import ftd_trips_dir, ftd_trips_prefix
+from information_boards.c_individual_analysis import ftd_shift_dir, ftd_shift_prefix
+from information_boards.c_individual_analysis import ftd_stat_ap_trip_dir, ftd_stat_ap_trip_prefix
+from information_boards.c_individual_analysis import ftd_stat_ns_trip_dir, ftd_stat_ns_trip_prefix
+
 #
 from taxi_common.file_handling_functions import load_pickle_file, remove_create_dir
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor

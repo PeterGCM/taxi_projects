@@ -5,7 +5,7 @@ from information_boards.b_aggregated_analysis.b2_summary import AP_DUR, AP_FARE,
 from information_boards.b_aggregated_analysis.b2_summary import NS_DUR, NS_FARE, NS_QUEUE, NS_NUM
 from information_boards.b_aggregated_analysis.b2_summary import ALL, AP, AP_GEN, NS, NS_GEN
 from information_boards.b_aggregated_analysis import productivity_dir, productivity_prefix
-from information_boards.b_aggregated_analysis import hourly_stats_fpath, zero_duration_timeslots
+from information_boards.b_aggregated_analysis import hourly_stats_fpath
 from information_boards import AM2, AM5
 from information_boards import error_period
 #
@@ -192,8 +192,7 @@ def run():
                                 ns_gen_total_fare, ns_gen_avg_fare,
                                 ns_gen_prod,
                              k])
-    #
-    save_pickle_file(zero_duration_timeslots, zero_dur)
+
     
 if __name__ == '__main__':
     from traceback import format_exc
