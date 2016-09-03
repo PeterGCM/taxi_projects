@@ -22,7 +22,7 @@ def run():
             yymm = '%02d%02d' % (y, m)
             if yymm in ['0912', '1010']:
                 continue
-            process_files(yymm)
+            # process_files(yymm)
             put_task(process_files, [yymm])
             count_num_jobs += 1
     end_multiprocessor(count_num_jobs)
