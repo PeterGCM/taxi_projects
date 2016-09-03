@@ -42,7 +42,7 @@ def process_files(stat_fpath, yymm, ep_dir, ep_prefix):
     shift_df = pd.read_csv('%s/%s%s.csv' % (ftd_shift_dir, ftd_shift_prefix, yymm))
     all_trip_df = pd.read_csv('%s/%s%s.csv' % (ftd_trips_dir, ftd_trips_prefix, yymm))
     loc_trip_df = pd.read_csv('%s/%s%s.csv' % (ep_dir, ep_prefix, yymm))
-    ft_drivers = load_pickle_file('%s/%s%s.pkl' % (full_time_driver_dir, ft_drivers_prefix, yymm))
+    ft_drivers = map(int, load_pickle_file('%s/%s%s.pkl' % (full_time_driver_dir, ft_drivers_prefix, yymm)))
     #
     yy, mm = int(yymm[:2]), int(yymm[2:])
     for did in ft_drivers:
