@@ -50,7 +50,7 @@ def process_files(yymm):
         headers = reader.next()
         hid = {h : i for i, h in enumerate(headers)}
         with open('%s/%s%s.csv' % (ftd_trips_dir, ftd_trips_prefix, yymm), 'wt') as w_csvfile:
-            writer = csv.writer(w_csvfile)
+            writer = csv.writer(w_csvfile, lineterminator='\n')
             new_headers = ['did', 'start-time', 'duration', 'fare']
             writer.writerow(new_headers)
             #

@@ -15,8 +15,20 @@ ftd_shift_dir, ftd_shift_prefix = '%s/%s' % (ftd_dir, 'ftd_shifts'), 'ftd-shifts
 
 
 
-ftd_stat_ap_trip_dir, ftd_stat_ap_trip_prefix = ftd_dir + '/driver_stat_ap_trips', 'stat-ap-trips-'
+
+#
+ftd_ap_stat_fpath = '%s/%s' % (summary_dir, 'ftd_ap_stats.csv')
+ftd_ns_stat_fpath = '%s/%s' % (summary_dir, 'ftd_ns_stats.csv')
+
+
+
+
+ftd_stat_atrip_dir, ftd_stat_atrip_prefix = '%s/%s' % (ftd_dir, 'driver_stat_ap_trips'), 'stat-ap-trips-'
 ftd_stat_ns_trip_dir, ftd_stat_ns_trip_prefix = ftd_dir + '/driver_stat_ns_trips', 'stat-ns-trips-'
+
+
+
+
 
 ftd_Y09_stat_ap_fn = summary_dir+ '/ftd-Y09-stat-ap.csv'
 ftd_Y10_stat_ap_fn = summary_dir+ '/ftd-Y10-stat-ap.csv'

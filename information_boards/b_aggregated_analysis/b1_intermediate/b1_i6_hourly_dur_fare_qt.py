@@ -1,7 +1,5 @@
 import __init__
 #
-from information_boards import SEC3600
-from information_boards.a_overall_analysis import trips_dir, trip_prefix
 from information_boards.b_aggregated_analysis import shift_pro_dur_dir, shift_pro_dur_prefix
 from information_boards.b_aggregated_analysis import ap_trips_dir, ap_trip_prefix
 from information_boards.b_aggregated_analysis import ns_trips_dir, ns_trip_prefix
@@ -9,6 +7,8 @@ from information_boards.b_aggregated_analysis import productivity_dir, productiv
 from information_boards.b_aggregated_analysis.b1_intermediate import ALL_DUR, ALL_FARE, ALL_NUM
 from information_boards.b_aggregated_analysis.b1_intermediate import AP_DUR, AP_FARE, AP_QUEUE, AP_NUM
 from information_boards.b_aggregated_analysis.b1_intermediate import NS_DUR, NS_FARE, NS_QUEUE, NS_NUM
+from information_boards.a_overall_analysis import trips_dir, trip_prefix
+from information_boards import SEC3600, SEC60
 #
 from taxi_common.file_handling_functions import remove_create_dir, check_dir_create, check_path_exist
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
@@ -61,7 +61,7 @@ def process_files(yymm):
         hid = {h: i for i, h in enumerate(headers)}
         for row in reader:
             dd, hh = eval(row[hid['dd']]), eval(row[hid['hh']])
-            hourly_stats[(yyyy, mm, dd, hh)][ALL_DUR] += eval(row[hid['pro-dur']]) * 60  # unit change; Minute -> Second
+            hourly_stats[(yyyy, mm, dd, hh)][ALL_DUR] += eval(row[hid['pro-dur']]) * SEC60  # unit change; Minute -> Second
     # Total fare
     print yymm, 'Total fare'
     with open('%s/%s%s.csv' % (trips_dir, trip_prefix, yymm), 'rb') as r_csvfile:

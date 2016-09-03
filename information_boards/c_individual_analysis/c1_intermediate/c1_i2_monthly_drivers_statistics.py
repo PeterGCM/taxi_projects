@@ -1,102 +1,88 @@
 import __init__
 #
-from information_boards import DIn_PIn, DOut_PIn
-from information_boards import SEC60
-from information_boards.b_aggregated_analysis import ap_ep_dir, ap_ep_prefix
-from information_boards.b_aggregated_analysis import ns_ep_dir, ns_ep_prefix
+from information_boards.c_individual_analysis import ftd_ap_stat_fpath, ftd_ns_stat_fpath
 from information_boards.c_individual_analysis import ftd_trips_dir, ftd_trips_prefix
 from information_boards.c_individual_analysis import ftd_shift_dir, ftd_shift_prefix
-from information_boards.c_individual_analysis import ftd_stat_ap_trip_dir, ftd_stat_ap_trip_prefix
-from information_boards.c_individual_analysis import ftd_stat_ns_trip_dir, ftd_stat_ns_trip_prefix
-
+from information_boards.b_aggregated_analysis import ap_ep_dir, ap_ep_prefix
+from information_boards.b_aggregated_analysis import ns_ep_dir, ns_ep_prefix
+from information_boards import DIn_PIn, DOut_PIn
+from information_boards import SEC60
 #
-from taxi_common.file_handling_functions import load_pickle_file, remove_create_dir
-from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
+from taxi_common import full_time_driver_dir, ft_drivers_prefix
+from taxi_common.file_handling_functions import load_pickle_file
 #
 import csv
 import pandas as pd
 
 
 def run():
-    for dn in [ftd_stat_ap_trip_dir, ftd_stat_ns_trip_dir]:
-        remove_create_dir(dn)
-    #
-    init_multiprocessor()
-    count_num_jobs = 0
-    for y in xrange(9, 11):
-        for m in xrange(1, 13):
-            yymm = '%02d%02d' % (y, m) 
-            if yymm in ['0912', '1010']:
-                continue
-#             process_files(yymm)
-            put_task(process_files, [yymm])
-            count_num_jobs += 1
-    end_multiprocessor(count_num_jobs)
-
-
-def process_files(yymm):
-    print 'handle the file; %s' % yymm
-    #
-    # initialize csv_files
-    #
-    for ftd_stat_dir, ftd_stat_prefix in [(ftd_stat_ap_trip_dir, ftd_stat_ap_trip_prefix),
-                                          (ftd_stat_ns_trip_dir, ftd_stat_ns_trip_prefix)]:
-        with open('%s/%s%s.csv' % (ftd_stat_dir, ftd_stat_prefix, yymm), 'wt') as w_csvfile:
-            writer = csv.writer(w_csvfile)
-            headers = ['yy', 'mm', 'did', 'num-trips', 'fare', 'pro-dur', 'gen-prod'
-                                        , 'pin-num-trips', 'pin-fare', 'pin-dur', 'pin-qu', 'pin-prod', 'pin-eco-profit'
-                                        , 'pout-num-trips', 'pout-fare', 'pout-dur', 'pout-qu', 'pout-prod', 'pout-eco-profit']
+    for stat_fpath, loc, ep_dir, ep_prefix in [(ftd_ap_stat_fpath, 'ap', ap_ep_dir, ap_ep_prefix),
+                                               (ftd_ns_stat_fpath, 'ns', ns_ep_dir, ns_ep_prefix),]:
+        #
+        with open(stat_fpath, 'wb') as w_csvfile:
+            writer = csv.writer(w_csvfile, lineterminator='\n')
+            headers = ['yy', 'mm', 'did'
+                       'all-num', 'all-dur', 'all-fare',
+                       '%s-num' % loc, '%s-dur' % loc, '%s-fare' % loc, '%s-ep' % loc, '%s-queueing-time' % loc,
+                       '%sIn-num' % loc, '%sIn-dur' % loc, '%sIn-fare' % loc, '%sIn-ep' % loc, '%sIn-queueing-time' % loc,
+                       '%sOut-num' % loc, '%sOut-dur' % loc, '%sOut-fare' % loc, '%sOut-ep' % loc, '%sOut-queueing-time' % loc]
             writer.writerow(headers)
-    #
-    full_dids = sorted(load_pickle_file('%s/%s%s.pkl' % (ftd_list_dir, ftd_list_prefix, yymm)))
-    s_df = pd.read_csv('%s/%s%s.csv' % (ftd_shift_dir, ftd_shift_prefix, yymm))
-    trip_df = pd.read_csv('%s/%s%s.csv' % (ftd_trips_dir, ftd_trips_prefix, yymm))
-    ap_trip_df = pd.read_csv('%s/%s%s.csv' % (ap_ep_dir, ap_ep_prefix, yymm))
-    ns_trip_df = pd.read_csv('%s/%s%s.csv' % (ns_ep_dir, ns_ep_prefix, yymm))
+        #
+        for y in xrange(9, 11):
+            for m in xrange(1, 13):
+                yymm = '%02d%02d' % (y, m)
+                if yymm in ['0912', '1010']:
+                    continue
+                process_files(stat_fpath, yymm, ep_dir, ep_prefix)
+
+
+def process_files(stat_fpath, yymm, ep_dir, ep_prefix):
+    shift_df = pd.read_csv('%s/%s%s.csv' % (ftd_shift_dir, ftd_shift_prefix, yymm))
+    all_trip_df = pd.read_csv('%s/%s%s.csv' % (ftd_trips_dir, ftd_trips_prefix, yymm))
+    loc_trip_df = pd.read_csv('%s/%s%s.csv' % (ep_dir, ep_prefix, yymm))
+    ft_drivers = load_pickle_file('%s/%s%s.pkl' % (full_time_driver_dir, ft_drivers_prefix, yymm))
     #
     yy, mm = int(yymm[:2]), int(yymm[2:])
-    for did in full_dids:
+    for did in ft_drivers:
         #
-        # General
+        # All
         #
-        did_sh = s_df[(s_df['did'] == did)]
-        pro_dur = sum(did_sh['pro-dur']) * SEC60
-        did_wt = trip_df[(trip_df['did'] == did)]
-        fare = sum(did_wt['fare'])
-        num_trips = len(did_wt['fare'])
-        if pro_dur > 0 and fare != 0:
-            gen_prod = fare / float(pro_dur)
-        else:
-            continue
-        for loc_trip_df, ftd_stat_dir, ftd_stat_prefix in [(ap_trip_df, ftd_stat_ap_trip_dir, ftd_stat_ap_trip_prefix),
-                                                           (ns_trip_df, ftd_stat_ns_trip_dir, ftd_stat_ns_trip_prefix)]:
-            did_df = loc_trip_df[(loc_trip_df['did'] == did)]
-            #
-            pin_trip_df = did_df[(did_df['trip-mode'] == DIn_PIn)]
-            if len(pin_trip_df) == 0: continue
-            pin_num_trips, pin_fare, pin_dur, pin_qu, pin_prod, pin_eco_profit = calc_prod_eco_profit(pin_trip_df)
-            #
-            pout_trip_df = did_df[(did_df['trip-mode'] == DOut_PIn)]
-            if len(pout_trip_df) == 0: continue
-            pout_num_trips, pout_fare, pout_dur, pout_qu, pout_prod, pout_eco_profit = calc_prod_eco_profit(pout_trip_df)
-            #
-            with open('%s/%s%s.csv' % (ftd_stat_dir, ftd_stat_prefix, yymm), 'a') as w_csvfile:
-                writer = csv.writer(w_csvfile)
-                writer.writerow([yy, mm, did, num_trips, fare, pro_dur, gen_prod
-                                            , pin_num_trips, pin_fare, pin_dur, pin_qu, pin_prod, pin_eco_profit
-                                            , pout_num_trips, pout_fare, pout_dur, pout_qu, pout_prod, pout_eco_profit])
-
-
-def calc_prod_eco_profit(df):
-    num_trips = len(df['duration'])
-    dur, qu = sum(df['duration']), sum(df['queueing-time'])
-    fare = sum(df['fare'])
-    if qu + dur > 0 and fare != 0:
-        prod = fare / float(qu + dur)
-    else:
-        prod = 0
-    eco_profit = sum(df['economic-profit'])
-    return num_trips, fare, dur, qu, prod, eco_profit
+        d_all_trip = all_trip_df[(all_trip_df['did'] == did)]
+        d_shift = shift_df[(shift_df['did'] == did)]
+        all_num = len(d_all_trip['fare'])
+        pro_dur = sum(d_shift['pro-dur']) * SEC60
+        all_fare = sum(d_all_trip['fare'])
+        #
+        # Specific location
+        #
+        d_loc_trip = loc_trip_df[(loc_trip_df['did'] == did)]
+        loc_num = len(d_loc_trip['fare'])
+        loc_dur = sum(d_loc_trip['duration'])
+        loc_fare = sum(d_loc_trip['fare'])
+        loc_ep = sum(d_loc_trip['economic-profit'])
+        loc_qtime = sum(d_loc_trip['queueing-time'])
+        #
+        d_loc_trip_in = d_loc_trip[(d_loc_trip['trip-mode'] == DIn_PIn)]
+        locIn_num = len(d_loc_trip_in['fare'])
+        locIn_dur = sum(d_loc_trip_in['duration'])
+        locIn_fare = sum(d_loc_trip_in['fare'])
+        locIn_ep = sum(d_loc_trip_in['economic-profit'])
+        locIn_qtime = sum(d_loc_trip_in['queueing-time'])
+        #
+        d_loc_trip_out = d_loc_trip[(d_loc_trip['trip-mode'] == DOut_PIn)]
+        locOut_num = len(d_loc_trip_out['fare'])
+        locOut_dur = sum(d_loc_trip_out['duration'])
+        locOut_fare = sum(d_loc_trip_out['fare'])
+        locOut_ep = sum(d_loc_trip_out['economic-profit'])
+        locOut_qtime = sum(d_loc_trip_out['queueing-time'])
+        #
+        with open(stat_fpath, 'a') as w_csvfile:
+            writer = csv.writer(w_csvfile, lineterminator='\n')
+            writer.writerow([yy, mm, did,
+                             all_num, pro_dur, all_fare,
+                             loc_num, loc_dur, loc_fare, loc_fare, loc_ep, loc_qtime,
+                             locIn_num, locIn_dur, locIn_fare, locIn_fare, locIn_ep, locIn_qtime,
+                             locOut_num, locOut_dur, locOut_fare, locOut_fare, locOut_ep, locOut_qtime])
 
 
 if __name__ == '__main__':
