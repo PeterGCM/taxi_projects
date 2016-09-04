@@ -28,9 +28,8 @@ def run():
             assert ts_header
             for row in reader:
                 com_sgth_fname.append([eval(row[hid[ts_header]]), row[hid['com-name']]])
-        if len(top_five_com) < 5:
+        if len(com_sgth_fname) < 5:
             continue
-
         top_five_com = sorted(com_sgth_fname, reverse=True)[:5]
         nid_cn = {}
         for _, cn in top_five_com:
