@@ -1,83 +1,75 @@
 import __init__
 #
-from __init__ import whole_trip_prefix, com_trip_prefix
-from community_analysis.__init__ import pg_dir, trip_dir, com_trip_dir
+from community_analysis import com_dir, com_trip_dir, trip_dir
 #
-from taxi_common.file_handling_functions import get_all_files, check_dir_create
+from taxi_common.file_handling_functions import get_all_files, check_dir_create, get_all_directories
 #
 import networkx as nx
 import csv
 
 
 def run():
-    yyyy = 2009
-    target = '%d' % yyyy
-    target_dir = '%s/%s' % (pg_dir, target)
-    com, nid_com = {}, {}
-    for fn in get_all_files(target_dir, '2009-', '.pkl'):
-        if fn.endswith('whole.pkl'):
+    for dir_name in get_all_directories(com_dir):
+        yyyy, str_CD, str_thD = dir_name.split('-')
+        CD = int(str_CD[len('CD('):-len(')')])
+        thD = int(str_thD[len('thD('):-len(')')])
+        target_dpath = '%s/%s' % (com_dir, dir_name)
+        print target_dpath
+        summary_fpath = '%s/%s-community-summary.csv' % (target_dpath, yyyy)
+        com_sgth_fname = []
+        with open(summary_fpath, 'rb') as r_csvfile:
+            reader = csv.reader(r_csvfile)
+            headers = reader.next()
+            hid = {h: i for i, h in enumerate(headers)}
+            ts_header = None
+            for k in hid.iterkeys():
+                if k.startswith('tie-strength'):
+                    ts_header = k
+            assert ts_header
+            for row in reader:
+                com_sgth_fname.append([eval(row[hid[ts_header]]), row[hid['com-name']]])
+        if len(top_five_com) < 5:
             continue
-        print fn
-        _, cnum_str = fn[:-len('.pkl')].split('-')
-        cnum = eval(cnum_str[len('COM('):-len(')')])
-        print fn, cnum
-        nxG = nx.read_gpickle('%s/%s' % (target_dir, fn))
-        com[cnum] = []
-        for n in nxG.nodes():
-            com[cnum].append(n)
-            nid_com[n] = cnum
-    #
 
-    target = '2009'
-    target_dir = '%s/%s' % (pg_dir, target)
-    #
-    summary_fn = '%s/%s_summary.csv' % (target_dir, target)
-    com_sgth_fname = []
-    with open(summary_fn, 'rb') as r_csvfile:
-        reader = csv.reader(r_csvfile)
-        headers = reader.next()
-        hid = {h: i for i, h in enumerate(headers)}
-        for row in reader:
-            com_sgth_fname.append([eval(row[hid['tie-strength']]), row[hid['fname']]])
-    top_five_com = sorted(com_sgth_fname, reverse=True)[:5]
-    nid_cn = {}
-    for _, fn in top_five_com:
-        _, com_name = fn[:-len('.pkl')].split('-')
+        top_five_com = sorted(com_sgth_fname, reverse=True)[:5]
+        nid_cn = {}
+        for _, cn in top_five_com:
+            for nid in nx.read_gpickle('%s/%s-%s.pkl' % (target_dpath, yyyy, cn)).nodes():
+                nid_cn[nid] = int(cn[len('COM)'):-len(')')])
         #
-        for nid in nx.read_gpickle('%s/%s/%s' % (pg_dir, target, fn)).nodes():
-            nid_cn[nid] = com_name
-
-    ct_yyyy_dir = '%s/%s' % (com_trip_dir, target); check_dir_create(ct_yyyy_dir)
-    ctrip_fn = '%s/%s-trip-community.csv' % (ct_yyyy_dir, target)
-    with open(ctrip_fn, 'wt') as w_csvfile:
-        writer = csv.writer(w_csvfile)
-        writer.writerow(['time', 'yy', 'mm', 'did', 'cnum', 'si', 'sj', 'ei', 'ej', 'distance', 'duration', 'fare'])
-    for m in range(1, 12):
-        yymm = target[-2:] + '%02d' % m
-        print yymm
-        yymm_dir = '%s/%s' % (trip_dir, yymm)
-        for fn in get_all_files(yymm_dir, '', '.csv'):
-            with open('%s/%s' % (yymm_dir, fn), 'rb') as r_csvfile:
-                reader = csv.reader(r_csvfile)
-                headers = reader.next()
-                hid = {h: i for i, h in enumerate(headers)}
-                for row in reader:
-                    did = eval(row[hid['did']])
-                    if not nid_cn.has_key(did):
-                        continue
-                    if not nid_com.has_key(did):
-                        continue
-                    k = nid_com[did]
-                    with open(ctrip_fn, 'a') as w_csvfile:
-                        writer = csv.writer(w_csvfile)
-                        new_row = [
-                            row[hid['time']], yymm[:2], yymm[-2:],
-                            row[hid['did']], k,
-                            row[hid['si']], row[hid['sj']],
-                            row[hid['ei']], row[hid['ej']],
-                            row[hid['distance']], row[hid['duration']], row[hid['fare']]
-                        ]
-                        writer.writerow(new_row)
+        check_dir_create(com_trip_dir)
+        ctrip_fn = '%s/%s-CD(%d)-thD(%d)-ctrip.csv' % (com_trip_dir, yyyy, CD, thD)
+        with open(ctrip_fn, 'wt') as w_csvfile:
+            writer = csv.writer(w_csvfile, lineterminator='\n')
+            writer.writerow(['time', 'yy', 'mm', 'did', 'cnum',
+                             'start-long', 'start-lat', 'end-long', 'end-lat',
+                             'distance', 'duration', 'fare',
+                             'si', 'sj', 'ei', 'ej'])
+        #
+        for m in range(1, 12):
+            yymm = '%02d%02d' % (int(yyyy) - 2000, m)
+            print yymm
+            yymm_dir = '%s/%s' % (trip_dir, yymm)
+            for fn in get_all_files(yymm_dir, '', '.csv'):
+                print fn
+                with open('%s/%s' % (yymm_dir, fn), 'rb') as r_csvfile:
+                    reader = csv.reader(r_csvfile)
+                    headers = reader.next()
+                    hid = {h: i for i, h in enumerate(headers)}
+                    for row in reader:
+                        did = eval(row[hid['did']])
+                        if not nid_cn.has_key(did):
+                            continue
+                        k = nid_cn[did]
+                        with open(ctrip_fn, 'a') as w_csvfile:
+                            writer = csv.writer(w_csvfile)
+                            new_row = [
+                                row[hid['time']], yymm[:2], yymm[-2:], row[hid['did']], k,
+                                row[hid['start-long']], row[hid['start-lat']], row[hid['end-long']], row[hid['end-lat']],
+                                row[hid['distance']], row[hid['duration']], row[hid['fare']],
+                                row[hid['si']], row[hid['sj']], row[hid['ei']], row[hid['ej']]
+                                ]
+                            writer.writerow(new_row)
 
 
 if __name__ == '__main__':

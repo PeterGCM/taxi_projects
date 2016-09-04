@@ -4,7 +4,7 @@ from community_analysis import la_dir, com_dir
 #
 from taxi_common.file_handling_functions import load_pickle_file, get_all_files, \
                                                 check_dir_create, save_pickle_file, \
-                                                check_path_exist, remove_create_dir
+                                                check_path_exist
 #
 import networkx as nx
 import igraph as ig
@@ -17,9 +17,10 @@ def run():
     #
     yyyy = '2009'
     for la_fn in get_all_files(la_dir, '%s-CD' % yyyy, '.pkl'):
-        _, _, str_thD, _, _ = la_fn[:-len('.pkl')].split('-')
+        _, str_CD, str_thD, _, _ = la_fn[:-len('.pkl')].split('-')
+        CD = int(str_CD[len('CD('):-len(')')])
         thD = int(str_thD[len('thD('):-len(')')])
-        thD_dir = '%s/%s' % (com_dir, '2009-CD(%d)' % thD)
+        thD_dir = '%s/%s' % (com_dir, '2009-CD(%d)-thD(%d)' % CD, thD)
         summary_fpath = '%s/%s-community-summary.csv' % (thD_dir, yyyy)
         glayout_fpath = '%s/%s-glayout.pkl' % (thD_dir, yyyy)
         if check_path_exist(glayout_fpath):
