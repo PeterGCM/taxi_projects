@@ -106,8 +106,8 @@ def run():
             , (Y09_apIn_num, Y10_apIn_num), (Y09_apIn_dur, Y10_apIn_dur), (Y09_apIn_fare, Y10_apIn_fare), (Y09_apIn_ep, Y10_apIn_ep), (Y09_apIn_qtime, Y10_apIn_qtime) \
             , (Y09_apOut_num, Y10_apOut_num), (Y09_apOut_dur, Y10_apOut_dur), (Y09_apOut_fare, Y10_apOut_fare), (Y09_apOut_ep, Y10_apOut_ep), (Y09_apOut_qtime, Y10_apOut_qtime) \
                 = driver_stats[did]
-            # if Y09_all_num == 0 and Y10_all_num == 0:
-            #     continue
+            if Y09_all_num == 0 and Y10_all_num == 0:
+                continue
             Y09_gen_num, Y10_gen_num = Y09_all_num - Y09_ap_num, Y10_all_num - Y10_ap_num
             Y09_gen_dur, Y10_gen_dur = Y09_all_dur - (Y09_ap_dur + Y09_ap_qtime), Y10_all_dur - (Y10_ap_dur + Y10_ap_qtime)
             Y09_gen_fare, Y10_gen_fare = Y09_all_fare - Y09_ap_fare, Y10_all_fare - Y10_ap_fare
