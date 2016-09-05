@@ -58,7 +58,7 @@ def process_files(yymm):
             _did0, _did0_num_pickup, _did0_linkage = daily_linkage.pop()
             did0 = int(_did0)
             if did0 not in nodes:
-                community_analysis
+                continue
             for _did1, num_linkage in _did0_linkage.iteritems():
                 did1 = int(_did1)
                 if did1 not in nodes:
