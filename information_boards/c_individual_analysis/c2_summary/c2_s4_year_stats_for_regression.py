@@ -33,6 +33,7 @@ def run():
     with open(ftd_ap_linear_fpath, 'wb') as w_csvfile:
         writer = csv.writer(w_csvfile, lineterminator='\n')
         header = [
+            'did'
             #
             # Total
             #
@@ -258,6 +259,7 @@ def run():
                 = [all_num / float(ap_num) if ap_num != 0 else 0 for all_num, ap_num in all_num_ap_num]
 
             new_row = [
+                did,
                 #
                 # Total
                 #
