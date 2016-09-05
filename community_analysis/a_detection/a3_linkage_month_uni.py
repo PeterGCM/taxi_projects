@@ -10,7 +10,7 @@ from taxi_common.multiprocess import init_multiprocessor, put_task, end_multipro
 def run():
     remove_create_dir(lm_dir)
     #
-    init_multiprocessor(8)
+    init_multiprocessor(11)
     count_num_jobs = 0
     for mm in range(1, 12):
         put_task(process_files, ['09%02d' % mm])
