@@ -13,6 +13,7 @@ lm_dir = '%s/%s' % (taxi_data, 'linkage_monthly')
 la_dir = '%s/%s' % (taxi_data, 'linkage_annually')
 com_dir = '%s/%s' % (taxi_data, 'community')
 com_trip_dir = '%s/%s' % (taxi_data, 'com_trips')
+lm_dg_dir = '%s/%s' % (taxi_data, 'month_directional')
 
 
 # pg_dir = taxi_data + '/partitioned_group'; check_dir_create(pg_dir)
