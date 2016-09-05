@@ -39,7 +39,7 @@ def generate_zones(poly_points, xaxis_unit, yaxis_unit, x_points, y_points):
             leftBottom, rightBottom = (x, y), (x + xaxis_unit, y)
             rightTop, leftTop = (x + xaxis_unit, y + yaxis_unit), (x, y + yaxis_unit)
             polyPoints_gps = [leftBottom, rightBottom, rightTop, leftTop]
-            cCoor_gps = (x + xaxis_unit / float(2), y + yaxis_unit / float(2))
+            cCoor_gps = (y + yaxis_unit / float(2), x + xaxis_unit / float(2))
             zone_poly = Polygon(polyPoints_gps)
             if poly.contains(zone_poly):
                 boundary_relation = zone.IN

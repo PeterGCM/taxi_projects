@@ -36,16 +36,13 @@ def get_sg_poly_points():
 
 
 def get_sg_zones():
-    if not check_path_exist(sg_zones):
-        if not check_path_exist(sg_grid_xy_points):
-            x_points, y_points = generate_sg_grid()
-        else:
-            x_points, y_points = load_pickle_file(sg_grid_xy_points)
-        xaxis_unit, yaxis_unit = x_points[1] - x_points[0], y_points[1] - y_points[0]
-        zones = generate_zones(get_sg_poly_points(), xaxis_unit, yaxis_unit, x_points, y_points)
-        save_pickle_file(sg_zones, zones)
+    if not check_path_exist(sg_grid_xy_points):
+        x_points, y_points = generate_sg_grid()
+        save_pickle_file(sg_zones, [x_points, y_points])
     else:
-        zones = load_pickle_file(sg_zones)
+        x_points, y_points = load_pickle_file(sg_grid_xy_points)
+    xaxis_unit, yaxis_unit = x_points[1] - x_points[0], y_points[1] - y_points[0]
+    zones = generate_zones(get_sg_poly_points(), xaxis_unit, yaxis_unit, x_points, y_points)
     return zones
 
 

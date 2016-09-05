@@ -14,6 +14,9 @@ def run():
     day_counting = 0
     pairs_day_counting = {}
 
+    print get_all_files(lm_dir, '', '.pkl')
+    assert False
+
     for fn in get_all_files(lm_dir, '', '.pkl'):
         _, D, _, _ = fn[:-len('.pkl')].split('-')
         day_counting += int(D[len('D('):-len(')')])
