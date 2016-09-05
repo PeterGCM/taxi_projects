@@ -19,7 +19,6 @@ def run():
               'ap-num', 'ap-dur', 'ap-fare', 'ap-ep', 'ap-queueing-time',
               'apIn-num', 'apIn-dur', 'apIn-fare', 'apIn-ep', 'apIn-queueing-time',
               'apOut-num', 'apOut-dur', 'apOut-fare', 'apOut-ep', 'apOut-queueing-time']
-    lid = {l: i for i, l in enumerate(labels)}
     for did in by_drivers:
         driver_stats[did] = [[] for _ in labels]
     for i, label in enumerate(labels):
@@ -33,7 +32,7 @@ def run():
     with open(ftd_ap_linear_fpath, 'wb') as w_csvfile:
         writer = csv.writer(w_csvfile, lineterminator='\n')
         header = [
-            'did'
+            'did',
             #
             # Total
             #
