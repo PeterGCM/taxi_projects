@@ -1,24 +1,50 @@
-import __init__
+import community_analysis.b_analysis
 #
-from community_analysis import ld_dir, lm_dg_dir
+from community_analysis import ld_dir, lm_dg_dir, com_dir
 #
 from taxi_common.file_handling_functions import load_pickle_file, get_all_files, \
                                                 save_pickle_file, remove_create_dir
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
+#
+import csv
+import networkx as nx
 
 
 def run():
-    remove_create_dir(lm_dg_dir)
+    # remove_create_dir(lm_dg_dir)
     #
-    init_multiprocessor(11)
-    count_num_jobs = 0
+    # init_multiprocessor(11)
+    # count_num_jobs = 0
     for mm in range(1, 12):
-        put_task(process_files, ['09%02d' % mm])
-        count_num_jobs += 1
-    end_multiprocessor(count_num_jobs)
+        yymm = '09%02d' % mm
+        process_files(yymm)
+    #     put_task(process_files, [yymm])
+    #     count_num_jobs += 1
+    # end_multiprocessor(count_num_jobs)
 
 
 def process_files(yymm):
+    yyyy = '2009'
+    target_dpath = '%s/%s' % (com_dir, '2009-CD(184)-thD(92)')
+    summary_fpath = '%s/%s-community-summary.csv' % (target_dpath, yyyy)
+    com_sgth_fname = []
+    with open(summary_fpath, 'rb') as r_csvfile:
+        reader = csv.reader(r_csvfile)
+        headers = reader.next()
+        hid = {h: i for i, h in enumerate(headers)}
+        ts_header = None
+        for k in hid.iterkeys():
+            if k.startswith('tie-strength'):
+                ts_header = k
+        assert ts_header
+        for row in reader:
+            com_sgth_fname.append([eval(row[hid[ts_header]]), row[hid['com-name']]])
+    top_five_com = sorted(com_sgth_fname, reverse=True)[:5]
+
+    nodes = set()
+    for _, cn in top_five_com:
+        for nid in nx.read_gpickle('%s/%s-%s.pkl' % (target_dpath, yyyy, cn)).nodes():
+            nodes.add(nid)
     ld_yymm_dir = ld_dir + '/%s' % yymm
     #
     num_days = 0
@@ -30,8 +56,13 @@ def process_files(yymm):
         daily_linkage = load_pickle_file('%s/%s' % (ld_yymm_dir, fn))
         while daily_linkage:
             _did0, _did0_num_pickup, _did0_linkage = daily_linkage.pop()
+            did0 = int(_did0)
+            if did0 not in nodes:
+                community_analysis
             for _did1, num_linkage in _did0_linkage.iteritems():
-                did0, did1 = int(_did0), int(_did1)
+                did1 = int(_did1)
+                if did1 not in nodes:
+                    continue
                 if (did0, did1) not in daily_pairs:
                     daily_pairs.add((did0, did1))
                     if not pairs_day_counting.has_key((did0, did1)):
