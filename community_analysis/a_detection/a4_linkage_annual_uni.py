@@ -13,7 +13,7 @@ def run():
     yyyy = '2009'
     day_counting = 0
     pairs_day_counting = {}
-
+    print lm_dir
     print get_all_files(lm_dir, '', '.pkl')
     assert False
 
