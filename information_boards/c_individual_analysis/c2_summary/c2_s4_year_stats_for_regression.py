@@ -93,7 +93,7 @@ def run():
             #
             # Etc.
             #
-            'BY-proportion-all-num-by-ap-num', 'Y09-proportion-all-num-by-ap-num', 'Y10-proportion-all-num-by-ap-num', 'Diff-proportion-all-num-by-ap-num',
+            'BY-proportion-ap-num-by-all-num', 'Y09-proportion-ap-num-by-all-num', 'Y10-proportion-ap-num-by-all-num', 'Diff-proportion-ap-num-by-all-num',
         ]
         writer.writerow(header)
         #
