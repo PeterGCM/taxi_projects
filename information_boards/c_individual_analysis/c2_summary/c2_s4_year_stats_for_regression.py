@@ -255,8 +255,8 @@ def run():
             #
             all_num_ap_num = [(by_all_num, by_ap_num), (Y09_all_num, Y09_ap_num),
                          (Y10_all_num, Y10_ap_num), (diff_all_num, diff_ap_num)]
-            by_all_num_by_ap_num, Y09_all_num_by_ap_num, Y10_all_num_by_ap_num, diff_all_num_by_ap_num \
-                = [all_num / float(ap_num) if ap_num != 0 else 0 for all_num, ap_num in all_num_ap_num]
+            by_ap_num_by_all_num, Y09_ap_num_by_all_num, Y10_ap_num_by_all_num, diff_ap_num_by_all_num \
+                = [ap_num / float(all_num) if ap_num != 0 else 0 for all_num, ap_num in all_num_ap_num]
 
             new_row = [
                 did,
@@ -321,7 +321,7 @@ def run():
                 #
                 # Etc.
                 #
-                by_all_num_by_ap_num, Y09_all_num_by_ap_num, Y10_all_num_by_ap_num, diff_all_num_by_ap_num
+                by_ap_num_by_all_num, Y09_ap_num_by_all_num, Y10_ap_num_by_all_num, diff_ap_num_by_all_num
             ]
             writer.writerow(new_row)
 
