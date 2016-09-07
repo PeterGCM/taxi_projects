@@ -37,6 +37,7 @@ sg_poly_fpath = '%s/%s' % (tc_data, 'Singapore_polygon')
 sg_grid_xy_points = tc_data + '/sg_grid_xy_points(%.1fkm).pkl' % ZONE_UNIT_KM
 sg_zones = tc_data + '/sg_zones(%.1fkm).pkl' % ZONE_UNIT_KM
 full_time_driver_dir, ft_drivers_prefix = '%s/%s' % (tc_data, 'full_time_drivers'), 'ft-drivers-'
+dl_by_trip_dir, dl_by_trip_prefix = '%s/%s' % (tc_data, 'drivers_by_trips'), 'drivers-'
 #
 
 
