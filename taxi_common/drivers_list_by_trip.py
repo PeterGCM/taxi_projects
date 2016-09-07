@@ -32,8 +32,9 @@ def process_file(yymm):
     drivers = set()
     with open(ext_file, 'rb') as r_csvfile:
         reader = csv.reader(r_csvfile)
+        headers = reader.next()
         # {'start-zone': 0, 'end-zone': 1, 'start-postal': 2, 'driver-id': 4, 'end-postal': 3}
-        hid = {h: i for i, h in enumerate(reader)}
+        hid = {h: i for i, h in enumerate(headers)}
         for row in reader:
             drivers.add(row[hid['driver-id']])
     save_pickle_file('%s/%s%s.pkl' % (dl_by_trip_dir, dl_by_trip_prefix, yymm), drivers)
