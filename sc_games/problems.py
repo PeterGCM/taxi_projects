@@ -351,4 +351,8 @@ def validate_transition(Tr_sas, S, A):
 
 
 if __name__ == '__main__':
-    problem_generator(10, 3, R_INVERSE, T_COMPLEX)
+    for rtype in [R_CONSTANT, R_LINEAR, R_INVERSE, R_EXPONENTIAL]:
+        for ttype in [T_SIMPLE, T_COMPLEX]:
+            for num_agents in range(5, 25, 5):
+                for num_states in range(2, 11):
+                    problem_generator(num_agents, num_states, rtype, ttype)
