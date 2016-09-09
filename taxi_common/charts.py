@@ -187,7 +187,9 @@ class multiple_line_chart(object):
         ax.set_ylabel(_ylabel)
         ymax = 0
         for i, y_data in enumerate(multi_y_data):
-            plt.plot(range(len(y_data)), y_data, linewidth=1, color=clists[i], marker=mlists[i])
+            color_i = i % len(clists)
+            marker_i = i % len(mlists)
+            plt.plot(range(len(y_data)), y_data, linewidth=1, color=clists[color_i], marker=mlists[marker_i])
             ymax1 = max(y_data)
             if ymax < ymax1:
                 ymax = ymax1
