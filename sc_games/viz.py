@@ -11,7 +11,7 @@ SAMPLING_INTERVAL = 100
 DRAW_SAMPLED_CHART = True
 
 def run():
-    problem_dn = 'P0-G(5)-S(2)-R(L)-Tr(S)'
+    problem_dn = 'P89-G(10)-S(6)-R(L)-Tr(S)'
     problem_dpath = '%s/%s' % (taxi_data, problem_dn)
     for dn in get_all_directories(problem_dpath):
         dpath = '%s/%s' % (problem_dpath, dn)
