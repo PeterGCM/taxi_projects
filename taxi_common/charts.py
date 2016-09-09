@@ -210,7 +210,10 @@ class multiple_line_chart(object):
             for i, ys in enumerate(multi_y_data):
                 write_text_file(txt_path_fn, '%s: %s' %(y_legend_labels[i], str(ys)))
             write_text_file(txt_path_fn, '')
-        plt.show()  
+        else:
+            plt.show()
+        plt.close(fig)
+
 
 class x_twin_chart(object):
     def __init__(self, _figsize, _title, x_info, y_info1, y_info2, save_fn=None):

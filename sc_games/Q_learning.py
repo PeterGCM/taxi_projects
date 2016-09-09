@@ -10,14 +10,15 @@ from sc_games import sheet_names
 
 from handling_distribution import choose_index_wDist
 #
-from taxi_common.file_handling_functions import check_dir_create, get_parent_dir, get_fn_only, get_all_files, check_path_exist
+from taxi_common.file_handling_functions import check_dir_create, get_parent_dir, \
+                                                get_fn_only, get_all_files, check_path_exist, get_all_directories
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
 import csv, xlrd
 
 
 def run():
-    # init_multiprocessor(11)
+    # init_multiprocessor(6)
     # count_num_jobs = 0
     # for prob in [scG_twoState, scG_threeState, scG_fiveState, scG_fiveState_RD]:
     #     for agent_type, dir_name in [(normal_agent, 'pure-normal-agents'), (sensitive_agent, 'pure-sensitive-agents')]:
@@ -26,45 +27,51 @@ def run():
     #         put_task(multi_processors_instance, [prob, dir_name, agent_type])
     #         count_num_jobs += 1
     # end_multiprocessor(count_num_jobs)
-
-    problem_dn = 'P1-G(10)-S(3)-R(I)-Tr(C)'
-    problem_dpath = '%s/%s' % (taxi_data, problem_dn)
-    problem_fpath = '%s/%s.xls' % (problem_dpath, problem_dn)
-    workbook = xlrd.open_workbook(problem_fpath)
-    par_sheet = workbook.sheet_by_name(sheet_names[SH_PARAMETER])
-    num_agents = int(par_sheet.cell(PAR_L_ID_NUM_AGENT, 1).value)
-    num_states = int(par_sheet.cell(PAR_L_ID_NUM_STATE, 1).value)
-    S, A = range(num_states), range(num_states)
-    ags_S = list(eval(par_sheet.cell(PAR_L_ID_DS, 1).value))
-    #
-    reward_sheet = workbook.sheet_by_name(sheet_names[SH_REWARD])
-    R = {}
-    for i in range(1, reward_sheet.nrows):
-        ds, a, v = (reward_sheet.cell(i, j).value for j in xrange(reward_sheet.ncols))
-        ds, a = map(int, [ds, a])
-        R[ds, a] = v
-    #
-    Tr = {}
-    transition_sheet = workbook.sheet_by_name(sheet_names[SH_TRANSITION])
-    headers = transition_sheet.row_values(0)
-    hid = {h: i for i, h in enumerate(headers)}
-    if transition_sheet.ncols == len(['s0', 'a', 's1', 'Tr']):
-        transition_type = T_SIMPLE
-        for i in range(1, transition_sheet.nrows):
-            s0, a, s1, v = (transition_sheet.cell(i, j).value for j in [hid['s0'], hid['a'], hid['s1'], hid['Tr']])
-            s0, a, s1 = map(int, [s0, a, s1])
-            Tr[s0, a, s1] = v
-    else:
-        assert transition_sheet.ncols == len(['s0', 'ds0', 'a', 's1', 'Tr'])
-        transition_type = T_COMPLEX
+    init_multiprocessor(11)
+    count_num_jobs = 0
+    for problem_dn in get_all_directories(taxi_data):
+        # problem_dn = 'P1-G(10)-S(3)-R(I)-Tr(C)'
+        problem_dpath = '%s/%s' % (taxi_data, problem_dn)
+        problem_fpath = '%s/%s.xls' % (problem_dpath, problem_dn)
+        workbook = xlrd.open_workbook(problem_fpath)
+        par_sheet = workbook.sheet_by_name(sheet_names[SH_PARAMETER])
+        num_agents = int(par_sheet.cell(PAR_L_ID_NUM_AGENT, 1).value)
+        num_states = int(par_sheet.cell(PAR_L_ID_NUM_STATE, 1).value)
+        S, A = range(num_states), range(num_states)
+        ags_S = list(eval(par_sheet.cell(PAR_L_ID_DS, 1).value))
         #
-        for i in range(1, transition_sheet.nrows):
-            s0, ds0, a, s1, v = (transition_sheet.cell(i, j).value for j in [hid['s0'], hid['ds0'], hid['a'], hid['s1'], hid['Tr']])
-            s0, ds0, a, s1 = map(int, [s0, ds0, a, s1])
-            Tr[s0, ds0, a, s1] = v
-    problem_inputs = [num_agents, S, A, R, Tr, ags_S, transition_type]
-    sol_dpath = '%s/%s' % (problem_dpath, 'pn-agents')
-    multi_processors_instance(problem_inputs, sol_dpath, normal_agent)
+        reward_sheet = workbook.sheet_by_name(sheet_names[SH_REWARD])
+        R = {}
+        for i in range(1, reward_sheet.nrows):
+            ds, a, v = (reward_sheet.cell(i, j).value for j in xrange(reward_sheet.ncols))
+            ds, a = map(int, [ds, a])
+            R[ds, a] = v
+        #
+        Tr = {}
+        transition_sheet = workbook.sheet_by_name(sheet_names[SH_TRANSITION])
+        headers = transition_sheet.row_values(0)
+        hid = {h: i for i, h in enumerate(headers)}
+        if transition_sheet.ncols == len(['s0', 'a', 's1', 'Tr']):
+            transition_type = T_SIMPLE
+            for i in range(1, transition_sheet.nrows):
+                s0, a, s1, v = (transition_sheet.cell(i, j).value for j in [hid['s0'], hid['a'], hid['s1'], hid['Tr']])
+                s0, a, s1 = map(int, [s0, a, s1])
+                Tr[s0, a, s1] = v
+        else:
+            assert transition_sheet.ncols == len(['s0', 'ds0', 'a', 's1', 'Tr'])
+            transition_type = T_COMPLEX
+            #
+            for i in range(1, transition_sheet.nrows):
+                s0, ds0, a, s1, v = (transition_sheet.cell(i, j).value for j in [hid['s0'], hid['ds0'], hid['a'], hid['s1'], hid['Tr']])
+                s0, ds0, a, s1 = map(int, [s0, ds0, a, s1])
+                Tr[s0, ds0, a, s1] = v
+        problem_inputs = [num_agents, S, A, R, Tr, ags_S, transition_type]
+        sol_dpath = '%s/%s' % (problem_dpath, 'pn-agents')
+        #
+        # multi_processors_instance(problem_inputs, sol_dpath, normal_agent)
+        put_task(multi_processors_instance, [problem_inputs, sol_dpath, normal_agent])
+        count_num_jobs += 1
+    end_multiprocessor(count_num_jobs)
 
 
 def multi_processors_instance(problem_inputs, sol_dpath, agent_class):
