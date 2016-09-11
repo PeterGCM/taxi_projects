@@ -20,9 +20,11 @@ def run():
     la_fpath = '%s/%s' % (la_dir, la_fn)
     _, str_CD, _, _ = la_fn[:-len('.pkl')].split('-')
     CD = int(str_CD[len('CD('):-len(')')])
+    print 'pick file loading...'
     pairs_day_counting = load_pickle_file(la_fpath)
+    print 'finished'
     for thD in [18, 36, 55, 73, 82, 92]:
-        thD_dpath = '%s/%s' % (com_dir, '2009-CD(%d)-thD(%d)' % CD, thD)
+        thD_dpath = '%s/%s' % (com_dir, '2009-CD(%d)-thD(%d)' % (CD, thD))
         check_dir_create(thD_dpath)
         summary_fpath = '%s/%s-CD(%d)-thD(%d)-community-summary.csv' % (thD_dpath, yyyy, CD, thD)
         glayout_fpath = '%s/%s-CD(%d)-thD(%d)-glayout.pkl' % (thD_dpath, yyyy, CD, thD)
