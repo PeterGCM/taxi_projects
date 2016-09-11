@@ -12,6 +12,7 @@ ld_dir = '%s/%s' % (taxi_data, 'linkage_daily')
 lm_dir = '%s/%s' % (taxi_data, 'linkage_monthly')
 la_dir = '%s/%s' % (taxi_data, 'linkage_annually')
 com_dir = '%s/%s' % (taxi_data, 'community')
+com_summary_fpath = '%s/%s' % (com_dir, 'com_summary.csv')
 #
 com_trip_dir = '%s/%s' % (taxi_data, 'com_trips')
 lm_dg_dir = '%s/%s' % (taxi_data, 'month_directional')

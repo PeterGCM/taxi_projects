@@ -13,32 +13,24 @@ def run():
     yyyy = '2009'
     day_counting = 0
     pairs_day_counting = {}
+    N = set()
     for fn in get_all_files(lm_dir, '', '.pkl'):
         _, D, _, _ = fn[:-len('.pkl')].split('-')
         day_counting += int(D[len('D('):-len(')')])
         lm = load_pickle_file('%s/%s' % (lm_dir, fn))
         print 'load', fn
         for (k0, k1), num_days in lm:
+            N.add(k0); N.add(k1)
             if (k0, k1) not in pairs_day_counting:
                 pairs_day_counting[(k0, k1)] = 0
             pairs_day_counting[(k0, k1)] += num_days
+    fpath = '%s/%s-CD(%d)-N(%d)-E(%d).pkl' % (
+        la_dir, yyyy, day_counting, len(N), len(pairs_day_counting))
+    save_pickle_file(fpath, pairs_day_counting)
 
-    for ratio in [0.45, 0.5]:
-        th_day = int(day_counting * ratio)
-        filtered_pairs = {}
-        N = set()
-        for (k0, k1), num_days in pairs_day_counting.iteritems():
-            if num_days < th_day:
-                continue
-            N.add(k0); N.add(k1)
-            filtered_pairs[(k0, k1)] = num_days
-        #
-        fpath = '%s/%s-CD(%d)-thD(%d)-N(%d)-E(%d).pkl' % (
-        la_dir, yyyy, day_counting, th_day, len(N), len(filtered_pairs))
-        if check_path_exist(fpath):
-            continue
-        print 'Saving'
-        save_pickle_file(fpath, filtered_pairs)
+
+    #
+
 
 
 if __name__ == '__main__':

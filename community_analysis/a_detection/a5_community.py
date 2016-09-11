@@ -16,45 +16,43 @@ def run():
     check_dir_create(com_dir)
     #
     yyyy = '2009'
-    for la_fn in get_all_files(la_dir, '%s-CD' % yyyy, '.pkl'):
-        _, str_CD, str_thD, _, _ = la_fn[:-len('.pkl')].split('-')
-        CD = int(str_CD[len('CD('):-len(')')])
-        thD = int(str_thD[len('thD('):-len(')')])
-        thD_dir = '%s/%s' % (com_dir, '2009-CD(%d)-thD(%d)' % CD, thD)
-        summary_fpath = '%s/%s-community-summary.csv' % (thD_dir, yyyy)
-        glayout_fpath = '%s/%s-glayout.pkl' % (thD_dir, yyyy)
-        if check_path_exist(glayout_fpath):
-            continue
-        elif not check_path_exist(thD_dir):
-            check_dir_create(thD_dir)
-        #
+    la_fn = '2009-CD(184)-N(7003)-E(5717371).pkl'
+    la_fpath = '%s/%s' % (la_dir, la_fn)
+    _, str_CD, _, _ = la_fn[:-len('.pkl')].split('-')
+    CD = int(str_CD[len('CD('):-len(')')])
+    pairs_day_counting = load_pickle_file(la_fpath)
+    for thD in [18, 36, 55, 73, 82, 92]:
+        thD_dpath = '%s/%s' % (com_dir, '2009-CD(%d)-thD(%d)' % CD, thD)
+        check_dir_create(thD_dpath)
+        summary_fpath = '%s/%s-CD(%d)-thD(%d)-community-summary.csv' % (thD_dpath, yyyy, CD, thD)
+        glayout_fpath = '%s/%s-CD(%d)-thD(%d)-glayout.pkl' % (thD_dpath, yyyy, CD, thD)
         with open(summary_fpath, 'wb') as w_csvfile:
             writer = csv.writer(w_csvfile, lineterminator='\n')
             new_headers = ['com-name', 'num-nodes', 'num-edges', 'tie-strength(# of days encounter / # of drivers)']
             writer.writerow(new_headers)
         #
-        print 'pkl file loading ...'
-        pairs_day_counting = load_pickle_file('%s/%s' % (la_dir, la_fn))
-        print 'Graph constructing ...'
         nxG = nx.Graph()
         for (k0, k1), num_days in pairs_day_counting.iteritems():
+            if num_days < thD:
+                continue
             nxG.add_edge(k0, k1, weight=num_days)
-        del pairs_day_counting
-        #
-        print 'Whole graph pickling ...'
-        nx.write_gpickle(nxG, '%s/%s-whole.pkl' % (thD_dir, yyyy))
+
+        print 'Whole graph pickling ...', yyyy, CD, thD
+        nx.write_gpickle(nxG, '%s/%s-CD(%d)-thD(%d)-whole-N(%d)-E(%d).pkl' % (thD_dpath, yyyy, CD, thD,
+                                                                              len(nxG.nodes()), len(nxG.edges())))
         n_label, n_comId = [], []
         nxId_igId = {}
         ig_nid = 0
         print 'Partitioning ...'
         partition = community.best_partition(nxG)
         for i, com in enumerate(set(partition.values())):
-            list_nodes = [nodes for nodes in partition.keys()
-                          if partition[nodes] == com]
+            list_nodes = [nodes for nodes in partition.keys() if partition[nodes] == com]
             print i, 'Saving sub-graph ...'
             sub_nxG = nxG.subgraph(list_nodes)
             com_name = 'COM(%d)' % i
-            nx.write_gpickle(sub_nxG, '%s/%s-%s.pkl' % (thD_dir, yyyy, com_name))
+            com_fpath = '%s/%s-CD(%d)-thD(%d)-%s-N(%d)-E(%d).pkl' % (thD_dpath, yyyy, CD, thD,
+                                                               com_name, len(sub_nxG.nodes()), len(sub_nxG.edges()))
+            nx.write_gpickle(sub_nxG, com_fpath)
 
             _, _, weight = zip(*list(sub_nxG.edges_iter(data='weight', default=1)))
             num_nodes, num_edges = len(sub_nxG), len(weight)
@@ -69,7 +67,7 @@ def run():
                 nxId_igId[n] = ig_nid
                 ig_nid += 1
         #
-        if len(nxG.nodes()) < 1500:
+        if len(nxG.nodes()) < 1000:
             print 'Layout calculating...'
             print datetime.datetime.now()
             Edges = [(nxId_igId[n0], nxId_igId[n1]) for (n0, n1) in nxG.edges()]
@@ -83,8 +81,6 @@ def run():
             save_pickle_file(glayout_fpath, [n_label, n_comId, layt, Edges])
         else:
             save_pickle_file(glayout_fpath, [])
-
-
 
 
 if __name__ == '__main__':

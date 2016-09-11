@@ -1,4 +1,32 @@
+import __init__
+#
+from community_analysis import com_summary_fpath
+#
+from taxi_common.file_handling_functions import check_path_exist
+#
+import folium
 from plotly.graph_objs import *
+
+
+def com_stats_summary():
+    if not check_path_exist(com_summary_fpath):
+
+        return
+    else:
+        pass
+
+
+
+def draw_grid_on_map(map_osm, x_points, y_points):
+    # horizontal lines
+    for x in x_points:
+        sx, sy, ex, ey = x, y_points[0], x, y_points[-1]
+        map_osm.add_children(folium.PolyLine(locations=[(sy, sx), (ey, ex)], weight=0.5))
+    # vertical lines
+    for y in y_points:
+        sx, sy, ex, ey = x_points[0], y, x_points[-1], y
+        map_osm.add_children(folium.PolyLine(locations=[(sy, sx), (ey, ex)], weight=0.5))
+    return map_osm
 
 
 def generate_3D_graph(labels, group, layt, Edges):
