@@ -18,10 +18,11 @@ Q_LIMIT_MIN = 0
 DAY_OF_WEEK = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 TIME_SLOTS = range(24)
 # summary and charts directory
-summary_dir = taxi_data + '/summary'
-charts_dir = taxi_data + '/charts'
-tables_dir = taxi_data + '/tables'
-check_dir_create(summary_dir); check_dir_create(charts_dir); check_dir_create(tables_dir)
+summary_dir = '%s/%s' % (taxi_data, 'summary')
+charts_dir = '%s/%s' % (taxi_data, 'charts')
+tables_dir = '%s/%s' % (taxi_data, 'tables')
+for dpath in [summary_dir, charts_dir, tables_dir]:
+    check_dir_create(dpath)
 #
 from taxi_common.geo_functions import read_generate_polygon
 ap_poly_fn = os.path.dirname(os.path.realpath(__file__)) + '/src/airport_polygon'

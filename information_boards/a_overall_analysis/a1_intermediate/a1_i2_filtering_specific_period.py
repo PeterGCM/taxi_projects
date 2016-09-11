@@ -1,6 +1,6 @@
 import __init__
 #
-from information_boards.a_overall_analysis import trips_dir, trip_prefix
+from information_boards.a_overall_analysis import trips_dpath, trip_prefix
 from information_boards import error_period
 #
 import csv, datetime
@@ -10,8 +10,8 @@ def run():
     for ys, ms, ds, hs in error_period:
         yymm = '%02d%02d' % (int(ys), int(ms))
         dd, hh = int(ds), int(hs)
-        fpath = '%s/%s%s.csv' % (trips_dir, trip_prefix, yymm)
-        temp_fpath = '%s/%s%s.csv.tmp' % (trips_dir, trip_prefix, yymm)
+        fpath = '%s/%s%s.csv' % (trips_dpath, trip_prefix, yymm)
+        temp_fpath = '%s/%s%s.csv.tmp' % (trips_dpath, trip_prefix, yymm)
         with open(fpath, 'rb') as r_csvfile1:
             reader = csv.reader(r_csvfile1)
             headers = reader.next()

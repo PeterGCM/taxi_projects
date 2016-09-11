@@ -1,6 +1,6 @@
 import __init__
 #
-from information_boards.a_overall_analysis import trips_dir, trip_prefix
+from information_boards.a_overall_analysis import trips_dpath, trip_prefix
 from information_boards import taxi_home
 from information_boards import DIn_PIn, DIn_POut, DOut_PIn, DOut_POut
 from information_boards import ap_poly, ns_poly
@@ -15,7 +15,7 @@ import csv, datetime
 
 
 def run():
-    remove_create_dir(trips_dir)
+    remove_create_dir(trips_dpath)
     #
     init_multiprocessor(11)
     count_num_jobs = 0
@@ -38,7 +38,7 @@ def process_file(yymm):
     ext_file = taxi_home + '/%s/%s/trips/trips-%s-normal-ext.csv' % (yyyy, mm, yymm)
     #
     vehicle_prev_trip_position_time = {}
-    with open('%s/%s%s.csv' % (trips_dir, trip_prefix, yymm), 'wt') as w_csvfile:
+    with open('%s/%s%s.csv' % (trips_dpath, trip_prefix, yymm), 'wt') as w_csvfile:
         writer = csv.writer(w_csvfile, lineterminator='\n')
         new_headers = ['tid', 'vid', 'did', 'start-time', 'end-time',
                        'duration', 'fare',

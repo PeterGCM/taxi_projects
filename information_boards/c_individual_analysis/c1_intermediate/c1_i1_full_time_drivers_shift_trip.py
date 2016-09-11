@@ -3,7 +3,7 @@ import __init__
 from information_boards.c_individual_analysis import ftd_trips_dir, ftd_trips_prefix
 from information_boards.c_individual_analysis import ftd_shift_dir, ftd_shift_prefix
 from information_boards.b_aggregated_analysis import shift_pro_dur_dir, shift_pro_dur_prefix
-from information_boards.a_overall_analysis import trips_dir, trip_prefix
+from information_boards.a_overall_analysis import trips_dpath, trip_prefix
 #
 from taxi_common import full_time_driver_dir, ft_drivers_prefix
 from taxi_common.file_handling_functions import load_pickle_file, remove_create_dir
@@ -45,7 +45,7 @@ def process_files(yymm):
                     continue
                 writer.writerow(row)
     #
-    with open('%s/%s%s.csv' % (trips_dir, trip_prefix, yymm), 'rb') as r_csvfile:
+    with open('%s/%s%s.csv' % (trips_dpath, trip_prefix, yymm), 'rb') as r_csvfile:
         reader = csv.reader(r_csvfile)
         headers = reader.next()
         hid = {h : i for i, h in enumerate(headers)}

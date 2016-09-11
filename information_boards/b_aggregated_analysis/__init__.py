@@ -6,7 +6,7 @@ import information_boards.__init__
 from taxi_common.file_handling_functions import check_dir_create
 #
 from information_boards.__init__ import taxi_data, summary_dir
-from information_boards.a_overall_analysis import trips_dir
+from information_boards.a_overall_analysis import trips_dpath
 check_dir_create(taxi_data)
 check_dir_create(summary_dir)
 #
@@ -19,8 +19,8 @@ ns_crossing_dir, ns_crossing_prefix = '%s/%s' % (logs_dir, 'ns_crossing'), 'ns-c
 #
 # Trip
 #
-ap_trips_dir, ap_trip_prefix = '%s/%s' % (trips_dir, 'ap_trips'), 'ap-trip-'
-ns_trips_dir, ns_trip_prefix = '%s/%s' % (trips_dir, 'ns_trips'), 'ns-trip-'
+ap_trips_dir, ap_trip_prefix = '%s/%s' % (trips_dpath, 'ap_trips'), 'ap-trip-'
+ns_trips_dir, ns_trip_prefix = '%s/%s' % (trips_dpath, 'ns_trips'), 'ns-trip-'
 
 #
 # Economic_profit

@@ -3,7 +3,7 @@ import __init__
 #
 from information_boards import DIn_PIn, DIn_POut, DOut_PIn, DOut_POut
 from information_boards import Q_LIMIT_MIN
-from information_boards.a_overall_analysis import trips_dir, trip_prefix
+from information_boards.a_overall_analysis import trips_dpath, trip_prefix
 from information_boards.b_aggregated_analysis import ap_crossing_dir, ap_crossing_prefix
 from information_boards.b_aggregated_analysis import ns_crossing_dir, ns_crossing_prefix
 from information_boards.b_aggregated_analysis import ap_trips_dir, ap_trip_prefix
@@ -59,7 +59,7 @@ def process_file(yymm):
                                'trip-mode', 'queue—join-time', 'queueing-time']
                 writer.writerow(new_headers)
     #
-    with open('%s/%s%s.csv' % (trips_dir, trip_prefix, yymm), 'rb') as r_csvfile:
+    with open('%s/%s%s.csv' % (trips_dpath, trip_prefix, yymm), 'rb') as r_csvfile:
         reader = csv.reader(r_csvfile)
         headers = reader.next()
         hid = {h : i for i, h in enumerate(headers)}

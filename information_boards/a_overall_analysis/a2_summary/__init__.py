@@ -1,6 +1,2 @@
 import os, sys
-sys.path.append(os.path.dirname(os.path.realpath(__file__)) + '/../..')
-#
-from a_overall_analysis import __init__  # @UnresolvedImport # @UnusedImport
-#
-NUM, DUR, FARE = range(3)
+sys.path.append(os.path.dirname(os.path.realpath(__file__)) + '/../../..')
