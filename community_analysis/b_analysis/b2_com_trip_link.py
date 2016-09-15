@@ -43,6 +43,7 @@ def for_multiprocessor(fn):
                          'si', 'sj', 'ei', 'ej'])
     #
     clink_thD_dpath = '%s/%s-CD(%d)-thD(%d)' % (clink_dir, yyyy, CD, thD)
+    check_dir_create(clink_thD_dpath)
     for m in range(1, 12):
         yymm = '%02d%02d' % (int(yyyy) - 2000, m)
         print yymm
