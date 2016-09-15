@@ -1,14 +1,15 @@
 import __init__
 #
-from community_analysis.a_detection import MIN_DAILY_LINKAGE
-from community_analysis.a_detection._classes import cd_driver, cd_zone
+import csv
+#
+from community_analysis._classes import ca_driver
 from community_analysis import trip_dir, ld_dir
+from community_analysis import generate_zones
+from community_analysis import MIN_DAILY_LINKAGE
 #
 from taxi_common.file_handling_functions import save_pkl_threading, remove_create_dir, get_all_files, check_dir_create
-from taxi_common.sg_grid_zone import get_sg_zones
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
-#
-import csv
+
 
 
 def run():
@@ -35,11 +36,11 @@ def process_files(yymm):
     out_boundary_logs_fn = linkage_yymm_dir + '/out_boundary.txt'
     with open(out_boundary_logs_fn, 'w') as f:
         f.write('time,did,i,j,zone_defined' + '\n')
-    log_yymm_dir = trip_dir + '/%s' % yymm
-    for fn in get_all_files(log_yymm_dir, '', '.csv'):
+    trip_yymm_dir = trip_dir + '/%s' % yymm
+    for fn in get_all_files(trip_yymm_dir, '', '.csv'):
         drivers = {}
         zones = generate_zones()
-        with open(log_yymm_dir + '/%s' % fn, 'rb') as r_csvfile:
+        with open(trip_yymm_dir + '/%s' % fn, 'rb') as r_csvfile:
             reader = csv.reader(r_csvfile)
             headers = reader.next()
             # {'i': 1, 'did': 3, ''j': 2, 'time': 0}
@@ -65,7 +66,7 @@ def process_files(yymm):
                         f.write('%d,%s,%d,%d,X' % (t, did, i, j) + '\n')
                     continue
                 #
-                if not drivers.has_key(did): drivers[did] = cd_driver(did)
+                if not drivers.has_key(did): drivers[did] = ca_driver(did)
                 drivers[did].update_linkage(t, z)
                 logs_num += 1
         day_linkage = []
@@ -86,14 +87,6 @@ def process_files(yymm):
     from taxi_common.file_handling_functions import thread_writing
     if thread_writing:
         thread_writing.join()
-
-
-def generate_zones():
-    zones = {}
-    basic_zones = get_sg_zones()
-    for k, z in basic_zones.iteritems():
-        zones[k] = cd_zone(z.relation_with_poly, z.i, z.j, z.cCoor_gps, z.polyPoints_gps)
-    return zones
 
 
 if __name__ == '__main__':

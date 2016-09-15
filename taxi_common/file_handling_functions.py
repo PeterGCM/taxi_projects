@@ -74,11 +74,20 @@ def get_all_files(path, filtering_prefix, filtering_postfix):
 
 
 def get_all_directories(path):
-    return [dn for dn in os.listdir(path) if os.path.isdir('%s/%s' % (path, dn))]
+    return sorted([dn for dn in os.listdir(path) if os.path.isdir('%s/%s' % (path, dn))])
 
 
 def get_created_time(path):
     return os.path.getctime(path)
+
+
+def get_fn_from_dir(dpath, filtering_prefix, filtering_postfix):
+    target_fn = None
+    for fn in get_all_files(dpath, '', ''):
+        if fn.startswith(filtering_prefix) and fn.endswith(filtering_postfix):
+            target_fn = fn
+            break
+    return target_fn
 
 
 if __name__ == '__main__':

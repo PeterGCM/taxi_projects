@@ -3,8 +3,7 @@ import __init__
 from community_analysis import lm_dir, la_dir
 #
 from taxi_common.file_handling_functions import load_pickle_file, get_all_files, \
-                                                save_pickle_file, check_dir_create, \
-                                                check_path_exist
+                                                save_pickle_file, check_dir_create
 
 
 def run():

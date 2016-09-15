@@ -1,4 +1,4 @@
-import __init__
+import community_analysis.c_evolution
 #
 from community_analysis.__init__ import pg_dir, com_linkage_dir, ld_dir
 #

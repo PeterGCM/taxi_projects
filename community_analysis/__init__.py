@@ -12,8 +12,14 @@ ld_dir = '%s/%s' % (taxi_data, 'linkage_daily')
 lm_dir = '%s/%s' % (taxi_data, 'linkage_monthly')
 la_dir = '%s/%s' % (taxi_data, 'linkage_annually')
 com_dir = '%s/%s' % (taxi_data, 'community')
-com_summary_fpath = '%s/%s' % (com_dir, 'com_summary.csv')
+com_summary_2009_fpath = '%s/%s' % (com_dir, '2009-com_summary.csv')
 #
+top5_com_dir = '%s/%s' % (taxi_data, 'top5_community')
+ctrip_dir = '%s/%s' % (taxi_data, 'ctrips')
+clink_dir = '%s/%s' % (taxi_data, 'clinks')
+
+
+
 com_trip_dir = '%s/%s' % (taxi_data, 'com_trips')
 lm_dg_dir = '%s/%s' % (taxi_data, 'month_directional')
 cevol_dir = '%s/%s' % (taxi_data, 'cevol')
@@ -28,6 +34,21 @@ cevol_dir = '%s/%s' % (taxi_data, 'cevol')
 # cevol_dir = taxi_data + '/cevol'; check_dir_create(cevol_dir)
 
 #
+MIN_DAILY_LINKAGE = 2
 MON, TUE, WED, THR, FRI, SAT, SUN = range(7)
 PM2, PM3 = 14, 15
 PM11 = 23
+THRESHOLD_VALUE = 30 * 60
+BY_COM_O, BY_COM_X = 'O', 'X'
+
+#
+from community_analysis._classes import ca_zone
+from taxi_common.sg_grid_zone import get_sg_zones
+
+
+def generate_zones():
+    zones = {}
+    basic_zones = get_sg_zones()
+    for k, z in basic_zones.iteritems():
+        zones[k] = ca_zone(z.relation_with_poly, z.i, z.j, z.cCoor_gps, z.polyPoints_gps)
+    return zones
