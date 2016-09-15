@@ -37,8 +37,8 @@ def for_multiprocessor(fn):
     ctrip_fn = '%s/%s-CD(%d)-thD(%d)-ctrip.csv' % (ctrip_dir, yyyy, CD, thD)
     with open(ctrip_fn, 'wt') as w_csvfile:
         writer = csv.writer(w_csvfile, lineterminator='\n')
-        writer.writerow(['time', 'yy', 'mm', 'did', 'cn', 'by_com'
-                                                          'start-long', 'start-lat', 'end-long', 'end-lat',
+        writer.writerow(['time', 'yy', 'mm', 'did', 'cn', 'by_com',
+                          'start-long', 'start-lat', 'end-long', 'end-lat',
                          'distance', 'duration', 'fare',
                          'si', 'sj', 'ei', 'ej'])
     #
