@@ -17,12 +17,14 @@ com_summary_2009_fpath = '%s/%s' % (com_dir, '2009-com_summary.csv')
 top5_com_dir = '%s/%s' % (taxi_data, 'top5_community')
 ctrip_dir = '%s/%s' % (taxi_data, 'ctrips')
 clink_dir = '%s/%s' % (taxi_data, 'clinks')
+cevol_dir = '%s/%s' % (taxi_data, 'cevol')
+
 
 
 
 com_trip_dir = '%s/%s' % (taxi_data, 'com_trips')
 lm_dg_dir = '%s/%s' % (taxi_data, 'month_directional')
-cevol_dir = '%s/%s' % (taxi_data, 'cevol')
+
 
 
 # pg_dir = taxi_data + '/partitioned_group'; check_dir_create(pg_dir)

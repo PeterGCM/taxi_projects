@@ -8,6 +8,65 @@ from plotly.graph_objs import *
 import pandas as pd
 import folium
 
+
+def draw_service_locations(df):
+    from taxi_common.sg_grid_zone import get_sg_grid_xy_points, get_sg_zones
+    #
+    zones = get_sg_zones()
+    #
+    x_points, y_points = get_sg_grid_xy_points()
+    xc, yc = (x_points[0] + x_points[-1]) / float(2), (y_points[0] + y_points[-1]) / float(2)
+    xaxis_unit = x_points[1] - x_points[0]
+    xmid = xaxis_unit / float(2)
+    dx_unit = xaxis_unit / float(5)
+    adjusts = [dx_unit / float(2) + dx_unit * i - xmid for i in xrange(5)]
+    color_map = ['red', 'green', 'blue', 'orange', 'black']
+    #
+    sloc = df.groupby(['cn', 'si', 'sj']).count()['did'].to_frame('total-num-trip').reset_index()
+    com_indices = set(df['cn'])
+    map_osm = folium.Map(location=[yc, xc], zoom_start=12)
+    top_locations = {}
+    for i, cid in enumerate(com_indices):
+        com_df = sloc[(sloc['cn'] == cid)]
+        for j, (_, si, sj, trip_num) in enumerate(com_df.sort('total-num-trip', ascending=False).values):
+            if not top_locations.has_key(cid):
+                top_locations[cid] = [i, (si, sj)]
+            y, x = zones[(si, sj)].cCoor_gps
+            folium.Marker((y, x + adjusts[i]),
+                          popup='%s %d' % (cid, j + 1),
+                          icon=folium.Icon(color=color_map[i])
+                          ).add_to(map_osm)
+            if j == 4:
+                break
+    for cid, (color_i, (si, sj)) in top_locations.iteritems():
+        top_loc_df = df[(df['cn'] == cid) & (df['si'] == si) & (df['sj'] == sj)]
+        gps_loc_df = top_loc_df.groupby(['start-long', 'start-lat']).count()['did'].to_frame(
+            'total-num-trip').reset_index()
+        for j, (gps_long, gps_lat, trip_num) in enumerate(gps_loc_df.sort('total-num-trip', ascending=False).values):
+            folium.RegularPolygonMarker(
+                [gps_lat, gps_long],
+                color=color_map[color_i],
+                fill_color=color_map[color_i],
+                number_of_sides=3 + j,
+                radius=5
+            ).add_to(map_osm)
+            if j == 4:
+                break
+    map_osm = draw_grid_on_map(map_osm, x_points, y_points)
+    return map_osm
+
+def draw_grid_on_map(map_osm, x_points, y_points):
+    # horizontal lines
+    for x in x_points:
+        sx, sy, ex, ey = x, y_points[0], x, y_points[-1]
+        map_osm.add_children(folium.PolyLine(locations=[(sy, sx), (ey, ex)], weight=0.5))
+    # vertical lines
+    for y in y_points:
+        sx, sy, ex, ey = x_points[0], y, x_points[-1], y
+        map_osm.add_children(folium.PolyLine(locations=[(sy, sx), (ey, ex)], weight=0.5))
+    return map_osm
+
+
 def get_com_stats_summary():
     if not check_path_exist(com_summary_2009_fpath):
         from community_analysis import com_dir
@@ -39,18 +98,6 @@ def get_com_stats_summary():
         return df
     else:
         return pd.read_csv(com_summary_2009_fpath)
-
-
-def draw_grid_on_map(map_osm, x_points, y_points):
-    # horizontal lines
-    for x in x_points:
-        sx, sy, ex, ey = x, y_points[0], x, y_points[-1]
-        map_osm.add_children(folium.PolyLine(locations=[(sy, sx), (ey, ex)], weight=0.5))
-    # vertical lines
-    for y in y_points:
-        sx, sy, ex, ey = x_points[0], y, x_points[-1], y
-        map_osm.add_children(folium.PolyLine(locations=[(sy, sx), (ey, ex)], weight=0.5))
-    return map_osm
 
 
 def generate_3D_graph(labels, group, layt, Edges):

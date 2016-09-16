@@ -90,8 +90,8 @@ class one_histogram(object):
         plt.title(r'$\mathrm{%s}\ \mu=%.2f,\ \sigma=%.2f$' % (_title, x_mean, x_std))
         if save_fn:
             plt.savefig(save_fn + '.pdf')
-            #
             self.saving_histo_data(save_fn + '.txt', num_bin, x_data)
+        plt.show()
 
     def saving_histo_data(self, txt_path_fn, num_bin, x_data):
         num_data = len(x_data)
@@ -113,7 +113,7 @@ class one_histogram(object):
         for i, (lower_bound, upper_bound) in enumerate(intervals):
             write_text_file(txt_path_fn,
                             '%f, %f, %s' % (lower_bound, upper_bound, str(proportion[i])))
-        plt.show()
+
 
 
 class histo_cumulative(object):
