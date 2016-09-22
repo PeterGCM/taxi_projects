@@ -1,10 +1,12 @@
 import __init__
 #
-from __init__ import sg_poly_fpath, sg_grid_xy_points, sg_zones
-from __init__ import ZONE_UNIT_KM
+from taxi_common import sg_poly_fpath, sg_grid_xy_points, sg_zones, sg_grid_geojson
+from taxi_common import ZONE_UNIT_KM
 #
 from geo_functions import make_grid, generate_zones
 from file_handling_functions import check_path_exist, save_pickle_file, load_pickle_file
+#
+import json
 
 
 def generate_sg_grid():
@@ -42,7 +44,10 @@ def get_sg_zones():
     else:
         x_points, y_points = load_pickle_file(sg_grid_xy_points)
     xaxis_unit, yaxis_unit = x_points[1] - x_points[0], y_points[1] - y_points[0]
-    zones = generate_zones(get_sg_poly_points(), xaxis_unit, yaxis_unit, x_points, y_points)
+    zones, geo_json = generate_zones(get_sg_poly_points(), xaxis_unit, yaxis_unit, x_points, y_points)
+    if not check_path_exist(sg_grid_geojson):
+        with open(sg_grid_geojson, 'w') as f:
+            json.dump(geo_json, f)
     return zones
 
 

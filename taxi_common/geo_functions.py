@@ -34,6 +34,7 @@ def make_grid(zone_unit_km, min_long, max_long, min_lat, max_lat):
 def generate_zones(poly_points, xaxis_unit, yaxis_unit, x_points, y_points):
     poly = Polygon(poly_points)
     zones = {}
+    geo_json = {"type": "FeatureCollection", "features": []}
     for i, x in enumerate(x_points):
         for j, y in enumerate(y_points):
             leftBottom, rightBottom = (x, y), (x + xaxis_unit, y)
@@ -48,7 +49,21 @@ def generate_zones(poly_points, xaxis_unit, yaxis_unit, x_points, y_points):
             else:
                 boundary_relation = zone.OUT
             zones[(i, j)] = zone(boundary_relation, i, j, cCoor_gps, polyPoints_gps)
-    return zones
+            feature = {"type":"Feature",
+                       "id": '%d@%d' % (i,j),
+                       "properties": {"cCoor_gps": cCoor_gps},
+                       "geometry":
+                           {"type": "Polygon",
+                            "coordinates": [[
+                                            [leftBottom, rightBottom],
+                                            [rightBottom, rightTop],
+                                            [rightTop, leftTop],
+                                            [leftTop, leftBottom]
+                                            ]]
+                            }
+                      }
+            geo_json["features"].append(feature)
+    return zones, geo_json
 
 
 class poly(Polygon):

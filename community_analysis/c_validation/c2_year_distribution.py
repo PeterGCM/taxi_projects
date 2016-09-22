@@ -1,7 +1,7 @@
 import __init__
 #
 from community_analysis import all_trip_dir, all_trip_prefix
-from community_analysis import year_dist_dir, year_dist_fpath
+from community_analysis import year_dist_dir
 #
 from taxi_common.file_handling_functions import save_pickle_file, check_dir_create
 #
@@ -17,6 +17,8 @@ def run():
         print 'Handle the file; %s' % yymm
         df = pd.read_csv('%s/%s%s.csv' % (all_trip_dir, all_trip_prefix, yymm))
         for si, sj, num_trips in df.groupby(['si', 'sj']).count().loc[:, ['did']].reset_index().values:
+            if si < 0 or sj <0:
+                continue
             if not year_com_count['all'].has_key((si, sj)):
                 year_com_count['all'][si, sj] = 0
             year_com_count['all'][si, sj] += num_trips
@@ -29,13 +31,16 @@ def run():
                     year_com_count[cn][si, sj] = 0
             year_com_count[cn][si, sj] += num_trips
     print 'aggregation'
-    year_com_dist = {}
+    headers = ['zone', 'prop.']
+    LZ, LP = range()
+    df_data = {k: [] for k in headers}
     for cn in year_com_count.iterkeys():
-        year_com_dist[cn] = {}
         sum_count = sum(year_com_count[cn].values())
         for (si, sj), num_trips in year_com_count[cn].iteritems():
-            year_com_dist[cn][si, sj] = num_trips / float(sum_count)
-    save_pickle_file(year_dist_fpath, year_com_dist)
+            df_data[headers[LZ]].append('%d@%d' % (si, sj))
+            df_data[headers[LP]].append(num_trips / float(sum_count))
+        df = pd.DataFrame(df_data)[headers]
+        df.to_csv('%s/%s' % (year_dist_dir, '2009-dist-%s.csv' % cn), index=False)
 
 
 if __name__ == '__main__':
