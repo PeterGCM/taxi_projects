@@ -108,6 +108,10 @@ def run():
                 = driver_stats[did]
             if Y09_all_num == 0 or Y10_all_num == 0:
                 continue
+            if Y09_apIn_num == 0 or Y10_apIn_num == 0:
+                continue
+            if Y09_apOut_num == 0 or Y10_apOut_num == 0:
+                continue
             Y09_gen_num, Y10_gen_num = Y09_all_num - Y09_ap_num, Y10_all_num - Y10_ap_num
             Y09_gen_dur, Y10_gen_dur = Y09_all_dur - (Y09_ap_dur + Y09_ap_qtime), Y10_all_dur - (Y10_ap_dur + Y10_ap_qtime)
             Y09_gen_fare, Y10_gen_fare = Y09_all_fare - Y09_ap_fare, Y10_all_fare - Y10_ap_fare
@@ -142,122 +146,127 @@ def run():
             #
             # Avg. duration
             #
-            all_dur_num = [(by_all_dur, by_all_num), (Y09_all_dur, Y09_all_num),
-                       (Y10_all_dur, Y10_all_num), (diff_all_dur, diff_all_num)]
-            by_all_avg_dur, Y09_all_avg_dur, Y10_all_avg_dur, diff_all_avg_dur \
+            all_dur_num = [(by_all_dur, by_all_num), (Y09_all_dur, Y09_all_num), (Y10_all_dur, Y10_all_num)]
+            by_all_avg_dur, Y09_all_avg_dur, Y10_all_avg_dur \
                 = [dur / float(num) if num != 0 else 0 for dur, num in all_dur_num]
+            diff_all_avg_dur = Y10_all_avg_dur - Y09_all_avg_dur
             #
-            gen_dur_num = [(by_gen_dur, by_gen_num), (Y09_gen_dur, Y09_gen_num),
-                       (Y10_gen_dur, Y10_gen_num), (diff_gen_dur, diff_gen_num)]
-            by_gen_avg_dur, Y09_gen_avg_dur, Y10_gen_avg_dur, diff_gen_avg_dur \
+            gen_dur_num = [(by_gen_dur, by_gen_num), (Y09_gen_dur, Y09_gen_num), (Y10_gen_dur, Y10_gen_num)]
+            by_gen_avg_dur, Y09_gen_avg_dur, Y10_gen_avg_dur \
                 = [dur / float(num) if num != 0 else 0 for dur, num in gen_dur_num]
+            diff_gen_avg_dur = Y10_gen_avg_dur - Y09_gen_avg_dur
             #
-            ap_dur_num = [(by_ap_dur, by_ap_num), (Y09_ap_dur, Y09_ap_num),
-                       (Y10_ap_dur, Y10_ap_num), (diff_ap_dur, diff_ap_num)]
-            by_ap_avg_dur, Y09_ap_avg_dur, Y10_ap_avg_dur, diff_ap_avg_dur \
+            ap_dur_num = [(by_ap_dur, by_ap_num), (Y09_ap_dur, Y09_ap_num), (Y10_ap_dur, Y10_ap_num)]
+            by_ap_avg_dur, Y09_ap_avg_dur, Y10_ap_avg_dur \
                 = [dur / float(num) if num != 0 else 0 for dur, num in ap_dur_num]
+            diff_ap_avg_dur = Y10_ap_avg_dur - Y09_ap_avg_dur
             #
-            apIn_dur_num = [(by_apIn_dur, by_apIn_num), (Y09_apIn_dur, Y09_apIn_num),
-                       (Y10_apIn_dur, Y10_apIn_num), (diff_apIn_dur, diff_apIn_num)]
-            by_apIn_avg_dur, Y09_apIn_avg_dur, Y10_apIn_avg_dur, diff_apIn_avg_dur \
+            apIn_dur_num = [(by_apIn_dur, by_apIn_num), (Y09_apIn_dur, Y09_apIn_num), (Y10_apIn_dur, Y10_apIn_num)]
+            by_apIn_avg_dur, Y09_apIn_avg_dur, Y10_apIn_avg_dur \
                 = [dur / float(num) if num != 0 else 0 for dur, num in apIn_dur_num]
+            diff_apIn_avg_dur = Y10_apIn_avg_dur - Y09_apIn_avg_dur
             #
-            apOut_dur_num = [(by_apOut_dur, by_apOut_num), (Y09_apOut_dur, Y09_apOut_num),
-                       (Y10_apOut_dur, Y10_apOut_num), (diff_apOut_dur, diff_apOut_num)]
-            by_apOut_avg_dur, Y09_apOut_avg_dur, Y10_apOut_avg_dur, diff_apOut_avg_dur \
+            apOut_dur_num = [(by_apOut_dur, by_apOut_num), (Y09_apOut_dur, Y09_apOut_num), (Y10_apOut_dur, Y10_apOut_num)]
+            by_apOut_avg_dur, Y09_apOut_avg_dur, Y10_apOut_avg_dur \
                 = [dur / float(num) if num != 0 else 0 for dur, num in apOut_dur_num]
+            diff_apOut_avg_dur = Y10_apOut_avg_dur - Y09_apOut_avg_dur
             #
             # Avg. fare
             #
-            all_fare_num = [(by_all_fare, by_all_num), (Y09_all_fare, Y09_all_num),
-                       (Y10_all_fare, Y10_all_num), (diff_all_fare, diff_all_num)]
-            by_all_avg_fare, Y09_all_avg_fare, Y10_all_avg_fare, diff_all_avg_fare \
+            all_fare_num = [(by_all_fare, by_all_num), (Y09_all_fare, Y09_all_num), (Y10_all_fare, Y10_all_num)]
+            by_all_avg_fare, Y09_all_avg_fare, Y10_all_avg_fare \
                 = [fare / float(num) if num != 0 else 0 for fare, num in all_fare_num]
+            diff_all_avg_fare = Y10_all_avg_fare - Y09_all_avg_fare
             #
-            gen_fare_num = [(by_gen_fare, by_gen_num), (Y09_gen_fare, Y09_gen_num),
-                       (Y10_gen_fare, Y10_gen_num), (diff_gen_fare, diff_gen_num)]
-            by_gen_avg_fare, Y09_gen_avg_fare, Y10_gen_avg_fare, diff_gen_avg_fare \
+            gen_fare_num = [(by_gen_fare, by_gen_num), (Y09_gen_fare, Y09_gen_num), (Y10_gen_fare, Y10_gen_num)]
+            by_gen_avg_fare, Y09_gen_avg_fare, Y10_gen_avg_fare \
                 = [fare / float(num) if num != 0 else 0 for fare, num in gen_fare_num]
+            diff_gen_avg_fare = Y10_gen_avg_fare - Y09_gen_avg_fare
             #
-            ap_fare_num = [(by_ap_fare, by_ap_num), (Y09_ap_fare, Y09_ap_num),
-                       (Y10_ap_fare, Y10_ap_num), (diff_ap_fare, diff_ap_num)]
-            by_ap_avg_fare, Y09_ap_avg_fare, Y10_ap_avg_fare, diff_ap_avg_fare \
+            ap_fare_num = [(by_ap_fare, by_ap_num), (Y09_ap_fare, Y09_ap_num), (Y10_ap_fare, Y10_ap_num)]
+            by_ap_avg_fare, Y09_ap_avg_fare, Y10_ap_avg_fare \
                 = [fare / float(num) if num != 0 else 0 for fare, num in ap_fare_num]
+            diff_ap_avg_fare = Y10_ap_avg_fare - Y09_ap_avg_fare
             #
-            apIn_fare_num = [(by_apIn_fare, by_apIn_num), (Y09_apIn_fare, Y09_apIn_num),
-                       (Y10_apIn_fare, Y10_apIn_num), (diff_apIn_fare, diff_apIn_num)]
-            by_apIn_avg_fare, Y09_apIn_avg_fare, Y10_apIn_avg_fare, diff_apIn_avg_fare \
+            apIn_fare_num = [(by_apIn_fare, by_apIn_num), (Y09_apIn_fare, Y09_apIn_num), (Y10_apIn_fare, Y10_apIn_num)]
+            by_apIn_avg_fare, Y09_apIn_avg_fare, Y10_apIn_avg_fare \
                 = [fare / float(num) if num != 0 else 0 for fare, num in apIn_fare_num]
+            diff_apIn_avg_fare = Y10_apIn_avg_fare - Y09_apIn_avg_fare
             #
-            apOut_fare_num = [(by_apOut_fare, by_apOut_num), (Y09_apOut_fare, Y09_apOut_num),
-                       (Y10_apOut_fare, Y10_apOut_num), (diff_apOut_fare, diff_apOut_num)]
-            by_apOut_avg_fare, Y09_apOut_avg_fare, Y10_apOut_avg_fare, diff_apOut_avg_fare \
+            apOut_fare_num = [(by_apOut_fare, by_apOut_num), (Y09_apOut_fare, Y09_apOut_num), (Y10_apOut_fare, Y10_apOut_num)]
+            by_apOut_avg_fare, Y09_apOut_avg_fare, Y10_apOut_avg_fare \
                 = [fare / float(num) if num != 0 else 0 for fare, num in apOut_fare_num]
+            diff_apOut_avg_fare = Y10_apOut_avg_fare - Y09_apOut_avg_fare
             #
             # Avg. economic profit
             #
-            ap_ep_num = [(by_ap_ep, by_ap_num), (Y09_ap_ep, Y09_ap_num),
-                       (Y10_ap_ep, Y10_ap_num), (diff_ap_ep, diff_ap_num)]
-            by_ap_avg_ep, Y09_ap_avg_ep, Y10_ap_avg_ep, diff_ap_avg_ep \
+            ap_ep_num = [(by_ap_ep, by_ap_num), (Y09_ap_ep, Y09_ap_num), (Y10_ap_ep, Y10_ap_num)]
+            by_ap_avg_ep, Y09_ap_avg_ep, Y10_ap_avg_ep \
                 = [ep / float(num) if num != 0 else 0 for ep, num in ap_ep_num]
+            diff_ap_avg_ep = Y10_ap_avg_ep - Y09_ap_avg_ep
             #
-            apIn_ep_num = [(by_apIn_ep, by_apIn_num), (Y09_apIn_ep, Y09_apIn_num),
-                       (Y10_apIn_ep, Y10_apIn_num), (diff_apIn_ep, diff_apIn_num)]
-            by_apIn_avg_ep, Y09_apIn_avg_ep, Y10_apIn_avg_ep, diff_apIn_avg_ep \
+            apIn_ep_num = [(by_apIn_ep, by_apIn_num), (Y09_apIn_ep, Y09_apIn_num), (Y10_apIn_ep, Y10_apIn_num)]
+            by_apIn_avg_ep, Y09_apIn_avg_ep, Y10_apIn_avg_ep \
                 = [ep / float(num) if num != 0 else 0 for ep, num in apIn_ep_num]
+            diff_apIn_avg_ep = Y10_apIn_avg_ep - Y09_apIn_avg_ep
             #
-            apOut_ep_num = [(by_apOut_ep, by_apOut_num), (Y09_apOut_ep, Y09_apOut_num),
-                       (Y10_apOut_ep, Y10_apOut_num), (diff_apOut_ep, diff_apOut_num)]
-            by_apOut_avg_ep, Y09_apOut_avg_ep, Y10_apOut_avg_ep, diff_apOut_avg_ep \
+            apOut_ep_num = [(by_apOut_ep, by_apOut_num), (Y09_apOut_ep, Y09_apOut_num), (Y10_apOut_ep, Y10_apOut_num)]
+            by_apOut_avg_ep, Y09_apOut_avg_ep, Y10_apOut_avg_ep \
                 = [ep / float(num) if num != 0 else 0 for ep, num in apOut_ep_num]
+            diff_apOut_avg_ep = Y10_apOut_avg_ep - Y09_apOut_avg_ep
             #
             # Avg. queueting time
             #
-            ap_qtime_num = [(by_ap_qtime, by_ap_num), (Y09_ap_qtime, Y09_ap_num),
-                       (Y10_ap_qtime, Y10_ap_num), (diff_ap_qtime, diff_ap_num)]
-            by_ap_avg_qtime, Y09_ap_avg_qtime, Y10_ap_avg_qtime, diff_ap_avg_qtime \
+            ap_qtime_num = [(by_ap_qtime, by_ap_num), (Y09_ap_qtime, Y09_ap_num), (Y10_ap_qtime, Y10_ap_num)]
+            by_ap_avg_qtime, Y09_ap_avg_qtime, Y10_ap_avg_qtime \
                 = [qtime / float(num) if num != 0 else 0 for qtime, num in ap_qtime_num]
+            diff_ap_avg_qtime = Y10_ap_avg_qtime - Y09_ap_avg_qtime
             #
-            apIn_qtime_num = [(by_apIn_qtime, by_apIn_num), (Y09_apIn_qtime, Y09_apIn_num),
-                       (Y10_apIn_qtime, Y10_apIn_num), (diff_apIn_qtime, diff_apIn_num)]
-            by_apIn_avg_qtime, Y09_apIn_avg_qtime, Y10_apIn_avg_qtime, diff_apIn_avg_qtime \
+            apIn_qtime_num = [(by_apIn_qtime, by_apIn_num), (Y09_apIn_qtime, Y09_apIn_num), (Y10_apIn_qtime, Y10_apIn_num)]
+            by_apIn_avg_qtime, Y09_apIn_avg_qtime, Y10_apIn_avg_qtime \
                 = [qtime / float(num) if num != 0 else 0 for qtime, num in apIn_qtime_num]
+            diff_apIn_avg_qtime = Y10_apIn_avg_qtime - Y09_apIn_avg_qtime
             #
-            apOut_qtime_num = [(by_apOut_qtime, by_apOut_num), (Y09_apOut_qtime, Y09_apOut_num),
-                       (Y10_apOut_qtime, Y10_apOut_num), (diff_apOut_qtime, diff_apOut_num)]
-            by_apOut_avg_qtime, Y09_apOut_avg_qtime, Y10_apOut_avg_qtime, diff_apOut_avg_qtime \
+            apOut_qtime_num = [(by_apOut_qtime, by_apOut_num), (Y09_apOut_qtime, Y09_apOut_num), (Y10_apOut_qtime, Y10_apOut_num)]
+            by_apOut_avg_qtime, Y09_apOut_avg_qtime, Y10_apOut_avg_qtime \
                 = [qtime / float(num) if num != 0 else 0 for qtime, num in apOut_qtime_num]
+            diff_apOut_avg_qtime = Y10_apOut_avg_qtime - Y09_apOut_avg_qtime
             #
             # Productivity
             #
-            all_fare_dur = [(by_all_fare, by_all_dur), (Y09_all_fare, Y09_all_dur),
-                         (Y10_all_fare, Y10_all_dur), (diff_all_fare, diff_all_dur)]
-            by_all_productivity, Y09_all_productivity, Y10_all_productivity, diff_all_productivity \
+            all_fare_dur = [(by_all_fare, by_all_dur), (Y09_all_fare, Y09_all_dur), (Y10_all_fare, Y10_all_dur)]
+            by_all_productivity, Y09_all_productivity, Y10_all_productivity \
                 = [fare / float(dur) if dur != 0 else 0 for fare, dur in all_fare_dur]
-            gen_fare_dur = [(by_gen_fare, by_gen_dur), (Y09_gen_fare, Y09_gen_dur),
-                         (Y10_gen_fare, Y10_gen_dur), (diff_gen_fare, diff_gen_dur)]
-            by_gen_productivity, Y09_gen_productivity, Y10_gen_productivity, diff_gen_productivity \
+            diff_all_productivity = Y10_all_productivity - Y09_all_productivity
+            #
+            gen_fare_dur = [(by_gen_fare, by_gen_dur), (Y09_gen_fare, Y09_gen_dur), (Y10_gen_fare, Y10_gen_dur)]
+            by_gen_productivity, Y09_gen_productivity, Y10_gen_productivity \
                 = [fare / float(dur) if dur != 0 else 0 for fare, dur in gen_fare_dur]
-            ap_fare_dur = [(by_ap_fare, by_ap_dur), (Y09_ap_fare, Y09_ap_dur),
-                         (Y10_ap_fare, Y10_ap_dur), (diff_ap_fare, diff_ap_dur)]
-            by_ap_productivity, Y09_ap_productivity, Y10_ap_productivity, diff_ap_productivity \
+            diff_gen_productivity = Y10_gen_productivity - Y09_gen_productivity
+            #
+            ap_fare_dur = [(by_ap_fare, by_ap_dur), (Y09_ap_fare, Y09_ap_dur), (Y10_ap_fare, Y10_ap_dur)]
+            by_ap_productivity, Y09_ap_productivity, Y10_ap_productivity \
                 = [fare / float(dur) if dur != 0 else 0 for fare, dur in ap_fare_dur]
-            apIn_fare_dur = [(by_apIn_fare, by_apIn_dur), (Y09_apIn_fare, Y09_apIn_dur),
-                         (Y10_apIn_fare, Y10_apIn_dur), (diff_apIn_fare, diff_apIn_dur)]
-            by_apIn_productivity, Y09_apIn_productivity, Y10_apIn_productivity, diff_apIn_productivity \
+            diff_ap_productivity = Y10_ap_productivity - Y09_ap_productivity
+            #
+            apIn_fare_dur = [(by_apIn_fare, by_apIn_dur), (Y09_apIn_fare, Y09_apIn_dur), (Y10_apIn_fare, Y10_apIn_dur)]
+            by_apIn_productivity, Y09_apIn_productivity, Y10_apIn_productivity \
                 = [fare / float(dur) if dur != 0 else 0 for fare, dur in apIn_fare_dur]
-            apOut_fare_dur = [(by_apOut_fare, by_apOut_dur), (Y09_apOut_fare, Y09_apOut_dur),
-                         (Y10_apOut_fare, Y10_apOut_dur), (diff_apOut_fare, diff_apOut_dur)]
-            by_apOut_productivity, Y09_apOut_productivity, Y10_apOut_productivity, diff_apOut_productivity \
+            diff_apIn_productivity = Y10_apIn_productivity - Y09_apIn_productivity
+            #
+            apOut_fare_dur = [(by_apOut_fare, by_apOut_dur), (Y09_apOut_fare, Y09_apOut_dur), (Y10_apOut_fare, Y10_apOut_dur)]
+            by_apOut_productivity, Y09_apOut_productivity, Y10_apOut_productivity \
                 = [fare / float(dur) if dur != 0 else 0 for fare, dur in apOut_fare_dur]
+            diff_apOut_productivity = Y10_apOut_productivity - Y09_apOut_productivity
             #
             # Etc.
             #
-            all_num_ap_num = [(by_all_num, by_ap_num), (Y09_all_num, Y09_ap_num),
-                         (Y10_all_num, Y10_ap_num), (diff_all_num, diff_ap_num)]
-            by_ap_num_by_all_num, Y09_ap_num_by_all_num, Y10_ap_num_by_all_num, diff_ap_num_by_all_num \
+            all_num_ap_num = [(by_all_num, by_ap_num), (Y09_all_num, Y09_ap_num), (Y10_all_num, Y10_ap_num)]
+            by_ap_num_by_all_num, Y09_ap_num_by_all_num, Y10_ap_num_by_all_num \
                 = [ap_num / float(all_num) if ap_num != 0 else 0 for all_num, ap_num in all_num_ap_num]
-
+            diff_ap_num_by_all_num = Y10_ap_num_by_all_num - Y09_ap_num_by_all_num
+            #
+            #
             new_row = [
                 did,
                 #

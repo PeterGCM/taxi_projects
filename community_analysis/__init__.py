@@ -18,7 +18,8 @@ top5_com_dir = '%s/%s' % (taxi_data, 'top5_community')
 ctrip_dir = '%s/%s' % (taxi_data, 'ctrips')
 clink_dir = '%s/%s' % (taxi_data, 'clinks')
 cevol_dir = '%s/%s' % (taxi_data, 'cevol')
-
+#
+all_trip_dir = '%s/%s' % (taxi_data, 'all_trips')
 
 
 

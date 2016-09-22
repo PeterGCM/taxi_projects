@@ -6,7 +6,6 @@ from sc_games import PAR_L_ID_NUM_AGENT, PAR_L_ID_NUM_STATE, PAR_L_ID_DS
 from sc_games import SH_PARAMETER, SH_REWARD, SH_TRANSITION
 from sc_games import T_SIMPLE, T_COMPLEX
 from sc_games import sheet_names
-# from problems import scG_twoState, scG_threeState, scG_fiveState, scG_fiveState_RD
 
 from handling_distribution import choose_index_wDist
 #
