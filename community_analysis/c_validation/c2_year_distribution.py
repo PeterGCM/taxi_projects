@@ -11,19 +11,23 @@ import pandas as pd
 def run():
     check_dir_create(year_dist_dir)
     #
-    year_com_count = {}
+    year_com_count = {'all': {}}
     for m in range(1, 12):
         yymm = '%02d%02d' % (9, m)
         print 'Handle the file; %s' % yymm
         df = pd.read_csv('%s/%s%s.csv' % (all_trip_dir, all_trip_prefix, yymm))
-        for cn, si, sj, v in df.groupby(['cn', 'si', 'sj']).count().loc[:, ['did']].reset_index().values:
+        for si, sj, num_trips in df.groupby(['si', 'sj']).count().loc[:, ['did']].reset_index().values:
+            if not year_com_count['all'].has_key((si, sj)):
+                year_com_count['all'][si, sj] = 0
+            year_com_count['all'][si, sj] += num_trips
+        for cn, si, sj, num_trips in df.groupby(['cn', 'si', 'sj']).count().loc[:, ['did']].reset_index().values:
             if not year_com_count.has_key(cn):
                 year_com_count[cn] = {}
                 year_com_count[cn][si, sj] = 0
             else:
                 if not year_com_count[cn].has_key((si, sj)):
                     year_com_count[cn][si, sj] = 0
-            year_com_count[cn][si, sj] += v
+            year_com_count[cn][si, sj] += num_trips
     print 'aggregation'
     year_com_dist = {}
     for cn in year_com_count.iterkeys():
