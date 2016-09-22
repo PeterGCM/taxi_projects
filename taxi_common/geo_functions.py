@@ -54,12 +54,12 @@ def generate_zones(poly_points, xaxis_unit, yaxis_unit, x_points, y_points):
                        "properties": {"cCoor_gps": cCoor_gps},
                        "geometry":
                            {"type": "Polygon",
-                            "coordinates": [[
-                                            [leftBottom, rightBottom],
-                                            [rightBottom, rightTop],
-                                            [rightTop, leftTop],
-                                            [leftTop, leftBottom]
-                                            ]]
+                            "coordinates": [leftBottom,
+                                            rightBottom,
+                                            rightTop,
+                                            leftTop,
+                                            leftBottom
+                                            ]
                             }
                       }
             geo_json["features"].append(feature)
