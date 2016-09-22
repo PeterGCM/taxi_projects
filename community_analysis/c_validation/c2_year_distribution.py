@@ -32,7 +32,7 @@ def run():
             year_com_count[cn][si, sj] += num_trips
     print 'aggregation'
     headers = ['zone', 'prop.']
-    LZ, LP = range()
+    LZ, LP = range(2)
     df_data = {k: [] for k in headers}
     for cn in year_com_count.iterkeys():
         sum_count = sum(year_com_count[cn].values())
