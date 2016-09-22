@@ -29,7 +29,7 @@ def run():
     for cn in year_com_count.iterkeys():
         year_com_dist[cn] = {}
         sum_count = sum(year_com_count[cn].values())
-        for (si, sj), num_trips in year_com_count.iteritems():
+        for (si, sj), num_trips in year_com_count[cn].iteritems():
             year_com_dist[cn][si, sj] = num_trips / float(sum_count)
     save_pickle_file(year_dist_fpath, year_com_dist)
 
