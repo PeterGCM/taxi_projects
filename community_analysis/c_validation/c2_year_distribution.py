@@ -37,7 +37,7 @@ def run():
     for cn in year_com_count.iterkeys():
         sum_count = sum(year_com_count[cn].values())
         for (si, sj), num_trips in year_com_count[cn].iteritems():
-            df_data[headers[LZ]].append('%d@%d' % (si, sj))
+            df_data[headers[LZ]].append('%03d%03d' % (si, sj))
             df_data[headers[LP]].append(num_trips / float(sum_count))
         df = pd.DataFrame(df_data)[headers]
         df.to_csv('%s/%s' % (year_dist_dir, '2009-dist-%s.csv' % cn), index=False)
