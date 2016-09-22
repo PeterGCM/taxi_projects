@@ -19,8 +19,9 @@ ctrip_dir = '%s/%s' % (taxi_data, 'ctrips')
 clink_dir = '%s/%s' % (taxi_data, 'clinks')
 cevol_dir = '%s/%s' % (taxi_data, 'cevol')
 #
-all_trip_dir = '%s/%s' % (taxi_data, 'all_trips')
-
+all_trip_dir, all_trip_prefix = '%s/%s' % (taxi_data, 'all_trips'), 'all-trips-'
+year_dist_dir = '%s/%s' % (taxi_data, 'ydists')
+year_dist_fpath = '%s/%s' % (year_dist_dir, '2009_dist.pkl')
 
 
 com_trip_dir = '%s/%s' % (taxi_data, 'com_trips')

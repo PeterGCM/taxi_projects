@@ -3,7 +3,7 @@ import __init__
 from community_analysis.c_validation import top5_com_TH92_fpath
 from community_analysis import FRI, SAT, SUN
 from community_analysis import PM2, PM11
-from community_analysis import taxi_home, all_trip_dir
+from community_analysis import taxi_home, all_trip_dir, all_trip_prefix
 #
 from taxi_common.sg_grid_zone import get_sg_grid_xy_points
 from taxi_common.file_handling_functions import load_pickle_file, check_dir_create
@@ -29,7 +29,7 @@ def run():
 
 def process_file(yymm):
     print 'Handle the file; %s' % yymm
-    processed_fpath = '%s/all-trips-%s.csv' % (all_trip_dir, yymm)
+    processed_fpath = '%s/%s%s.csv' % (all_trip_dir, all_trip_prefix, yymm)
     with open(processed_fpath, 'wt') as w_csvfile:
         writer = csv.writer(w_csvfile, lineterminator='\n')
         writer.writerow(['time', 'did', 'cn',
