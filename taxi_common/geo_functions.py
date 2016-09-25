@@ -39,7 +39,7 @@ def generate_zones(poly_points, xaxis_unit, yaxis_unit, x_points, y_points):
         for j, y in enumerate(y_points):
             leftBottom, rightBottom = (x, y), (x + xaxis_unit, y)
             rightTop, leftTop = (x + xaxis_unit, y + yaxis_unit), (x, y + yaxis_unit)
-            polyPoints_gps = [leftBottom, rightBottom, rightTop, leftTop]
+            polyPoints_gps = [leftBottom, rightBottom, rightTop, leftTop, leftBottom]
             cCoor_gps = (y + yaxis_unit / float(2), x + xaxis_unit / float(2))
             zone_poly = Polygon(polyPoints_gps)
             if poly.contains(zone_poly):
@@ -54,12 +54,12 @@ def generate_zones(poly_points, xaxis_unit, yaxis_unit, x_points, y_points):
                        "properties": {"cCoor_gps": cCoor_gps},
                        "geometry":
                            {"type": "Polygon",
-                            "coordinates": [leftBottom,
+                            "coordinates": [[leftBottom,
                                             rightBottom,
                                             rightTop,
                                             leftTop,
                                             leftBottom
-                                            ]
+                                            ]]
                             }
                       }
             geo_json["features"].append(feature)

@@ -32,7 +32,7 @@ def process_file(yymm):
     processed_fpath = '%s/%s%s.csv' % (all_trip_dir, all_trip_prefix, yymm)
     with open(processed_fpath, 'wt') as w_csvfile:
         writer = csv.writer(w_csvfile, lineterminator='\n')
-        writer.writerow(['time', 'did', 'cn',
+        writer.writerow(['time', 'hh', 'did', 'cn',
                          'start-long', 'start-lat', 'end-long', 'end-lat',
                          'distance', 'duration', 'fare',
                          'si', 'sj', 'ei', 'ej'])
@@ -91,7 +91,7 @@ def process_file(yymm):
                 cn = did_cn[int(did)] if did_cn.has_key(int(did)) else 'None'
                 with open(processed_fpath, 'a') as w_csvfile:
                     writer = csv.writer(w_csvfile, lineterminator='\n')
-                    writer.writerow([t, did, cn,
+                    writer.writerow([t, row1[hid1['start-hour']], did, cn,
                                      s_long, s_lat, e_long, e_lat,
                                      row1[hid1['distance']], row1[hid1['duration']], row1[hid1['fare']],
                                      si, sj, ei, ej])
