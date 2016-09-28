@@ -2,25 +2,31 @@ import __init__
 #
 from taxi_common import shifts_dir, shift_prefix
 from taxi_common import full_time_driver_dir, ft_drivers_prefix
-from file_handling_functions import remove_create_dir, save_pickle_file
+from file_handling_functions import remove_create_dir, save_pickle_file, check_dir_create
 from multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
 import csv, gzip
 
 
 def run():
-    remove_create_dir(full_time_driver_dir)
+    # remove_create_dir(full_time_driver_dir)
+    check_dir_create(full_time_driver_dir)
     #
     init_multiprocessor(11)
     count_num_jobs = 0
-    for y in xrange(9, 11):
-        for m in xrange(1, 13):
-            yymm = '%02d%02d' % (y, m)
-            if yymm in ['0912', '1010']:
-                continue
-            # process_file(yymm)
-            put_task(process_file, [yymm])
-            count_num_jobs += 1
+    # for y in xrange(9, 11):
+    #     for m in xrange(1, 13):
+    #         yymm = '%02d%02d' % (y, m)
+    #         if yymm in ['0912', '1010']:
+    #             continue
+    #         # process_file(yymm)
+    #         put_task(process_file, [yymm])
+    #         count_num_jobs += 1
+
+    for yymm in ['1201', '1202', '1203', '1204', '1205', '1206', '1207', '1208', '1209']:
+        # process_file(yymm)
+        put_task(process_file, [yymm])
+        count_num_jobs += 1
     end_multiprocessor(count_num_jobs)
 
 
