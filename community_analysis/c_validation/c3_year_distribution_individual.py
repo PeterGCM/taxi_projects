@@ -40,6 +40,7 @@ def run():
     print 'aggregation'
     year_individual_prob = {}
     for did, hhij_numTrips in year_individual_count.iteritems():
+        year_individual_prob[did] = {}
         sum_trip_num = sum(hhij_numTrips.values())
         for (hh, i, j), num_trips in hhij_numTrips.iteritems():
             year_individual_prob[did][hh, i, j] = num_trips / float(sum_trip_num)
