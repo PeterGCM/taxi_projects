@@ -19,8 +19,9 @@ def run():
     #
     init_multiprocessor(11)
     count_num_jobs = 0
-    for mm in range(1, 12):
-        yymm = '09%02d' % mm
+    for mm in range(1, 10):
+        # yymm = '09%02d' % mm
+        yymm = '12%02d' % mm
         # process_file(yymm)
         put_task(process_file, [yymm])
         count_num_jobs += 1
