@@ -80,3 +80,27 @@ class ca_driver_with_com(ca_driver):
         #
         return by_com
 
+class ca_driver_with_com_prevD(ca_driver_with_com):
+    def __init__(self, did, com_drivers):
+        ca_driver_with_com.__init__(did, com_drivers)
+
+    def update_linkage(self, t, z):
+        z.update_logQ(t)
+        updated_drivers = set()
+        prevD = 'None'
+        for _, d in z.logQ:
+            if d.did == self.did:
+                continue
+            if d.did in updated_drivers:
+                continue
+            else:
+                updated_drivers.add(d.did)
+                if d.did in self.com_drivers:
+                    prevD = d.did
+            if not self.linkage.has_key(d.did):
+                self.linkage[d.did] = 0
+            self.linkage[d.did] += 1
+        z.add_driver_in_logQ(t, self)
+        self.num_pickup += 1
+        #
+        return prevD
