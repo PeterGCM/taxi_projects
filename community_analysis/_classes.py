@@ -80,9 +80,13 @@ class ca_driver_with_com(ca_driver):
         #
         return by_com
 
-class ca_driver_with_com_prevD(ca_driver_with_com):
+class ca_driver_with_com_prevD(ca_driver):
     def __init__(self, did, com_drivers):
-        ca_driver_with_com.__init__(did, com_drivers)
+        ca_driver.__init__(self, did)
+        #
+        for com_did in com_drivers:
+            assert type(com_did) == type(did)
+        self.com_drivers = com_drivers
 
     def update_linkage(self, t, z):
         z.update_logQ(t)
