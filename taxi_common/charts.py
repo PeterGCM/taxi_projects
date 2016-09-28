@@ -57,8 +57,8 @@ FONT_SIZE = 18
 
 
 class simple_barchart(object):
-    def __init__(self, x_ticks, y_label, _data, save_fn=None) :
-        fig = plt.figure(figsize=(6, 6))
+    def __init__(self, _figsize, x_ticks, y_label, _data, save_fn=None) :
+        fig = plt.figure(figsize=_figsize)
         ax = fig.add_subplot(111)
         ind = np.arange(len(_data))
         width = 0.5  # the width of the bars

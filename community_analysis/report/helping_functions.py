@@ -24,7 +24,7 @@ def draw_service_locations(df):
     #
     sloc = df.groupby(['cn', 'si', 'sj']).count()['did'].to_frame('total-num-trip').reset_index()
     com_indices = set(df['cn'])
-    map_osm = folium.Map(location=[yc, xc], zoom_start=12)
+    map_osm = folium.Map(location=[yc, xc], zoom_start=11)
     top_locations = {}
     for i, cid in enumerate(com_indices):
         com_df = sloc[(sloc['cn'] == cid)]
