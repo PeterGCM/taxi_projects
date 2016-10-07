@@ -37,7 +37,10 @@ def process_file(yymm):
     if not check_path_exist(normal_fpath):
         print 'The file X exists; %s' % yymm
         return None
-    ft_drivers = load_pickle_file('%s/%s%s.pkl' % (full_time_driver_dir, ft_drivers_prefix, yymm))
+    ftd_list_fpath = '%s/%s%s.pkl' % (full_time_driver_dir, ft_drivers_prefix, yymm)
+    if not check_path_exist(ftd_list_fpath):
+        return None
+    ft_drivers = load_pickle_file(ftd_list_fpath)
     x_points, y_points = get_sg_grid_xy_points()
     #
     ft_trips_fpath = '%s/%s%s.csv' % (ft_trips_dir, ft_trips_prefix, yymm)
