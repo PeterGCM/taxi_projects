@@ -47,7 +47,7 @@ def process_file(yymm):
     with open(ft_trips_fpath, 'wt') as w_csvfile:
         writer = csv.writer(w_csvfile, lineterminator='\n')
         writer.writerow(['time', 'did',
-                         'day', 'timeFrame', 'i', 'j',
+                         'day', 'timeFrame', 'zi', 'zj',
                          'distance', 'duration', 'fare'])
     with open(normal_fpath, 'rb') as r_csvfile1:
         reader1 = csv.reader(r_csvfile1)

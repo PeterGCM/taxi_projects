@@ -44,7 +44,7 @@ def process_file(yymm):
         hid = {h: i for i, h in enumerate(headers)}
         for row in reader:
             did = int(row[hid['did']])
-            tf, zi, zj = int(row[hid['timeFrame']]), int(row[hid['i']]), int(row[hid['j']])
+            tf, zi, zj = int(row[hid['timeFrame']]), int(row[hid['zi']]), int(row[hid['zj']])
             if not drivers.has_key(did):
                 drivers[did] = {}
                 drivers[did][tf, zi, zj] = 0
