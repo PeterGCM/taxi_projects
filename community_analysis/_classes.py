@@ -1,4 +1,4 @@
-import community_analysis.a_detection
+import __init__
 #
 from taxi_common._classes import zone
 from taxi_common._classes import driver
