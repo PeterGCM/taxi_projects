@@ -17,18 +17,15 @@ import csv, datetime
 def run():
     check_dir_create(ft_trips_dir)
     #
-    # process_file('1012')
-
-    y = 11
-    #
     init_multiprocessor(11)
     count_num_jobs = 0
-    for m in range(1, 12):
-        yymm = '%02d%02d' % (y, m)
-        # yymm = '12%02d' % mm
-        # process_file(yymm)
-        put_task(process_file, [yymm])
-        count_num_jobs += 1
+    for y in range(9, 13):
+        for m in range(1, 12):
+            yymm = '%02d%02d' % (y, m)
+            # yymm = '12%02d' % mm
+            # process_file(yymm)
+            put_task(process_file, [yymm])
+            count_num_jobs += 1
     end_multiprocessor(count_num_jobs)
 
 
@@ -49,7 +46,7 @@ def process_file(yymm):
         return None
     with open(ft_trips_fpath, 'wt') as w_csvfile:
         writer = csv.writer(w_csvfile, lineterminator='\n')
-        writer.writerow(['did',
+        writer.writerow(['time', 'did',
                          'day', 'timeFrame', 'i', 'j',
                          'distance', 'duration', 'fare'])
     with open(normal_fpath, 'rb') as r_csvfile1:
@@ -91,7 +88,7 @@ def process_file(yymm):
                 #
                 with open(ft_trips_fpath , 'a') as w_csvfile:
                     writer = csv.writer(w_csvfile, lineterminator='\n')
-                    writer.writerow([did,
+                    writer.writerow([t, did,
                                      cur_dt.day, cur_dt.hour, zi, zj,
                                      eval(row1[hid1['distance']]), row1[hid1['duration']], row1[hid1['fare']]])
 
