@@ -3,15 +3,16 @@ import __init__
 from community_analysis import tf_zone_distribution_dir, tf_zone_distribution_prefix
 from community_analysis import dw_graph_dir, dw_graph_prefix
 from community_analysis import ft_trips_dir
-from community_analysis._classes import ca_zone
+from community_analysis._classes import ca_driver, ca_zone
 #
 from taxi_common.file_handling_functions import check_path_exist, load_pickle_file, get_all_files
 from taxi_common.sg_grid_zone import get_sg_zones
 #
 import csv
 
+
 def run():
-    for y in range(9, 13):
+    for y in range(9, 10):
         yyyy = '20%02d' % y
         print 'Handle %s' % yyyy
         year_dw_graph_fpath = '%s/%s%s.pkl' % (dw_graph_dir, dw_graph_prefix, yyyy)
@@ -29,16 +30,18 @@ def run():
             with open('%s/%s' % (ft_trips_dir, fn), 'rb') as r_csvfile:
                 reader = csv.reader(r_csvfile)
                 headers = reader.next()
-                # {'i': 1, 'did': 3, ''j': 2, 'time': 0}
                 hid = {h: i for i, h in enumerate(headers)}
-
-                writer.writerow(['did',
-                                 'day', 'timeFrame', 'i', 'j',
-                                 'distance', 'duration', 'fare'])
-
-
                 for row in reader:
                     t = eval(row[hid['time']])
+                    did = int(row[hid['did']])
+                    zi, zj = int(row[hid['zi']]), int(row[hid['zj']])
+                    try:
+                        z = zones[(zi, zj)]
+                    except KeyError:
+                        continue
+                    if not drivers.has_key(did):
+                        drivers[did] = ca_driver(did, year_distribution[did])
+                    drivers[did].update_linkage(t, z)
 
 
 def generate_zones():

@@ -4,10 +4,10 @@ import __init__
 class zone(object):
     IN, INTERSECT, OUT = range(3)
 
-    def __init__(self, boundary_relation_with_poly, gi, gj, cCoor_gps, polyPoints_gps):
+    def __init__(self, boundary_relation_with_poly, zi, zj, cCoor_gps, polyPoints_gps):
         self.relation_with_poly = boundary_relation_with_poly
-        self.loc_grid = (gi, gj)
-        self.i, self.j = gi, gj
+        self.loc_grid = (zi, zj)
+        self.zi, self.zj = zi, zj
         self.cCoor_gps, self.polyPoints_gps = cCoor_gps, polyPoints_gps
 
     def __repr__(self):

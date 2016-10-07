@@ -9,6 +9,7 @@ taxi_data = os.path.dirname(os.path.realpath(__file__)) + '/data'; check_dir_cre
 #
 MON, TUE, WED, THR, FRI, SAT, SUN = range(7)
 PM2, PM11 = 14, 23
+THRESHOLD_VALUE = 30 * 60
 #
 ft_trips_dir = '%s/%s' % (taxi_data, 'trips_ft_drivers'); ft_trips_prefix = 'trips-ft-drivers-'
 tf_zone_counting_dir = '%s/%s' % (taxi_data, 'tf_zone_counting'); tf_zone_counting_prefix = 'tf-zone-counting-'
