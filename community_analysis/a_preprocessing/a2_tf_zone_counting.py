@@ -1,11 +1,13 @@
 import __init__
 #
+from community_analysis import ft_trips_dir, ft_trips_prefix
 from community_analysis import tf_zone_counting_dir, ft_trips_prefix
 #
 from taxi_common.file_handling_functions import check_dir_create, save_pickle_file
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
 import csv
+
 
 def run():
     check_dir_create(tf_zone_counting_dir)
@@ -24,25 +26,22 @@ def run():
 
 def process_file(yymm):
     print 'Handle the file; %s' % yymm
-    individual_count = {}
-    with open('%s/%s%s.csv' % (all_trip_dir, all_trip_prefix, yymm), 'rb') as r_csvfile:
+    drivers = {}
+    with open('%s/%s%s.csv' % (ft_trips_dir, ft_trips_prefix, yymm), 'rb') as r_csvfile:
         reader = csv.reader(r_csvfile)
         headers = reader.next()
         hid = {h: i for i, h in enumerate(headers)}
         for row in reader:
             did = int(row[hid['did']])
             tf, zi, zj = int(row[hid['timeFrame']]), int(row[hid['zi']]), int(row[hid['zj']])
-            if zi < 0 or zj < 0:
-                continue
-            if not year_individual_count.has_key(did):
-                year_individual_count[did] = {}
-                year_individual_count[did][hh, si, sj] = 0
+            if not drivers.has_key(did):
+                drivers[did] = {}
+                drivers[did][tf, zi, zj] = 0
             else:
-                if not year_individual_count[did].has_key((hh, si, sj)):
-                    year_individual_count[did][hh, si, sj] = 0
-            year_individual_count[did][hh, si, sj] += 1
-
-    save_pickle_file(individual_couting_fpath, year_individual_count)
+                if not drivers[did].has_key((tf, zi, zj)):
+                    drivers[did][tf, zi, zj] = 0
+            drivers[did][tf, zi, zj] += 1
+    save_pickle_file('%s/%s%s.pkl' % (tf_zone_counting_dir, ft_trips_prefix, yymm), drivers)
 
 
 if __name__ == '__main__':

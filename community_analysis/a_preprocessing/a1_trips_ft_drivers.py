@@ -2,7 +2,8 @@ import __init__
 #
 from community_analysis import FRI, SAT, SUN
 from community_analysis import PM2, PM11
-from community_analysis import taxi_home, ft_trips_dir, ft_trips_prefix
+from community_analysis import taxi_home
+from community_analysis import ft_trips_dir, ft_trips_prefix
 #
 from taxi_common.file_handling_functions import load_pickle_file, check_dir_create, check_path_exist
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
