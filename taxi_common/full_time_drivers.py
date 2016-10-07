@@ -23,7 +23,7 @@ def run():
     #         put_task(process_file, [yymm])
     #         count_num_jobs += 1
 
-    for yymm in ['1201', '1202', '1203', '1204', '1205', '1206', '1207', '1208', '1209']:
+    for yymm in ['1101', '1106', '1107', '1108', '1109', '1111', '1102']:
         # process_file(yymm)
         put_task(process_file, [yymm])
         count_num_jobs += 1
