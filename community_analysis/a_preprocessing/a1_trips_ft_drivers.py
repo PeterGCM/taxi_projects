@@ -39,7 +39,7 @@ def process_file(yymm):
     ft_drivers = load_pickle_file('%s/%s%s.pkl' % (full_time_driver_dir, ft_drivers_prefix, yymm))
     x_points, y_points = get_sg_grid_xy_points()
     #
-    with open('%s/%s%s' % (ft_trips_dir, ft_trips_prefix), 'wt') as w_csvfile:
+    with open('%s/%s%s' % (ft_trips_dir, ft_trips_prefix, yymm), 'wt') as w_csvfile:
         writer = csv.writer(w_csvfile, lineterminator='\n')
         writer.writerow(['did',
                          'day', 'timeFrame', 'i', 'j',
@@ -79,7 +79,7 @@ def process_file(yymm):
                 s_long, s_lat = eval(row1[hid1['start-long']]), eval(row1[hid1['start-lat']])
                 zi, zj = bisect(x_points, s_long) - 1, bisect(y_points, s_lat) - 1
                 #
-                with open('%s/%s%s' % (ft_trips_dir, ft_trips_prefix), 'a') as w_csvfile:
+                with open('%s/%s%s' % (ft_trips_dir, ft_trips_prefix, yymm), 'a') as w_csvfile:
                     writer = csv.writer(w_csvfile, lineterminator='\n')
                     writer.writerow([did,
                                      cur_dt.day, cur_dt.hour, zi, zj,
