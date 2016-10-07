@@ -21,7 +21,7 @@ def run():
         else:
             year_counting = {}
             for m in range(1, 13):
-                yymm = '%02d%02d' % (yymm)
+                yymm = '%02d%02d' % (y, m)
                 print 'Handle the file; %s' % yymm
                 tf_zone_counting_fpath = '%s/%s%s.pkl' % (tf_zone_counting_dir, tf_zone_counting_prefix, yymm)
                 if not check_path_exist(tf_zone_counting_fpath):
