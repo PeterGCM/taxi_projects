@@ -3,7 +3,7 @@ import __init__
 from community_analysis import tf_zone_counting_dir, tf_zone_counting_prefix
 from community_analysis import tf_zone_distribution_dir, tf_zone_distribution_prefix
 #
-from taxi_common.file_handling_functions import check_dir_create, check_path_exist, load_pickle_file, save_pickle_file
+from taxi_common.file_handling_functions import check_dir_create, check_path_exist, load_pickle_file, save_pickle_file, save_pkl_threading
 
 
 def run():
@@ -34,7 +34,7 @@ def run():
                         if not year_counting[did].has_key(tf_zone):
                             year_counting[did][tf_zone] = 0
                         year_counting[did][tf_zone] += num_trips
-            save_pickle_file(year_counting_fpath, year_counting)
+            save_pkl_threading(year_counting_fpath, year_counting)
         year_dist = {}
         for did, tf_zone_counting in year_counting.iteritems():
             year_num_trips = sum(tf_zone_counting.values())
