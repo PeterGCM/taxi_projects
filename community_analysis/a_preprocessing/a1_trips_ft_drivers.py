@@ -41,7 +41,11 @@ def process_file(yymm):
     ft_drivers = load_pickle_file('%s/%s%s.pkl' % (full_time_driver_dir, ft_drivers_prefix, yymm))
     x_points, y_points = get_sg_grid_xy_points()
     #
-    with open('%s/%s%s.csv' % (ft_trips_dir, ft_trips_prefix, yymm), 'wt') as w_csvfile:
+    ft_trips_fpath = '%s/%s%s.csv' % (ft_trips_dir, ft_trips_prefix, yymm)
+    if check_path_exist(ft_trips_fpath):
+        print 'The file had already been processed; %s' % yymm
+        return None
+    with open(ft_trips_fpath, 'wt') as w_csvfile:
         writer = csv.writer(w_csvfile, lineterminator='\n')
         writer.writerow(['did',
                          'day', 'timeFrame', 'i', 'j',
@@ -83,7 +87,7 @@ def process_file(yymm):
                 if zi < 0 or zj < 0:
                     continue
                 #
-                with open('%s/%s%s.csv' % (ft_trips_dir, ft_trips_prefix, yymm), 'a') as w_csvfile:
+                with open(ft_trips_fpath , 'a') as w_csvfile:
                     writer = csv.writer(w_csvfile, lineterminator='\n')
                     writer.writerow([did,
                                      cur_dt.day, cur_dt.hour, zi, zj,
