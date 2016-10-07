@@ -12,9 +12,9 @@ import csv
 def run():
     check_dir_create(tf_zone_counting_dir)
     #
-    init_multiprocessor(6)
+    init_multiprocessor(3)
     count_num_jobs = 0
-    for y in (9, 12):
+    for y in (9, 10):
         for m in range(1, 12):
             yymm = '%02d%02d' % (y, m)
             # yymm = '12%02d' % mm
