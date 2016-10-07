@@ -5,8 +5,8 @@ from community_analysis import PM2, PM11
 from community_analysis import taxi_home, ft_trips_dir, ft_trips_prefix
 #
 from taxi_common.file_handling_functions import load_pickle_file, check_dir_create, check_path_exist
-from taxi_common.sg_grid_zone import get_sg_grid_xy_points
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
+from taxi_common.sg_grid_zone import get_sg_grid_xy_points
 from taxi_common import full_time_driver_dir, ft_drivers_prefix
 #
 from bisect import bisect
@@ -78,6 +78,8 @@ def process_file(yymm):
                 #
                 s_long, s_lat = eval(row1[hid1['start-long']]), eval(row1[hid1['start-lat']])
                 zi, zj = bisect(x_points, s_long) - 1, bisect(y_points, s_lat) - 1
+                if zi < 0 or zj < 0:
+                    continue
                 #
                 with open('%s/%s%s.csv' % (ft_trips_dir, ft_trips_prefix, yymm), 'a') as w_csvfile:
                     writer = csv.writer(w_csvfile, lineterminator='\n')
