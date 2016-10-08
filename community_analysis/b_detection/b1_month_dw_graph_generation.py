@@ -10,9 +10,9 @@ from taxi_common.log_handling_functions import get_logger
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 from taxi_common.sg_grid_zone import get_sg_zones
 #
-import os, logging
 import csv, datetime
 
+logger = get_logger('dw_graph')
 
 def run():
     check_dir_create(dw_graph_dir)
@@ -36,7 +36,6 @@ def process_file(yymm):
         print 'The file had already been processed; %s' % yymm
         None
     #
-    logger = get_logger('dw_graph')
     logger.info('Start %s directed weighted graph processing' % yymm)
     #
     yyyy = '20%s' % yymm[:2]

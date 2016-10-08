@@ -11,6 +11,7 @@ import numpy as np
 import scipy.stats.stats as st
 import csv
 #
+logger = get_logger('th_values')
 
 
 def run():
@@ -21,8 +22,7 @@ def run():
                             'numPickupsMin', 'numPickupsMax', 'numPickupsSkew',
                          'weightTotal', 'weightAverage', 'weightSD',
                             'weightMin', 'weightMax', 'weightSkew'])
-    for y in range(9, 13):
-        logger = get_logger('th_values')
+    for y in range(9, 10):
         yyyy = '20%02d' % y
         logger.info('Handle %s' % yyyy)
         year_dw_graph_fpath = '%s/%s%s.pkl' % (dw_graph_dir, dw_graph_prefix, yyyy)
