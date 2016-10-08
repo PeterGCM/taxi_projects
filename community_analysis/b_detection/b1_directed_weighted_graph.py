@@ -12,7 +12,7 @@ import csv
 
 
 def run():
-    for y in range(9, 10):
+    for y in range(9, 13):
         yyyy = '20%02d' % y
         print 'Handle %s' % yyyy
         year_dw_graph_fpath = '%s/%s%s.pkl' % (dw_graph_dir, dw_graph_prefix, yyyy)
