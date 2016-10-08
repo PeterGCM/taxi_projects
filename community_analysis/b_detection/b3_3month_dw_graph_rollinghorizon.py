@@ -8,6 +8,7 @@ from taxi_common.file_handling_functions import load_pickle_file, check_path_exi
 from taxi_common.log_handling_functions import get_logger
 #
 import numpy as np
+import scipy.stats.stats as st
 import csv
 #
 logger = get_logger('th_values')
@@ -17,11 +18,11 @@ def run():
     if not check_path_exist(dw_summary_fpath):
         with open(dw_summary_fpath, 'wt') as w_csvfile:
             writer = csv.writer(w_csvfile, lineterminator='\n')
-            writer.writerow(['year', 'days','numDrivers',
+            writer.writerow(['fromMonth', 'days','numDrivers',
                              'numPickupsTotal', 'numPickupsAverage', 'numPickupsSD',
-                                'numPickupsMin', 'numPickupsMax',
+                                'numPickupsMin', 'numPickupsMax', 'numPickupsSkew',
                              'weightTotal', 'weightAverage', 'weightSD',
-                                'weightMin', 'weightMax'])
+                                'weightMin', 'weightMax', 'weightSkew'])
     for y in range(9, 10):
         yyyy = '20%02d' % y
         logger.info('Handle %s' % yyyy)
@@ -67,10 +68,9 @@ def run():
             writer = csv.writer(w_csvfile, lineterminator='\n')
             writer.writerow([yyyy, len(month_day), num_drivers,
                              pickups.sum(), pickups.mean(), pickups.std(),
-                                pickups.min(), pickups.max(),
+                                pickups.min(), pickups.max(), st.skew(pickups),
                              weights.sum(), weights.mean(), weights.std(),
-                             weights.min(), pickups.max()])
-
+                             weights.min(), pickups.max(), st.skew(weights)])
 
 
 if __name__ == '__main__':
