@@ -27,6 +27,7 @@ def run():
                 continue
             drivers = {}
             zones = generate_zones()
+            print 'Handling %s' % yymm
             with open('%s/%s' % (ft_trips_dir, fn), 'rb') as r_csvfile:
                 reader = csv.reader(r_csvfile)
                 headers = reader.next()
@@ -42,6 +43,7 @@ def run():
                     if not drivers.has_key(did):
                         drivers[did] = ca_driver(did, year_distribution[did])
                     drivers[did].update_linkage(t, z)
+        print 'Aggregation %s' % yyyy
         year_dw_graph = []
         for did, d in drivers.iteritems():
             year_dw_graph.append((did, d.num_pickup, d.weighted_link))
