@@ -8,7 +8,6 @@ from taxi_common.file_handling_functions import load_pickle_file, check_path_exi
 from taxi_common.log_handling_functions import get_logger
 #
 import numpy as np
-import scipy.stats.stats as st
 import csv
 #
 logger = get_logger('month3')
