@@ -15,13 +15,14 @@ logger = get_logger('th_values')
 
 
 def run():
-    with open(dw_summary_fpath, 'wt') as w_csvfile:
-        writer = csv.writer(w_csvfile, lineterminator='\n')
-        writer.writerow(['year', 'days','numDrivers',
-                         'numPickupsTotal', 'numPickupsAverage', 'numPickupsSD',
-                            'numPickupsMin', 'numPickupsMax', 'numPickupsSkew',
-                         'weightTotal', 'weightAverage', 'weightSD',
-                            'weightMin', 'weightMax', 'weightSkew'])
+    if not check_path_exist(dw_summary_fpath):
+        with open(dw_summary_fpath, 'wt') as w_csvfile:
+            writer = csv.writer(w_csvfile, lineterminator='\n')
+            writer.writerow(['year', 'days','numDrivers',
+                             'numPickupsTotal', 'numPickupsAverage', 'numPickupsSD',
+                                'numPickupsMin', 'numPickupsMax', 'numPickupsSkew',
+                             'weightTotal', 'weightAverage', 'weightSD',
+                                'weightMin', 'weightMax', 'weightSkew'])
     for y in range(9, 10):
         yyyy = '20%02d' % y
         logger.info('Handle %s' % yyyy)
