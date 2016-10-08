@@ -23,7 +23,7 @@ def run():
                              'numLinks',
                                 'weightTotal', 'weightAverage', 'weightSD',
                                 'weightMedian', 'weightMin', 'weightMax'])
-    for y in range(9, 10):
+    for y in range(9, 12):
         yyyy = '20%02d' % y
         yymm_fns = get_all_files(dw_graph_dir, '%s%02d' % (dw_graph_prefix, y), '.pkl')
         for i in range(len(yymm_fns) - 1):
