@@ -6,6 +6,7 @@ from community_analysis import ft_trips_dir, ft_trips_prefix
 from community_analysis._classes import ca_driver, ca_zone
 #
 from taxi_common.file_handling_functions import check_path_exist, load_pickle_file, save_pickle_file, check_dir_create
+from taxi_common.log_handling_functions import get_logger
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 from taxi_common.sg_grid_zone import get_sg_zones
 #
@@ -35,13 +36,7 @@ def process_file(yymm):
         print 'The file had already been processed; %s' % yymm
         None
     #
-    logger = logging.getLogger('dw_graph_%d' % os.getpid())
-    logger.setLevel(logging.DEBUG)
-    fh = logging.FileHandler('dw_graph_%d.log' % os.getpid())
-    fh.setLevel(logging.DEBUG)
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    fh.setFormatter(formatter)
-    logger.addHandler(fh)
+    logger = get_logger('dw_graph')
     logger.info('Start %s directed weighted graph processing' % yymm)
     #
     yyyy = '20%s' % yymm[:2]
