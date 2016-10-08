@@ -18,41 +18,47 @@ def run():
     if not check_path_exist(dw_summary_fpath):
         with open(dw_summary_fpath, 'wt') as w_csvfile:
             writer = csv.writer(w_csvfile, lineterminator='\n')
-            writer.writerow(['fromMonth', 'days','numDrivers',
+            writer.writerow(['fromMonth', 'toMonth', 'days','numDrivers',
                              'numPickupsTotal', 'numPickupsAverage', 'numPickupsSD',
                                 'numPickupsMin', 'numPickupsMax', 'numPickupsSkew',
                              'weightTotal', 'weightAverage', 'weightSD',
                                 'weightMin', 'weightMax', 'weightSkew'])
     for y in range(9, 10):
         yyyy = '20%02d' % y
-        logger.info('Handle %s' % yyyy)
-        year_dw_graph_fpath = '%s/%s%s.pkl' % (dw_graph_dir, dw_graph_prefix, yyyy)
-        driver_pickup = {}
-        year_dw_graph = {}
+
+
+
+
         for m in range(1, 12):
-            yymm = '%02d%02d' % (y, m)
-            logger.info('Loading %s' % yymm)
-            month_dw_graph_fpath = '%s/%s%s.pkl' % (dw_graph_dir, dw_graph_prefix, yymm)
-            if not check_path_exist(month_dw_graph_fpath):
+            if m > 10:
                 continue
-            month_dw_graph = load_pickle_file(month_dw_graph_fpath)
-            for did0, num_pickup, weighted_link in month_dw_graph:
-                if not driver_pickup.has_key(did0):
-                    driver_pickup[did0] = 0
-                driver_pickup[did0] += num_pickup
-                #
-                for did1, weight in weighted_link.iteritems():
-                    k = (did0, did1)
-                    if not year_dw_graph.has_key(k):
-                        year_dw_graph[k] = 0.0
-                    year_dw_graph[k] += weight
-            logger.info('Finish %s' % yymm)
-        logger.info('Saving pickle file %s' % yyyy)
-        save_pickle_file(year_dw_graph_fpath, year_dw_graph)
+            month3_dw_graph_fpath = '%s/%s%s.pkl' % (dw_graph_dir, dw_graph_prefix, yyyy)
+            driver_pickup = {}
+            month3_dw_graph = {}
+            for x in range(3):
+                yymm = '%02d%02d' % (y, m + x)
+                logger.info('Loading %s' % yymm)
+                month_dw_graph_fpath = '%s/%s%s.pkl' % (dw_graph_dir, dw_graph_prefix, yymm)
+                if not check_path_exist(month_dw_graph_fpath):
+                    continue
+                month_dw_graph = load_pickle_file(month_dw_graph_fpath)
+                for did0, num_pickup, weighted_link in month_dw_graph:
+                    if not driver_pickup.has_key(did0):
+                        driver_pickup[did0] = 0
+                    driver_pickup[did0] += num_pickup
+                    #
+                    for did1, weight in weighted_link.iteritems():
+                        k = (did0, did1)
+                        if not month3_dw_graph.has_key(k):
+                            month3_dw_graph[k] = 0.0
+                        month3_dw_graph[k] += weight
+                logger.info('Finish %s' % yymm)
+            logger.info('Saving pickle file %s' % yyyy)
+            save_pickle_file(month3_dw_graph_fpath, month3_dw_graph)
         #
         logger.info('Generate summary statistics %s' % yyyy)
         num_drivers = len(driver_pickup)
-        pickups, weights = np.asarray(driver_pickup.values()), np.asarray(year_dw_graph.values())
+        pickups, weights = np.asarray(driver_pickup.values()), np.asarray(month3_dw_graph.values())
         month_day = set()
         for m in range(1, 12):
             yymm = '%02d%02d' % (y, m)
