@@ -5,7 +5,7 @@ from community_analysis import dw_graph_dir, dw_graph_prefix
 from community_analysis import ft_trips_dir
 from community_analysis._classes import ca_driver, ca_zone
 #
-from taxi_common.file_handling_functions import check_path_exist, load_pickle_file, get_all_files
+from taxi_common.file_handling_functions import check_path_exist, load_pickle_file, get_all_files, save_pickle_file
 from taxi_common.sg_grid_zone import get_sg_zones
 #
 import csv
@@ -42,6 +42,10 @@ def run():
                     if not drivers.has_key(did):
                         drivers[did] = ca_driver(did, year_distribution[did])
                     drivers[did].update_linkage(t, z)
+        year_dw_graph = []
+        for did, d in drivers.iteritems():
+            year_dw_graph.append((did, d.num_pickup, d.weighted_link))
+        save_pickle_file(year_dw_graph_fpath, year_dw_graph)
 
 
 def generate_zones():
