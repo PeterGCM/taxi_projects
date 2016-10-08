@@ -10,7 +10,7 @@ from taxi_common.log_handling_functions import get_logger
 import numpy as np
 import csv
 #
-logger = get_logger('th_values')
+logger = get_logger('year')
 
 
 def run():
@@ -18,9 +18,10 @@ def run():
         with open(dw_year_summary_fpath, 'wt') as w_csvfile:
             writer = csv.writer(w_csvfile, lineterminator='\n')
             writer.writerow(['year', 'days','numDrivers',
-                             'numPickupsTotal', 'numPickupsAverage', 'numPickupsSD',
+                                'numPickupsTotal', 'numPickupsAverage', 'numPickupsSD',
                                 'numPickupsMedian', 'numPickupsMin', 'numPickupsMax',
-                             'weightTotal', 'weightAverage', 'weightSD',
+                             'numLinks',
+                                'weightTotal', 'weightAverage', 'weightSD',
                                 'weightMedian', 'weightMin', 'weightMax'])
     for y in range(9, 10):
         yyyy = '20%02d' % y
@@ -51,6 +52,7 @@ def run():
         #
         logger.info('Generate summary statistics %s' % yyyy)
         num_drivers = len(driver_pickup)
+        num_links = len(year_dw_graph)
         pickups, weights = np.asarray(driver_pickup.values()), np.asarray(year_dw_graph.values())
         month_day = set()
         for m in range(1, 12):
@@ -66,9 +68,10 @@ def run():
         with open(dw_year_summary_fpath, 'a') as w_csvfile:
             writer = csv.writer(w_csvfile, lineterminator='\n')
             writer.writerow([yyyy, len(month_day), num_drivers,
-                             pickups.sum(), pickups.mean(), pickups.std(),
+                                pickups.sum(), pickups.mean(), pickups.std(),
                                 np.median(pickups), pickups.min(), pickups.max(),
-                             weights.sum(), weights.mean(), weights.std(),
+                             num_links,
+                                weights.sum(), weights.mean(), weights.std(),
                                 np.median(weights), weights.min(), weights.max()])
 
 

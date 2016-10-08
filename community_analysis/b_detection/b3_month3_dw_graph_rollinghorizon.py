@@ -18,9 +18,10 @@ def run():
         with open(dw_month3_summary_fpath, 'wt') as w_csvfile:
             writer = csv.writer(w_csvfile, lineterminator='\n')
             writer.writerow(['fromMonth', 'toMonth', 'days','numDrivers',
-                             'numPickupsTotal', 'numPickupsAverage', 'numPickupsSD',
+                                'numPickupsTotal', 'numPickupsAverage', 'numPickupsSD',
                                 'numPickupsMedian', 'numPickupsMin', 'numPickupsMax',
-                             'weightTotal', 'weightAverage', 'weightSD',
+                             'numLinks',
+                                'weightTotal', 'weightAverage', 'weightSD',
                                 'weightMedian', 'weightMin', 'weightMax'])
     for y in range(9, 10):
         yyyy = '20%02d' % y
@@ -53,6 +54,7 @@ def run():
             #
             logger.info('Generate summary statistics %s' % mms_str)
             num_drivers = len(driver_pickup)
+            num_links = len(month3_dw_graph)
             pickups, weights = np.asarray(driver_pickup.values()), np.asarray(month3_dw_graph.values())
             month_day = set()
             for yymm in yymms:
@@ -69,7 +71,8 @@ def run():
                 writer.writerow([yymms[0], yymms[1], len(month_day), num_drivers,
                                  pickups.sum(), pickups.mean(), pickups.std(),
                                     np.median(pickups), pickups.min(), pickups.max(),
-                                 weights.sum(), weights.mean(), weights.std(),
+                                 num_links,
+                                    weights.sum(), weights.mean(), weights.std(),
                                     np.median(weights), weights.min(), weights.max()])
 
 
