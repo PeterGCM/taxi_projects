@@ -17,7 +17,7 @@ logger = get_logger('dw_graph')
 def run():
     check_dir_create(dw_graph_dir)
     #
-    init_multiprocessor(6)
+    init_multiprocessor(4)
     count_num_jobs = 0
     for y in range(9, 13):
         for m in range(1, 12):
