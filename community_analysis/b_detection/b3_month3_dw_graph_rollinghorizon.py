@@ -2,7 +2,7 @@ import __init__
 #
 from community_analysis import ft_trips_dir, ft_trips_prefix
 from community_analysis import dw_graph_dir, dw_graph_prefix
-from community_analysis import dw_summary_fpath
+from community_analysis import dw_month3_summary_fpath
 #
 from taxi_common.file_handling_functions import load_pickle_file, check_path_exist, save_pickle_file, get_all_files
 from taxi_common.log_handling_functions import get_logger
@@ -14,14 +14,14 @@ logger = get_logger('month3')
 
 
 def run():
-    if not check_path_exist(dw_summary_fpath):
-        with open(dw_summary_fpath, 'wt') as w_csvfile:
+    if not check_path_exist(dw_month3_summary_fpath):
+        with open(dw_month3_summary_fpath, 'wt') as w_csvfile:
             writer = csv.writer(w_csvfile, lineterminator='\n')
             writer.writerow(['fromMonth', 'toMonth', 'days','numDrivers',
                              'numPickupsTotal', 'numPickupsAverage', 'numPickupsSD',
-                                'numPickupsMin', 'numPickupsMax',
+                                'numPickupsMedian', 'numPickupsMin', 'numPickupsMax',
                              'weightTotal', 'weightAverage', 'weightSD',
-                                'weightMin', 'weightMax'])
+                                'weightMedian', 'weightMin', 'weightMax'])
     for y in range(9, 10):
         yyyy = '20%02d' % y
         yymm_fns = get_all_files(dw_graph_dir, '%s%02d' % (dw_graph_prefix, y), '.pkl')
@@ -64,13 +64,13 @@ def run():
                     for row in reader:
                         day = row[hid['day']]
                         month_day.add((yymm, day))
-            with open(dw_summary_fpath, 'a') as w_csvfile:
+            with open(dw_month3_summary_fpath, 'a') as w_csvfile:
                 writer = csv.writer(w_csvfile, lineterminator='\n')
                 writer.writerow([yymms[0], yymms[1], len(month_day), num_drivers,
                                  pickups.sum(), pickups.mean(), pickups.std(),
-                                    pickups.min(), pickups.max(),
+                                    np.median(pickups), pickups.min(), pickups.max(),
                                  weights.sum(), weights.mean(), weights.std(),
-                                 weights.min(), pickups.max()])
+                                    np.median(weights), weights.min(), weights.max()])
 
 
 if __name__ == '__main__':

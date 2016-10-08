@@ -17,7 +17,8 @@ tf_zone_distribution_dir = '%s/%s' % (taxi_data, 'tf_zone_distribution'); tf_zon
 #
 dw_graph_dir = '%s/%s' % (taxi_data, 'dw_graph')
 dw_graph_prefix = 'dw-graph-'
-dw_summary_fpath = '%s/%s.csv' % (dw_graph_dir, 'dw-summary')
+dw_year_summary_fpath = '%s/%s.csv' % (dw_graph_dir, 'dw-year-summary')
+dw_month3_summary_fpath = '%s/%s.csv' % (dw_graph_dir, 'dw-month3-summary')
 
 
 
