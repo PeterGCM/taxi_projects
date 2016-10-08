@@ -54,7 +54,7 @@ def generate_zones():
     zones = {}
     basic_zones = get_sg_zones()
     for k, z in basic_zones.iteritems():
-        zones[k] = ca_zone(z.relation_with_poly, z.i, z.j, z.cCoor_gps, z.polyPoints_gps)
+        zones[k] = ca_zone(z.relation_with_poly, z.zi, z.zj, z.cCoor_gps, z.polyPoints_gps)
     return zones
 
 if __name__ == '__main__':
