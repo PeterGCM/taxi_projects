@@ -34,7 +34,7 @@ def process_file(yymm):
     year_dw_graph_fpath = '%s/%s%s.pkl' % (dw_graph_dir, dw_graph_prefix, yymm)
     if check_path_exist(year_dw_graph_fpath):
         print 'The file had already been processed; %s' % yymm
-        None
+        return None
     #
     logger.info('Start %s directed weighted graph processing' % yymm)
     #
