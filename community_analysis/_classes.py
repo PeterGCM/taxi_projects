@@ -42,10 +42,12 @@ class ca_driver(driver):
             if not self.weighted_link.has_key(driverPrev.did):
                 self.weighted_link[driverPrev.did] = 0.0
             cur_dt = datetime.datetime.fromtimestamp(t)
-            tf = cur_dt.hour
-            zi, zj = z.zi, z.zj
-            did0_prob = self.distribution[tf, zi, zj]
-            did1_prob = driverPrev.distribution[tf, zi, zj]
+            k = (cur_dt.hour, z.zi, z.zj)
+            did0_prob = self.distribution[k]
+            if not driverPrev.distribution.has_key(k):
+                did1_prob = 0.0
+            else:
+                did1_prob = driverPrev.distribution[k]
             self.weighted_link[driverPrev.did] += max(0, did0_prob - did1_prob)
         z.add_driver_in_logQ(t, self)
         self.num_pickup += 1
