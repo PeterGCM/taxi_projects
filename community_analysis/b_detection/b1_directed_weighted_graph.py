@@ -23,7 +23,7 @@ def run():
         year_distribution = load_pickle_file(year_distribution_fpath)
         for fn in get_all_files(ft_trips_dir, '', '.csv'):
             _, _, _, yymm = fn[:-len('.csv')].split('-')
-            if not yymm.startwith('%02d' % y):
+            if not yymm.startswith('%02d' % y):
                 continue
             drivers = {}
             zones = generate_zones()
