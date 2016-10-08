@@ -15,7 +15,9 @@ ft_trips_dir = '%s/%s' % (taxi_data, 'trips_ft_drivers'); ft_trips_prefix = 'tri
 tf_zone_counting_dir = '%s/%s' % (taxi_data, 'tf_zone_counting'); tf_zone_counting_prefix = 'tf-zone-counting-'
 tf_zone_distribution_dir = '%s/%s' % (taxi_data, 'tf_zone_distribution'); tf_zone_distribution_prefix = 'tf-zone-distribution-'
 #
-dw_graph_dir = '%s/%s' % (taxi_data, 'dw_graph'); dw_graph_prefix = 'dw-graph-'
+dw_graph_dir = '%s/%s' % (taxi_data, 'dw_graph')
+dw_graph_prefix = 'dw-graph-'
+dw_summary_prefix = 'dw-summary-'
 
 
 

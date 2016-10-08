@@ -23,9 +23,9 @@ class ca_zone(zone):
 
 
 class ca_driver(driver):
-    def __init__(self, did, dist):
+    def __init__(self, did, distribution):
         driver.__init__(self, did)
-        self.dist = dist
+        self.distribution = distribution
         self.weighted_link = {}
         self.num_pickup = 0
 
