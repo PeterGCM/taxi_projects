@@ -44,7 +44,9 @@ class ca_driver(driver):
             cur_dt = datetime.datetime.fromtimestamp(t)
             tf = cur_dt.hour
             zi, zj = z.zi, z.zj
-            self.weighted_link[driverPrev.did] += max(0, self.distribution[tf, zi, zj] - driverPrev.distribution[tf, zi, zj])
+            did0_prob = self.distribution[tf, zi, zj]
+            did1_prob = driverPrev.distribution[tf, zi, zj]
+            self.weighted_link[driverPrev.did] += max(0, did0_prob - did1_prob)
         z.add_driver_in_logQ(t, self)
         self.num_pickup += 1
 
