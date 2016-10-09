@@ -1,6 +1,6 @@
 import __init__
 #
-from community_analysis import dw_graph_dir, dw_graph_above_avg_prefix, dw_graph_above_per90_prefix
+from community_analysis import dw_graph_dir, dw_graph_above_avg_prefix, dw_graph_above_per90_prefix, dw_graph_above_per95_prefix
 from community_analysis import group_dir, group_prepix
 #
 from taxi_common.file_handling_functions import load_pickle_file, check_path_exist, check_dir_create
@@ -9,7 +9,7 @@ from taxi_common.log_handling_functions import get_logger
 import louvain
 import igraph as ig
 
-logger = get_logger('partitioning_90')
+logger = get_logger('partitioning_095')
 
 
 def run():
@@ -21,7 +21,7 @@ def run():
     if check_path_exist(year_group_fpath):
         return None
     logger.info('year dw graph loading')
-    year_dw_graph1_fpath = '%s/%s%s.pkl' % (dw_graph_dir, dw_graph_above_per90_prefix, yyyy)
+    year_dw_graph1_fpath = '%s/%s%s.pkl' % (dw_graph_dir, dw_graph_above_per95_prefix, yyyy)
     year_dw_graph_above_avg = load_pickle_file(year_dw_graph1_fpath)
     num_edges = len(year_dw_graph_above_avg)
     logger.info('igraph generation total number of edges %d' % num_edges)

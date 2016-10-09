@@ -73,7 +73,7 @@ def run():
         # save_pickle_file(year_dw_graph2_fpath, year_dw_graph_above_per90)
         #
         logger.info('Saving year_dw_graph_per95 %s' % yyyy)
-        year_dw_graph2_fpath = '%s/%s%s.pkl' % (dw_graph_dir, dw_graph_above_per90_prefix, yyyy)
+        year_dw_graph2_fpath = '%s/%s%s.pkl' % (dw_graph_dir, dw_graph_above_per95_prefix, yyyy)
         percentile95 = np.percentile(year_dw_graph.values(), 95)
         year_dw_graph_above_per95 = {k: v for k, v in year_dw_graph.iteritems() if v > percentile95}
         save_pickle_file(year_dw_graph2_fpath, year_dw_graph_above_per95)
