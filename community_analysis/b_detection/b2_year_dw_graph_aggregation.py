@@ -59,12 +59,17 @@ def run():
         # year_dw_graph_above_avg = {k: v for k, v in year_dw_graph.iteritems() if v > weight_avg}
         # save_pickle_file(year_dw_graph1_fpath, year_dw_graph_above_avg)
         #
-        logger.info('Saving year_dw_graph_per75 %s' % yyyy)
-        year_dw_graph2_fpath = '%s/%s%s.pkl' % (dw_graph_dir, dw_graph_above_per75_prefix, yyyy)
-        weight_avg = np.asarray(year_dw_graph.values()).mean()
-        percentile75 = np.percentile(year_dw_graph.values(), 75)
-        year_dw_graph_above_per75 = {k: v for k, v in year_dw_graph.iteritems() if v > percentile75}
-        save_pickle_file(year_dw_graph2_fpath, year_dw_graph_above_per75)
+        # logger.info('Saving year_dw_graph_per75 %s' % yyyy)
+        # year_dw_graph2_fpath = '%s/%s%s.pkl' % (dw_graph_dir, dw_graph_above_per75_prefix, yyyy)
+        # percentile75 = np.percentile(year_dw_graph.values(), 75)
+        # year_dw_graph_above_per75 = {k: v for k, v in year_dw_graph.iteritems() if v > percentile75}
+        # save_pickle_file(year_dw_graph2_fpath, year_dw_graph_above_per75)
+        #
+        logger.info('Saving year_dw_graph_per90 %s' % yyyy)
+        year_dw_graph2_fpath = '%s/%s%s.pkl' % (dw_graph_dir, dw_graph_above_per90_prefix, yyyy)
+        percentile90 = np.percentile(year_dw_graph.values(), 90)
+        year_dw_graph_above_per75 = {k: v for k, v in year_dw_graph.iteritems() if v > percentile90}
+        save_pickle_file(year_dw_graph2_fpath, year_dw_graph_above_per90)
         #
         if not check_path_exist(year_dw_graph0_fpath):
             logger.info('Generate summary statistics %s' % yyyy)

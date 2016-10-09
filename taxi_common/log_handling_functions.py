@@ -10,3 +10,7 @@ def get_logger(app_name):
     fh.setFormatter(formatter)
     logger.addHandler(fh)
     return logger
+
+
+# TODO
+# Write error in logger
