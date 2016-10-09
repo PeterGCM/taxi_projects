@@ -19,7 +19,7 @@ def run():
     #
     init_multiprocessor(3)
     count_num_jobs = 0
-    for y in range(9, 13):
+    for y in range(10, 12):
         for m in range(1, 12):
             yymm = '%02d%02d' % (y, m)
             put_task(process_file, [yymm])
