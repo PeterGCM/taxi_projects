@@ -23,7 +23,7 @@ def run():
                              'numLinks',
                                 'weightTotal', 'weightAverage', 'weightSD',
                                 'weightMedian', 'weightMin', 'weightMax'])
-    for y in range(11, 13):
+    for y in range(9, 10):
         yyyy = '20%02d' % y
         logger.info('Handle %s' % yyyy)
         year_dw_graph0_fpath = '%s/%s%s.pkl' % (dw_graph_dir, dw_graph_prefix, yyyy)
