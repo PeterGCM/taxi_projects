@@ -23,10 +23,13 @@ def run():
     logger.info('year dw graph loading')
     year_dw_graph1_fpath = '%s/%s%s.pkl' % (dw_graph_dir, dw_graph_above_avg_prefix, yyyy)
     year_dw_graph_above_avg = load_pickle_file(year_dw_graph1_fpath)
-    logger.info('igraph generation')
+    num_edges = len(year_dw_graph_above_avg)
+    logger.info('igraph generation total number of edges %d' % num_edges)
     igid, did_igid = 0, {}
     igG = ig.Graph(directed=True)
-    for (did0, did1), w in year_dw_graph_above_avg.iteritems():
+    for i, ((did0, did1), w) in enumerate(year_dw_graph_above_avg.iteritems()):
+        if i % 500 == 0:
+            logger.info('processed %d edges' % i)
         if not did_igid.has_key(did0):
             igG.add_vertex(did0)
             did_igid[did0] = igid
