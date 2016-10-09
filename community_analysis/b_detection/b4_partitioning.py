@@ -28,7 +28,7 @@ def run():
     igid, did_igid = 0, {}
     igG = ig.Graph(directed=True)
     for i, ((did0, did1), w) in enumerate(year_dw_graph_above_avg.iteritems()):
-        if i % 500 == 0:
+        if i % 1000 == 0:
             logger.info('processed %d edges' % i)
         if not did_igid.has_key(did0):
             igG.add_vertex(did0)
