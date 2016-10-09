@@ -9,7 +9,7 @@ from taxi_common.log_handling_functions import get_logger
 import louvain
 import igraph as ig
 
-logger = get_logger('partitioning_95')
+logger = get_logger('partitioning_90')
 
 
 def run():
