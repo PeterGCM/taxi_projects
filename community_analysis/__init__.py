@@ -20,6 +20,7 @@ dw_graph_prefix = 'dw-graph-'
 dw_graph_above_avg_prefix = 'dw-graph-above-avg-'
 dw_graph_above_per75_prefix = 'dw-graph-above-per75-'
 dw_graph_above_per90_prefix = 'dw-graph-above-per90-'
+dw_graph_above_per95_prefix = 'dw-graph-above-per95-'
 dw_year_summary_fpath = '%s/%s.csv' % (dw_graph_dir, 'dw-year-summary')
 dw_month3_summary_fpath = '%s/%s.csv' % (dw_graph_dir, 'dw-month3-summary')
 group_dir = '%s/%s' % (taxi_data, 'group')
