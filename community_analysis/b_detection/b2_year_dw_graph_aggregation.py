@@ -23,7 +23,7 @@ def run():
                              'numLinks',
                                 'weightTotal', 'weightAverage', 'weightSD',
                                 'weightMedian', 'weightMin', 'weightMax'])
-    for y in range(9, 12):
+    for y in range(11, 13):
         yyyy = '20%02d' % y
         logger.info('Handle %s' % yyyy)
         driver_pickup = {}
