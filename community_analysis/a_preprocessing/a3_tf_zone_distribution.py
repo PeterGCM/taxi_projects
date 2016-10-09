@@ -9,7 +9,7 @@ from taxi_common.file_handling_functions import check_dir_create, check_path_exi
 def run():
     check_dir_create(tf_zone_distribution_dir)
     #
-    for y in range(9, 13):
+    for y in range(10, 12):
         yyyy = '20%02d' % y
         print 'Handle %s' % yyyy
         year_distribution_fpath = '%s/%s%s.pkl' % (tf_zone_distribution_dir, tf_zone_distribution_prefix, yyyy)
