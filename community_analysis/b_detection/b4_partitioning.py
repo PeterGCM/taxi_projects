@@ -10,7 +10,7 @@ from taxi_common.log_handling_functions import get_logger
 import louvain
 import igraph as ig
 
-logger = get_logger('partitioning_month3_99')
+logger = get_logger('partitioning_month3_990')
 
 
 def run():
@@ -18,7 +18,7 @@ def run():
     #
     init_multiprocessor(2)
     count_num_jobs = 0
-    for month3_dw_graph_fn in ['dw-graph-above-per99-2009-M03M04M05.pkl' ,'dw-graph-above-per99-2009-M04M05M06.pkl' ,'dw-graph-above-per99-2009-M05M06M07.pkl' ,'dw-graph-above-per99-2009-M06M07M08.pkl' ,'dw-graph-above-per99-2009-M07M08M09.pkl' ,'dw-graph-above-per99-2009-M08M09M10.pkl']:
+    for month3_dw_graph_fn in ['dw-graph-above-per990-2009-M01M02M03.pkl','dw-graph-above-per990-2009-M02M03M04.pkl']:
         # process_file(month3_dw_graph_fn)
         put_task(process_file, [month3_dw_graph_fn])
         count_num_jobs += 1
