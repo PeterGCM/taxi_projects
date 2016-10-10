@@ -16,12 +16,12 @@ def run():
     check_dir_create(group_dir)
 
     month3_dw_graph_fn = 'dw-graph-above-per99-2009-M01M02M03.pkl'
-    month3_dw_graph_fpath = '%s/%s' % (dw_graph_dir, 'dw-graph-above-per95-2009-M01M02M03.pkl')
+    month3_dw_graph_fpath = '%s/%s' % (dw_graph_dir, month3_dw_graph_fn)
     #
     _, _, _, per, yyyy, month3 = month3_dw_graph_fn[:-len('.pkl')].split()
 
 
-    logger.info('year dw graph loading')
+    logger.info('month3 dw graph loading')
     month3_dw_graph_above_per99 = load_pickle_file(month3_dw_graph_fpath)
     num_edges = len(month3_dw_graph_above_per99)
     logger.info('igraph generation total number of edges %d' % num_edges)
