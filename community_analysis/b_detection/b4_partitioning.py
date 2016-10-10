@@ -4,23 +4,31 @@ from community_analysis import dw_graph_dir, dw_graph_above_avg_prefix, dw_graph
 from community_analysis import group_dir, group_prepix
 #
 from taxi_common.file_handling_functions import load_pickle_file, check_path_exist, check_dir_create
+from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 from taxi_common.log_handling_functions import get_logger
 #
 import louvain
 import igraph as ig
 
-logger = get_logger('partitioning_month3_991')
+logger = get_logger('partitioning_month3_99')
 
 
 def run():
     check_dir_create(group_dir)
+    #
+    init_multiprocessor(2)
+    count_num_jobs = 0
+    for month3_dw_graph_fn in ['dw-graph-above-per99-2009-M03M04M05.pkl' ,'dw-graph-above-per99-2009-M04M05M06.pkl' ,'dw-graph-above-per99-2009-M05M06M07.pkl' ,'dw-graph-above-per99-2009-M06M07M08.pkl' ,'dw-graph-above-per99-2009-M07M08M09.pkl' ,'dw-graph-above-per99-2009-M08M09M10.pkl']:
+        # process_file(month3_dw_graph_fn)
+        put_task(process_file, [month3_dw_graph_fn])
+        count_num_jobs += 1
+    end_multiprocessor(count_num_jobs)
 
-    # month3_dw_graph_fn = 'dw-graph-above-per99-2009-M01M02M03.pkl'
-    month3_dw_graph_fn = 'dw-graph-above-per99-2009-M02M03M04.pkl'
+
+def process_file(month3_dw_graph_fn):
     month3_dw_graph_fpath = '%s/%s' % (dw_graph_dir, month3_dw_graph_fn)
     #
     _, _, _, per, yyyy, month3 = month3_dw_graph_fn[:-len('.pkl')].split('-')
-
 
     logger.info('month3 dw graph loading')
     month3_dw_graph_above_per99 = load_pickle_file(month3_dw_graph_fpath)
@@ -29,20 +37,20 @@ def run():
     igid, did_igid = 0, {}
     igG = ig.Graph(directed=True)
     for i, ((did0, did1), w) in enumerate(month3_dw_graph_above_per99.iteritems()):
-    #
-    # yyyy = '2009'
-    # #
-    # # year_group_fpath = '%s/%s%s.pkl' % (group_dir, group_prepix, yyyy)
-    # # if check_path_exist(year_group_fpath):
-    # #     return None
-    # # logger.info('year dw graph loading')
-    # # year_dw_graph1_fpath = '%s/%s%s.pkl' % (dw_graph_dir, dw_graph_above_per95_prefix, yyyy)
-    # # year_dw_graph_above_avg = load_pickle_file(year_dw_graph1_fpath)
-    # # num_edges = len(year_dw_graph_above_avg)
-    # # logger.info('igraph generation total number of edges %d' % num_edges)
-    # # igid, did_igid = 0, {}
-    # # igG = ig.Graph(directed=True)
-    # # for i, ((did0, did1), w) in enumerate(year_dw_graph_above_avg.iteritems()):
+        #
+        # yyyy = '2009'
+        # #
+        # # year_group_fpath = '%s/%s%s.pkl' % (group_dir, group_prepix, yyyy)
+        # # if check_path_exist(year_group_fpath):
+        # #     return None
+        # # logger.info('year dw graph loading')
+        # # year_dw_graph1_fpath = '%s/%s%s.pkl' % (dw_graph_dir, dw_graph_above_per95_prefix, yyyy)
+        # # year_dw_graph_above_avg = load_pickle_file(year_dw_graph1_fpath)
+        # # num_edges = len(year_dw_graph_above_avg)
+        # # logger.info('igraph generation total number of edges %d' % num_edges)
+        # # igid, did_igid = 0, {}
+        # # igG = ig.Graph(directed=True)
+        # # for i, ((did0, did1), w) in enumerate(year_dw_graph_above_avg.iteritems()):
         if i % 5000 == 0:
             logger.info('processed %.3f edges' % (i / float(num_edges)))
         if not did_igid.has_key(did0):
