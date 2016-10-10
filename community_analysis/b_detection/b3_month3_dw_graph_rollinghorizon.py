@@ -125,6 +125,6 @@ if __name__ == '__main__':
     try:
         run()
     except Exception as _:
-        with open('Exception logging.txt', 'w') as f:
+        with open('Exception month3.txt', 'w') as f:
             f.write(format_exc())
         raise
