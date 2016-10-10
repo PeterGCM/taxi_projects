@@ -9,25 +9,25 @@ from taxi_common.log_handling_functions import get_logger
 import louvain
 import igraph as ig
 
-logger = get_logger('partitioning_month3_95')
+logger = get_logger('partitioning_month3_99')
 
 
 def run():
     check_dir_create(group_dir)
 
-    month3_dw_graph_fn = 'dw-graph-above-per95-2009-M01M02M03.pkl'
+    month3_dw_graph_fn = 'dw-graph-above-per99-2009-M01M02M03.pkl'
     month3_dw_graph_fpath = '%s/%s' % (dw_graph_dir, 'dw-graph-above-per95-2009-M01M02M03.pkl')
     #
     _, _, _, per, yyyy, month3 = month3_dw_graph_fn[:-len('.pkl')].split()
 
 
     logger.info('year dw graph loading')
-    month3_dw_graph_above_per95 = load_pickle_file(month3_dw_graph_fpath)
-    num_edges = len(month3_dw_graph_above_per95)
+    month3_dw_graph_above_per99 = load_pickle_file(month3_dw_graph_fpath)
+    num_edges = len(month3_dw_graph_above_per99)
     logger.info('igraph generation total number of edges %d' % num_edges)
     igid, did_igid = 0, {}
     igG = ig.Graph(directed=True)
-    for i, ((did0, did1), w) in enumerate(month3_dw_graph_above_per95.iteritems()):
+    for i, ((did0, did1), w) in enumerate(month3_dw_graph_above_per99.iteritems()):
     #
     # yyyy = '2009'
     # #
@@ -42,8 +42,8 @@ def run():
     # # igid, did_igid = 0, {}
     # # igG = ig.Graph(directed=True)
     # # for i, ((did0, did1), w) in enumerate(year_dw_graph_above_avg.iteritems()):
-        if i % 1000 == 0:
-            logger.info('processed %.2f edges' % (i / float(num_edges)))
+        if i % 5000 == 0:
+            logger.info('processed %.3f edges' % (i / float(num_edges)))
         if not did_igid.has_key(did0):
             igG.add_vertex(did0)
             did_igid[did0] = igid
@@ -57,7 +57,7 @@ def run():
     part = louvain.find_partition(igG, method='Modularity', weight='weight')
     logger.info('Whole group pickling')
     month3_group_fpath = '%s/%s%s-%s-%s.pkl' % (group_dir, group_prepix, per, yyyy, month3)
-    part.graph.write_pickle(month3_group_fpath )
+    part.graph.write_pickle(month3_group_fpath)
     logger.info('Each group pickling')
     for i, sg in enumerate(part.subgraphs()):
         month3_a_group_fpath = '%s/%s%s-%s-%s-G(%d).pkl' % (group_dir, group_prepix, per, yyyy, month3, i)
