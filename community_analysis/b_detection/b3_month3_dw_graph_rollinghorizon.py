@@ -16,6 +16,22 @@ logger = get_logger('month3')
 
 
 def run():
+    # threshold_values = list(np.arange(99.9, 100, 0.01))
+    # with open(dw_month3_summary_fpath2, 'wt') as w_csvfile:
+    #     writer = csv.writer(w_csvfile, lineterminator='\n')
+    #     new_row = ['year', 'months', 'days', 'numDrivers',
+    #                         'numPickupsTotal', 'numPickupsAverage', 'numPickupsSD',
+    #                         'numPickupsMedian', 'numPickupsMin', 'numPickupsMax',
+    #                      'numLinks',
+    #                         'weightTotal', 'weightAverage', 'weightSD',
+    #                         'weightMedian', 'weightMin', 'weightMax']
+    #     for th in threshold_values:
+    #         new_row.append('weightPer%.2f' % th)
+    #     writer.writerow(new_row)
+    # print new_row
+    # assert False
+
+
     # if not check_path_exist(dw_month3_summary_fpath):
     # with open(dw_month3_summary_fpath, 'wt') as w_csvfile:
     #     writer = csv.writer(w_csvfile, lineterminator='\n')
@@ -26,18 +42,7 @@ def run():
     #                         'weightTotal', 'weightAverage', 'weightSD',
     #                         'weightMedian', 'weightMin', 'weightMax', 'weightPer90', 'weightPer95'])
 
-
-    with open(dw_month3_summary_fpath2, 'wt') as w_csvfile:
-        writer = csv.writer(w_csvfile, lineterminator='\n')
-        writer.writerow(['year', 'months', 'days', 'numDrivers',
-                            'numPickupsTotal', 'numPickupsAverage', 'numPickupsSD',
-                            'numPickupsMedian', 'numPickupsMin', 'numPickupsMax',
-                         'numLinks',
-                            'weightTotal', 'weightAverage', 'weightSD',
-                            'weightMedian', 'weightMin', 'weightMax', 'weightPer999'])
-
-
-    for y in range(9, 10):
+    for y in range(10, 13):
         yyyy = '20%02d' % y
         yymm_fns = get_all_files(dw_graph_dir, '%s%02d' % (dw_graph_prefix, y), '.pkl')
         for i in range(len(yymm_fns) - 1):
@@ -86,33 +91,40 @@ def run():
             # year_dw_graph_above_per99 = {k: v for k, v in month3_dw_graph.iteritems() if v > percentile99}
             # save_pickle_file(month3_dw_graph3_fpath, year_dw_graph_above_per99)
             #
-            month3_dw_graph3_fpath = '%s/%s%s-%s.pkl' % (dw_graph_dir, dw_graph_above_per999_prefix, yyyy, month3_str)
-            percentile999 = np.percentile(month3_dw_graph.values(), 99.9)
-            year_dw_graph_above_per999 = {k: v for k, v in month3_dw_graph.iteritems() if v > percentile999}
-            save_pickle_file(month3_dw_graph3_fpath, year_dw_graph_above_per999)
-            #
-            logger.info('Generate summary statistics %s' % month3_str)
-            num_drivers = len(driver_pickup)
-            num_links = len(month3_dw_graph)
-            pickups, weights = np.asarray(driver_pickup.values()), np.asarray(month3_dw_graph.values())
-            month_day = set()
-            for yymm in yymms:
-                with open('%s/%s%s.csv' % (ft_trips_dir, ft_trips_prefix, yymm), 'rb') as r_csvfile:
-                    reader = csv.reader(r_csvfile)
-                    headers = reader.next()
-                    hid = {h: i for i, h in enumerate(headers)}
-                    for row in reader:
-                        day = row[hid['day']]
-                        month_day.add((yymm, day))
-            with open(dw_month3_summary_fpath1, 'a') as w_csvfile:
-                writer = csv.writer(w_csvfile, lineterminator='\n')
-                writer.writerow([yyyy, month3_str, len(month_day), num_drivers,
-                                 pickups.sum(), pickups.mean(), pickups.std(),
-                                    np.median(pickups), pickups.min(), pickups.max(),
-                                 num_links,
-                                    weights.sum(), weights.mean(), weights.std(),
-                                    np.median(weights), weights.min(), weights.max(), year_dw_graph_above_per999])
+            # month3_dw_graph3_fpath = '%s/%s%s-%s.pkl' % (dw_graph_dir, dw_graph_above_per999_prefix, yyyy, month3_str)
+            # percentile999 = np.percentile(month3_dw_graph.values(), 99.9)
+            # year_dw_graph_above_per999 = {k: v for k, v in month3_dw_graph.iteritems() if v > percentile999}
+            # save_pickle_file(month3_dw_graph3_fpath, year_dw_graph_above_per999)
+            # #
+            # logger.info('Generate summary statistics %s' % month3_str)
+            # num_drivers = len(driver_pickup)
+            # num_links = len(month3_dw_graph)
+            # pickups, weights = np.asarray(driver_pickup.values()), np.asarray(month3_dw_graph.values())
+            # month_day = set()
+            # for yymm in yymms:
+            #     with open('%s/%s%s.csv' % (ft_trips_dir, ft_trips_prefix, yymm), 'rb') as r_csvfile:
+            #         reader = csv.reader(r_csvfile)
+            #         headers = reader.next()
+            #         hid = {h: i for i, h in enumerate(headers)}
+            #         for row in reader:
+            #             day = row[hid['day']]
+            #             month_day.add((yymm, day))
+            # with open(dw_month3_summary_fpath1, 'a') as w_csvfile:
+            #     writer = csv.writer(w_csvfile, lineterminator='\n')
+            #     writer.writerow([yyyy, month3_str, len(month_day), num_drivers,
+            #                      pickups.sum(), pickups.mean(), pickups.std(),
+            #                         np.median(pickups), pickups.min(), pickups.max(),
+            #                      num_links,
+            #                         weights.sum(), weights.mean(), weights.std(),
+            #                         np.median(weights), weights.min(), weights.max(), year_dw_graph_above_per999])
 
 
 if __name__ == '__main__':
-    run()
+    from traceback import format_exc
+    #
+    try:
+        run()
+    except Exception as _:
+        with open('Exception logging.txt', 'w') as f:
+            f.write(format_exc())
+        raise

@@ -24,6 +24,9 @@ dw_graph_above_per95_prefix = 'dw-graph-above-per95-'
 dw_graph_above_per95_prefix = 'dw-graph-above-per95-'
 dw_graph_above_per99_prefix = 'dw-graph-above-per99-'
 dw_graph_above_per999_prefix = 'dw-graph-above-per990-'
+dw_graph_per_prefix = 'dw-graph-above-per-'
+
+
 dw_year_summary_fpath = '%s/%s.csv' % (dw_graph_dir, 'dw-year-summary')
 dw_month3_summary_fpath = '%s/%s.csv' % (dw_graph_dir, 'dw-month3-summary')
 dw_month3_summary_fpath1 = '%s/%s.csv' % (dw_graph_dir, 'dw-month3-summary1')
