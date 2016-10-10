@@ -1,8 +1,9 @@
 import __init__
 #
 from community_analysis import ft_trips_dir, ft_trips_prefix
-from community_analysis import dw_graph_dir, dw_graph_prefix, dw_graph_above_avg_prefix, dw_graph_above_per90_prefix, dw_graph_above_per95_prefix
-from community_analysis import dw_month3_summary_fpath
+from community_analysis import dw_graph_dir, dw_graph_prefix, dw_graph_above_avg_prefix, \
+    dw_graph_above_per90_prefix, dw_graph_above_per95_prefix, dw_graph_above_per99_prefix
+from community_analysis import dw_month3_summary_fpath, dw_month3_summary_fpath1
 #
 from taxi_common.file_handling_functions import load_pickle_file, check_path_exist, save_pickle_file, get_all_files
 from taxi_common.log_handling_functions import get_logger
@@ -15,14 +16,26 @@ logger = get_logger('month3')
 
 def run():
     # if not check_path_exist(dw_month3_summary_fpath):
-    with open(dw_month3_summary_fpath, 'wt') as w_csvfile:
+    # with open(dw_month3_summary_fpath, 'wt') as w_csvfile:
+    #     writer = csv.writer(w_csvfile, lineterminator='\n')
+    #     writer.writerow(['year', 'months', 'days', 'numDrivers',
+    #                         'numPickupsTotal', 'numPickupsAverage', 'numPickupsSD',
+    #                         'numPickupsMedian', 'numPickupsMin', 'numPickupsMax',
+    #                      'numLinks',
+    #                         'weightTotal', 'weightAverage', 'weightSD',
+    #                         'weightMedian', 'weightMin', 'weightMax', 'weightPer90', 'weightPer95'])
+
+
+    with open(dw_month3_summary_fpath1, 'wt') as w_csvfile:
         writer = csv.writer(w_csvfile, lineterminator='\n')
         writer.writerow(['year', 'months', 'days', 'numDrivers',
                             'numPickupsTotal', 'numPickupsAverage', 'numPickupsSD',
                             'numPickupsMedian', 'numPickupsMin', 'numPickupsMax',
                          'numLinks',
                             'weightTotal', 'weightAverage', 'weightSD',
-                            'weightMedian', 'weightMin', 'weightMax', 'weightPer90', 'weightPer95'])
+                            'weightMedian', 'weightMin', 'weightMax', 'weightPer99'])
+
+
     for y in range(9, 10):
         yyyy = '20%02d' % y
         yymm_fns = get_all_files(dw_graph_dir, '%s%02d' % (dw_graph_prefix, y), '.pkl')
@@ -52,20 +65,25 @@ def run():
             logger.info('Saving pickle file %s' % month3_str)
             save_pickle_file(month3_dw_graph0_fpath, month3_dw_graph)
             #
-            month3_dw_graph1_fpath = '%s/%s%s-%s.pkl' % (dw_graph_dir, dw_graph_above_avg_prefix, yyyy, month3_str)
-            weight_avg = np.asarray(month3_dw_graph.values()).mean()
-            month3_dw_graph_above_avg = {k: v for k, v in month3_dw_graph.iteritems() if v > weight_avg}
-            save_pickle_file(month3_dw_graph1_fpath, month3_dw_graph_above_avg)
+            # month3_dw_graph1_fpath = '%s/%s%s-%s.pkl' % (dw_graph_dir, dw_graph_above_avg_prefix, yyyy, month3_str)
+            # weight_avg = np.asarray(month3_dw_graph.values()).mean()
+            # month3_dw_graph_above_avg = {k: v for k, v in month3_dw_graph.iteritems() if v > weight_avg}
+            # save_pickle_file(month3_dw_graph1_fpath, month3_dw_graph_above_avg)
+            # #
+            # month3_dw_graph2_fpath = '%s/%s%s-%s.pkl' % (dw_graph_dir, dw_graph_above_per90_prefix, yyyy, month3_str)
+            # percentile90 = np.percentile(month3_dw_graph.values(), 90)
+            # year_dw_graph_above_per90 = {k: v for k, v in month3_dw_graph.iteritems() if v > percentile90}
+            # save_pickle_file(month3_dw_graph2_fpath, year_dw_graph_above_per90)
+            # #
+            # month3_dw_graph3_fpath = '%s/%s%s-%s.pkl' % (dw_graph_dir, dw_graph_above_per95_prefix, yyyy, month3_str)
+            # percentile95 = np.percentile(month3_dw_graph.values(), 95)
+            # year_dw_graph_above_per95 = {k: v for k, v in month3_dw_graph.iteritems() if v > percentile95}
+            # save_pickle_file(month3_dw_graph3_fpath, year_dw_graph_above_per95)
             #
-            month3_dw_graph2_fpath = '%s/%s%s-%s.pkl' % (dw_graph_dir, dw_graph_above_per90_prefix, yyyy, month3_str)
-            percentile90 = np.percentile(month3_dw_graph.values(), 90)
-            year_dw_graph_above_per90 = {k: v for k, v in month3_dw_graph.iteritems() if v > percentile90}
-            save_pickle_file(month3_dw_graph2_fpath, year_dw_graph_above_per90)
-            #
-            month3_dw_graph3_fpath = '%s/%s%s-%s.pkl' % (dw_graph_dir, dw_graph_above_per95_prefix, yyyy, month3_str)
-            percentile95 = np.percentile(month3_dw_graph.values(), 95)
-            year_dw_graph_above_per95 = {k: v for k, v in month3_dw_graph.iteritems() if v > percentile95}
-            save_pickle_file(month3_dw_graph3_fpath, year_dw_graph_above_per95)
+            month3_dw_graph3_fpath = '%s/%s%s-%s.pkl' % (dw_graph_dir, dw_graph_above_per99_prefix, yyyy, month3_str)
+            percentile99 = np.percentile(month3_dw_graph.values(), 99)
+            year_dw_graph_above_per99 = {k: v for k, v in month3_dw_graph.iteritems() if v > percentile99}
+            save_pickle_file(month3_dw_graph3_fpath, year_dw_graph_above_per99)
             #
             logger.info('Generate summary statistics %s' % month3_str)
             num_drivers = len(driver_pickup)
@@ -80,14 +98,14 @@ def run():
                     for row in reader:
                         day = row[hid['day']]
                         month_day.add((yymm, day))
-            with open(dw_month3_summary_fpath, 'a') as w_csvfile:
+            with open(dw_month3_summary_fpath1, 'a') as w_csvfile:
                 writer = csv.writer(w_csvfile, lineterminator='\n')
                 writer.writerow([yyyy, month3_str, len(month_day), num_drivers,
                                  pickups.sum(), pickups.mean(), pickups.std(),
                                     np.median(pickups), pickups.min(), pickups.max(),
                                  num_links,
                                     weights.sum(), weights.mean(), weights.std(),
-                                    np.median(weights), weights.min(), weights.max(), percentile90, percentile95])
+                                    np.median(weights), weights.min(), weights.max(), percentile99])
 
 
 if __name__ == '__main__':

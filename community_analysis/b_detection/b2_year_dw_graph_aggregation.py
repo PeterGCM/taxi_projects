@@ -2,7 +2,7 @@ import __init__
 #
 from community_analysis import ft_trips_dir, ft_trips_prefix
 from community_analysis import dw_graph_dir, dw_graph_prefix, dw_graph_above_avg_prefix, dw_graph_above_per75_prefix, \
-    dw_graph_above_per90_prefix, dw_graph_above_per95_prefix
+    dw_graph_above_per90_prefix, dw_graph_above_per95_prefix, dw_graph_above_per99_prefix
 from community_analysis import dw_year_summary_fpath
 #
 from taxi_common.file_handling_functions import load_pickle_file, check_path_exist, save_pickle_file
@@ -72,12 +72,18 @@ def run():
         # year_dw_graph_above_per90 = {k: v for k, v in year_dw_graph.iteritems() if v > percentile90}
         # save_pickle_file(year_dw_graph2_fpath, year_dw_graph_above_per90)
         #
-        logger.info('Saving year_dw_graph_per95 %s' % yyyy)
-        year_dw_graph2_fpath = '%s/%s%s.pkl' % (dw_graph_dir, dw_graph_above_per95_prefix, yyyy)
-        percentile95 = np.percentile(year_dw_graph.values(), 95)
-        year_dw_graph_above_per95 = {k: v for k, v in year_dw_graph.iteritems() if v > percentile95}
-        save_pickle_file(year_dw_graph2_fpath, year_dw_graph_above_per95)
+        # logger.info('Saving year_dw_graph_per95 %s' % yyyy)
+        # year_dw_graph2_fpath = '%s/%s%s.pkl' % (dw_graph_dir, dw_graph_above_per95_prefix, yyyy)
+        # percentile95 = np.percentile(year_dw_graph.values(), 95)
+        # year_dw_graph_above_per95 = {k: v for k, v in year_dw_graph.iteritems() if v > percentile95}
+        # save_pickle_file(year_dw_graph2_fpath, year_dw_graph_above_per95)
         #
+        logger.info('Saving year_dw_graph_per99 %s' % yyyy)
+        year_dw_graph2_fpath = '%s/%s%s.pkl' % (dw_graph_dir, dw_graph_above_per99_prefix, yyyy)
+        percentile99 = np.percentile(year_dw_graph.values(), 99)
+        year_dw_graph_above_per99 = {k: v for k, v in year_dw_graph.iteritems() if v > percentile99}
+        save_pickle_file(year_dw_graph2_fpath, year_dw_graph_above_per99)
+
         if not check_path_exist(year_dw_graph0_fpath):
             logger.info('Generate summary statistics %s' % yyyy)
             num_drivers = len(driver_pickup)
