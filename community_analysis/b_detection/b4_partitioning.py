@@ -9,14 +9,14 @@ from taxi_common.log_handling_functions import get_logger
 import louvain
 import igraph as ig
 
-logger = get_logger('partitioning_month3_99')
+logger = get_logger('partitioning_month3_991')
 
 
 def run():
     check_dir_create(group_dir)
 
-    month3_dw_graph_fn = 'dw-graph-above-per99-2009-M01M02M03.pkl'
-    # month3_dw_graph_fn = 'dw-graph-above-per99-2009-M02M03M04.pkl'
+    # month3_dw_graph_fn = 'dw-graph-above-per99-2009-M01M02M03.pkl'
+    month3_dw_graph_fn = 'dw-graph-above-per99-2009-M02M03M04.pkl'
     month3_dw_graph_fpath = '%s/%s' % (dw_graph_dir, month3_dw_graph_fn)
     #
     _, _, _, per, yyyy, month3 = month3_dw_graph_fn[:-len('.pkl')].split('-')
