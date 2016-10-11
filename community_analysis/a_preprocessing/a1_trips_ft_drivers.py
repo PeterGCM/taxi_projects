@@ -17,19 +17,19 @@ import csv, datetime
 def run():
     check_dir_create(ft_trips_dir)
     #
-    init_multiprocessor(2)
+    init_multiprocessor(1)
     count_num_jobs = 0
-    # for y in range(9, 13):
-    #     for m in range(1, 12):
-    #         yymm = '%02d%02d' % (y, m)
-    #         # yymm = '12%02d' % mm
-    #         # process_file(yymm)
-    #         put_task(process_file, [yymm])
-    #         count_num_jobs += 1
-    for yymm in ['1012', '1112']:
-        put_task(process_file, [yymm])
-        count_num_jobs += 1
-    end_multiprocessor(count_num_jobs)
+    for y in range(10, 12):
+        for m in range(1, 13):
+            yymm = '%02d%02d' % (y, m)
+            # yymm = '12%02d' % mm
+            # process_file(yymm)
+            put_task(process_file, [yymm])
+            count_num_jobs += 1
+    # for yymm in ['1012', '1112']:
+    #     put_task(process_file, [yymm])
+    #     count_num_jobs += 1
+    # end_multiprocessor(count_num_jobs)
 
 
 def process_file(yymm):
