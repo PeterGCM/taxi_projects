@@ -88,4 +88,11 @@ def generate_zones():
 
 
 if __name__ == '__main__':
-    run()
+    from traceback import format_exc
+    #
+    try:
+        run()
+    except Exception as _:
+        with open('Exception month dw graph.txt', 'w') as f:
+            f.write(format_exc())
+        raise
