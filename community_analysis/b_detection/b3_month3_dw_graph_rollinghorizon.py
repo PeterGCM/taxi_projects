@@ -50,13 +50,7 @@ def run():
             month3_dw_graph = {}
             yymms = []
             for j in range(3):
-                print i, j
-                print yymm_fns
                 yymm_fn = yymm_fns[i + j]
-
-
-                assert False
-
                 _, _, yymm = yymm_fn[:-len('.pkl')].split('-')
                 yymms.append(yymm)
                 logger.info('Loading %s' % yymm)
