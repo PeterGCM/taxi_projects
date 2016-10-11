@@ -68,6 +68,8 @@ def process_file(yymm):
                 z = zones[(zi, zj)]
             except KeyError:
                 continue
+            if not year_distribution.has_key(did):
+                continue
             if not drivers.has_key(did):
                 drivers[did] = ca_driver(did, year_distribution[did])
             drivers[did].update_linkage(t, z)
