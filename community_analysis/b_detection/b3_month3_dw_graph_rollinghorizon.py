@@ -42,7 +42,7 @@ def run():
     #                         'weightTotal', 'weightAverage', 'weightSD',
     #                         'weightMedian', 'weightMin', 'weightMax', 'weightPer90', 'weightPer95'])
 
-    for y in range(10, 13):
+    for y in range(11, 13):
         yyyy = '20%02d' % y
         yymm_fns = get_all_files(dw_graph_dir, '%s%02d' % (dw_graph_prefix, y), '.pkl')
         for i in range(len(yymm_fns) - 1):
@@ -50,7 +50,13 @@ def run():
             month3_dw_graph = {}
             yymms = []
             for j in range(3):
+                print i, j
+                print yymm_fns
                 yymm_fn = yymm_fns[i + j]
+
+
+                assert False
+
                 _, _, yymm = yymm_fn[:-len('.pkl')].split('-')
                 yymms.append(yymm)
                 logger.info('Loading %s' % yymm)
