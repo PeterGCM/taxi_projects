@@ -14,20 +14,20 @@ def run():
     #
     init_multiprocessor(2)
     count_num_jobs = 0
-    # for y in range(11, 12):
-    #     for m in range(1, 12):
-    #         yymm = '%02d%02d' % (y, m)
-    #         # yymm = '12%02d' % mm
-    #         # process_file(yymm)
-    #         put_task(process_file, [yymm])
-    #         count_num_jobs += 1
-    # end_multiprocessor(count_num_jobs)
-
-
-    for yymm in ['1012', '1112']:
-        put_task(process_file, [yymm])
-        count_num_jobs += 1
+    for y in range(10, 12):
+        for m in range(1, 13):
+            yymm = '%02d%02d' % (y, m)
+            # yymm = '12%02d' % mm
+            # process_file(yymm)
+            put_task(process_file, [yymm])
+            count_num_jobs += 1
     end_multiprocessor(count_num_jobs)
+
+
+    # for yymm in ['1012', '1112']:
+    #     put_task(process_file, [yymm])
+    #     count_num_jobs += 1
+    # end_multiprocessor(count_num_jobs)
 
 
 def process_file(yymm):
