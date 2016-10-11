@@ -17,7 +17,7 @@ import csv, datetime
 def run():
     check_dir_create(ft_trips_dir)
     #
-    init_multiprocessor(1)
+    init_multiprocessor(11)
     count_num_jobs = 0
     for y in range(10, 12):
         for m in range(1, 13):
@@ -29,7 +29,7 @@ def run():
     # for yymm in ['1012', '1112']:
     #     put_task(process_file, [yymm])
     #     count_num_jobs += 1
-    # end_multiprocessor(count_num_jobs)
+    end_multiprocessor(count_num_jobs)
 
 
 def process_file(yymm):
