@@ -20,7 +20,7 @@ def run():
     init_multiprocessor(8)
     count_num_jobs = 0
     for y in range(10, 12):
-        for m in range(1, 12):
+        for m in range(1, 13):
             yymm = '%02d%02d' % (y, m)
             put_task(process_file, [yymm])
             count_num_jobs += 1
@@ -33,51 +33,57 @@ def run():
 
 
 def process_file(yymm):
-    ft_trips_fpath = '%s/%s%s.csv' % (ft_trips_dir, ft_trips_prefix, yymm)
-    if not check_path_exist(ft_trips_fpath):
-        return None
-    year_dw_graph_fpath = '%s/%s%s.pkl' % (dw_graph_dir, dw_graph_prefix, yymm)
-    if check_path_exist(year_dw_graph_fpath):
-        print 'The file had already been processed; %s' % yymm
-        return None
-    #
-    logger.info('Start %s directed weighted graph processing' % yymm)
-    #
-    yyyy = '20%s' % yymm[:2]
-    year_distribution_fpath = '%s/%s%s.pkl' % (tf_zone_distribution_dir, tf_zone_distribution_prefix, yyyy)
-    year_distribution = load_pickle_file(year_distribution_fpath)
-    logger.info('Finish year distribution loading')
-    #
-    drivers = {}
-    zones = generate_zones()
-    handling_day = 0
-    with open(ft_trips_fpath, 'rb') as r_csvfile:
-        reader = csv.reader(r_csvfile)
-        headers = reader.next()
-        hid = {h: i for i, h in enumerate(headers)}
-        for row in reader:
-            t = eval(row[hid['time']])
-            cur_dt = datetime.datetime.fromtimestamp(t)
-            if handling_day != cur_dt.day:
-                logger.info('Processing %dth day' % cur_dt.day)
-                handling_day = cur_dt.day
-            did = int(row[hid['did']])
-            zi, zj = int(row[hid['zi']]), int(row[hid['zj']])
-            try:
-                z = zones[(zi, zj)]
-            except KeyError:
-                continue
-            if not year_distribution.has_key(did):
-                continue
-            if not drivers.has_key(did):
-                drivers[did] = ca_driver(did, year_distribution[did])
-            drivers[did].update_linkage(t, z)
-    logger.info('Start %s aggregation' % yymm)
-    year_dw_graph = []
-    for did, d in drivers.iteritems():
-        year_dw_graph.append((did, d.num_pickup, d.weighted_link))
-    logger.info('Start %s pickling' % yymm)
-    save_pickle_file(year_dw_graph_fpath, year_dw_graph)
+    from traceback import format_exc
+    try:
+        ft_trips_fpath = '%s/%s%s.csv' % (ft_trips_dir, ft_trips_prefix, yymm)
+        if not check_path_exist(ft_trips_fpath):
+            return None
+        year_dw_graph_fpath = '%s/%s%s.pkl' % (dw_graph_dir, dw_graph_prefix, yymm)
+        if check_path_exist(year_dw_graph_fpath):
+            print 'The file had already been processed; %s' % yymm
+            return None
+        #
+        logger.info('Start %s directed weighted graph processing' % yymm)
+        #
+        yyyy = '20%s' % yymm[:2]
+        year_distribution_fpath = '%s/%s%s.pkl' % (tf_zone_distribution_dir, tf_zone_distribution_prefix, yyyy)
+        year_distribution = load_pickle_file(year_distribution_fpath)
+        logger.info('Finish year distribution loading')
+        #
+        drivers = {}
+        zones = generate_zones()
+        handling_day = 0
+        with open(ft_trips_fpath, 'rb') as r_csvfile:
+            reader = csv.reader(r_csvfile)
+            headers = reader.next()
+            hid = {h: i for i, h in enumerate(headers)}
+            for row in reader:
+                t = eval(row[hid['time']])
+                cur_dt = datetime.datetime.fromtimestamp(t)
+                if handling_day != cur_dt.day:
+                    logger.info('Processing %s %dth day' % (yymm, cur_dt.day))
+                    handling_day = cur_dt.day
+                did = int(row[hid['did']])
+                zi, zj = int(row[hid['zi']]), int(row[hid['zj']])
+                try:
+                    z = zones[(zi, zj)]
+                except KeyError:
+                    continue
+                if not year_distribution.has_key(did):
+                    continue
+                if not drivers.has_key(did):
+                    drivers[did] = ca_driver(did, year_distribution[did])
+                drivers[did].update_linkage(t, z)
+        logger.info('Start %s aggregation' % yymm)
+        year_dw_graph = []
+        for did, d in drivers.iteritems():
+            year_dw_graph.append((did, d.num_pickup, d.weighted_link))
+        logger.info('Start %s pickling' % yymm)
+        save_pickle_file(year_dw_graph_fpath, year_dw_graph)
+    except Exception as _:
+        with open('Exception month dw graph.txt', 'w') as f:
+            f.write(format_exc())
+        raise
 
 
 def generate_zones():
@@ -89,11 +95,4 @@ def generate_zones():
 
 
 if __name__ == '__main__':
-    from traceback import format_exc
-    #
-    try:
-        run()
-    except Exception as _:
-        with open('Exception month dw graph.txt', 'w') as f:
-            f.write(format_exc())
-        raise
+    run()
