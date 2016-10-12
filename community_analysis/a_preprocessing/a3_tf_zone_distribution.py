@@ -25,6 +25,7 @@ def run():
                 print 'Handle the file; %s' % yymm
                 tf_zone_counting_fpath = '%s/%s%s.pkl' % (tf_zone_counting_dir, tf_zone_counting_prefix, yymm)
                 if not check_path_exist(tf_zone_counting_fpath):
+                    print 'The file X exists; %s' % yymm
                     continue
                 drivers = load_pickle_file(tf_zone_counting_fpath)
                 for did, tf_zone_counting in drivers.iteritems():
@@ -45,4 +46,11 @@ def run():
 
 
 if __name__ == '__main__':
-    run()
+    from traceback import format_exc
+    #
+    try:
+        run()
+    except Exception as _:
+        with open('Exception tf zone distribution.txt', 'w') as f:
+            f.write(format_exc())
+        raise
