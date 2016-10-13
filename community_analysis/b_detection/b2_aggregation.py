@@ -96,7 +96,7 @@ def run():
                         hid = {h: i for i, h in enumerate(headers)}
                         for row in reader:
                             day = row[hid['day']]
-                            month3_days.add((m, day))
+                            month3_days.add((int(n_yymm[2:]), day))
                     rolling_horizon_lm = target_m
                 if len(yymms) == 3:
                     break
