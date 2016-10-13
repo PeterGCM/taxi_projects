@@ -16,7 +16,7 @@ tf_zone_counting_dir = '%s/%s' % (taxi_data, 'tf_zone_counting'); tf_zone_counti
 tf_zone_distribution_dir = '%s/%s' % (taxi_data, 'tf_zone_distribution'); tf_zone_distribution_prefix = 'tf-zone-distribution-'
 #
 dw_graph_dir = '%s/%s' % (taxi_data, 'dw_graph'); dw_graph_prefix = 'dw-graph-'
-dw_aggreg_dir = '%s/%s' % (dw_graph_dir, 'dw_graph'); dw_aggreg_prefix = 'dw-aggreg-'
+dw_aggreg_dir = '%s/%s' % (dw_graph_dir, 'de_aggregation'); dw_aggreg_prefix = 'dw-aggregation-'
 year_aggre_summary_fpath = '%s/%s.csv' % (dw_aggreg_dir, 'year-aggretation-summary')
 month3_aggre_summary_fpath = '%s/%s.csv' % (dw_aggreg_dir, 'month3-aggretation-summary')
 

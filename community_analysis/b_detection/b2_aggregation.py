@@ -5,7 +5,8 @@ from community_analysis import dw_graph_dir, dw_graph_prefix
 from community_analysis import dw_aggreg_dir, dw_aggreg_prefix
 from community_analysis import year_aggre_summary_fpath, month3_aggre_summary_fpath
 #
-from taxi_common.file_handling_functions import load_pickle_file, check_path_exist, save_pickle_file, get_all_files, save_pkl_threading
+from taxi_common.file_handling_functions import load_pickle_file, check_path_exist, save_pickle_file, \
+    get_all_files, save_pkl_threading, check_dir_create
 from taxi_common.log_handling_functions import get_logger
 #
 import numpy as np
@@ -15,6 +16,7 @@ logger = get_logger('aggregation')
 
 
 def run():
+    check_dir_create(dw_aggreg_dir)
     if not check_path_exist(year_aggre_summary_fpath):
         with open(year_aggre_summary_fpath, 'wt') as w_csvfile:
             writer = csv.writer(w_csvfile, lineterminator='\n')
@@ -37,7 +39,7 @@ def run():
     for y in range(9, 13):
         yyyy = '20%02d' % y
         logger.info('Handle %s' % yyyy)
-        year_dw_graph0_fpath = '%s/%s%s.pkl' % (dw_graph_dir, dw_graph_prefix, yyyy)
+        year_aggregation_fpath = '%s/%s%s.pkl' % (dw_aggreg_dir, dw_aggreg_prefix, yyyy)
         year_driver_pickup, year_dw_graph = {}, {}
         year_days = set()
         for m in range(1, 13):
@@ -116,7 +118,7 @@ def run():
                 logger.info('Finish %s for rolling horizon' % yymm_fn)
 
             month3_str = ''.join(['M%s' % yymm[2:] for yymm in yymms])
-            month3_aggregation_fpath = '%s/%s%s-%s.pkl' % (dw_graph_dir, dw_graph_prefix, yyyy, month3_str)
+            month3_aggregation_fpath = '%s/%s%s-%s.pkl' % (dw_aggreg_dir, dw_aggreg_prefix, yyyy, month3_str)
             logger.info('Saving pickle file %s' % month3_str)
             save_pkl_threading(month3_aggregation_fpath, month3_dw_graph)
             #
@@ -133,7 +135,7 @@ def run():
                                     weights.sum(), weights.mean(), weights.std(),
                                     np.median(weights), weights.min(), weights.max()])
         logger.info('Saving year_dw_graph0 %s' % yyyy)
-        save_pickle_file(year_dw_graph0_fpath, year_dw_graph)
+        save_pickle_file(year_aggregation_fpath, year_dw_graph)
         #
         logger.info('Generate year summary statistics %s' % yyyy)
         num_drivers = len(year_driver_pickup)
