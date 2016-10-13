@@ -3,7 +3,7 @@ import __init__
 from community_analysis import ft_trips_dir, ft_trips_prefix
 from community_analysis import dw_graph_dir, dw_graph_prefix, dw_graph_above_avg_prefix, dw_graph_above_per75_prefix, \
     dw_graph_above_per90_prefix, dw_graph_above_per95_prefix, dw_graph_above_per99_prefix
-from community_analysis import dw_year_summary_fpath
+from community_analysis import year_aggre_summary_fpath
 #
 from taxi_common.file_handling_functions import load_pickle_file, check_path_exist, save_pickle_file
 from taxi_common.log_handling_functions import get_logger

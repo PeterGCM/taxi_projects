@@ -4,7 +4,7 @@ from community_analysis import ft_trips_dir, ft_trips_prefix
 from community_analysis import dw_graph_dir, dw_graph_prefix, dw_graph_above_avg_prefix, \
     dw_graph_above_per90_prefix, dw_graph_above_per95_prefix, dw_graph_above_per99_prefix, \
     dw_graph_above_per999_prefix
-from community_analysis import dw_month3_summary_fpath, dw_month3_summary_fpath1, dw_month3_summary_fpath2
+from community_analysis import month3_aggre_summary_fpath, dw_month3_summary_fpath1, dw_month3_summary_fpath2
 #
 from taxi_common.file_handling_functions import load_pickle_file, check_path_exist, save_pickle_file, get_all_files
 from taxi_common.log_handling_functions import get_logger

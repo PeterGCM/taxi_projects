@@ -15,8 +15,12 @@ ft_trips_dir = '%s/%s' % (taxi_data, 'trips_ft_drivers'); ft_trips_prefix = 'tri
 tf_zone_counting_dir = '%s/%s' % (taxi_data, 'tf_zone_counting'); tf_zone_counting_prefix = 'tf-zone-counting-'
 tf_zone_distribution_dir = '%s/%s' % (taxi_data, 'tf_zone_distribution'); tf_zone_distribution_prefix = 'tf-zone-distribution-'
 #
-dw_graph_dir = '%s/%s' % (taxi_data, 'dw_graph')
-dw_graph_prefix = 'dw-graph-'
+dw_graph_dir = '%s/%s' % (taxi_data, 'dw_graph'); dw_graph_prefix = 'dw-graph-'
+dw_aggreg_dir = '%s/%s' % (dw_graph_dir, 'dw_graph'); dw_aggreg_prefix = 'dw-aggreg-'
+year_aggre_summary_fpath = '%s/%s.csv' % (dw_aggreg_dir, 'year-aggretation-summary')
+month3_aggre_summary_fpath = '%s/%s.csv' % (dw_aggreg_dir, 'month3-aggretation-summary')
+
+
 dw_graph_above_avg_prefix = 'dw-graph-above-avg-'
 dw_graph_above_per75_prefix = 'dw-graph-above-per75-'
 dw_graph_above_per90_prefix = 'dw-graph-above-per90-'
@@ -27,8 +31,8 @@ dw_graph_above_per999_prefix = 'dw-graph-above-per990-'
 dw_graph_per_prefix = 'dw-graph-above-per-'
 
 
-dw_year_summary_fpath = '%s/%s.csv' % (dw_graph_dir, 'dw-year-summary')
-dw_month3_summary_fpath = '%s/%s.csv' % (dw_graph_dir, 'dw-month3-summary')
+
+
 dw_month3_summary_fpath1 = '%s/%s.csv' % (dw_graph_dir, 'dw-month3-summary1')
 dw_month3_summary_fpath2 = '%s/%s.csv' % (dw_graph_dir, 'dw-month3-summary2')
 group_dir = '%s/%s' % (taxi_data, 'group')
