@@ -43,7 +43,7 @@ def handle_month3(dw_month3_fn, month3_dw_graph):
         percentile_dir = '%s/percentile(%.2f)' % (dw_filtered_dir, pv)
         check_dir_create(percentile_dir)
         fpath = '%s/%s%s-%s-%s.pkl' % \
-                            (percentile_dir, dw_filtered_prefix, 'percentile(%.2f)', yyyy, duration)
+                            (percentile_dir, dw_filtered_prefix, 'percentile(%.2f)' % pv, yyyy, duration)
         save_pkl_threading(fpath, month3_filtered_dw_graph[pv])
 
 
@@ -61,7 +61,7 @@ def handle_year(dw_year_fn, year_dw_graph):
         percentile_dir = '%s/percentile(%.2f)' % (dw_filtered_dir, pv)
         check_dir_create(percentile_dir)
         fpath = '%s/%s%s-%s.pkl' % \
-                (percentile_dir, dw_filtered_prefix, 'percentile(%.2f)', yyyy)
+                (percentile_dir, dw_filtered_prefix, 'percentile(%.2f)' % pv, yyyy)
         logger.info('Start pickling %s , percentile(%.2f)' % (year_dw_graph, pv))
         save_pickle_file(fpath, year_filtered_dw_graph)
 
