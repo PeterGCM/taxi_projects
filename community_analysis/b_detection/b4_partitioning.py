@@ -30,10 +30,10 @@ def process_file(dw_per_fpath, dw_per_fn):
     if len(fn_split) == 5:
         is_month3_handling = True
         _, _, percentile, yyyy, duration = fn_split
-        gp_targer_dirpath = '%s/%s-%s-%s' % (group_per_dirpath, yyyy, duration)
+        gp_targer_dirpath = '%s/%s-%s-%s' % (group_per_dirpath, percentile, yyyy, duration)
     else:
         _, _, percentile, yyyy = fn_split
-        gp_targer_dirpath = '%s/%s-%s' % (group_per_dirpath, yyyy)
+        gp_targer_dirpath = '%s/%s-%s' % (group_per_dirpath, percentile, yyyy)
     if check_path_exist(gp_targer_dirpath):
         return None
     check_dir_create(gp_targer_dirpath)
