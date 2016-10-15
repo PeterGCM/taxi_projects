@@ -54,7 +54,7 @@ def handle_year(dw_year_fn, year_dw_graph):
     for i, th in enumerate(threshold_values):
         pv = percentiles[i]
         year_filtered_dw_graph = {}
-        logger.info('Start filtering %s , percentile(%.2f)' % year_dw_graph, pv)
+        logger.info('Start filtering %s , percentile(%.2f)' % (year_dw_graph, pv))
         for k, v in year_dw_graph.iteritems():
             if th < v:
                 year_filtered_dw_graph[k] = v
@@ -62,7 +62,7 @@ def handle_year(dw_year_fn, year_dw_graph):
         check_dir_create(percentile_dir)
         fpath = '%s/%s%s-%s.pkl' % \
                 (percentile_dir, dw_filtered_prefix, 'percentile(%.2f)', yyyy)
-        logger.info('Start pickling %s , percentile(%.2f)' % year_dw_graph, pv)
+        logger.info('Start pickling %s , percentile(%.2f)' % (year_dw_graph, pv))
         save_pickle_file(fpath, year_filtered_dw_graph)
 
 
