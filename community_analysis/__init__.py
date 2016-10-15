@@ -20,7 +20,7 @@ dw_aggreg_dir = '%s/%s' % (dw_graph_dir, 'dw_aggregation'); dw_aggreg_prefix = '
 year_aggre_summary_fpath = '%s/%s.csv' % (dw_aggreg_dir, 'year-aggretation-summary')
 month3_aggre_summary_fpath = '%s/%s.csv' % (dw_aggreg_dir, 'month3-aggretation-summary')
 dw_filtered_dir = '%s/%s' % (dw_graph_dir, 'dw_filtered'); dw_filtered_prefix = 'dw-filtered-'
-
+group_dir = '%s/%s' % (taxi_data, 'group'); group_prepix = 'group-'
 
 
 
@@ -39,8 +39,7 @@ dw_graph_per_prefix = 'dw-graph-above-per-'
 
 dw_month3_summary_fpath1 = '%s/%s.csv' % (dw_graph_dir, 'dw-month3-summary1')
 dw_month3_summary_fpath2 = '%s/%s.csv' % (dw_graph_dir, 'dw-month3-summary2')
-group_dir = '%s/%s' % (taxi_data, 'group')
-group_prepix = 'group-'
+
 group_summary_fpath = '%s/%s.csv' % (group_dir, 'group-summary')
 
 
