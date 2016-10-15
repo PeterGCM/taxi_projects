@@ -16,7 +16,7 @@ def run():
     check_dir_create(group_dir)
     #
     for dw_per_dir_fn in get_all_directories(dw_filtered_dir):
-        dw_per_dirpath = '%s/%s' % (group_dir, dw_per_dir_fn)
+        dw_per_dirpath = '%s/%s' % (dw_filtered_dir, dw_per_dir_fn)
         for dw_per_fn in get_all_files(dw_per_dirpath, '', '.pkl'):
             dw_per_fpath = '%s/%s' % (dw_per_dirpath, dw_per_fn)
             process_file(dw_per_fpath, dw_per_fn)
