@@ -47,10 +47,10 @@ def process_files(y):
     for trips_fn in get_all_files(ft_trips_dir, '%s%02d' % (ft_trips_prefix, y), '.csv'):
         logger.info('Start handing %s' % trips_fn)
         did_gn, drivers = {}, {}
-        for gn, com_drivers in com_drivers.iteritems():
-            for did in com_drivers:
+        for gn, members in com_drivers.iteritems():
+            for did in members:
                 did_gn[did] = gn
-                drivers[did] = ca_driver_with_com_prevD(did, com_drivers)
+                drivers[did] = ca_driver_with_com_prevD(did, members)
         zones = generate_zones()
         with open('%s/%s' % (ft_trips_dir, trips_fn), 'rb') as r_csvfile:
             reader = csv.reader(r_csvfile)
