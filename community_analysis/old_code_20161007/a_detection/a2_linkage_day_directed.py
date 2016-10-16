@@ -2,7 +2,7 @@ import __init__
 #
 import csv
 #
-from community_analysis._classes import ca_driver
+from community_analysis._classes import ca_driver_with_distribution
 from community_analysis import trip_dir, ld_dir
 from community_analysis import generate_zones
 from community_analysis import MIN_DAILY_LINKAGE
@@ -67,7 +67,7 @@ def process_files(yymm):
                         f.write('%d,%s,%d,%d,X' % (t, did, i, j) + '\n')
                     continue
                 #
-                if not drivers.has_key(did): drivers[did] = ca_driver(did)
+                if not drivers.has_key(did): drivers[did] = ca_driver_with_distribution(did)
                 drivers[did].update_linkage(t, z)
                 logs_num += 1
         day_linkage = []

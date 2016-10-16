@@ -22,7 +22,7 @@ class ca_zone(zone):
         self.logQ = []
 
 
-class ca_driver(driver):
+class ca_driver_with_distribution(driver):
     def __init__(self, did, distribution):
         driver.__init__(self, did)
         self.distribution = distribution
@@ -52,9 +52,10 @@ class ca_driver(driver):
         z.add_driver_in_logQ(t, self)
         self.num_pickup += 1
 
-class ca_driver_with_com_prevD(ca_driver):
+
+class ca_driver_with_com_prevD(driver):
     def __init__(self, did, com_drivers):
-        ca_driver.__init__(self, did)
+        driver.__init__(self, did)
         #
         for com_did in com_drivers:
             assert type(com_did) == type(did)

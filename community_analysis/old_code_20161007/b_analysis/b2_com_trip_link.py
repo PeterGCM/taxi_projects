@@ -1,6 +1,6 @@
 import __init__
 #
-from community_analysis._classes import ca_driver_with_com, ca_driver
+from community_analysis._classes import ca_driver_with_com, ca_driver_with_distribution
 from community_analysis import top5_com_dir, trip_dir, ctrip_dir, clink_dir
 from community_analysis import generate_zones
 from community_analysis import BY_COM_O, BY_COM_X
@@ -73,7 +73,7 @@ def for_multiprocessor(fn):
                             pass
                     except KeyError:
                         pass
-                    if not drivers.has_key(did): drivers[did] = ca_driver(did)
+                    if not drivers.has_key(did): drivers[did] = ca_driver_with_distribution(did)
                     by_com = drivers[did].update_linkage(t, z)
                     #
                     if did_cn.has_key(did):

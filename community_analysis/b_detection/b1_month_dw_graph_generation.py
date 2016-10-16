@@ -3,7 +3,7 @@ import __init__
 from community_analysis import tf_zone_distribution_dir, tf_zone_distribution_prefix
 from community_analysis import dw_graph_dir, dw_graph_prefix
 from community_analysis import ft_trips_dir, ft_trips_prefix
-from community_analysis._classes import ca_driver, ca_zone
+from community_analysis._classes import ca_driver_with_distribution, ca_zone
 #
 from taxi_common.file_handling_functions import check_path_exist, load_pickle_file, save_pickle_file, check_dir_create
 from taxi_common.log_handling_functions import get_logger
@@ -72,7 +72,7 @@ def process_file(yymm):
                 if not year_distribution.has_key(did):
                     continue
                 if not drivers.has_key(did):
-                    drivers[did] = ca_driver(did, year_distribution[did])
+                    drivers[did] = ca_driver_with_distribution(did, year_distribution[did])
                 drivers[did].update_linkage(t, z)
         logger.info('Start %s aggregation' % yymm)
         year_dw_graph = []
