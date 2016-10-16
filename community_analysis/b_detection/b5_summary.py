@@ -29,8 +29,6 @@ def run():
                 else:
                     _, percentile, yyyy, group_name = fn_components
                     period = yyyy
-
-                # print '%s/%s' % (com_dirpath, com_fn)
                 igG = ig.Graph.Read_Pickle('%s/%s' % (com_dirpath, com_fn))
                 drivers = [v['name'] for v in igG.vs]
                 weights = [e['weight'] for e in igG.es]

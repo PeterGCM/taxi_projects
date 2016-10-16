@@ -23,7 +23,9 @@ dw_filtered_dir = '%s/%s' % (dw_graph_dir, 'dw_filtered'); dw_filtered_prefix = 
 group_dir = '%s/%s' % (taxi_data, 'group'); group_prepix = 'group-'
 group_summary_fpath = '%s/%s.csv' % (group_dir , 'group-summary')
 #
-CHOSEN_PERCENTILE = 99.99
+CHOSEN_PERCENTILE = 99.995
+MIN_NUM_DRIVERS = 10
+com_drivers_dir = '%s/%s' % (taxi_data, 'com_drivers'); com_drivers_prefix = 'com-drivers-'
 
 
 
