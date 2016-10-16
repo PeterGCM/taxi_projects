@@ -31,7 +31,7 @@ def run():
 
 def process_files(y):
     yyyy = '20%02d' % y
-    com_trips_fpath = '%s/%s/%s%s.pkl' % (com_trips_dir, percentile_dirname, com_trips_prefix, yyyy)
+    com_trips_fpath = '%s/%s/%s%s.csv' % (com_trips_dir, percentile_dirname, com_trips_prefix, yyyy)
     if check_path_exist(com_trips_fpath):
         return None
     with open(com_trips_fpath, 'wt') as w_csvfile:
