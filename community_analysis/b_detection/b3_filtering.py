@@ -10,7 +10,7 @@ from taxi_common.log_handling_functions import get_logger
 import numpy as np
 
 logger = get_logger('filtering')
-percentiles = list(np.arange(99.9, 100, 0.01))
+percentiles = list(np.arange(99.90, 100, 0.001))
 
 
 def run():
@@ -40,10 +40,10 @@ def handle_month3(dw_month3_fn, month3_dw_graph):
     #
     logger.info('Start pickling %s' % dw_month3_fn)
     for pv in percentiles:
-        percentile_dir = '%s/percentile(%.2f)' % (dw_filtered_dir, pv)
+        percentile_dir = '%s/percentile(%.3f)' % (dw_filtered_dir, pv)
         check_dir_create(percentile_dir)
         fpath = '%s/%s%s-%s-%s.pkl' % \
-                            (percentile_dir, dw_filtered_prefix, 'percentile(%.2f)' % pv, yyyy, duration)
+                            (percentile_dir, dw_filtered_prefix, 'percentile(%.3f)' % pv, yyyy, duration)
         save_pkl_threading(fpath, month3_filtered_dw_graph[pv])
 
 
@@ -54,14 +54,14 @@ def handle_year(dw_year_fn, year_dw_graph):
     for i, th in enumerate(threshold_values):
         pv = percentiles[i]
         year_filtered_dw_graph = {}
-        logger.info('Start filtering %s , percentile(%.2f)' % (year_dw_graph, pv))
+        logger.info('Start filtering %s , percentile(%.3f)' % (year_dw_graph, pv))
         for k, v in year_dw_graph.iteritems():
             if th < v:
                 year_filtered_dw_graph[k] = v
         percentile_dir = '%s/percentile(%.2f)' % (dw_filtered_dir, pv)
         check_dir_create(percentile_dir)
         fpath = '%s/%s%s-%s.pkl' % \
-                (percentile_dir, dw_filtered_prefix, 'percentile(%.2f)' % pv, yyyy)
+                (percentile_dir, dw_filtered_prefix, 'percentile(%.3f)' % pv, yyyy)
         logger.info('Start pickling %s , percentile(%.2f)' % (year_dw_graph, pv))
         save_pickle_file(fpath, year_filtered_dw_graph)
 
