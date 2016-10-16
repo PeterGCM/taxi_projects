@@ -21,12 +21,15 @@ def run():
     check_dir_create(com_trips_dir)
     check_dir_create('%s/%s' % (com_trips_dir, percentile_dirname))
     #
-    init_multiprocessor(4)
-    count_num_jobs = 0
-    for y in range(9, 13):
-        put_task(process_files, [y])
-        count_num_jobs += 1
-    end_multiprocessor(count_num_jobs)
+    process_files(9)
+
+
+    # init_multiprocessor(4)
+    # count_num_jobs = 0
+    # for y in range(9, 13):
+    #     put_task(process_files, [y])
+    #     count_num_jobs += 1
+    # end_multiprocessor(count_num_jobs)
 
 
 def process_files(y):
@@ -42,7 +45,7 @@ def process_files(y):
         writer.writerow(['time', 'did',
                          'day', 'timeFrame', 'zi', 'zj',
                          'distance', 'duration', 'fare',
-                         'prevComDriver'])
+                         'comName', 'prevComDriver'])
     #
     for trips_fn in get_all_files(ft_trips_dir, '%s%02d' % (ft_trips_prefix, y), '.csv'):
         logger.info('Start handing %s' % trips_fn)
@@ -71,13 +74,13 @@ def process_files(y):
                 prev_com_driver = drivers[did].update_linkage(t, z)
                 #
                 cn = did_gn[did]
-                with open(com_drivers_fpath, 'a') as w_csvfile:
+                with open(com_trips_fpath, 'a') as w_csvfile:
                     writer = csv.writer(w_csvfile, lineterminator='\n')
                     new_row = [
                         t, did,
                         day, row[hid['timeFrame']], zi, zj,
                         row[hid['distance']], row[hid['duration']], row[hid['fare']],
-                        prev_com_driver]
+                        cn, prev_com_driver]
                     writer.writerow(new_row)
 
 
