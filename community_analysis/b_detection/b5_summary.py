@@ -19,7 +19,7 @@ def run():
         writer.writerow(['percentile', 'period', 'groupName', 'numDrivers', 'tieStrength'])
     for group_per_dir in get_all_directories(group_dir):
         for period_dir in get_all_directories('%s/%s' % (group_dir, group_per_dir)):
-            for com_fn in get_all_files(period_dir, '', '.pkl'):
+            for com_fn in get_all_files('%s/%s/%s' % (group_dir, group_per_dir, period_dir), '', '.pkl'):
                 fn_components = com_fn[:-len('.pkl')].split('-')
                 logger.info('processing %s' % com_fn)
                 if len(fn_components) == 5:
