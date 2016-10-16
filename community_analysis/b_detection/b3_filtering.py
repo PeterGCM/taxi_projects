@@ -10,7 +10,7 @@ from taxi_common.log_handling_functions import get_logger
 import numpy as np
 
 logger = get_logger('filtering')
-percentiles = list(np.arange(99.90, 100, 0.001))
+percentiles = list(np.arange(99.99, 100, 0.001))
 
 
 def run():

@@ -22,7 +22,8 @@ month3_aggre_summary_fpath = '%s/%s.csv' % (dw_aggreg_dir, 'month3-aggretation-s
 dw_filtered_dir = '%s/%s' % (dw_graph_dir, 'dw_filtered'); dw_filtered_prefix = 'dw-filtered-'
 group_dir = '%s/%s' % (taxi_data, 'group'); group_prepix = 'group-'
 group_summary_fpath = '%s/%s.csv' % (group_dir , 'group-summary')
-
+#
+CHOSEN_PERCENTILE = 99.99
 
 
 
