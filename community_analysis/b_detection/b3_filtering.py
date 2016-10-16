@@ -10,7 +10,7 @@ from taxi_common.log_handling_functions import get_logger
 import numpy as np
 
 logger = get_logger('filtering')
-percentiles = list(np.arange(99.99, 100, 0.001))
+percentiles = [pv for pv in np.arange(99.99, 100, 0.001) if pv < 100]
 
 
 def run():
