@@ -21,15 +21,13 @@ def run():
     check_dir_create(com_trips_dir)
     check_dir_create('%s/%s' % (com_trips_dir, percentile_dirname))
     #
-    process_files(9)
-
-
-    # init_multiprocessor(4)
-    # count_num_jobs = 0
-    # for y in range(9, 13):
-    #     put_task(process_files, [y])
-    #     count_num_jobs += 1
-    # end_multiprocessor(count_num_jobs)
+    # process_files(9)
+    init_multiprocessor(4)
+    count_num_jobs = 0
+    for y in range(9, 13):
+        put_task(process_files, [y])
+        count_num_jobs += 1
+    end_multiprocessor(count_num_jobs)
 
 
 def process_files(y):
