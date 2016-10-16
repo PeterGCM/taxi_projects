@@ -8,14 +8,13 @@ from taxi_common.file_handling_functions import check_dir_create, get_all_direct
 from taxi_common.log_handling_functions import get_logger
 #
 import igraph as ig
-
+#
 logger = get_logger('com_drivers')
+percentile_dirname = 'percentile(%.3f)' % CHOSEN_PERCENTILE
 
 
 def run():
     check_dir_create(com_drivers_dir)
-    #
-    percentile_dirname = 'percentile(%.3f)' % CHOSEN_PERCENTILE
     check_dir_create('%s/%s' % (com_drivers_dir, percentile_dirname))
     #
     percentile_dirpath = '%s/%s' % (group_dir, percentile_dirname)
@@ -33,15 +32,6 @@ def run():
                 continue
             year_communities[g_name] = drivers
         save_pickle_file(year_com_fpath, year_communities)
-
-
-
-
-
-
-
-
-
 
 
 if __name__ == '__main__':

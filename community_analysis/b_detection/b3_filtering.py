@@ -58,7 +58,7 @@ def handle_year(dw_year_fn, year_dw_graph):
         for k, v in year_dw_graph.iteritems():
             if th < v:
                 year_filtered_dw_graph[k] = v
-        percentile_dir = '%s/percentile(%.2f)' % (dw_filtered_dir, pv)
+        percentile_dir = '%s/percentile(%.3f)' % (dw_filtered_dir, pv)
         check_dir_create(percentile_dir)
         fpath = '%s/%s%s-%s.pkl' % \
                 (percentile_dir, dw_filtered_prefix, 'percentile(%.3f)' % pv, yyyy)
