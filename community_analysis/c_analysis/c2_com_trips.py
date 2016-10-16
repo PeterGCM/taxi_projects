@@ -31,6 +31,9 @@ def run():
 
 def process_files(y):
     yyyy = '20%02d' % y
+    com_drivers_fpath = '%s/%s/%s%s.pkl' % (com_drivers_dir, percentile_dirname, com_drivers_prefix, yyyy)
+    com_drivers = load_pickle_file(com_drivers_fpath)
+    #
     com_trips_fpath = '%s/%s/%s%s.csv' % (com_trips_dir, percentile_dirname, com_trips_prefix, yyyy)
     if check_path_exist(com_trips_fpath):
         return None
@@ -41,9 +44,6 @@ def process_files(y):
                          'distance', 'duration', 'fare',
                          'prevComDriver'])
     #
-    com_drivers_fpath = '%s/%s/%s%s.pkl' % (com_drivers_dir, percentile_dirname, com_drivers_prefix, yyyy)
-    com_drivers = load_pickle_file(com_drivers_fpath)
-    #
     for trips_fn in get_all_files(ft_trips_dir, '%s%02d' % (ft_trips_prefix, y), '.csv'):
         logger.info('Start handing %s' % trips_fn)
         did_gn, drivers = {}, {}
@@ -52,6 +52,7 @@ def process_files(y):
                 did_gn[did] = gn
                 drivers[did] = ca_driver_with_com_prevD(did, members)
         zones = generate_zones()
+        handling_day = 0
         with open('%s/%s' % (ft_trips_dir, trips_fn), 'rb') as r_csvfile:
             reader = csv.reader(r_csvfile)
             headers = reader.next()
@@ -59,9 +60,12 @@ def process_files(y):
             for row in reader:
                 did = int(row[hid['did']])
                 t = eval(row[hid['time']])
-                # Find a targeted zone
+                day = int(row[hid['day']])
                 zi, zj = int(row[hid['zi']]), int(row[hid['zj']])
                 z = zones[(zi, zj)]
+                if handling_day < day:
+                    logger.info('%dth handing %s' % (day, trips_fn))
+                    handling_day = day
                 if not drivers.has_key(did):
                     continue
                 prev_com_driver = drivers[did].update_linkage(t, z)
@@ -71,7 +75,7 @@ def process_files(y):
                     writer = csv.writer(w_csvfile, lineterminator='\n')
                     new_row = [
                         t, did,
-                        row[hid['day']], row[hid['timeFrame']], zi, zj,
+                        day, row[hid['timeFrame']], zi, zj,
                         row[hid['distance']], row[hid['duration']], row[hid['fare']],
                         prev_com_driver]
                     writer.writerow(new_row)
