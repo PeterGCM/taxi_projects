@@ -22,36 +22,36 @@ def draw_service_locations(df):
     adjusts = [dx_unit / float(2) + dx_unit * i - xmid for i in xrange(5)]
     color_map = ['red', 'green', 'blue', 'orange', 'black']
     #
-    sloc = df.groupby(['cn', 'si', 'sj']).count()['did'].to_frame('total-num-trip').reset_index()
-    com_indices = set(df['cn'])
+    sloc = df.groupby(['comName', 'zi', 'zj']).count()['did'].to_frame('total-num-trip').reset_index()
+    com_indices = set(df['comName'])
     map_osm = folium.Map(location=[yc, xc], zoom_start=11)
     top_locations = {}
     for i, cid in enumerate(com_indices):
-        com_df = sloc[(sloc['cn'] == cid)]
-        for j, (_, si, sj, trip_num) in enumerate(com_df.sort('total-num-trip', ascending=False).values):
+        com_df = sloc[(sloc['comName'] == cid)]
+        for j, (_, zi, zj, trip_num) in enumerate(com_df.sort('total-num-trip', ascending=False).values):
             if not top_locations.has_key(cid):
-                top_locations[cid] = [i, (si, sj)]
-            y, x = zones[(si, sj)].cCoor_gps
+                top_locations[cid] = [i, (zi, zj)]
+            y, x = zones[(zi, zj)].cCoor_gps
             folium.Marker((y, x + adjusts[i]),
                           popup='%s %d' % (cid, j + 1),
                           icon=folium.Icon(color=color_map[i])
                           ).add_to(map_osm)
             if j == 4:
                 break
-    for cid, (color_i, (si, sj)) in top_locations.iteritems():
-        top_loc_df = df[(df['cn'] == cid) & (df['si'] == si) & (df['sj'] == sj)]
-        gps_loc_df = top_loc_df.groupby(['start-long', 'start-lat']).count()['did'].to_frame(
-            'total-num-trip').reset_index()
-        for j, (gps_long, gps_lat, trip_num) in enumerate(gps_loc_df.sort('total-num-trip', ascending=False).values):
-            folium.RegularPolygonMarker(
-                [gps_lat, gps_long],
-                color=color_map[color_i],
-                fill_color=color_map[color_i],
-                number_of_sides=3 + j,
-                radius=5
-            ).add_to(map_osm)
-            if j == 4:
-                break
+    # for cid, (color_i, (zi, zj)) in top_locations.iteritems():
+    #     top_loc_df = df[(df['cn'] == cid) & (df['zi'] == zi) & (df['zj'] == zj)]
+    #     gps_loc_df = top_loc_df.groupby(['start-long', 'start-lat']).count()['did'].to_frame(
+    #         'total-num-trip').reset_index()
+    #     for j, (gps_long, gps_lat, trip_num) in enumerate(gps_loc_df.sort('total-num-trip', ascending=False).values):
+    #         folium.RegularPolygonMarker(
+    #             [gps_lat, gps_long],
+    #             color=color_map[color_i],
+    #             fill_color=color_map[color_i],
+    #             number_of_sides=3 + j,
+    #             radius=5
+    #         ).add_to(map_osm)
+    #         if j == 4:
+    #             break
     map_osm = draw_grid_on_map(map_osm, x_points, y_points)
     return map_osm
 
@@ -177,4 +177,9 @@ def generate_3D_graph(labels, group, layt, Edges):
     return fig
 
 if __name__ == '__main__':
-    print get_com_stats_summary()
+    import pandas as pd
+    df = pd.read_csv('temp.csv')
+    draw_service_locations(df)
+    # print df
+
+    # print get_com_stats_summary()
