@@ -50,21 +50,21 @@ def process_file(yymm):
         year_distribution_fpath = '%s/%s%s.pkl' % (tf_zone_distribution_dir, tf_zone_distribution_prefix, yyyy)
         individual_year_distribution = load_pickle_file(year_distribution_fpath)
         #
-        year_counting = load_pickle_file('%s/%s%s.pkl' % (tf_zone_counting_dir, tf_zone_counting_prefix, yyyy))
-        year_count_aggregation = {}
-        for did, counting in year_counting.iteritems():
-            for tf_zone, num_trips in counting.iteritems():
-                if not year_count_aggregation.has_key(tf_zone):
-                    year_count_aggregation[tf_zone] = 0
-                year_count_aggregation[tf_zone] += num_trips
-        #
-        community_year_distribution = {}
-        year_num_trips = sum(year_count_aggregation.values())
-        for tf_zone, tf_zone_counting in year_count_aggregation.iteritems():
-            community_year_distribution[tf_zone] = tf_zone_counting / float(year_num_trips)
+        # year_counting = load_pickle_file('%s/%s%s.pkl' % (tf_zone_counting_dir, tf_zone_counting_prefix, yyyy))
+        # year_count_aggregation = {}
+        # for did, counting in year_counting.iteritems():
+        #     for tf_zone, num_trips in counting.iteritems():
+        #         if not year_count_aggregation.has_key(tf_zone):
+        #             year_count_aggregation[tf_zone] = 0
+        #         year_count_aggregation[tf_zone] += num_trips
+        # #
+        # community_year_distribution = {}
+        # year_num_trips = sum(year_count_aggregation.values())
+        # for tf_zone, tf_zone_counting in year_count_aggregation.iteritems():
+        #     community_year_distribution[tf_zone] = tf_zone_counting / float(year_num_trips)
         logger.info('Finish year distribution loading')
         #
-        drivers, pair_frequency = {}, {}
+        drivers = {}
         zones = generate_zones()
         handling_day = 0
         with open(ft_trips_fpath, 'rb') as r_csvfile:
@@ -88,7 +88,7 @@ def process_file(yymm):
                 if not individual_year_distribution.has_key(did):
                     continue
                 if not drivers.has_key(did):
-                    drivers[did] = ca_driver_with_distribution(did, individual_year_distribution[did], community_year_distribution)
+                    drivers[did] = ca_driver_with_distribution(did, individual_year_distribution[did], individual_year_distribution[did])
                 drivers[did].update_linkWeight(t, z)
         logger.info('Start %s aggregation' % yymm)
         year_dw_graph = []

@@ -24,10 +24,10 @@ class ca_zone(zone):
 
 
 class ca_driver_with_distribution(driver):
-    def __init__(self, did, individual_distribution, community_distribution):
+    def __init__(self, did, individual_distribution, group_distribution):
         driver.__init__(self, did)
         self.individual_distribution = individual_distribution
-        self.community_distribution = community_distribution
+        self.group_distribution = group_distribution
         self.num_inDay = {}
         self.link_weight, self.link_frequency = {}, {}
         self.num_pickup = 0
@@ -49,11 +49,11 @@ class ca_driver_with_distribution(driver):
             cur_dt = datetime.datetime.fromtimestamp(t)
             k = (cur_dt.hour, z.zi, z.zj)
             curD_prob = self.individual_distribution[k]
-            if not driverPrev.community_distribution.has_key(k):
-                prevD_com_prob = 0.0
+            if not driverPrev.group_distribution.has_key(k):
+                prevD_group_prob = 0.0
             else:
-                prevD_com_prob = driverPrev.community_distribution[k]
-            self.link_weight[driverPrev.did] += max(0, prevD_com_prob - curD_prob) * self.link_frequency[driverPrev.did]
+                prevD_group_prob = driverPrev.group_distribution[k]
+            self.link_weight[driverPrev.did] += max(0, prevD_group_prob - curD_prob) * self.link_frequency[driverPrev.did]
             self.num_inDay[driverPrev.did] += 1
         z.add_driver_in_logQ(t, self)
         self.num_pickup += 1
