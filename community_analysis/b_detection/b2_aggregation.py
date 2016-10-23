@@ -36,7 +36,7 @@ def run():
                                 'weightTotal', 'weightAverage', 'weightSD',
                                 'weightMedian', 'weightMin', 'weightMax'])
 
-    for y in range(9, 13):
+    for y in range(9, 10):
         yyyy = '20%02d' % y
         logger.info('Handle %s' % yyyy)
         year_aggregation_fpath = '%s/%s%s.pkl' % (dw_aggreg_dir, dw_aggreg_prefix, yyyy)
@@ -120,7 +120,7 @@ def run():
             month3_str = ''.join(['M%s' % yymm[2:] for yymm in yymms])
             month3_aggregation_fpath = '%s/%s%s-%s.pkl' % (dw_aggreg_dir, dw_aggreg_prefix, yyyy, month3_str)
             logger.info('Saving pickle file %s' % month3_str)
-            save_pkl_threading(month3_aggregation_fpath, month3_dw_graph)
+            save_pkl_threading(month3_aggregation_fpath, {k: v for k, v in month3_dw_graph.iteritems() if v > 0.0})
             #
             logger.info('Generate month3 summary statistics %s' % yyyy)
             num_drivers = len(month3_driver_pickup)
@@ -135,7 +135,7 @@ def run():
                                     weights.sum(), weights.mean(), weights.std(),
                                     np.median(weights), weights.min(), weights.max()])
         logger.info('Saving year_dw_graph0 %s' % yyyy)
-        save_pickle_file(year_aggregation_fpath, year_dw_graph)
+        save_pickle_file(year_aggregation_fpath, {k: v for k, v in year_dw_graph.iteritems() if v > 0.0})
         #
         logger.info('Generate year summary statistics %s' % yyyy)
         num_drivers = len(year_driver_pickup)
