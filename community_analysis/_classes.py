@@ -49,7 +49,7 @@ class ca_driver_with_distribution(driver):
             cur_dt = datetime.datetime.fromtimestamp(t)
             k = (cur_dt.hour, z.zi, z.zj)
             curD_prob = self.individual_distribution[k]
-            if not driverPrev.distribution.has_key(k):
+            if not driverPrev.community_distribution.has_key(k):
                 prevD_com_prob = 0.0
             else:
                 prevD_com_prob = driverPrev.community_distribution[k]
