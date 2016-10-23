@@ -93,7 +93,7 @@ def process_file(yymm):
         logger.info('Start %s aggregation' % yymm)
         year_dw_graph = []
         for did, d in drivers.iteritems():
-            year_dw_graph.append((did, d.num_pickup, d.weighted_link))
+            year_dw_graph.append((did, d.num_pickup, d.link_weight))
         logger.info('Start %s pickling' % yymm)
         save_pickle_file(year_dw_graph_fpath, year_dw_graph)
     except Exception as _:
