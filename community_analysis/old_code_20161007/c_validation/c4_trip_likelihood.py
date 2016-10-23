@@ -71,7 +71,7 @@ def run():
                         pass
                 except KeyError:
                     pass
-                prevD = drivers[did].update_linkage(t, z)
+                prevD = drivers[did].update_linkWeight(t, z)
                 d_prob = year_individual_prob[did][hh, si, sj]
                 c_prob = com_dist[cn][hh, si, sj]
                 #

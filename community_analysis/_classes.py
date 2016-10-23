@@ -1,4 +1,5 @@
 from community_analysis import THRESHOLD_VALUE
+from community_analysis import DEPRECIATION_LAMBDA
 
 from taxi_common._classes import zone
 from taxi_common._classes import driver
@@ -23,13 +24,15 @@ class ca_zone(zone):
 
 
 class ca_driver_with_distribution(driver):
-    def __init__(self, did, distribution):
+    def __init__(self, did, individual_distribution, community_distribution):
         driver.__init__(self, did)
-        self.distribution = distribution
-        self.weighted_link = {}
+        self.individual_distribution = individual_distribution
+        self.community_distribution = community_distribution
+        self.num_inDay = {}
+        self.link_weight, self.link_frequency = {}, {}
         self.num_pickup = 0
 
-    def update_linkage(self, t, z):
+    def update_linkWeight(self, t, z):
         z.update_logQ(t)
         updated_drivers = set()
         for _, driverPrev in z.logQ:
@@ -39,18 +42,28 @@ class ca_driver_with_distribution(driver):
                 continue
             else:
                 updated_drivers.add(driverPrev)
-            if not self.weighted_link.has_key(driverPrev.did):
-                self.weighted_link[driverPrev.did] = 0.0
+            if not self.link_weight.has_key(driverPrev.did):
+                self.num_inDay[driverPrev.did] = 0
+                self.link_weight[driverPrev.did] = 0.0
+                self.link_frequency[driverPrev.did] = 0.0
             cur_dt = datetime.datetime.fromtimestamp(t)
             k = (cur_dt.hour, z.zi, z.zj)
-            curD_prob = self.distribution[k]
+            curD_prob = self.individual_distribution[k]
             if not driverPrev.distribution.has_key(k):
-                prevD_prob = 0.0
+                prevD_com_prob = 0.0
             else:
-                prevD_prob = driverPrev.distribution[k]
-            self.weighted_link[driverPrev.did] += max(0, prevD_prob - curD_prob)
+                prevD_com_prob = driverPrev.community_distribution[k]
+            self.link_weight[driverPrev.did] += max(0, prevD_com_prob - curD_prob) * self.link_frequency[driverPrev.did]
+            self.num_inDay[driverPrev.did] += 1
         z.add_driver_in_logQ(t, self)
         self.num_pickup += 1
+
+    def update_linkFrequency(self):
+        for prev_did in self.link_frequency.iterkeys():
+            self.link_frequency[prev_did] = DEPRECIATION_LAMBDA * self.link_frequency[prev_did] + self.num_inDay[prev_did]
+        #
+        for prev_did in self.num_inDay.iterkeys():
+            self.num_inDay[prev_did] = 0
 
 
 class ca_driver_with_com_prevD(driver):

@@ -1,6 +1,7 @@
 import __init__
 #
 from community_analysis import tf_zone_distribution_dir, tf_zone_distribution_prefix
+from community_analysis import tf_zone_counting_dir, tf_zone_counting_prefix
 from community_analysis import dw_graph_dir, dw_graph_prefix
 from community_analysis import ft_trips_dir, ft_trips_prefix
 from community_analysis._classes import ca_driver_with_distribution, ca_zone
@@ -17,7 +18,7 @@ logger = get_logger('dw_graph')
 def run():
     check_dir_create(dw_graph_dir)
     #
-    init_multiprocessor(8)
+    init_multiprocessor(6)
     count_num_jobs = 0
     for y in range(10, 12):
         for m in range(1, 13):
@@ -47,10 +48,23 @@ def process_file(yymm):
         #
         yyyy = '20%s' % yymm[:2]
         year_distribution_fpath = '%s/%s%s.pkl' % (tf_zone_distribution_dir, tf_zone_distribution_prefix, yyyy)
-        year_distribution = load_pickle_file(year_distribution_fpath)
+        individual_year_distribution = load_pickle_file(year_distribution_fpath)
+        #
+        year_counting = load_pickle_file('%s/%s%s.pkl' % (tf_zone_counting_dir, tf_zone_counting_prefix, yyyy))
+        year_count_aggregation = {}
+        for did, counting in year_counting.iteritems():
+            for tf_zone, num_trips in counting.iteritems():
+                if not year_count_aggregation.has_key(tf_zone):
+                    year_count_aggregation[tf_zone] = 0
+                year_count_aggregation[tf_zone] += num_trips
+        #
+        community_year_distribution = {}
+        year_num_trips = sum(year_count_aggregation.values())
+        for tf_zone, tf_zone_counting in year_count_aggregation.iteritems():
+            community_year_distribution[tf_zone] = tf_zone_counting / float(year_num_trips)
         logger.info('Finish year distribution loading')
         #
-        drivers = {}
+        drivers, pair_frequency = {}, {}
         zones = generate_zones()
         handling_day = 0
         with open(ft_trips_fpath, 'rb') as r_csvfile:
@@ -62,6 +76,8 @@ def process_file(yymm):
                 cur_dt = datetime.datetime.fromtimestamp(t)
                 if handling_day != cur_dt.day:
                     logger.info('Processing %s %dth day' % (yymm, cur_dt.day))
+                    for d in drivers.itervalues():
+                        d.update_linkFrequency()
                     handling_day = cur_dt.day
                 did = int(row[hid['did']])
                 zi, zj = int(row[hid['zi']]), int(row[hid['zj']])
@@ -69,11 +85,11 @@ def process_file(yymm):
                     z = zones[(zi, zj)]
                 except KeyError:
                     continue
-                if not year_distribution.has_key(did):
+                if not individual_year_distribution.has_key(did):
                     continue
                 if not drivers.has_key(did):
-                    drivers[did] = ca_driver_with_distribution(did, year_distribution[did])
-                drivers[did].update_linkage(t, z)
+                    drivers[did] = ca_driver_with_distribution(did, individual_year_distribution[did], community_year_distribution)
+                drivers[did].update_linkWeight(t, z)
         logger.info('Start %s aggregation' % yymm)
         year_dw_graph = []
         for did, d in drivers.iteritems():

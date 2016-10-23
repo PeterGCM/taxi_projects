@@ -74,7 +74,7 @@ def for_multiprocessor(fn):
                     except KeyError:
                         pass
                     if not drivers.has_key(did): drivers[did] = ca_driver_with_distribution(did)
-                    by_com = drivers[did].update_linkage(t, z)
+                    by_com = drivers[did].update_linkWeight(t, z)
                     #
                     if did_cn.has_key(did):
                         cn = did_cn[did]

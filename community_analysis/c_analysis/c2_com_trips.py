@@ -69,7 +69,7 @@ def process_files(y):
                     handling_day = day
                 if not drivers.has_key(did):
                     continue
-                prev_com_driver = drivers[did].update_linkage(t, z)
+                prev_com_driver = drivers[did].update_linkWeight(t, z)
                 #
                 cn = did_gn[did]
                 with open(com_trips_fpath, 'a') as w_csvfile:

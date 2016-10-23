@@ -64,7 +64,7 @@ def handle_a_timeslot(yyyymmdd_t):
                 continue
             #
             if not drivers.has_key(did): drivers[did] = cd_driver(did)
-            drivers[did].update_linkage(t, z)
+            drivers[did].update_linkWeight(t, z)
             logs_num += 1
     day_linkage = []
     for did0, d in drivers.iteritems():
@@ -122,7 +122,7 @@ def process_files(yymm):
                     continue
                 #
                 if not drivers.has_key(did): drivers[did] = cd_driver(did)
-                drivers[did].update_linkage(t, z)
+                drivers[did].update_linkWeight(t, z)
                 logs_num += 1
         day_linkage = []
         for did0, d in drivers.iteritems():
