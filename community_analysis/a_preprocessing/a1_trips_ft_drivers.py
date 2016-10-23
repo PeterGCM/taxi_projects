@@ -19,7 +19,7 @@ def run():
     #
     init_multiprocessor(11)
     count_num_jobs = 0
-    for y in range(10, 12):
+    for y in range(9, 13):
         for m in range(1, 13):
             yymm = '%02d%02d' % (y, m)
             # yymm = '12%02d' % mm
@@ -54,7 +54,8 @@ def process_file(yymm):
         writer = csv.writer(w_csvfile, lineterminator='\n')
         writer.writerow(['time', 'did',
                          'day', 'timeFrame', 'zi', 'zj',
-                         'distance', 'duration', 'fare'])
+                         'distance', 'duration', 'fare',
+                         'start-long', 'start-lat'])
     with open(normal_fpath, 'rb') as r_csvfile1:
         reader1 = csv.reader(r_csvfile1)
         headers1 = reader1.next()
@@ -96,7 +97,9 @@ def process_file(yymm):
                     writer = csv.writer(w_csvfile, lineterminator='\n')
                     writer.writerow([t, did,
                                      cur_dt.day, cur_dt.hour, zi, zj,
-                                     eval(row1[hid1['distance']]), row1[hid1['duration']], row1[hid1['fare']]])
+                                     row1[hid1['distance']], row1[hid1['duration']], row1[hid1['fare']],
+                                     row1[hid1['start-long']], row1[hid1['start-lat']]
+                                     ])
 
 
 if __name__ == '__main__':
