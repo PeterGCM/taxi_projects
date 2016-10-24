@@ -1,6 +1,6 @@
 import __init__
 #
-from community_analysis import ft_trips_dir, ft_trips_prefix
+from community_analysis import ss_trips_dir, ss_trips_prefix
 from community_analysis import tf_zone_counting_dir, tf_zone_counting_prefix
 #
 from taxi_common.file_handling_functions import check_dir_create, save_pickle_file, check_path_exist
@@ -24,16 +24,10 @@ def run():
     end_multiprocessor(count_num_jobs)
 
 
-    # for yymm in ['1012', '1112']:
-    #     put_task(process_file, [yymm])
-    #     count_num_jobs += 1
-    # end_multiprocessor(count_num_jobs)
-
-
 def process_file(yymm):
     print 'Handle the file; %s' % yymm
     #
-    ft_trips_fpath = '%s/%s%s.csv' % (ft_trips_dir, ft_trips_prefix, yymm)
+    ft_trips_fpath = '%s/%s%s.csv' % (ss_trips_dir, ss_trips_prefix, yymm)
     if not check_path_exist(ft_trips_fpath):
         print 'The file X exists; %s' % yymm
         return None

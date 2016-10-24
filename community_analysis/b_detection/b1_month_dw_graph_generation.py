@@ -3,7 +3,7 @@ import __init__
 from community_analysis import tf_zone_distribution_dir, tf_zone_distribution_prefix
 from community_analysis import tf_zone_counting_dir, tf_zone_counting_prefix
 from community_analysis import dw_graph_dir, dw_graph_prefix
-from community_analysis import ft_trips_dir, ft_trips_prefix
+from community_analysis import ss_trips_dir, ss_trips_prefix
 from community_analysis._classes import ca_driver_with_distribution, ca_zone
 #
 from taxi_common.file_handling_functions import check_path_exist, load_pickle_file, save_pickle_file, check_dir_create
@@ -36,7 +36,7 @@ def run():
 def process_file(yymm):
     from traceback import format_exc
     try:
-        ft_trips_fpath = '%s/%s%s.csv' % (ft_trips_dir, ft_trips_prefix, yymm)
+        ft_trips_fpath = '%s/%s%s.csv' % (ss_trips_dir, ss_trips_prefix, yymm)
         if not check_path_exist(ft_trips_fpath):
             return None
         year_dw_graph_fpath = '%s/%s%s.pkl' % (dw_graph_dir, dw_graph_prefix, yymm)

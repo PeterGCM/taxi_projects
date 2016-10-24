@@ -1,6 +1,6 @@
 import __init__
 #
-from community_analysis import ft_trips_dir, ft_trips_prefix
+from community_analysis import ss_trips_dir, ss_trips_prefix
 from community_analysis import com_drivers_dir, com_drivers_prefix
 from community_analysis import com_trips_dir, com_trips_prefix
 from community_analysis import CHOSEN_PERCENTILE
@@ -45,7 +45,7 @@ def process_files(y):
                          'distance', 'duration', 'fare',
                          'comName', 'prevComDriver'])
     #
-    for trips_fn in get_all_files(ft_trips_dir, '%s%02d' % (ft_trips_prefix, y), '.csv'):
+    for trips_fn in get_all_files(ss_trips_dir, '%s%02d' % (ss_trips_prefix, y), '.csv'):
         logger.info('Start handing %s' % trips_fn)
         did_gn, drivers = {}, {}
         for gn, members in com_drivers.iteritems():
@@ -54,7 +54,7 @@ def process_files(y):
                 drivers[did] = ca_driver_with_com_prevD(did, members)
         zones = generate_zones()
         handling_day = 0
-        with open('%s/%s' % (ft_trips_dir, trips_fn), 'rb') as r_csvfile:
+        with open('%s/%s' % (ss_trips_dir, trips_fn), 'rb') as r_csvfile:
             reader = csv.reader(r_csvfile)
             headers = reader.next()
             hid = {h: i for i, h in enumerate(headers)}

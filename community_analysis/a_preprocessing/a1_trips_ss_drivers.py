@@ -3,7 +3,7 @@ import __init__
 from community_analysis import FRI, SAT, SUN
 from community_analysis import PM2, PM11
 from community_analysis import taxi_home
-from community_analysis import ft_trips_dir, ft_trips_prefix
+from community_analysis import ss_trips_dir, ss_trips_prefix
 #
 from taxi_common.file_handling_functions import load_pickle_file, check_dir_create, check_path_exist
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
@@ -15,7 +15,7 @@ import csv, datetime
 
 
 def run():
-    check_dir_create(ft_trips_dir)
+    check_dir_create(ss_trips_dir)
     #
     init_multiprocessor(4)
     count_num_jobs = 0
@@ -26,9 +26,6 @@ def run():
             # process_file(yymm)
             put_task(process_file, [yymm])
             count_num_jobs += 1
-    # for yymm in ['1012', '1112']:
-    #     put_task(process_file, [yymm])
-    #     count_num_jobs += 1
     end_multiprocessor(count_num_jobs)
 
 
@@ -46,16 +43,19 @@ def process_file(yymm):
     ft_drivers = load_pickle_file(ftd_list_fpath)
     x_points, y_points = get_sg_grid_xy_points()
     #
-    ft_trips_fpath = '%s/%s%s.csv' % (ft_trips_dir, ft_trips_prefix, yymm)
+    ft_trips_fpath = '%s/%s%s.csv' % (ss_trips_dir, ss_trips_prefix, yymm)
     if check_path_exist(ft_trips_fpath):
         print 'The file had already been processed; %s' % yymm
         return None
     with open(ft_trips_fpath, 'wt') as w_csvfile:
         writer = csv.writer(w_csvfile, lineterminator='\n')
-        writer.writerow(['time', 'did',
-                         'day', 'timeFrame', 'zi', 'zj',
-                         'distance', 'duration', 'fare',
-                         'start-long', 'start-lat'])
+        writer.writerow(['did',
+                         'timeFrame', 'zi', 'zj',
+                         'groupName', 'prevDriver',
+                         'time', 'day',
+                         'start-long', 'start-lat',
+                         'distance', 'duration', 'fare'])
+    drivers = {}
     with open(normal_fpath, 'rb') as r_csvfile1:
         reader1 = csv.reader(r_csvfile1)
         headers1 = reader1.next()
@@ -73,7 +73,7 @@ def process_file(yymm):
             #
             for row1 in reader1:
                 row2 = reader2.next()
-                did = row2[hid2['driver-id']]
+                did = eval(row2[hid2['driver-id']])
                 if did == '-1':
                     continue
                 #
@@ -93,12 +93,17 @@ def process_file(yymm):
                 if zi < 0 or zj < 0:
                     continue
                 #
+                if not drivers.has_key(did):
+                    drivers[did] = 'G(%d)' % len(drivers)
+                gn = drivers[did]
                 with open(ft_trips_fpath , 'a') as w_csvfile:
                     writer = csv.writer(w_csvfile, lineterminator='\n')
-                    writer.writerow([t, did,
-                                     cur_dt.day, cur_dt.hour, zi, zj,
-                                     row1[hid1['distance']], row1[hid1['duration']], row1[hid1['fare']],
-                                     row1[hid1['start-long']], row1[hid1['start-lat']]
+                    writer.writerow([did,
+                                     cur_dt.hour, zi, zj,
+                                     gn, None,
+                                     t, cur_dt.day,
+                                     row1[hid1['start-long']], row1[hid1['start-lat']],
+                                     row1[hid1['distance']], row1[hid1['duration']], row1[hid1['fare']]
                                      ])
 
 

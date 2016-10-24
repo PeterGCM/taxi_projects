@@ -1,6 +1,6 @@
 import __init__
 #
-from community_analysis import ft_trips_dir, ft_trips_prefix
+from community_analysis import ss_trips_dir, ss_trips_prefix
 from community_analysis import dw_graph_dir, dw_graph_prefix, dw_graph_above_avg_prefix, dw_graph_above_per75_prefix, \
     dw_graph_above_per90_prefix, dw_graph_above_per95_prefix, dw_graph_above_per99_prefix
 from community_analysis import year_aggre_summary_fpath

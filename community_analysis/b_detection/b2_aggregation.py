@@ -1,6 +1,6 @@
 import __init__
 #
-from community_analysis import ft_trips_dir, ft_trips_prefix
+from community_analysis import ss_trips_dir, ss_trips_prefix
 from community_analysis import dw_graph_dir, dw_graph_prefix
 from community_analysis import dw_aggreg_dir, dw_aggreg_prefix
 from community_analysis import year_aggre_summary_fpath, month3_aggre_summary_fpath
@@ -51,7 +51,7 @@ def run():
             if not check_path_exist(month_dw_graph_fpath):
                 continue
             #
-            ft_trips_fpath = '%s/%s%s.csv' % (ft_trips_dir, ft_trips_prefix, yymm)
+            ft_trips_fpath = '%s/%s%s.csv' % (ss_trips_dir, ss_trips_prefix, yymm)
             with open(ft_trips_fpath, 'rb') as r_csvfile:
                 reader = csv.reader(r_csvfile)
                 headers = reader.next()
@@ -89,7 +89,7 @@ def run():
                     next_month_fns.append(yymm_fn)
                     yymms.append(n_yymm)
                     #
-                    ft_trips_fpath = '%s/%s%s.csv' % (ft_trips_dir, ft_trips_prefix, n_yymm)
+                    ft_trips_fpath = '%s/%s%s.csv' % (ss_trips_dir, ss_trips_prefix, n_yymm)
                     with open(ft_trips_fpath, 'rb') as r_csvfile:
                         reader = csv.reader(r_csvfile)
                         headers = reader.next()

@@ -11,7 +11,7 @@ MON, TUE, WED, THR, FRI, SAT, SUN = range(7)
 PM2, PM11 = 14, 23
 THRESHOLD_VALUE = 30 * 60
 #
-ft_trips_dir = '%s/%s' % (taxi_data, 'trips_ft_drivers'); ft_trips_prefix = 'trips-ft-drivers-'
+ss_trips_dir = '%s/%s' % (taxi_data, 'trips_ss_drivers'); ss_trips_prefix = 'trips-ss-drivers-'
 tf_zone_counting_dir = '%s/%s' % (taxi_data, 'tf_zone_counting'); tf_zone_counting_prefix = 'tf-zone-counting-'
 tf_zone_distribution_dir = '%s/%s' % (taxi_data, 'tf_zone_distribution'); tf_zone_distribution_prefix = 'tf-zone-distribution-'
 #
