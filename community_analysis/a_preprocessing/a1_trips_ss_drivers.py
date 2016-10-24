@@ -6,12 +6,15 @@ from community_analysis import taxi_home
 from community_analysis import ss_trips_dir, ss_trips_prefix
 #
 from taxi_common.file_handling_functions import load_pickle_file, check_dir_create, check_path_exist
+from taxi_common.log_handling_functions import get_logger
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 from taxi_common.sg_grid_zone import get_sg_grid_xy_points
 from taxi_common import full_time_driver_dir, ft_drivers_prefix
 #
 from bisect import bisect
 import csv, datetime
+#
+logger = get_logger('trips_ss_drivers')
 
 
 def run():
@@ -30,12 +33,12 @@ def run():
 
 
 def process_file(yymm):
-    print 'handle the file; %s' % yymm
+    logger.info('handle the file; %s' % yymm)
     yy, mm = yymm[:2], yymm[2:]
     normal_fpath = '%s/20%s/%s/trips/trips-%s-normal.csv' % (taxi_home, yy, mm, yymm)
     ext_fpath = '%s/20%s/%s/trips/trips-%s-normal-ext.csv' % (taxi_home, yy, mm, yymm)
     if not check_path_exist(normal_fpath):
-        print 'The file X exists; %s' % yymm
+        logger.info('The file X exists; %s' % yymm)
         return None
     ftd_list_fpath = '%s/%s%s.pkl' % (full_time_driver_dir, ft_drivers_prefix, yymm)
     if not check_path_exist(ftd_list_fpath):
@@ -45,7 +48,7 @@ def process_file(yymm):
     #
     ss_trips_fpath = '%s/%s%s.csv' % (ss_trips_dir, ss_trips_prefix, yymm)
     if check_path_exist(ss_trips_fpath):
-        print 'The file had already been processed; %s' % yymm
+        logger.info('The file had already been processed; %s' % yymm)
         return None
     with open(ss_trips_fpath, 'wt') as w_csvfile:
         writer = csv.writer(w_csvfile, lineterminator='\n')
@@ -71,16 +74,20 @@ def process_file(yymm):
             # {'start-zone': 0, 'end-zone': 1, 'start-postal': 2, 'driver-id': 4, 'end-postal': 3}
             hid2 = {h: i for i, h in enumerate(headers2)}
             #
+            handling_day = 0
             for row1 in reader1:
                 row2 = reader2.next()
-                did = eval(row2[hid2['driver-id']])
-                if did == -1:
+                did = row2[hid2['driver-id']]
+                if did == '-1':
                     continue
                 #
                 if did not in ft_drivers:
                     continue
                 t = eval(row1[hid1['start-time']])
                 cur_dt = datetime.datetime.fromtimestamp(t)
+                if handling_day != cur_dt.day:
+                    handling_day = cur_dt.day
+                    logger.info('Processing %s %dth day' % (yymm, cur_dt.day))
                 if cur_dt.weekday() in [FRI, SAT, SUN]:
                     continue
                 if cur_dt.hour < PM2:
