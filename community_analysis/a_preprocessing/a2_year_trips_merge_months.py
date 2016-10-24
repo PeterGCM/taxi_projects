@@ -12,7 +12,7 @@ logger = get_logger('year_trip_merge_months')
 
 def run():
     #
-    for y in range(10, 11):
+    for y in range(10, 13):
         ss_year_trips_fpath = '%s/%s20%02d.csv' % (ss_trips_dir, ss_trips_prefix, y)
         if check_path_exist(ss_year_trips_fpath):
             continue
