@@ -81,6 +81,10 @@ def get_created_time(path):
     return os.path.getctime(path)
 
 
+def get_modified_time(path):
+    return os.path.getmtime(path)
+
+
 def get_fn_from_dir(dpath, filtering_prefix, filtering_postfix):
     target_fn = None
     for fn in get_all_files(dpath, '', ''):
