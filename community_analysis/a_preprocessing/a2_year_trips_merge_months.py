@@ -58,7 +58,11 @@ if __name__ == '__main__':
             last_fpath = '%s/%s' % (ss_trips_dir, Y12[-1])
             if time.time() - get_modified_time(last_fpath) > 5 * 60:
                 run()
-        if len(Y09) == 11 and len(Y10) == 11 and len(Y11) == 7 and len(Y12) == 9:
+        for y in range(9, 13):
+            ss_year_trips_fpath = '%s/%s20%02d.csv' % (ss_trips_dir, ss_trips_prefix, y)
+            if not check_path_exist(ss_year_trips_fpath):
+                break
+        else:
             break
         logger.info('Falling sleep')
         time.sleep(20 * 60)
