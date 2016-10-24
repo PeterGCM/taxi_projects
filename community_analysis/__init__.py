@@ -13,7 +13,8 @@ THRESHOLD_VALUE = 30 * 60
 #
 ss_trips_dir = '%s/%s' % (taxi_data, 'trips_ss_drivers'); ss_trips_prefix = 'trips-ss-drivers-'
 tf_zone_counting_dir = '%s/%s' % (taxi_data, 'tf_zone_counting')
-tf_zone_counting_individuals_prefix, tf_zone_counting_groups_prefix = 'tf-zone-counting-groups-'
+tf_zone_counting_individuals_prefix = 'tf-zone-counting-individuals-'
+tf_zone_counting_groups_prefix = 'tf-zone-counting-groups-'
 tf_zone_distribution_dir = '%s/%s' % (taxi_data, 'tf_zone_distribution'); tf_zone_distribution_prefix = 'tf-zone-distribution-'
 #
 DEPRECIATION_LAMBDA = 0.5
