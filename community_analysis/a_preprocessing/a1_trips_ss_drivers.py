@@ -43,11 +43,11 @@ def process_file(yymm):
     ft_drivers = load_pickle_file(ftd_list_fpath)
     x_points, y_points = get_sg_grid_xy_points()
     #
-    ft_trips_fpath = '%s/%s%s.csv' % (ss_trips_dir, ss_trips_prefix, yymm)
-    if check_path_exist(ft_trips_fpath):
+    ss_trips_fpath = '%s/%s%s.csv' % (ss_trips_dir, ss_trips_prefix, yymm)
+    if check_path_exist(ss_trips_fpath):
         print 'The file had already been processed; %s' % yymm
         return None
-    with open(ft_trips_fpath, 'wt') as w_csvfile:
+    with open(ss_trips_fpath, 'wt') as w_csvfile:
         writer = csv.writer(w_csvfile, lineterminator='\n')
         writer.writerow(['did',
                          'timeFrame', 'zi', 'zj',
@@ -74,7 +74,7 @@ def process_file(yymm):
             for row1 in reader1:
                 row2 = reader2.next()
                 did = eval(row2[hid2['driver-id']])
-                if did == '-1':
+                if did == -1:
                     continue
                 #
                 if did not in ft_drivers:
@@ -96,7 +96,7 @@ def process_file(yymm):
                 if not drivers.has_key(did):
                     drivers[did] = 'G(%d)' % len(drivers)
                 gn = drivers[did]
-                with open(ft_trips_fpath , 'a') as w_csvfile:
+                with open(ss_trips_fpath, 'a') as w_csvfile:
                     writer = csv.writer(w_csvfile, lineterminator='\n')
                     writer.writerow([did,
                                      cur_dt.hour, zi, zj,
