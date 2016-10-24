@@ -100,7 +100,7 @@ def process_file(yymm):
                     writer = csv.writer(w_csvfile, lineterminator='\n')
                     writer.writerow([did,
                                      cur_dt.hour, zi, zj,
-                                     gn, None,
+                                     gn, 'None',
                                      t, cur_dt.day,
                                      row1[hid1['start-long']], row1[hid1['start-lat']],
                                      row1[hid1['distance']], row1[hid1['duration']], row1[hid1['fare']]
