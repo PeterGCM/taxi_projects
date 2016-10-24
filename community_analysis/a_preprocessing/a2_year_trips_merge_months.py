@@ -27,7 +27,7 @@ def run():
                              'distance', 'duration', 'fare'])
             for ss_trips_fpath in get_all_files(ss_trips_dir, '%s%02d' % (ss_trips_prefix, y), '.csv'):
                 logger.info('Handling %s' % ss_trips_fpath)
-                with open(ss_trips_fpath, 'rb') as r_csvfile:
+                with open('%s/%s' % (ss_trips_dir, ss_trips_fpath), 'rb') as r_csvfile:
                     reader = csv.reader(r_csvfile)
                     reader.next()
                     for row in reader:
