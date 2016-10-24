@@ -18,12 +18,12 @@ def run():
     #
     init_multiprocessor(8)
     count_num_jobs = 0
-    for y in range(9, 12):
+    for y in range(9, 13):
         for m in range(1, 13):
             yymm = '%02d%02d' % (y, m)
             # yymm = '12%02d' % mm
-            # process_file(yymm)
-            put_task(process_file, [yymm])
+            process_file(yymm)
+            # put_task(process_file, [yymm])
             count_num_jobs += 1
         yyyy = '20%02d' % (y)
         put_task(process_file, [yyyy])
@@ -63,7 +63,7 @@ def process_file(period):
                         individuals[did][tf, zi, zj] = 0
                 individuals[did][tf, zi, zj] += 1
                 #
-                if not groups.has_key(did):
+                if not groups.has_key(gn):
                     groups[gn] = {}
                     groups[gn][tf, zi, zj] = 0
                 else:
@@ -80,5 +80,7 @@ def process_file(period):
 
 
 if __name__ == '__main__':
-
+    # from taxi_common.file_handling_functions import load_pickle_file
+    # print load_pickle_file('tf-zone-counting-groups-0901.pkl')
+    # print load_pickle_file('tf-zone-counting-individuals-0901.pkl')
     run()
