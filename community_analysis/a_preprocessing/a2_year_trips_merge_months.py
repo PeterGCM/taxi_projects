@@ -25,15 +25,24 @@ def run():
                              'time', 'day',
                              'start-long', 'start-lat',
                              'distance', 'duration', 'fare'])
+            drivers = {}
             for ss_trips_fpath in get_all_files(ss_trips_dir, '%s%02d' % (ss_trips_prefix, y), '.csv'):
                 logger.info('Handling %s' % ss_trips_fpath)
                 with open('%s/%s' % (ss_trips_dir, ss_trips_fpath), 'rb') as r_csvfile:
                     reader = csv.reader(r_csvfile)
-                    reader.next()
+                    headers = reader.next()
+                    hid = {h: i for i, h in enumerate(headers)}
                     for row in reader:
-                        writer.writerow(row)
-
-
+                        did = row[hid['did']]
+                        if not drivers.has_key(did):
+                            drivers[did] = 'G(%d)' % len(drivers)
+                        gn = drivers[did]
+                        writer.writerow([did,
+                                         row[hid['timeFrame']], row[hid['zi']], row[hid['zj']],
+                                         gn, row[hid['prevDriver']],
+                                         row[hid['time']], row[hid['day']],
+                                         row[hid['start-long']], row[hid['start-lat']],
+                                         row[hid['distance']], row[hid['duration']], row[hid['fare']]])
 
 
 if __name__ == '__main__':
