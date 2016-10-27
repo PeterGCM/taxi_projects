@@ -19,7 +19,8 @@ def run():
     init_multiprocessor(3)
     count_num_jobs = 0
     dw_per_dirs = get_all_directories(fdw_graph_dir)
-    for dw_per_dir_fn in dw_per_dirs.reverse():
+    dw_per_dirs.reverse()
+    for dw_per_dir_fn in dw_per_dirs:
         dw_per_dirpath = '%s/%s' % (fdw_graph_dir, dw_per_dir_fn)
         for dw_per_fn in get_all_files(dw_per_dirpath, '', '.pkl'):
             dw_per_fpath = '%s/%s' % (dw_per_dirpath, dw_per_fn)
