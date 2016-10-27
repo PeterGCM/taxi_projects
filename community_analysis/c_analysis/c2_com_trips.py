@@ -20,7 +20,7 @@ percentile_dirname = 'percentile(%.3f)' % CHOSEN_PERCENTILE
 def run():
     check_dir_create(com_trips_dir)
     check_dir_create('%s/%s' % (com_trips_dir, percentile_dirname))
-    process_files('0901_')
+    process_files('0901__')
     #
     # process_files(9)
     # init_multiprocessor(4)
