@@ -58,7 +58,7 @@ def process_files(period):
             drivers[did] = ca_driver_with_com_prevD(did, members)
     zones = generate_zones()
     handling_day = 0
-    with open('%s/%s' % (ss_trips_dir, trips_fn), 'rb') as r_csvfile:
+    with open(trips_fn, 'rb') as r_csvfile:
         reader = csv.reader(r_csvfile)
         headers = reader.next()
         hid = {h: i for i, h in enumerate(headers)}
