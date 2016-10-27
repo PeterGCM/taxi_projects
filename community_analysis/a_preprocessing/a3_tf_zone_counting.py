@@ -16,19 +16,22 @@ def run():
     logger.info('Execution')
     check_dir_create(tf_zone_counting_dir)
     #
-    init_multiprocessor(8)
-    count_num_jobs = 0
-    for y in range(9, 13):
-        for m in range(1, 13):
-            yymm = '%02d%02d' % (y, m)
-            # yymm = '12%02d' % mm
-            # process_file(yymm)
-            put_task(process_file, [yymm])
-            count_num_jobs += 1
-        yyyy = '20%02d' % (y)
-        put_task(process_file, [yyyy])
-        count_num_jobs += 1
-    end_multiprocessor(count_num_jobs)
+    process_file('0901_')
+
+
+    # init_multiprocessor(8)
+    # count_num_jobs = 0
+    # for y in range(9, 13):
+    #     for m in range(1, 13):
+    #         yymm = '%02d%02d' % (y, m)
+    #         # yymm = '12%02d' % mm
+    #         # process_file(yymm)
+    #         put_task(process_file, [yymm])
+    #         count_num_jobs += 1
+    #     yyyy = '20%02d' % (y)
+    #     put_task(process_file, [yyyy])
+    #     count_num_jobs += 1
+    # end_multiprocessor(count_num_jobs)
 
 
 def process_file(period):
