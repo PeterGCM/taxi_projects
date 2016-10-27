@@ -20,18 +20,18 @@ def run():
     logger.info('Execution')
     check_dir_create(dw_graph_dir)
     #
-    # init_multiprocessor(6)
-    # count_num_jobs = 0
+    init_multiprocessor(6)
+    count_num_jobs = 0
     for y in range(9, 13):
         yyyy = '20%02d' % (y)
-        process_file(yyyy)
-        # put_task(process_file, [yyyy])
-        # count_num_jobs += 1
-        # for m in range(1, 13):
-        #     yymm = '%02d%02d' % (y, m)
-        #     put_task(process_file, [yymm])
-        #     count_num_jobs += 1
-    # end_multiprocessor(count_num_jobs)
+        # process_file(yyyy)
+        put_task(process_file, [yyyy])
+        count_num_jobs += 1
+        for m in range(1, 13):
+            yymm = '%02d%02d' % (y, m)
+            put_task(process_file, [yymm])
+            count_num_jobs += 1
+    end_multiprocessor(count_num_jobs)
 
 
 def process_file(period):
@@ -50,12 +50,11 @@ def process_file(period):
             for row in reader:
                 did = int(row[hid['did']])
                 gn = row[hid['groupName']]
-                print did, gn
                 if did_gn.has_key(did):
+                    assert did_gn[did] == gn, (did, gn)
                     continue
                 else:
-                    assert did_gn[did] == gn, (did, gn)
-                did_gn[did] = gn
+                    did_gn[did] = gn
         #
         dw_graph_fpath = '%s/%s%s.pkl' % (dw_graph_dir, dw_graph_prefix, period)
         if check_path_exist(dw_graph_fpath):
