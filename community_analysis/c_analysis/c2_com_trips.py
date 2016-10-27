@@ -47,7 +47,7 @@ def process_files(period):
                          'start-long', 'start-lat',
                          'distance', 'duration', 'fare'])
     #
-    new_gn_assigned_trip_fpath = '%s/%s%s_.csv' % (ss_trips_dir, ss_trips_prefix, period)
+    new_gn_assigned_trip_fpath = '%s/%s%s.csv' % (ss_trips_dir, ss_trips_prefix, period)
     logger.info('Start handing %s' % new_gn_assigned_trip_fpath)
     did_gn, drivers = {}, {}
     num_groups = 0
