@@ -52,7 +52,7 @@ def process_file(period):
                 if did_gn.has_key(did):
                     continue
                 else:
-                    assert did_gn[did] == gn, (did_gn[did], gn)
+                    assert did_gn[did] == gn, (did, gn)
                 did_gn[did] = gn
         #
         dw_graph_fpath = '%s/%s%s.pkl' % (dw_graph_dir, dw_graph_prefix, period)
