@@ -74,7 +74,7 @@ class ca_driver_with_com_prevD(driver):
             assert type(com_did) == type(did)
         self.com_drivers = com_drivers
 
-    def update_linkage(self, t, z):
+    def find_prevDriver(self, t, z):
         z.update_logQ(t)
         updated_drivers = set()
         prevD = 'None'
