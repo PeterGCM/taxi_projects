@@ -15,7 +15,10 @@ ss_trips_dir = '%s/%s' % (taxi_data, 'trips_ss_drivers'); ss_trips_prefix = 'tri
 tf_zone_counting_dir = '%s/%s' % (taxi_data, 'tf_zone_counting')
 tf_zone_counting_individuals_prefix = 'tf-zone-counting-individuals-'
 tf_zone_counting_groups_prefix = 'tf-zone-counting-groups-'
-tf_zone_distribution_dir = '%s/%s' % (taxi_data, 'tf_zone_distribution'); tf_zone_distribution_prefix = 'tf-zone-distribution-'
+tf_zone_distribution_dir = '%s/%s' % (taxi_data, 'tf_zone_distribution')
+tf_zone_distribution_individuals_prefix = 'tf-zone-distribution-individuals-'
+tf_zone_distribution_groups_prefix = 'tf-zone-distribution-groups-'
+tf_zone_distribution_whole_prefix = 'tf-zone-distribution-whole-'
 #
 DEPRECIATION_LAMBDA = 0.5
 dw_graph_dir = '%s/%s' % (taxi_data, 'dw_graph'); dw_graph_prefix = 'dw-graph-'

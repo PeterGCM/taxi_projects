@@ -80,7 +80,4 @@ def process_file(period):
 
 
 if __name__ == '__main__':
-    # from taxi_common.file_handling_functions import load_pickle_file
-    # print load_pickle_file('tf-zone-counting-groups-0901.pkl')
-    # print load_pickle_file('tf-zone-counting-individuals-0901.pkl')
     run()
