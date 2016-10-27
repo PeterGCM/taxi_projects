@@ -23,17 +23,10 @@ def run():
 
 
 def process_file(dw_per_fpath, dw_per_fn):
-    is_month3_handling = False
-    fn_split = dw_per_fn[:-len('.pkl')].split('-')
-    group_per_dirpath = '%s/%s' % (group_dir, fn_split[2])
+    _, _, percentile, period = dw_per_fn[:-len('.pkl')].split('-')
+    group_per_dirpath = '%s/%s' % (group_dir, percentile)
     check_dir_create(group_per_dirpath)
-    if len(fn_split) == 5:
-        is_month3_handling = True
-        _, _, percentile, yyyy, duration = fn_split
-        gp_targer_dirpath = '%s/%s-%s' % (group_per_dirpath, yyyy, duration)
-    else:
-        _, _, percentile, yyyy = fn_split
-        gp_targer_dirpath = '%s/%s' % (group_per_dirpath, yyyy)
+    gp_targer_dirpath = '%s/%s' % (group_per_dirpath, period)
     if check_path_exist(gp_targer_dirpath):
         return None
     check_dir_create(gp_targer_dirpath)
@@ -44,8 +37,11 @@ def process_file(dw_per_fpath, dw_per_fn):
     logger.info('igraph generation total number of edges %d' % num_edges)
     igid, did_igid = 0, {}
     igG = ig.Graph(directed=True)
+    cur_percent = 0
     for i, ((did0, did1), w) in enumerate(dw_graph.iteritems()):
-        if i % 5000 == 0:
+        per = (i / float(num_edges))
+        if per * 100 > cur_percent:
+            cur_percent += 25
             logger.info('processed %.3f edges' % (i / float(num_edges)))
         if not did_igid.has_key(did0):
             igG.add_vertex(did0)
@@ -60,10 +56,7 @@ def process_file(dw_per_fpath, dw_per_fn):
     part = louvain.find_partition(igG, method='Modularity', weight='weight')
     logger.info('Each group pickling')
     for i, sg in enumerate(part.subgraphs()):
-        if is_month3_handling:
-            group_fpath = '%s/%s%s-%s-%s-G(%d).pkl' % (gp_targer_dirpath, group_prepix, percentile, yyyy, duration, i)
-        else:
-            group_fpath = '%s/%s%s-%s-G(%d).pkl' % (gp_targer_dirpath, group_prepix, percentile, yyyy, i)
+        group_fpath = '%s/%s%s-%s-G(%d).pkl' % (gp_targer_dirpath, group_prepix, percentile, period, i)
         sg.write_pickle(group_fpath)
 
 
