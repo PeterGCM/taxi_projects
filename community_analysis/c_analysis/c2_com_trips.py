@@ -72,7 +72,9 @@ def process_files(period):
                 logger.info('%dth handing %s' % (day, trips_fn))
                 handling_day = day
             if not drivers.has_key(did):
-                continue
+                drivers[did] = ca_driver_with_com_prevD(did, [])
+                did_gn[did] = 'G(%d)' % num_groups
+                num_groups += 1
             prev_com_driver = drivers[did].find_prevDriver(t, z)
             #
             gn = did_gn[did]
@@ -93,6 +95,6 @@ if __name__ == '__main__':
     try:
         run()
     except Exception as _:
-        with open('Exception filtering.txt', 'w') as f:
+        with open('Exception com trips.txt', 'w') as f:
             f.write(format_exc())
         raise
