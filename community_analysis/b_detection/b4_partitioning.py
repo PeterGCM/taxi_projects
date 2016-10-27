@@ -1,6 +1,6 @@
 import __init__
 #
-from community_analysis import dw_filtered_dir
+from community_analysis import fdw_graph_dir
 from community_analysis import group_dir, group_prepix
 #
 from taxi_common.file_handling_functions import load_pickle_file, check_path_exist, check_dir_create, get_all_directories, get_all_files
@@ -15,8 +15,8 @@ logger = get_logger('partitioning')
 def run():
     check_dir_create(group_dir)
     #
-    for dw_per_dir_fn in get_all_directories(dw_filtered_dir):
-        dw_per_dirpath = '%s/%s' % (dw_filtered_dir, dw_per_dir_fn)
+    for dw_per_dir_fn in get_all_directories(fdw_graph_dir):
+        dw_per_dirpath = '%s/%s' % (fdw_graph_dir, dw_per_dir_fn)
         for dw_per_fn in get_all_files(dw_per_dirpath, '', '.pkl'):
             dw_per_fpath = '%s/%s' % (dw_per_dirpath, dw_per_fn)
             process_file(dw_per_fpath, dw_per_fn)
