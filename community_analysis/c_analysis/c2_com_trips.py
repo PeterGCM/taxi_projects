@@ -20,7 +20,7 @@ percentile_dirname = 'percentile(%.3f)' % CHOSEN_PERCENTILE
 def run():
     check_dir_create(com_trips_dir)
     check_dir_create('%s/%s' % (com_trips_dir, percentile_dirname))
-    process_files('0901')
+    process_files('0901_')
     #
     # process_files(9)
     # init_multiprocessor(4)
@@ -47,8 +47,8 @@ def process_files(period):
                          'start-long', 'start-lat',
                          'distance', 'duration', 'fare'])
     #
-    trips_fn = '%s/%s%s.csv' % (ss_trips_dir, ss_trips_prefix, period)
-    logger.info('Start handing %s' % trips_fn)
+    new_gn_assigned_trip_fpath = '%s/%s%s_.csv' % (ss_trips_dir, ss_trips_prefix, period)
+    logger.info('Start handing %s' % new_gn_assigned_trip_fpath)
     did_gn, drivers = {}, {}
     num_groups = 0
     for gn, members in group_drivers.iteritems():
@@ -58,7 +58,7 @@ def process_files(period):
             drivers[did] = ca_driver_with_com_prevD(did, members)
     zones = generate_zones()
     handling_day = 0
-    with open(trips_fn, 'rb') as r_csvfile:
+    with open(new_gn_assigned_trip_fpath, 'rb') as r_csvfile:
         reader = csv.reader(r_csvfile)
         headers = reader.next()
         hid = {h: i for i, h in enumerate(headers)}
@@ -69,7 +69,7 @@ def process_files(period):
             zi, zj = int(row[hid['zi']]), int(row[hid['zj']])
             z = zones[(zi, zj)]
             if handling_day < day:
-                logger.info('%dth handing %s' % (day, trips_fn))
+                logger.info('%dth handing %s' % (day, new_gn_assigned_trip_fpath))
                 handling_day = day
             if not drivers.has_key(did):
                 drivers[did] = ca_driver_with_com_prevD(did, [])
