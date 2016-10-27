@@ -45,7 +45,7 @@ def run():
                         whole_counting[tf_zone] = 0
                     whole_counting[tf_zone] += num_trips
             distribution_fpath = '%s/%s%s.pkl' % (tf_zone_distribution_dir, tf_zone_distribution_individuals_prefix, period)
-            save_pkl_threading(distribution_fpath, distribution)
+            save_pickle_file(distribution_fpath, distribution)
             #
             whole_distribution = {}
             year_num_trips = sum(whole_counting.values())
