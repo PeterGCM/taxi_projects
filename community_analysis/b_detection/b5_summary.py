@@ -23,12 +23,7 @@ def run():
                 com_dirpath = '%s/%s/%s' % (group_dir, group_per_dir, period_dir)
                 fn_components = com_fn[:-len('.pkl')].split('-')
                 logger.info('processing %s' % com_fn)
-                if len(fn_components) == 5:
-                    _, percentile, yyyy, months, group_name = fn_components
-                    period = '%s(%s)' % (yyyy, months)
-                else:
-                    _, percentile, yyyy, group_name = fn_components
-                    period = yyyy
+                _, percentile, period, group_name = fn_components
                 igG = ig.Graph.Read_Pickle('%s/%s' % (com_dirpath, com_fn))
                 drivers = [v['name'] for v in igG.vs]
                 weights = [e['weight'] for e in igG.es]
