@@ -24,6 +24,11 @@ def run():
     for fn in get_all_files(tf_zone_counting_dir, '', '.pkl'):
         logger.info('Handling %s' % fn)
         _, _, _, _, period = fn[:-len('.pkl')].split('-')
+
+
+        if period != '0901_':
+            continue
+
         #
         tf_zone_counting_fpath = '%s/%s' % (tf_zone_counting_dir, fn)
         drivers = load_pickle_file(tf_zone_counting_fpath)
