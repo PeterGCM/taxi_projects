@@ -47,7 +47,7 @@ def process_files(period):
                          'start-long', 'start-lat',
                          'distance', 'duration', 'fare'])
     #
-    trips_fn = '%s/%s%s.pkl' % (ss_trips_dir, ss_trips_prefix, period)
+    trips_fn = '%s/%s%s.csv' % (ss_trips_dir, ss_trips_prefix, period)
     logger.info('Start handing %s' % trips_fn)
     did_gn, drivers = {}, {}
     num_groups = 0
