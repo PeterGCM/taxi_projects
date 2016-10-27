@@ -98,7 +98,12 @@ def process_file(period):
         logger.info('Start %s aggregation' % period)
         dw_graph = []
         for did, d in drivers.iteritems():
-            dw_graph.append((did, d.num_pickup, d.link_weight))
+            non_zero_weight_link = {}
+            for did0, w in d.link_weight.iteritems():
+                if w == 0:
+                    continue
+                non_zero_weight_link[did0] = w
+            dw_graph.append((did, d.num_pickup, non_zero_weight_link))
         logger.info('Start %s pickling' % period)
         save_pickle_file(dw_graph_fpath, dw_graph)
     except Exception as _:
