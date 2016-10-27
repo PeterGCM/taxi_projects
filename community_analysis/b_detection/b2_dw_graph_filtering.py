@@ -13,7 +13,7 @@ import numpy as np
 import csv
 #
 logger = get_logger('dw graph filtering')
-PER_FROM, INTERVAL = 90.0, 1.0
+PER_FROM, INTERVAL = 95.0, 1.0
 percentiles = [pv for pv in np.arange(PER_FROM, 100, INTERVAL) if pv < 100]
 fdw_graph_summary = '%s/%s(%.3f,%.3f).csv' % (fdw_graph_dir, 'fdw-graph-summary', PER_FROM, INTERVAL)
 
