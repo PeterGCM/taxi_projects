@@ -21,7 +21,7 @@ def run():
     logger.info('Execution')
     check_dir_create(tf_zone_distribution_dir)
     #
-    for fn in get_all_files(tf_zone_counting_dir):
+    for fn in get_all_files(tf_zone_counting_dir, '', '.pkl'):
         logger.info('Handling %s' % fn)
         _, _, _, _, period = fn[:-len('.pkl')].split('-')
         #
