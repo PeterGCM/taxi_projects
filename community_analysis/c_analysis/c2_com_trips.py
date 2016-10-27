@@ -32,10 +32,10 @@ def run():
 
 
 def process_files(period):
-    com_drivers_fpath = '%s/%s/%s%s.pkl' % (com_drivers_dir, percentile_dirname, com_drivers_prefix, period)
-    com_drivers = load_pickle_file(com_drivers_fpath)
+    group_drivers_fpath = '%s/%s/%s%s.pkl' % (com_drivers_dir, percentile_dirname, com_drivers_prefix, period)
+    group_drivers = load_pickle_file(group_drivers_fpath)
     #
-    com_trips_fpath = '%s/%s/%s%s.csv' % (com_trips_dir, percentile_dirname, com_trips_prefix, yyyy)
+    com_trips_fpath = '%s/%s/%s%s.csv' % (com_trips_dir, percentile_dirname, com_trips_prefix, period)
     if check_path_exist(com_trips_fpath):
         return None
     with open(com_trips_fpath, 'wt') as w_csvfile:
@@ -51,7 +51,7 @@ def process_files(period):
     logger.info('Start handing %s' % trips_fn)
     did_gn, drivers = {}, {}
     num_groups = 0
-    for gn, members in com_drivers.iteritems():
+    for gn, members in group_drivers.iteritems():
         num_groups += 1
         for did in members:
             did_gn[did] = gn
