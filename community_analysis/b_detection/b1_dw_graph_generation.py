@@ -20,7 +20,7 @@ def run():
     logger.info('Execution')
     check_dir_create(dw_graph_dir)
     #
-    process_file('0901__')
+    process_file('0901___')
 
 
     # init_multiprocessor(6)
