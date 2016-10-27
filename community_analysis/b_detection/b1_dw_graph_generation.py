@@ -107,7 +107,7 @@ def process_file(period):
         logger.info('Start %s pickling' % period)
         save_pickle_file(dw_graph_fpath, dw_graph)
     except Exception as _:
-        with open('Exception month dw graph.txt', 'w') as f:
+        with open('Exception dw graph.txt', 'w') as f:
             f.write(format_exc())
         raise
 
