@@ -50,6 +50,7 @@ def process_file(period):
             for row in reader:
                 did = int(row[hid['did']])
                 gn = row[hid['groupName']]
+                print did, gn
                 if did_gn.has_key(did):
                     continue
                 else:
