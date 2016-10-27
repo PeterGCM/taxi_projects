@@ -20,19 +20,19 @@ percentile_dirname = 'percentile(%.3f)' % CHOSEN_PERCENTILE
 def run():
     check_dir_create(com_trips_dir)
     check_dir_create('%s/%s' % (com_trips_dir, percentile_dirname))
+    process_files('0901')
     #
     # process_files(9)
-    init_multiprocessor(4)
-    count_num_jobs = 0
-    for y in range(9, 13):
-        put_task(process_files, [y])
-        count_num_jobs += 1
-    end_multiprocessor(count_num_jobs)
+    # init_multiprocessor(4)
+    # count_num_jobs = 0
+    # for y in range(9, 13):
+    #     put_task(process_files, [y])
+    #     count_num_jobs += 1
+    # end_multiprocessor(count_num_jobs)
 
 
-def process_files(y):
-    yyyy = '20%02d' % y
-    com_drivers_fpath = '%s/%s/%s%s.pkl' % (com_drivers_dir, percentile_dirname, com_drivers_prefix, yyyy)
+def process_files(period):
+    com_drivers_fpath = '%s/%s/%s%s.pkl' % (com_drivers_dir, percentile_dirname, com_drivers_prefix, period)
     com_drivers = load_pickle_file(com_drivers_fpath)
     #
     com_trips_fpath = '%s/%s/%s%s.csv' % (com_trips_dir, percentile_dirname, com_trips_prefix, yyyy)
@@ -40,46 +40,51 @@ def process_files(y):
         return None
     with open(com_trips_fpath, 'wt') as w_csvfile:
         writer = csv.writer(w_csvfile, lineterminator='\n')
-        writer.writerow(['time', 'did',
-                         'day', 'timeFrame', 'zi', 'zj',
-                         'distance', 'duration', 'fare',
-                         'comName', 'prevComDriver'])
+        writer.writerow(['did',
+                         'timeFrame', 'zi', 'zj',
+                         'groupName', 'prevDriver',
+                         'time', 'day',
+                         'start-long', 'start-lat',
+                         'distance', 'duration', 'fare'])
     #
-    for trips_fn in get_all_files(ss_trips_dir, '%s%02d' % (ss_trips_prefix, y), '.csv'):
-        logger.info('Start handing %s' % trips_fn)
-        did_gn, drivers = {}, {}
-        for gn, members in com_drivers.iteritems():
-            for did in members:
-                did_gn[did] = gn
-                drivers[did] = ca_driver_with_com_prevD(did, members)
-        zones = generate_zones()
-        handling_day = 0
-        with open('%s/%s' % (ss_trips_dir, trips_fn), 'rb') as r_csvfile:
-            reader = csv.reader(r_csvfile)
-            headers = reader.next()
-            hid = {h: i for i, h in enumerate(headers)}
-            for row in reader:
-                did = int(row[hid['did']])
-                t = eval(row[hid['time']])
-                day = int(row[hid['day']])
-                zi, zj = int(row[hid['zi']]), int(row[hid['zj']])
-                z = zones[(zi, zj)]
-                if handling_day < day:
-                    logger.info('%dth handing %s' % (day, trips_fn))
-                    handling_day = day
-                if not drivers.has_key(did):
-                    continue
-                prev_com_driver = drivers[did].update_linkWeight(t, z)
-                #
-                cn = did_gn[did]
-                with open(com_trips_fpath, 'a') as w_csvfile:
-                    writer = csv.writer(w_csvfile, lineterminator='\n')
-                    new_row = [
-                        t, did,
-                        day, row[hid['timeFrame']], zi, zj,
-                        row[hid['distance']], row[hid['duration']], row[hid['fare']],
-                        cn, prev_com_driver]
-                    writer.writerow(new_row)
+    trips_fn = '%s/%s' % (ss_trips_dir, ss_trips_prefix, period)
+    logger.info('Start handing %s' % trips_fn)
+    did_gn, drivers = {}, {}
+    num_groups = 0
+    for gn, members in com_drivers.iteritems():
+        num_groups += 1
+        for did in members:
+            did_gn[did] = gn
+            drivers[did] = ca_driver_with_com_prevD(did, members)
+    zones = generate_zones()
+    handling_day = 0
+    with open('%s/%s' % (ss_trips_dir, trips_fn), 'rb') as r_csvfile:
+        reader = csv.reader(r_csvfile)
+        headers = reader.next()
+        hid = {h: i for i, h in enumerate(headers)}
+        for row in reader:
+            did = int(row[hid['did']])
+            t = eval(row[hid['time']])
+            day = int(row[hid['day']])
+            zi, zj = int(row[hid['zi']]), int(row[hid['zj']])
+            z = zones[(zi, zj)]
+            if handling_day < day:
+                logger.info('%dth handing %s' % (day, trips_fn))
+                handling_day = day
+            if not drivers.has_key(did):
+                continue
+            prev_com_driver = drivers[did].update_linkWeight(t, z)
+            #
+            gn = did_gn[did]
+            with open(com_trips_fpath, 'a') as w_csvfile:
+                writer = csv.writer(w_csvfile, lineterminator='\n')
+                new_row = [did,
+                           row[hid['timeFrame']], zi, zj,
+                           gn, prev_com_driver,
+                           t, day,
+                           row[hid['start-long']], row[hid['start-lat']],
+                           row[hid['distance']], row[hid['duration']], row[hid['fare']]]
+                writer.writerow(new_row)
 
 
 if __name__ == '__main__':
