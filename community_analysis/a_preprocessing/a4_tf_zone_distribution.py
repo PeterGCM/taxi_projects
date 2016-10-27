@@ -10,14 +10,19 @@ from community_analysis import PM2, PM11
 from taxi_common.file_handling_functions import check_dir_create, load_pickle_file, \
                             save_pickle_file, save_pkl_threading, get_all_files
 from taxi_common.sg_grid_zone import get_sg_zones
+from taxi_common.log_handling_functions import get_logger
 #
 import pandas as pd
+#
+logger = get_logger('tf zone distribution')
 
 
 def run():
+    logger.info('Execution')
     check_dir_create(tf_zone_distribution_dir)
     #
     for fn in get_all_files(tf_zone_counting_dir):
+        logger.info('Handling %s' % fn)
         _, _, _, _, period = fn[:-len('.pkl')].split('-')
         #
         tf_zone_counting_fpath = '%s/%s' % (tf_zone_counting_dir, fn)
