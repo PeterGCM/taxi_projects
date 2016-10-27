@@ -31,12 +31,14 @@ def run():
                 header.append('Percentile (%.3f)' % per)
             writer.writerow(header)
     #
-    init_multiprocessor(3)
-    count_num_jobs = 0
-    for dw_graph_fn in get_all_files(dw_graph_dir, '', '.pkl'):
-        put_task(handle_file, [dw_graph_fn])
-        count_num_jobs += 1
-    end_multiprocessor(count_num_jobs)
+    handle_file('dw-graph-0901_.pkl')
+
+    # init_multiprocessor(3)
+    # count_num_jobs = 0
+    # for dw_graph_fn in get_all_files(dw_graph_dir, '', '.pkl'):
+    #     put_task(handle_file, [dw_graph_fn])
+    #     count_num_jobs += 1
+    # end_multiprocessor(count_num_jobs)
 
 
 def handle_file(dw_graph_fn):
