@@ -5,7 +5,7 @@ from community_analysis import fdw_graph_dir, fdw_graph_prefix
 
 #
 from taxi_common.file_handling_functions import get_all_files, check_dir_create, load_pickle_file, \
-    save_pickle_file, save_pkl_threading, check_path_exist
+                save_pkl_threading, check_path_exist
 from taxi_common.log_handling_functions import get_logger
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
@@ -13,7 +13,7 @@ import numpy as np
 import csv
 #
 logger = get_logger('dw graph filtering')
-PER_FROM, INTERVAL = 95.0, 1.0
+PER_FROM, INTERVAL = 99.0, 0.2
 percentiles = [pv for pv in np.arange(PER_FROM, 100, INTERVAL) if pv < 100]
 fdw_graph_summary = '%s/%s(%.3f,%.3f).csv' % (fdw_graph_dir, 'fdw-graph-summary', PER_FROM, INTERVAL)
 
