@@ -16,7 +16,7 @@ def run():
     logger.info('Execution')
     check_dir_create(tf_zone_counting_dir)
     #
-    process_file('0901_')
+    process_file('0901__')
 
 
     # init_multiprocessor(8)
