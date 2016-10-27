@@ -26,7 +26,7 @@ def run():
         _, _, _, _, period = fn[:-len('.pkl')].split('-')
 
 
-        if period != '0901__':
+        if period != '0901___':
             continue
 
         #
