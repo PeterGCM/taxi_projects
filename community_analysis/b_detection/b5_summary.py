@@ -29,7 +29,7 @@ def run():
                 weights = [e['weight'] for e in igG.es]
                 with open(group_summary_fpath, 'a') as w_csvfile:
                     writer = csv.writer(w_csvfile, lineterminator='\n')
-                    writer.writerow([percentile, period, group_name, len(drivers), len(weights) / float(len(drivers))])
+                    writer.writerow([percentile, period, group_name, len(drivers), sum(weights) / float(len(drivers))])
 
 
 if __name__ == '__main__':

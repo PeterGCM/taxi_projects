@@ -29,7 +29,7 @@ fdw_graph_dir = '%s/%s' % (dw_graph_dir, 'fdw_graph'); fdw_graph_prefix = 'fdw-g
 group_dir = '%s/%s' % (taxi_data, 'group'); group_prepix = 'group-'
 group_summary_fpath = '%s/%s.csv' % (group_dir , 'group-summary')
 #
-CHOSEN_PERCENTILE = 99.995
+CHOSEN_PERCENTILE = 99.970
 MIN_NUM_DRIVERS = 10
 com_drivers_dir = '%s/%s' % (taxi_data, 'com_drivers'); com_drivers_prefix = 'com-drivers-'
 com_trips_dir = '%s/%s' % (taxi_data, 'com_trips'); com_trips_prefix = 'com-trips-'

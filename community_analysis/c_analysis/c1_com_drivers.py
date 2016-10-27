@@ -19,19 +19,17 @@ def run():
     #
     percentile_dirpath = '%s/%s' % (group_dir, percentile_dirname)
     for dirname in get_all_directories(percentile_dirpath):
-        if len(dirname) > len('yyyy'):
-            continue
-        year_dirpath = '%s/%s' % (percentile_dirpath, dirname)
-        year_com_fpath = '%s/%s/%s%s.pkl' % (com_drivers_dir, percentile_dirname, com_drivers_prefix, dirname)
-        year_communities = {}
-        for group_fn in get_all_files(year_dirpath, '', '.pkl'):
-            _, _, yyyy, g_name = group_fn[:-len('.pkl')].split('-')
-            igG = ig.Graph.Read_Pickle('%s/%s' % (year_dirpath, group_fn))
+        dirpath = '%s/%s' % (percentile_dirpath, dirname)
+        group_fpath = '%s/%s/%s%s.pkl' % (com_drivers_dir, percentile_dirname, com_drivers_prefix, dirname)
+        groups = {}
+        for group_fn in get_all_files(dirpath, '', '.pkl'):
+            _, _, yyyy, gn = group_fn[:-len('.pkl')].split('-')
+            igG = ig.Graph.Read_Pickle('%s/%s' % (dirpath, group_fn))
             drivers = [v['name'] for v in igG.vs]
             if len(drivers) < MIN_NUM_DRIVERS:
                 continue
-            year_communities[g_name] = drivers
-        save_pickle_file(year_com_fpath, year_communities)
+            groups[gn] = drivers
+        save_pickle_file(group_fpath, groups)
 
 
 if __name__ == '__main__':
