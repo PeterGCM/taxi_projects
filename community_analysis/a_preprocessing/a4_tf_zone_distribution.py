@@ -82,6 +82,6 @@ if __name__ == '__main__':
     try:
         run()
     except Exception as _:
-        with open('Exception tf zone distribution.txt', 'w') as f:
+        with open('Exception tf zone distribution', 'w') as f:
             f.write(format_exc())
         raise
