@@ -22,12 +22,12 @@ def draw_service_locations(df):
     adjusts = [dx_unit / float(2) + dx_unit * i - xmid for i in xrange(5)]
     color_map = ['red', 'green', 'blue', 'orange', 'black']
     #
-    sloc = df.groupby(['comName', 'zi', 'zj']).count()['did'].to_frame('total-num-trip').reset_index()
-    com_indices = set(df['comName'])
+    sloc = df.groupby(['groupName', 'zi', 'zj']).count()['did'].to_frame('total-num-trip').reset_index()
+    com_indices = set(df['groupName'])
     map_osm = folium.Map(location=[yc, xc], zoom_start=11)
     top_locations = {}
     for i, cid in enumerate(com_indices):
-        com_df = sloc[(sloc['comName'] == cid)]
+        com_df = sloc[(sloc['groupName'] == cid)]
         for j, (_, zi, zj, trip_num) in enumerate(com_df.sort('total-num-trip', ascending=False).values):
             if not top_locations.has_key(cid):
                 top_locations[cid] = [i, (zi, zj)]
