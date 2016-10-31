@@ -11,6 +11,7 @@ import folium
 
 def draw_service_locations(df):
     from taxi_common.sg_grid_zone import get_sg_grid_xy_points, get_sg_zones
+    NUM_GROUPS = 8
     #
     zones = get_sg_zones()
     #
@@ -18,9 +19,9 @@ def draw_service_locations(df):
     xc, yc = (x_points[0] + x_points[-1]) / float(2), (y_points[0] + y_points[-1]) / float(2)
     xaxis_unit = x_points[1] - x_points[0]
     xmid = xaxis_unit / float(2)
-    dx_unit = xaxis_unit / float(5)
-    adjusts = [dx_unit / float(2) + dx_unit * i - xmid for i in xrange(5)]
-    color_map = ['red', 'green', 'blue', 'orange', 'black']
+    dx_unit = xaxis_unit / float(NUM_GROUPS)
+    adjusts = [dx_unit / float(2) + dx_unit * i - xmid for i in xrange(NUM_GROUPS)]
+    color_map = ['red', 'green', 'blue', 'orange', 'black', 'yellow', 'purple', 'white']
     #
     sloc = df.groupby(['groupName', 'zi', 'zj']).count()['did'].to_frame('total-num-trip').reset_index()
     com_indices = set(df['groupName'])
@@ -32,10 +33,15 @@ def draw_service_locations(df):
             if not top_locations.has_key(cid):
                 top_locations[cid] = [i, (zi, zj)]
             y, x = zones[(zi, zj)].cCoor_gps
-            folium.Marker((y, x + adjusts[i]),
-                          popup='%s %d' % (cid, j + 1),
-                          icon=folium.Icon(color=color_map[i])
+            # folium.Marker((y, x + adjusts[i]),
+            #               popup='%s %d' % (cid, j + 1),
+            #               icon=folium.Icon(color=color_map[i])
+            #               ).add_to(map_osm)
+
+            folium.CircleMarker((y, x + adjusts[i]), #radius=50,
+                          popup='%s %d' % (cid, j + 1), color=color_map[i], fill_color=color_map[i]
                           ).add_to(map_osm)
+
             if j == 4:
                 break
     # for cid, (color_i, (zi, zj)) in top_locations.iteritems():
