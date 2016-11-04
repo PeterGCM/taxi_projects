@@ -66,7 +66,7 @@ def process_files(yymm):
                     #
                     writer.writerow([st_ts, row[hid['did']], dur, fare,
                                      row[hid['trip-mode']], qt, eco_profit,
-                                     yy, mm, st_dt.day, st_dt.hour])
+                                     yy, st_dt.month, st_dt.day, st_dt.hour])
     #
     print 'end the file; %s' % yymm
     
