@@ -15,7 +15,7 @@ import csv, datetime
 def run():
     remove_create_dir(ap_ep_dir); remove_create_dir(ns_ep_dir)
     #
-    init_multiprocessor(11)
+    init_multiprocessor(3)
     count_num_jobs = 0
     for y in xrange(9, 11):
         for m in xrange(1, 13):
