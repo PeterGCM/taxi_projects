@@ -16,7 +16,7 @@ def run():
     for path in [ftd_trips_dir, ftd_shift_dir]:
         remove_create_dir(path)
     #
-    init_multiprocessor(11)
+    init_multiprocessor(3)
     count_num_jobs = 0
     for y in xrange(9, 11):
         for m in xrange(1, 13):
