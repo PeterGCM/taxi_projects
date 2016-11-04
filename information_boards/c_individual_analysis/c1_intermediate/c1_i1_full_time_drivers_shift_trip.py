@@ -51,7 +51,7 @@ def process_files(yymm):
         hid = {h : i for i, h in enumerate(headers)}
         with open('%s/%s%s.csv' % (ftd_trips_dir, ftd_trips_prefix, yymm), 'wt') as w_csvfile:
             writer = csv.writer(w_csvfile, lineterminator='\n')
-            new_headers = ['did', 'start-time', 'duration', 'fare']
+            new_headers = ['did', 'start-time', 'duration', 'fare', 'yy', 'mm', 'dd', 'hh']
             writer.writerow(new_headers)
             #
             # filter out trips data based on two factors;
@@ -60,14 +60,13 @@ def process_files(yymm):
             for row in reader:
                 st_ts = eval(row[hid['start-time']])
                 st_dt = datetime.datetime.fromtimestamp(st_ts)
-                k = (st_dt.year, st_dt.month, st_dt.day, st_dt.hour)
                 did = row[hid['did']]
                 if did not in ft_drivers:
                     continue
                 writer.writerow([row[hid['did']],
                                  row[hid['start-time']],
                                  row[hid['duration']],
-                                 row[hid['fare']]])
+                                 row[hid['fare']], st_dt.year - 2000, st_dt.month, st_dt.day, st_dt.hour])
     #
     print 'end the file; %s' % yymm
 
