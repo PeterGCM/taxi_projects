@@ -88,7 +88,7 @@ class driver(object):
                 writer.writerow(['did',
                                  'timeFrame', 'zi', 'zj',
                                  'roamingTime',
-                                 'time'])
+                                 'time', 'day'])
 
     def update(self, cl_time, cl_zone, cl_state):
         if self.pl_state == FREE:
@@ -100,7 +100,7 @@ class driver(object):
                 writer.writerow([self.did,
                                  pl_dt.hour, zi, zj,
                                  roaming_time,
-                                 self.pl_time])
+                                 self.pl_time, pl_dt.day])
         self.pl_time, self.pl_zone, self.pl_state = cl_time, cl_zone, cl_state
 
 
