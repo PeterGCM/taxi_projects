@@ -57,7 +57,7 @@ def process_file(period):
                 zi, zj = bisect(x_points, longitude) - 1, bisect(y_points, latitude) - 1
                 if zi < 0 or zj < 0:
                     continue
-                t, s = row[hid['time']], row[hid['state']]
+                t, s = eval(row[hid['time']]), eval(row[hid['state']])
                 z = (zi, zj)
                 cur_dt = datetime.datetime.fromtimestamp(t)
                 if handling_day != cur_dt.day:
