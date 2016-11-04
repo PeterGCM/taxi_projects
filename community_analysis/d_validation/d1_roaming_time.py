@@ -41,7 +41,7 @@ def process_file(period):
         if not check_path_exist(log_fpath):
             logger.info('The file X exists; %s' % period)
             return None
-        roaming_time_fpath = '%s/%s%s' % (roaming_time_dir, roaming_time_prefix, period)
+        roaming_time_fpath = '%s/%s%s.csv' % (roaming_time_dir, roaming_time_prefix, period)
 
         with open(log_fpath, 'rb') as r_csvfile:
             reader = csv.reader(r_csvfile)
