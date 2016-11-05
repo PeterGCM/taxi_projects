@@ -36,6 +36,7 @@ com_trips_dir = '%s/%s' % (taxi_data, 'com_trips'); com_trips_prefix = 'com-trip
 #
 FREE = 0
 roaming_time_dir = '%s/%s' % (taxi_data, 'roaming_time'); roaming_time_prefix = 'roaming-time-'
+roaming_time_ag_dir = '%s/%s' % (roaming_time_dir, 'aggregated'); roaming_time_ag_prefix = 'roaming-time-ag-'
 
 
 
