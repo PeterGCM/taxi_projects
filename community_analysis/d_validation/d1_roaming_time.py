@@ -27,8 +27,6 @@ def run():
     for y in range(9, 13):
         for m in range(1, 13):
             yymm = '%02d%02d' % (y, m)
-            if yymm == '0901':
-                continue
             # yymm = '12%02d' % mm
             # process_file(yymm)
             put_task(process_file, [yymm])
@@ -55,7 +53,9 @@ def process_file(period):
             logger.info('The file X exists; %s' % period)
             return None
         roaming_time_fpath = '%s/%s%s.csv' % (roaming_time_dir, roaming_time_prefix, period)
-
+        if check_path_exist(roaming_time_fpath):
+            logger.info('The file already handled; %s' % period)
+            return None
         with open(log_fpath, 'rb') as r_csvfile:
             reader = csv.reader(r_csvfile)
             headers = reader.next()
