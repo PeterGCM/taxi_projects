@@ -10,7 +10,7 @@ from taxi_common.log_handling_functions import get_logger
 #
 import pandas as pd
 
-logger = get_logger('roaming_time')
+logger = get_logger('roaming_time_day')
 
 def run():
     check_dir_create(roaming_time_ag_dir)
@@ -47,9 +47,6 @@ def process_file(period):
         with open('roaming time_%s.txt' % period, 'w') as f:
             f.write(format_exc())
         raise
-
-
-
 
 
 if __name__ == '__main__':
