@@ -15,9 +15,8 @@ def run():
             headers = reader.next()
             writer.writerow(headers)
             hid = {h: i for i, h in enumerate(headers)}
-            print hid
+            reader.next()
             for row in reader:
-                print row
                 ap_num = int(row[hid['ap-num']])
                 if ap_num == 0:
                     continue
