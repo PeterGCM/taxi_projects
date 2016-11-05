@@ -14,31 +14,32 @@ import csv
 #
 logger = get_logger('dw graph filtering')
 PER_FROM, INTERVAL = 99.94, 0.01
-percentiles = [pv for pv in np.arange(PER_FROM, 100, INTERVAL) if pv < 100]
-fdw_graph_summary = '%s/%s(%.3f,%.3f).csv' % (fdw_graph_dir, 'fdw-graph-summary', PER_FROM, INTERVAL)
+# percentiles = [pv for pv in np.arange(PER_FROM, 100, INTERVAL) if pv < 100]
+percentiles = [99.970]
+# fdw_graph_summary = '%s/%s(%.3f,%.3f).csv' % (fdw_graph_dir, 'fdw-graph-summary', PER_FROM, INTERVAL)
 
 
 def run():
     check_dir_create(fdw_graph_dir)
     #
-    if not check_path_exist(fdw_graph_summary):
-        with open(fdw_graph_summary, 'wt') as w_csvfile:
-            writer = csv.writer(w_csvfile, lineterminator='\n')
-            header = ['period', 'numDrivers', 'numPickups', 'numLinks',
-                                'weightAverage', 'weightSD',
-                                'weightMedian', 'weightMin', 'weightMax']
-            for per in percentiles:
-                header.append('Percentile (%.3f)' % per)
-            writer.writerow(header)
+    # if not check_path_exist(fdw_graph_summary):
+    #     with open(fdw_graph_summary, 'wt') as w_csvfile:
+    #         writer = csv.writer(w_csvfile, lineterminator='\n')
+    #         header = ['period', 'numDrivers', 'numPickups', 'numLinks',
+    #                             'weightAverage', 'weightSD',
+    #                             'weightMedian', 'weightMin', 'weightMax']
+    #         for per in percentiles:
+    #             header.append('Percentile (%.3f)' % per)
+    #         writer.writerow(header)
     #
-    handle_file('dw-graph-0901___.pkl')
+    # handle_file('dw-graph-0901___.pkl')
 
-    # init_multiprocessor(3)
-    # count_num_jobs = 0
-    # for dw_graph_fn in get_all_files(dw_graph_dir, '', '.pkl'):
-    #     put_task(handle_file, [dw_graph_fn])
-    #     count_num_jobs += 1
-    # end_multiprocessor(count_num_jobs)
+    init_multiprocessor(8)
+    count_num_jobs = 0
+    for dw_graph_fn in get_all_files(dw_graph_dir, '', '.pkl'):
+        put_task(handle_file, [dw_graph_fn])
+        count_num_jobs += 1
+    end_multiprocessor(count_num_jobs)
 
 
 def handle_file(dw_graph_fn):
@@ -73,15 +74,15 @@ def handle_file(dw_graph_fn):
                     (percentile_dir, fdw_graph_prefix, 'percentile(%.3f)' % per, period)
             save_pkl_threading(fpath, filtered_graph[per])
         #
-        weights = np.asarray(weights)
-        with open(fdw_graph_summary, 'a') as w_csvfile:
-            writer = csv.writer(w_csvfile, lineterminator='\n')
-            new_row = [period, num_drivers, num_pickups, len(weights),
-                     weights.mean(), weights.std(),
-                     np.median(weights), weights.min(), weights.max()]
-            for pv in percentile_values:
-                new_row.append('%.3f' % pv)
-            writer.writerow(new_row)
+        # weights = np.asarray(weights)
+        # with open(fdw_graph_summary, 'a') as w_csvfile:
+        #     writer = csv.writer(w_csvfile, lineterminator='\n')
+        #     new_row = [period, num_drivers, num_pickups, len(weights),
+        #              weights.mean(), weights.std(),
+        #              np.median(weights), weights.min(), weights.max()]
+        #     for pv in percentile_values:
+        #         new_row.append('%.3f' % pv)
+        #     writer.writerow(new_row)
     except Exception as _:
         with open('Exception filtering.txt', 'w') as f:
             f.write(format_exc())
