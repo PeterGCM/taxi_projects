@@ -2,9 +2,13 @@ import __init__
 #
 from community_analysis import taxi_home
 from community_analysis import roaming_time_dir, roaming_time_prefix
+from community_analysis import com_drivers_dir, com_drivers_prefix
 from community_analysis import FREE
+from community_analysis import CHOSEN_PERCENTILE
+from community_analysis import FRI, SAT, SUN
+from community_analysis import PM2, PM11
 #
-from taxi_common.file_handling_functions import check_path_exist, check_dir_create
+from taxi_common.file_handling_functions import check_path_exist, check_dir_create, load_pickle_file
 from taxi_common.log_handling_functions import get_logger
 from taxi_common.sg_grid_zone import get_sg_grid_xy_points
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
@@ -13,7 +17,7 @@ from bisect import bisect
 import csv, datetime
 
 logger = get_logger('roaming_time')
-
+percentile_dirname = 'percentile(%.3f)' % CHOSEN_PERCENTILE
 
 def run():
     check_dir_create(roaming_time_dir)
@@ -36,6 +40,13 @@ def process_file(period):
     try:
         logger.info('Handling %s' % period)
         x_points, y_points = get_sg_grid_xy_points()
+
+        group_drivers_fpath = '%s/%s/%s%s.pkl' % (com_drivers_dir, percentile_dirname, com_drivers_prefix, period)
+        group_drivers = load_pickle_file(group_drivers_fpath)
+        driver_set = set()
+        for gn, members in group_drivers.iteritems():
+            for did in members:
+                driver_set.add(did)
         yy, mm = period[:2], period[-2:]
         log_fpath = '%s/20%s/%s/logs/logs-%s-normal.csv' % (taxi_home, yy, mm, period)
         if not check_path_exist(log_fpath):
@@ -52,6 +63,8 @@ def process_file(period):
             for row in reader:
                 did = row[hid['driver-id']]
                 if did == '-1':
+                    continue
+                if eval(did) not in driver_set:
                     continue
                 longitude, latitude = eval(row[hid['longitude']]), eval(row[hid['latitude']])
                 zi, zj = bisect(x_points, longitude) - 1, bisect(y_points, latitude) - 1
@@ -91,8 +104,18 @@ class driver(object):
                                  'time', 'day', 'dayOfWeek'])
 
     def update(self, cl_time, cl_zone, cl_state):
+        pl_dt = datetime.datetime.fromtimestamp(self.pl_time)
+        count_true = 0
         if self.pl_state == FREE:
-            pl_dt = datetime.datetime.fromtimestamp(self.pl_time)
+            count_true += 1
+        if pl_dt.weekday() not in [FRI, SAT, SUN]:
+            count_true += 1
+        if PM2 < pl_dt.hour:
+            count_true += 1
+        if pl_dt.hour < PM11:
+            count_true += 1
+        #
+        if count_true == 4:
             zi, zj = self.pl_zone
             roaming_time = cl_time - self.pl_time
             with open(self.roaming_time_fpath, 'a') as w_csvfile:
