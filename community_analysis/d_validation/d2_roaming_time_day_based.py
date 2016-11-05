@@ -17,7 +17,7 @@ def run():
     #
     init_multiprocessor(6)
     count_num_jobs = 0
-    for y in range(9, 13):
+    for y in range(9, 10):
         for m in range(1, 13):
             yymm = '%02d%02d' % (y, m)
             # yymm = '12%02d' % mm
