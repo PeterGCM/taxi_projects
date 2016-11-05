@@ -27,7 +27,7 @@ def run():
     for y in range(9, 13):
         for m in range(1, 13):
             yymm = '%02d%02d' % (y, m)
-            if yy== '0901':
+            if yymm == '0901':
                 continue
             # yymm = '12%02d' % mm
             # process_file(yymm)
