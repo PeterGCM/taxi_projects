@@ -20,6 +20,7 @@ ftd_shift_dir, ftd_shift_prefix = '%s/%s' % (ftd_dir, 'ftd_shifts'), 'ftd-shifts
 ftd_ap_stat_fpath = '%s/%s' % (summary_dir, 'ftd_ap_stats.csv')
 
 ftd_ap_daily_stat_fpath = '%s/%s' % (summary_dir, 'ftd_ap_daily_stats.csv')
+ftd_ap_daily_stat_filtered_fpath = '%s/%s' % (summary_dir, 'ftd_ap_daily_stats_filtered.csv')
 
 ftd_ns_stat_fpath = '%s/%s' % (summary_dir, 'ftd_ns_stats.csv')
 #
