@@ -86,7 +86,7 @@ def process_file(period):
     except Exception as _:
         with open('roaming time_%s.txt' % period, 'w') as f:
             f.write(format_exc())
-    raise
+        raise
 
 
 class driver(object):
