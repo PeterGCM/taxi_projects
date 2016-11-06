@@ -19,6 +19,7 @@ import csv, datetime
 logger = get_logger('roaming_time')
 percentile_dirname = 'percentile(%.3f)' % CHOSEN_PERCENTILE
 
+
 def run():
     check_dir_create(roaming_time_dir)
     #
