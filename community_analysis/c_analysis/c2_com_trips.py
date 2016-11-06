@@ -20,19 +20,23 @@ percentile_dirname = 'percentile(%.3f)' % CHOSEN_PERCENTILE
 def run():
     check_dir_create(com_trips_dir)
     check_dir_create('%s/%s' % (com_trips_dir, percentile_dirname))
-    process_files('0901___')
     #
-    # process_files(9)
-    # init_multiprocessor(4)
-    # count_num_jobs = 0
-    # for y in range(9, 13):
-    #     put_task(process_files, [y])
-    #     count_num_jobs += 1
-    # end_multiprocessor(count_num_jobs)
+    init_multiprocessor(4)
+    count_num_jobs = 0
+    for y in range(9, 13):
+        for m in range(1, 13):
+            yymm = '%02d%02d' % (y, m)
+            # yymm = '12%02d' % mm
+            # process_file(yymm)
+            put_task(process_files, [yymm])
+            count_num_jobs += 1
+    end_multiprocessor(count_num_jobs)
 
 
 def process_files(period):
     group_drivers_fpath = '%s/%s/%s%s.pkl' % (com_drivers_dir, percentile_dirname, com_drivers_prefix, period)
+    if not check_path_exist(group_drivers_fpath):
+        return None
     group_drivers = load_pickle_file(group_drivers_fpath)
     #
     com_trips_fpath = '%s/%s/%s%s.csv' % (com_trips_dir, percentile_dirname, com_trips_prefix, period)
