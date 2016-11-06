@@ -64,7 +64,7 @@ def process_file(period):
                                 if zi < 0 or zj < 0:
                                     continue
                                 day_tf_zone_drivers[handling_day, tf, zi, zj, com_did] = \
-                                    O_APPEAR if tf_zone_drivers.has((tf, zi, zj, com_did)) else X_APPEAR
+                                    O_APPEAR if tf_zone_drivers.has_key((tf, zi, zj, com_did)) else X_APPEAR
                     handling_day = day
                     tf_zone_drivers = {}
                 did = int(row[hid['did']])
