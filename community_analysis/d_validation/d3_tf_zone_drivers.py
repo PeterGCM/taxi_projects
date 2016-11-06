@@ -18,17 +18,17 @@ percentile_dirname = 'percentile(%.3f)' % CHOSEN_PERCENTILE
 def run():
     check_dir_create(tf_zone_drivers_dir)
     #
-    process_file('0901')
-    # init_multiprocessor(8)
-    # count_num_jobs = 0
-    # for y in range(9, 10):
-    #     for m in range(1, 13):
-    #         yymm = '%02d%02d' % (y, m)
-    #         # yymm = '12%02d' % mm
-    #         # process_file(yymm)
-    #         put_task(process_file, [yymm])
-    #         count_num_jobs += 1
-    # end_multiprocessor(count_num_jobs)
+    # process_file('0901')
+    init_multiprocessor(8)
+    count_num_jobs = 0
+    for y in range(9, 10):
+        for m in range(1, 13):
+            yymm = '%02d%02d' % (y, m)
+            # yymm = '12%02d' % mm
+            # process_file(yymm)
+            put_task(process_file, [yymm])
+            count_num_jobs += 1
+    end_multiprocessor(count_num_jobs)
 
 
 def process_file(period):
