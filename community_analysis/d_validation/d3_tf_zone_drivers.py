@@ -35,7 +35,7 @@ def process_file(period):
     from traceback import format_exc
     #
     try:
-        tf_zone_drivers_fpath = '%s/%s%s.csv' % (tf_zone_drivers_dir, tf_zone_drivers_prefix, period)
+        tf_zone_drivers_fpath = '%s/%s%s.pkl' % (tf_zone_drivers_dir, tf_zone_drivers_prefix, period)
         if check_path_exist(tf_zone_drivers_fpath):
             logger.info('Already handled; %s' % period)
             return None
