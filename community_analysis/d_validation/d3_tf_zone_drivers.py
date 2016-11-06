@@ -48,14 +48,13 @@ def process_file(period):
             reader = csv.reader(r_csvfile)
             headers = reader.next()
             hid = {h: i for i, h in enumerate(headers)}
-            row = reader.next()
-            handling_day = int(row[hid['day']])
+            handling_day = 0
             tf_zone_drivers = {}
-            while row:
+            for row in reader:
                 day = int(row[hid['day']])
                 if handling_day != day:
-                    logger.info('finished; %s-%d' % (period, handling_day))
                     handling_day = day
+                    logger.info('handling; %s-%d' % (period, handling_day))
                 did = int(row[hid['did']])
                 tf = int(row[hid['timeFrame']])
                 zi, zj = int(row[hid['zi']]), int(row[hid['zj']])
@@ -63,8 +62,6 @@ def process_file(period):
                 if not tf_zone_drivers.has_key(k):
                     tf_zone_drivers[k] = set()
                 tf_zone_drivers[k].add(did)
-                #
-                row = reader.next()
         save_pickle_file(tf_zone_drivers_fpath, tf_zone_drivers)
     except Exception as _:
         with open('tf_zone_drivers_%s.txt' % period, 'w') as f:
