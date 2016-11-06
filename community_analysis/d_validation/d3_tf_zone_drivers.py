@@ -55,6 +55,7 @@ def process_file(period):
                 day = int(row[hid['day']])
                 if handling_day != day:
                     logger.info('finished; %s-%d' % (period, handling_day))
+                    handling_day = day
                 did = int(row[hid['did']])
                 tf = int(row[hid['timeFrame']])
                 zi, zj = int(row[hid['zi']]), int(row[hid['zj']])
