@@ -57,6 +57,7 @@ def process_file(period):
             while row:
                 day = int(row[hid['day']])
                 if handling_day != day:
+                    logger.info('saving; %s-%d' % (period, handling_day))
                     for com_did in com_drivers:
                         for tf in range(PM2, PM11 + 1):
                             for (zi, zj) in zones.iterkeys():
