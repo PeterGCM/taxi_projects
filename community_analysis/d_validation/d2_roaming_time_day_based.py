@@ -45,7 +45,6 @@ def process_file(period):
         df = pd.read_csv(roaming_time_fpath)
         new_df = df.groupby(['did', 'timeFrame', 'zi', 'zj', 'day']).sum().loc[:, 'roamingTime'].reset_index()
         new_df.to_csv(roaming_time_ag_fpath)
-
     except Exception as _:
         with open('roaming time_%s.txt' % period, 'w') as f:
             f.write(format_exc())

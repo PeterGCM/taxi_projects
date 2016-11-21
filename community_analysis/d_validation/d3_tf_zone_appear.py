@@ -1,6 +1,5 @@
 import __init__
 #
-from community_analysis import com_drivers_dir, com_drivers_prefix
 from community_analysis import com_trips_dir, com_trips_prefix
 from community_analysis import tf_zone_drivers_dir, tf_zone_drivers_prefix
 from community_analysis import CHOSEN_PERCENTILE
@@ -9,7 +8,7 @@ from taxi_common.file_handling_functions import check_dir_create, check_path_exi
 from taxi_common.log_handling_functions import get_logger
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
-import csv
+import csv, datetime
 
 logger = get_logger('tf_zone_drivers')
 percentile_dirname = 'percentile(%.3f)' % CHOSEN_PERCENTILE
@@ -18,16 +17,12 @@ percentile_dirname = 'percentile(%.3f)' % CHOSEN_PERCENTILE
 def run():
     check_dir_create(tf_zone_drivers_dir)
     #
-    # process_file('0901')
-    init_multiprocessor(8)
+    init_multiprocessor(4)
     count_num_jobs = 0
-    for y in range(9, 10):
-        for m in range(1, 13):
-            yymm = '%02d%02d' % (y, m)
-            # yymm = '12%02d' % mm
-            # process_file(yymm)
-            put_task(process_file, [yymm])
-            count_num_jobs += 1
+    for y in range(9, 13):
+        yyyy = '20%02d' % (y)
+        put_task(process_file, [yyyy])
+        count_num_jobs += 1
     end_multiprocessor(count_num_jobs)
 
 
@@ -48,19 +43,19 @@ def process_file(period):
             headers = reader.next()
             hid = {h: i for i, h in enumerate(headers)}
             handling_day = 0
-            tf_zone_drivers = {}
+            tf_zone_drivers = set()
             for row in reader:
-                day = int(row[hid['day']])
+                t = eval(row[hid['time']])
+                cur_dt = datetime.datetime.fromtimestamp(t)
+                day = cur_dt.day
                 if handling_day != day:
                     handling_day = day
                     logger.info('handling; %s-%d' % (period, handling_day))
                 did = int(row[hid['did']])
                 tf = int(row[hid['timeFrame']])
                 zi, zj = int(row[hid['zi']]), int(row[hid['zj']])
-                k = (day, tf, zi, zj)
-                if not tf_zone_drivers.has_key(k):
-                    tf_zone_drivers[k] = set()
-                tf_zone_drivers[k].add(did)
+                k = (did, cur_dt.month, day, tf, zi, zj)
+                tf_zone_drivers.add(k)
         save_pickle_file(tf_zone_drivers_fpath, tf_zone_drivers)
     except Exception as _:
         with open('tf_zone_drivers_%s.txt' % period, 'w') as f:
