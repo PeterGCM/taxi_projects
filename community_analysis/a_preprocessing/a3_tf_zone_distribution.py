@@ -1,5 +1,9 @@
 import __init__
 #
+'''
+
+'''
+#
 from community_analysis import tf_zone_counting_dir
 from community_analysis import tf_zone_counting_individuals_prefix, tf_zone_counting_groups_prefix
 from community_analysis import tf_zone_distribution_dir
@@ -8,7 +12,7 @@ from community_analysis import tf_zone_distribution_individuals_prefix, tf_zone_
 from community_analysis import PM2, PM11
 #
 from taxi_common.file_handling_functions import check_dir_create, load_pickle_file, \
-                            save_pickle_file, save_pkl_threading, get_all_files
+                            save_pickle_file, save_pkl_threading, get_all_files, check_path_exist
 from taxi_common.sg_grid_zone import get_sg_zones
 from taxi_common.log_handling_functions import get_logger
 #
@@ -24,12 +28,11 @@ def run():
     for fn in get_all_files(tf_zone_counting_dir, '', '.pkl'):
         logger.info('Handling %s' % fn)
         _, _, _, _, period = fn[:-len('.pkl')].split('-')
-
-
-        if period != '0901___':
-            continue
-
         #
+        whole_distribution_fpath = '%s/%s%s.csv' % (tf_zone_distribution_dir, tf_zone_distribution_whole_prefix, period)
+        if check_path_exist(whole_distribution_fpath):
+            logger.info('Already handled %s' % fn)
+            continue
         tf_zone_counting_fpath = '%s/%s' % (tf_zone_counting_dir, fn)
         drivers = load_pickle_file(tf_zone_counting_fpath)
 
@@ -52,7 +55,6 @@ def run():
             for tf_zone, tf_zone_counting in whole_counting.iteritems():
                 whole_distribution[tf_zone] = tf_zone_counting / float(year_num_trips)
             #
-            whole_distribution_fpath = '%s/%s%s.csv' % (tf_zone_distribution_dir, tf_zone_distribution_whole_prefix, period)
             headers = ['k','timeFrame', 'zid', 'probability']
             LK, LTF, LZ, LP = range(4)
             zones = get_sg_zones()

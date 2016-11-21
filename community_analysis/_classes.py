@@ -29,7 +29,9 @@ class ca_driver_with_distribution(driver):
         self.individual_distribution = individual_distribution
         self.group_distribution = group_distribution
         self.num_inDay = {}
-        self.link_weight, self.link_frequency = {}, {}
+        self.link_frequency = {}
+        self.lw_count, self.lw_benefit = {}, {}
+        self.lw_frequency, self.lw_fb = {}, {}
         self.num_pickup = 0
 
     def update_linkWeight(self, t, z):
@@ -42,10 +44,16 @@ class ca_driver_with_distribution(driver):
                 continue
             else:
                 updated_drivers.add(driverPrev)
-            if not self.link_weight.has_key(driverPrev.did):
+            if not self.lw_fb.has_key(driverPrev.did):
                 self.num_inDay[driverPrev.did] = 0
-                self.link_weight[driverPrev.did] = 0.0
                 self.link_frequency[driverPrev.did] = 0.0
+                #
+                self.lw_count[driverPrev.did] = 0
+                self.lw_benefit[driverPrev.did] = 0.0
+                self.lw_frequency[driverPrev.did] = 0.0
+                self.lw_fb[driverPrev.did] = 0.0
+            #
+            self.num_inDay[driverPrev.did] += 1
             cur_dt = datetime.datetime.fromtimestamp(t)
             k = (cur_dt.hour, z.zi, z.zj)
             curD_prob = self.individual_distribution[k]
@@ -53,8 +61,10 @@ class ca_driver_with_distribution(driver):
                 prevD_group_prob = 0.0
             else:
                 prevD_group_prob = driverPrev.group_distribution[k]
-            self.link_weight[driverPrev.did] += max(0, prevD_group_prob - curD_prob) * self.link_frequency[driverPrev.did]
-            self.num_inDay[driverPrev.did] += 1
+            self.lw_count[driverPrev.did] += 1
+            self.lw_benefit[driverPrev.did] += self.link_frequency[driverPrev.did]
+            self.lw_frequency[driverPrev.did] += max(0, prevD_group_prob - curD_prob)
+            self.lw_fb[driverPrev.did] += self.link_frequency[driverPrev.did] * max(0, prevD_group_prob - curD_prob)
         z.add_driver_in_logQ(t, self)
         self.num_pickup += 1
 

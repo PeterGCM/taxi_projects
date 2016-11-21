@@ -20,21 +20,18 @@ def run():
     logger.info('Execution')
     check_dir_create(dw_graph_dir)
     #
-    process_file('0901___')
-
-
-    # init_multiprocessor(6)
-    # count_num_jobs = 0
-    # for y in range(9, 13):
-    #     yyyy = '20%02d' % (y)
-    #     # process_file(yyyy)
-    #     put_task(process_file, [yyyy])
-    #     count_num_jobs += 1
-    #     for m in range(1, 13):
-    #         yymm = '%02d%02d' % (y, m)
-    #         put_task(process_file, [yymm])
-    #         count_num_jobs += 1
-    # end_multiprocessor(count_num_jobs)
+    init_multiprocessor(4)
+    count_num_jobs = 0
+    for y in range(9, 13):
+        yyyy = '20%02d' % (y)
+        # process_file(yyyy)
+        put_task(process_file, [yyyy])
+        count_num_jobs += 1
+        for m in range(1, 13):
+            yymm = '%02d%02d' % (y, m)
+            put_task(process_file, [yymm])
+            count_num_jobs += 1
+    end_multiprocessor(count_num_jobs)
 
 
 def process_file(period):
@@ -59,8 +56,11 @@ def process_file(period):
                 else:
                     did_gn[did] = gn
         #
-        dw_graph_fpath = '%s/%s%s.pkl' % (dw_graph_dir, dw_graph_prefix, period)
-        if check_path_exist(dw_graph_fpath):
+        dwg_count_fpath = '%s/%scount-%s.pkl' % (dw_graph_dir, dw_graph_prefix, period)
+        dwg_benefit_fpath = '%s/%sbenefit-%s.pkl' % (dw_graph_dir, dw_graph_prefix, period)
+        dwg_frequency_fpath = '%s/%sfrequency-%s.pkl' % (dw_graph_dir, dw_graph_prefix, period)
+        dwg_fb_fpath = '%s/%sfb-%s.pkl' % (dw_graph_dir, dw_graph_prefix, period)
+        if check_path_exist(dwg_fb_fpath):
             logger.info('Already processed %s' % period)
             return None
         logger.info('Start %s directed weighted graph processing' % period)
@@ -99,16 +99,42 @@ def process_file(period):
                                                                group_distribution[did_gn[did]])
                 drivers[did].update_linkWeight(t, z)
         logger.info('Start %s aggregation' % period)
-        dw_graph = []
+        dwg_count, dwg_benefit, dwg_frequency, dwg_fb = [], [], [], []
         for did, d in drivers.iteritems():
+            #
+            non_zero_one_weight_link = {}
+            for did0, w in d.dwg_count.iteritems():
+                if w < 1:
+                    continue
+                non_zero_one_weight_link[did0] = w
+            dwg_count.append((did, d.num_pickup, non_zero_one_weight_link))
+            #
             non_zero_weight_link = {}
-            for did0, w in d.link_weight.iteritems():
+            for did0, w in d.dwg_benefit.iteritems():
                 if w == 0:
                     continue
                 non_zero_weight_link[did0] = w
-            dw_graph.append((did, d.num_pickup, non_zero_weight_link))
+            dwg_benefit.append((did, d.num_pickup, non_zero_weight_link))
+            #
+            non_zero_weight_link = {}
+            for did0, w in d.dwg_frequency.iteritems():
+                if w == 0:
+                    continue
+                non_zero_weight_link[did0] = w
+            dwg_frequency.append((did, d.num_pickup, non_zero_weight_link))
+            #
+            non_zero_weight_link = {}
+            for did0, w in d.lw_fb.iteritems():
+                if w == 0:
+                    continue
+                non_zero_weight_link[did0] = w
+            dwg_fb.append((did, d.num_pickup, non_zero_weight_link))
+        #
         logger.info('Start %s pickling' % period)
-        save_pickle_file(dw_graph_fpath, dw_graph)
+        save_pickle_file(dwg_count_fpath, dwg_count)
+        save_pickle_file(dwg_benefit_fpath, dwg_benefit)
+        save_pickle_file(dwg_frequency_fpath, dwg_frequency)
+        save_pickle_file(dwg_fb_fpath, dwg_fb)
     except Exception as _:
         with open('Exception dw graph.txt', 'w') as f:
             f.write(format_exc())
