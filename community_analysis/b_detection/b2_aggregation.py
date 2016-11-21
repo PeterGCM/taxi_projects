@@ -10,6 +10,7 @@ import time
 logger = get_logger('aggregation')
 FIVE_MINUTE = 5 * 60
 
+
 def run():
     check_dir_create(dw_graph_dir)
     #

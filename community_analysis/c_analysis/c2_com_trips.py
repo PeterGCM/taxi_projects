@@ -39,10 +39,10 @@ def process_files(period):
         return None
     group_drivers = load_pickle_file(group_drivers_fpath)
     #
-    com_trips_fpath = '%s/%s/%s%s.csv' % (com_trips_dir, percentile_dirname, com_trips_prefix, period)
-    if check_path_exist(com_trips_fpath):
+    group_trips_fpath = '%s/%s/%s%s.csv' % (com_trips_dir, percentile_dirname, com_trips_prefix, period)
+    if check_path_exist(group_trips_fpath):
         return None
-    with open(com_trips_fpath, 'wt') as w_csvfile:
+    with open(group_trips_fpath, 'wt') as w_csvfile:
         writer = csv.writer(w_csvfile, lineterminator='\n')
         writer.writerow(['did',
                          'timeFrame', 'zi', 'zj',
@@ -82,7 +82,7 @@ def process_files(period):
             prev_com_driver = drivers[did].find_prevDriver(t, z)
             #
             gn = did_gn[did]
-            with open(com_trips_fpath, 'a') as w_csvfile:
+            with open(group_trips_fpath, 'a') as w_csvfile:
                 writer = csv.writer(w_csvfile, lineterminator='\n')
                 new_row = [did,
                            row[hid['timeFrame']], zi, zj,

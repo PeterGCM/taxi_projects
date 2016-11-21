@@ -39,11 +39,10 @@ def process_file(period):
         if check_path_exist(tf_zone_drivers_fpath):
             logger.info('Already handled; %s' % period)
             return None
-        group_drivers_fpath = '%s/%s/%s%s.pkl' % (com_drivers_dir, percentile_dirname, com_drivers_prefix, period)
-        if not check_path_exist(group_drivers_fpath):
+        com_trips_fpath = '%s/%s/%s%s.csv' % (com_trips_dir, percentile_dirname, com_trips_prefix, period)
+        if not check_path_exist(com_trips_fpath):
             logger.info('The file X exists; %s' % period)
             return None
-        com_trips_fpath = '%s/%s/%s%s.csv' % (com_trips_dir, percentile_dirname, com_trips_prefix, period)
         with open(com_trips_fpath, 'rb') as r_csvfile:
             reader = csv.reader(r_csvfile)
             headers = reader.next()

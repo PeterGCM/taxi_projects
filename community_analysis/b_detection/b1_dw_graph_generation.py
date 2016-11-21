@@ -24,7 +24,7 @@ def run():
     logger.info('Execution')
     check_dir_create(dw_graph_dir)
     #
-    init_multiprocessor(4)
+    init_multiprocessor(3)
     count_num_jobs = 0
     for y in range(9, 13):
         for m in range(1, 13):
@@ -103,21 +103,21 @@ def process_file(period):
         for did, d in drivers.iteritems():
             #
             non_zero_one_weight_link = {}
-            for did0, w in d.dwg_count.iteritems():
+            for did0, w in d.lw_count.iteritems():
                 if w < 1:
                     continue
                 non_zero_one_weight_link[did0] = w
             dwg_count.append((did, d.num_pickup, non_zero_one_weight_link))
             #
             non_zero_weight_link = {}
-            for did0, w in d.dwg_benefit.iteritems():
+            for did0, w in d.lw_benefit.iteritems():
                 if w == 0:
                     continue
                 non_zero_weight_link[did0] = w
             dwg_benefit.append((did, d.num_pickup, non_zero_weight_link))
             #
             non_zero_weight_link = {}
-            for did0, w in d.dwg_frequency.iteritems():
+            for did0, w in d.lw_frequency.iteritems():
                 if w == 0:
                     continue
                 non_zero_weight_link[did0] = w

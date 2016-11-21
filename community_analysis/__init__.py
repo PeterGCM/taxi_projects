@@ -36,7 +36,7 @@ com_trips_dir = '%s/%s' % (taxi_data, 'com_trips'); com_trips_prefix = 'com-trip
 #
 FREE = 0
 roaming_time_dir = '%s/%s' % (taxi_data, 'roaming_time'); roaming_time_prefix = 'roaming-time-'
-roaming_time_ag_dir = '%s/%s' % (roaming_time_dir, 'aggregated'); roaming_time_ag_prefix = 'roaming-time-ag-'
+rt_day_dir = '%s/%s' % (roaming_time_dir, 'day'); rt_day_prefix = 'roaming-time-day-'
 tf_zone_drivers_dir = '%s/%s' % (taxi_data, 'tf_zone_drivers'); tf_zone_drivers_prefix = 'tf-zone-drivers-'
 X_APPEAR, O_APPEAR = range(2)
 

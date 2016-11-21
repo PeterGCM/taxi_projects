@@ -20,16 +20,16 @@ def run():
     percentile_dirpath = '%s/%s' % (group_dir, percentile_dirname)
     for dirname in get_all_directories(percentile_dirpath):
         dirpath = '%s/%s' % (percentile_dirpath, dirname)
-        group_fpath = '%s/%s/%s%s.pkl' % (com_drivers_dir, percentile_dirname, com_drivers_prefix, dirname)
-        groups = {}
+        group_drivers_fpath = '%s/%s/%s%s.pkl' % (com_drivers_dir, percentile_dirname, com_drivers_prefix, dirname)
+        group_drivers = {}
         for group_fn in get_all_files(dirpath, '', '.pkl'):
             _, _, yyyy, gn = group_fn[:-len('.pkl')].split('-')
             igG = ig.Graph.Read_Pickle('%s/%s' % (dirpath, group_fn))
             drivers = [v['name'] for v in igG.vs]
             if len(drivers) < MIN_NUM_DRIVERS:
                 continue
-            groups[gn] = drivers
-        save_pickle_file(group_fpath, groups)
+            group_drivers[gn] = drivers
+        save_pickle_file(group_drivers_fpath, group_drivers)
 
 
 if __name__ == '__main__':

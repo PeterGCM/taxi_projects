@@ -1,8 +1,11 @@
 import __init__
 #
-from community_analysis import taxi_home
+'''
+
+'''
+#
 from community_analysis import roaming_time_dir, roaming_time_prefix
-from community_analysis import roaming_time_ag_dir, roaming_time_ag_prefix
+from community_analysis import rt_day_dir, rt_day_prefix
 #
 from taxi_common.file_handling_functions import check_path_exist, check_dir_create, load_pickle_file
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
@@ -13,7 +16,7 @@ import pandas as pd
 logger = get_logger('roaming_time_day')
 
 def run():
-    check_dir_create(roaming_time_ag_dir)
+    check_dir_create(rt_day_dir)
     #
     init_multiprocessor(6)
     count_num_jobs = 0
@@ -35,7 +38,7 @@ def process_file(period):
         if not check_path_exist(roaming_time_fpath):
             logger.info('The file X exists; %s' % period)
             return None
-        roaming_time_ag_fpath = '%s/%s%s.csv' % (roaming_time_ag_dir, roaming_time_ag_prefix, period)
+        roaming_time_ag_fpath = '%s/%s%s.csv' % (rt_day_dir, rt_day_prefix, period)
         if check_path_exist(roaming_time_ag_fpath):
             logger.info('The file already handled; %s' % period)
             return None
