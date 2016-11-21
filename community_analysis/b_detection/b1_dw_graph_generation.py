@@ -1,12 +1,16 @@
 import __init__
 #
+'''
+
+'''
+#
 from community_analysis import ss_trips_dir, ss_trips_prefix
 from community_analysis import tf_zone_distribution_dir
 from community_analysis import tf_zone_distribution_individuals_prefix, tf_zone_distribution_groups_prefix
 from community_analysis import dw_graph_dir, dw_graph_prefix
 from community_analysis._classes import ca_driver_with_distribution, ca_zone
 #
-from taxi_common.file_handling_functions import check_path_exist, load_pickle_file, save_pickle_file, check_dir_create
+from taxi_common.file_handling_functions import check_path_exist, load_pickle_file, save_pickle_file, check_dir_create, save_pkl_threading
 from taxi_common.log_handling_functions import get_logger
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 from taxi_common.sg_grid_zone import get_sg_zones
@@ -23,10 +27,6 @@ def run():
     init_multiprocessor(4)
     count_num_jobs = 0
     for y in range(9, 13):
-        yyyy = '20%02d' % (y)
-        # process_file(yyyy)
-        put_task(process_file, [yyyy])
-        count_num_jobs += 1
         for m in range(1, 13):
             yymm = '%02d%02d' % (y, m)
             put_task(process_file, [yymm])
@@ -131,10 +131,10 @@ def process_file(period):
             dwg_fb.append((did, d.num_pickup, non_zero_weight_link))
         #
         logger.info('Start %s pickling' % period)
-        save_pickle_file(dwg_count_fpath, dwg_count)
-        save_pickle_file(dwg_benefit_fpath, dwg_benefit)
-        save_pickle_file(dwg_frequency_fpath, dwg_frequency)
-        save_pickle_file(dwg_fb_fpath, dwg_fb)
+        save_pkl_threading(dwg_count_fpath, dwg_count)
+        save_pkl_threading(dwg_benefit_fpath, dwg_benefit)
+        save_pkl_threading(dwg_frequency_fpath, dwg_frequency)
+        save_pkl_threading(dwg_fb_fpath, dwg_fb)
     except Exception as _:
         with open('Exception dw graph.txt', 'w') as f:
             f.write(format_exc())
