@@ -27,9 +27,6 @@ dwg_benefit_dir = '%s/%s' % (dwg_dir, 'benefit'); dwg_benefit_prefix = 'dw-graph
 dwg_frequency_dir = '%s/%s' % (dwg_dir, 'frequency'); dwg_frequency_prefix = 'dw-graph-frequency-'
 dwg_fb_dir = '%s/%s' % (dwg_dir, 'fb'); dwg_fb_prefix = 'dw-graph-fb-'
 dwg_summary = '%s/%s' % (dwg_dir, 'dwg-summary.csv')
-# dw_aggreg_dir = '%s/%s' % (dw_graph_dir, 'dw_aggregation'); dw_aggreg_prefix = 'dw-aggregation-'
-# year_aggre_summary_fpath = '%s/%s.csv' % (dw_aggreg_dir, 'year-aggretation-summary')
-# month3_aggre_summary_fpath = '%s/%s.csv' % (dw_aggreg_dir, 'month3-aggretation-summary')
 fdwg_dir = '%s/%s' % (taxi_data, 'fdw_graph'); fdw_graph_prefix = 'fdw-graph-'
 TOP5PERCENT = 0.05
 group_dir = '%s/%s' % (taxi_data, 'group'); group_prepix = 'group-'
