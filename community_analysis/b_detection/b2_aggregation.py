@@ -81,6 +81,6 @@ if __name__ == '__main__':
         run()
     except Exception as _:
         import sys
-        with open('__%s.txt' % (sys.argv[0]), 'w') as f:
+        with open('___error_%s.txt' % (sys.argv[0]), 'w') as f:
             f.write(format_exc())
         raise
