@@ -7,7 +7,7 @@ import __init__
 from community_analysis import ss_trips_dir, ss_trips_prefix
 from community_analysis import tf_zone_distribution_dir
 from community_analysis import tf_zone_distribution_individuals_prefix, tf_zone_distribution_groups_prefix
-from community_analysis import dwg_dir, dwg_prefix
+from community_analysis import dwg_dir
 from community_analysis import dwg_count_dir, dwg_count_prefix
 from community_analysis import dwg_benefit_dir, dwg_benefit_prefix
 from community_analysis import dwg_frequency_dir, dwg_frequency_prefix
@@ -48,6 +48,13 @@ def process_file(period):
         if not check_path_exist(ft_trips_fpath):
             logger.info('No file %s' % period)
             return None
+        dwg_count_fpath = '%s/%s%s.pkl' % (dwg_count_dir, dwg_count_prefix, period)
+        dwg_benefit_fpath = '%s/%s%s.pkl' % (dwg_benefit_dir, dwg_benefit_prefix, period)
+        dwg_frequency_fpath = '%s/%s%s.pkl' % (dwg_frequency_dir, dwg_frequency_prefix, period)
+        dwg_fb_fpath = '%s/%s%s.pkl' % (dwg_fb_dir, dwg_fb_prefix, period)
+        if check_path_exist(dwg_fb_fpath):
+            logger.info('Already processed %s' % period)
+            return None
         did_gn = {}
         with open(ft_trips_fpath, 'rb') as r_csvfile:
             reader = csv.reader(r_csvfile)
@@ -62,13 +69,6 @@ def process_file(period):
                 else:
                     did_gn[did] = gn
         #
-        dwg_count_fpath = '%s/%s%s.pkl' % (dwg_count_dir, dwg_count_prefix, period)
-        dwg_benefit_fpath = '%s/%s%s.pkl' % (dwg_benefit_dir, dwg_benefit_prefix, period)
-        dwg_frequency_fpath = '%s/%s%s.pkl' % (dwg_frequency_dir, dwg_frequency_prefix, period)
-        dwg_fb_fpath = '%s/%s%s.pkl' % (dwg_fb_dir, dwg_fb_prefix, period)
-        if check_path_exist(dwg_fb_fpath):
-            logger.info('Already processed %s' % period)
-            return None
         logger.info('Start %s directed weighted graph processing' % period)
         #
         individual_distribution = load_pickle_file('%s/%s%s.pkl' %
