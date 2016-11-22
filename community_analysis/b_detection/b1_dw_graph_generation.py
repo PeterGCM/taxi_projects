@@ -141,7 +141,7 @@ def process_file(period):
         save_pkl_threading(dwg_count_fpath, dwg_count)
         save_pkl_threading(dwg_benefit_fpath, dwg_benefit)
         save_pkl_threading(dwg_frequency_fpath, dwg_frequency)
-        save_pkl_threading(dwg_fb_fpath, dwg_fb)
+        save_pickle_file(dwg_fb_fpath, dwg_fb)
     except Exception as _:
         import sys
         with open('%s_%s.txt' % (sys.argv[0], period), 'w') as f:

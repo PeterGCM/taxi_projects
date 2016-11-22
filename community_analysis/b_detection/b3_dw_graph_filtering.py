@@ -47,6 +47,7 @@ def process_file(period):
             save_pickle_file(fdw_graph_fpath,
                              sorted([(k, v) for k, v in dw_graph.iteritems()], key=lambda x: x[1], reverse=True)[
                              :int(len(dw_graph) * TOP5PERCENT)])
+            del dw_graph
     except Exception as _:
         import sys
         with open('___error_%s.txt' % (sys.argv[0]), 'w') as f:

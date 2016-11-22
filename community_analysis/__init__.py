@@ -30,7 +30,7 @@ dwg_summary = '%s/%s' % (dwg_dir, 'dwg-summary.csv')
 # dw_aggreg_dir = '%s/%s' % (dw_graph_dir, 'dw_aggregation'); dw_aggreg_prefix = 'dw-aggregation-'
 # year_aggre_summary_fpath = '%s/%s.csv' % (dw_aggreg_dir, 'year-aggretation-summary')
 # month3_aggre_summary_fpath = '%s/%s.csv' % (dw_aggreg_dir, 'month3-aggretation-summary')
-fdwg_dir = '%s/%s' % (dwg_dir, 'fdw_graph'); fdw_graph_prefix = 'fdw-graph-'
+fdwg_dir = '%s/%s' % (taxi_data, 'fdw_graph'); fdw_graph_prefix = 'fdw-graph-'
 TOP5PERCENT = 0.05
 group_dir = '%s/%s' % (taxi_data, 'group'); group_prepix = 'group-'
 group_summary_fpath = '%s/%s.csv' % (group_dir , 'group-summary')
