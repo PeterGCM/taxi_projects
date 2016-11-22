@@ -30,7 +30,7 @@ def process_file(period):
         for dpath, fprefix in [(dwg_count_dir, dwg_count_prefix),
                                (dwg_benefit_dir, dwg_benefit_prefix),
                                (dwg_frequency_dir, dwg_frequency_prefix),
-                               (dwg_fb_dir, dwg_fb_prefix)
+                               # (dwg_fb_dir, dwg_fb_prefix)
                                ]:
             fdw_graph_fpath = '%s/%s%s-%s.pkl' % (fdwg_dir, fdw_graph_prefix, fprefix.split('-')[2], period)
             if check_path_exist(fdw_graph_fpath):

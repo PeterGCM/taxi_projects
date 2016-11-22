@@ -32,7 +32,8 @@ def run():
     for dpath, fprefix in [(dwg_count_dir, dwg_count_prefix),
                             (dwg_benefit_dir, dwg_benefit_prefix),
                             (dwg_frequency_dir, dwg_frequency_prefix),
-                            (dwg_fb_dir, dwg_fb_prefix)]:
+                            # (dwg_fb_dir, dwg_fb_prefix)
+                           ]:
         for y in range(9, 10):
             yyyy = '20%02d' % y
             logger.info('Handle %s (%s)' % (yyyy, fprefix))
