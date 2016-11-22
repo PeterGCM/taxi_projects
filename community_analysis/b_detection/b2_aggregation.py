@@ -25,7 +25,7 @@ def run():
                             (dwg_fb_dir, dwg_fb_prefix)]:
         for y in range(9, 10):
             yyyy = '20%02d' % y
-            logger.info('Handle %s' % yyyy)
+            logger.info('Handle %s (%s)' % yyyy, fprefix)
             year_aggregation_fpath = '%s/%s%s.pkl' % (dpath, fprefix, yyyy)
             if check_path_exist(year_aggregation_fpath):
                 return None
@@ -51,7 +51,7 @@ def run():
                             year_dwg[k] = 0.0
                         year_dwg[k] += weight
                 #
-            logger.info('Saving year_dw_graph0 %s' % yyyy)
+            logger.info('Saving year_dw_graph %s' % yyyy)
             save_pickle_file(year_aggregation_fpath, {k: v for k, v in year_dwg.iteritems() if v > 0.0})
 
 
@@ -61,6 +61,7 @@ if __name__ == '__main__':
     try:
         run()
     except Exception as _:
-        with open('Exception aggregation.txt', 'w') as f:
+        import sys
+        with open('%s.txt' % (sys.argv[0]), 'w') as f:
             f.write(format_exc())
         raise

@@ -142,7 +142,8 @@ def process_file(period):
         save_pkl_threading(dwg_frequency_fpath, dwg_frequency)
         save_pkl_threading(dwg_fb_fpath, dwg_fb)
     except Exception as _:
-        with open('Exception dw graph.txt', 'w') as f:
+        import sys
+        with open('%s_%s.txt' % (sys.argv[0], period), 'w') as f:
             f.write(format_exc())
         raise
 
