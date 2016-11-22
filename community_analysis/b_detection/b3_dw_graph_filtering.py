@@ -11,7 +11,7 @@ from taxi_common.file_handling_functions import check_dir_create, load_pickle_fi
                                                 save_pickle_file, check_path_exist
 from taxi_common.log_handling_functions import get_logger
 #
-logger = get_logger('dw graph filtering')
+logger = get_logger('___dw graph filtering')
 
 
 def run():
@@ -36,7 +36,7 @@ def process_file(period):
             if check_path_exist(fdw_graph_fpath):
                 logger.info('Already exist %s' % (fdw_graph_fpath))
                 continue
-            dwg_fpath = '%s/%s%s' % (dpath, fprefix, period)
+            dwg_fpath = '%s/%s%s.pkl' % (dpath, fprefix, period)
             if not check_path_exist(dwg_fpath):
                 logger.info('Not exist %s' % (dwg_fpath))
                 continue
