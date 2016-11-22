@@ -40,7 +40,10 @@ def process_file(period):
             if not check_path_exist(dwg_fpath):
                 logger.info('Not exist %s' % (dwg_fpath))
                 continue
+            logger.info('Loading %s' % (dwg_fpath))
             dw_graph = load_pickle_file(dwg_fpath)
+            #
+            logger.info('Filtering and pickling %s' % (fdw_graph_fpath))
             save_pickle_file(fdw_graph_fpath,
                              sorted([(k, v) for k, v in dw_graph.iteritems()], key=lambda x: x[1], reverse=True)[
                              :int(len(dw_graph) * TOP5PERCENT)])
