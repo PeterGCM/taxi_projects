@@ -1,6 +1,6 @@
 import __init__
 #
-from community_analysis import dw_graph_dir
+from community_analysis import dwg_dir
 from community_analysis import fdw_graph_dir, fdw_graph_prefix
 
 #
@@ -36,7 +36,7 @@ def run():
 
     init_multiprocessor(8)
     count_num_jobs = 0
-    for dw_graph_fn in get_all_files(dw_graph_dir, '', '.pkl'):
+    for dw_graph_fn in get_all_files(dwg_dir, '', '.pkl'):
         put_task(handle_file, [dw_graph_fn])
         count_num_jobs += 1
     end_multiprocessor(count_num_jobs)
@@ -48,7 +48,7 @@ def handle_file(dw_graph_fn):
     try:
         _, _, period = dw_graph_fn[:-len('.pkl')].split('-')
         logger.info('Start handling %s' % dw_graph_fn)
-        dw_graph_fpath = '%s/%s' % (dw_graph_dir, dw_graph_fn)
+        dw_graph_fpath = '%s/%s' % (dwg_dir, dw_graph_fn)
         dw_graph = load_pickle_file(dw_graph_fpath)
         logger.info('Start filtering %s' % dw_graph_fn)
         num_drivers, num_pickups, num_links = 0, 0, 0

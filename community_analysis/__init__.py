@@ -21,11 +21,15 @@ tf_zone_distribution_groups_prefix = 'tf-zone-distribution-groups-'
 tf_zone_distribution_whole_prefix = 'tf-zone-distribution-whole-'
 #
 DEPRECIATION_LAMBDA = 0.5
-dw_graph_dir = '%s/%s' % (taxi_data, 'dw_graph'); dw_graph_prefix = 'dw-graph-'
+dwg_dir = '%s/%s' % (taxi_data, 'dw_graph'); dwg_prefix = 'dw-graph-'
+dwg_count_dir = '%s/%s' % (dwg_dir, 'count'); dwg_count_prefix = 'dw-graph-count-'
+dwg_benefit_dir = '%s/%s' % (dwg_dir, 'benefit'); dwg_benefit_prefix = 'dw-graph-benefit-'
+dwg_frequency_dir = '%s/%s' % (dwg_dir, 'frequency'); dwg_frequency_prefix = 'dw-graph-frequency-'
+dwg_fb_dir = '%s/%s' % (dwg_dir, 'fb'); dwg_fb_prefix = 'dw-graph-fb-'
 # dw_aggreg_dir = '%s/%s' % (dw_graph_dir, 'dw_aggregation'); dw_aggreg_prefix = 'dw-aggregation-'
 # year_aggre_summary_fpath = '%s/%s.csv' % (dw_aggreg_dir, 'year-aggretation-summary')
 # month3_aggre_summary_fpath = '%s/%s.csv' % (dw_aggreg_dir, 'month3-aggretation-summary')
-fdw_graph_dir = '%s/%s' % (dw_graph_dir, 'fdw_graph'); fdw_graph_prefix = 'fdw-graph-'
+fdw_graph_dir = '%s/%s' % (dwg_dir, 'fdw_graph'); fdw_graph_prefix = 'fdw-graph-'
 group_dir = '%s/%s' % (taxi_data, 'group'); group_prepix = 'group-'
 group_summary_fpath = '%s/%s.csv' % (group_dir , 'group-summary')
 #
@@ -55,8 +59,8 @@ dw_graph_per_prefix = 'dw-graph-above-per-'
 
 
 
-dw_month3_summary_fpath1 = '%s/%s.csv' % (dw_graph_dir, 'dw-month3-summary1')
-dw_month3_summary_fpath2 = '%s/%s.csv' % (dw_graph_dir, 'dw-month3-summary2')
+dw_month3_summary_fpath1 = '%s/%s.csv' % (dwg_dir, 'dw-month3-summary1')
+dw_month3_summary_fpath2 = '%s/%s.csv' % (dwg_dir, 'dw-month3-summary2')
 
 group_summary_fpath = '%s/%s.csv' % (group_dir, 'group-summary')
 
