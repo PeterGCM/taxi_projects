@@ -39,6 +39,8 @@ def run():
             yyyy = '20%02d' % y
             logger.info('Handle %s (%s)' % (yyyy, fprefix))
             year_aggregation_fpath = '%s/%s%s.pkl' % (dpath, fprefix, yyyy)
+            print year_aggregation_fpath
+            assert False
             if check_path_exist(year_aggregation_fpath):
                 logger.info('Already handled %s (%s)' % (yyyy, fprefix))
                 return None
