@@ -21,19 +21,6 @@ percentiles = [99.970]
 
 def run():
     check_dir_create(fdw_graph_dir)
-    #
-    # if not check_path_exist(fdw_graph_summary):
-    #     with open(fdw_graph_summary, 'wt') as w_csvfile:
-    #         writer = csv.writer(w_csvfile, lineterminator='\n')
-    #         header = ['period', 'numDrivers', 'numPickups', 'numLinks',
-    #                             'weightAverage', 'weightSD',
-    #                             'weightMedian', 'weightMin', 'weightMax']
-    #         for per in percentiles:
-    #             header.append('Percentile (%.3f)' % per)
-    #         writer.writerow(header)
-    #
-    # handle_file('dw-graph-0901___.pkl')
-
     init_multiprocessor(8)
     count_num_jobs = 0
     for dw_graph_fn in get_all_files(dwg_dir, '', '.pkl'):

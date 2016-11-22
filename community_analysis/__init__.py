@@ -26,6 +26,7 @@ dwg_count_dir = '%s/%s' % (dwg_dir, 'count'); dwg_count_prefix = 'dw-graph-count
 dwg_benefit_dir = '%s/%s' % (dwg_dir, 'benefit'); dwg_benefit_prefix = 'dw-graph-benefit-'
 dwg_frequency_dir = '%s/%s' % (dwg_dir, 'frequency'); dwg_frequency_prefix = 'dw-graph-frequency-'
 dwg_fb_dir = '%s/%s' % (dwg_dir, 'fb'); dwg_fb_prefix = 'dw-graph-fb-'
+dwg_summary = '%s/%s' % (dwg_dir, 'dwg-summary.csv')
 # dw_aggreg_dir = '%s/%s' % (dw_graph_dir, 'dw_aggregation'); dw_aggreg_prefix = 'dw-aggregation-'
 # year_aggre_summary_fpath = '%s/%s.csv' % (dw_aggreg_dir, 'year-aggretation-summary')
 # month3_aggre_summary_fpath = '%s/%s.csv' % (dw_aggreg_dir, 'month3-aggretation-summary')
