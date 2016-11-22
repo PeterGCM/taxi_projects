@@ -25,7 +25,7 @@ def run():
                             (dwg_fb_dir, dwg_fb_prefix)]:
         for y in range(9, 10):
             yyyy = '20%02d' % y
-            logger.info('Handle %s (%s)' % yyyy, fprefix)
+            logger.info('Handle %s (%s)' % (yyyy, fprefix))
             year_aggregation_fpath = '%s/%s%s.pkl' % (dpath, fprefix, yyyy)
             if check_path_exist(year_aggregation_fpath):
                 return None
