@@ -21,7 +21,7 @@ from taxi_common.sg_grid_zone import get_sg_zones
 #
 import csv, datetime
 
-logger = get_logger('dw_graph')
+logger = get_logger('___dw_graph')
 
 
 def run():
@@ -29,16 +29,15 @@ def run():
     for dpath in [dwg_dir, dwg_count_dir, dwg_benefit_dir, dwg_frequency_dir, dwg_fb_dir]:
         check_dir_create(dpath)
     #
-    # init_multiprocessor(2)
-    # count_num_jobs = 0
-    for yymm in ['0904', '0905', '0906']:
-    # for y in range(9, 13):
-    #     for m in range(1, 13):
-    #         yymm = '%02d%02d' % (y, m)
-            process_file(yymm)
-            # put_task(process_file, [yymm])
-            # count_num_jobs += 1
-    # end_multiprocessor(count_num_jobs)
+    init_multiprocessor(2)
+    count_num_jobs = 0
+    for y in range(9, 13):
+         for m in range(1, 13):
+            yymm = '%02d%02d' % (y, m)
+            # process_file(yymm)
+            put_task(process_file, [yymm])
+            count_num_jobs += 1
+    end_multiprocessor(count_num_jobs)
 
 
 def process_file(period):
