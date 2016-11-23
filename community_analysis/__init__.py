@@ -30,7 +30,7 @@ dwg_summary = '%s/%s' % (dwg_dir, 'dwg-summary.csv')
 TOP5PERCENT = 0.05
 TOP1PERCENT = 0.01
 TOPZP5PERCENT = 0.005
-TOPZP1PERCENT = 0.005
+TOPZP1PERCENT = 0.001
 CHOSEN_PERCENT = TOPZP1PERCENT
 fdwg_dir = '%s/%s' % (taxi_data, 'fdw_graph(%.3f)' % CHOSEN_PERCENT); fdw_graph_prefix = 'fdw-graph-'
 
