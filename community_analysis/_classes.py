@@ -62,8 +62,8 @@ class ca_driver_with_distribution(driver):
             else:
                 prevD_group_prob = driverPrev.group_distribution[k]
             self.lw_count[driverPrev.did] += 1
-            self.lw_benefit[driverPrev.did] += self.link_frequency[driverPrev.did]
-            self.lw_frequency[driverPrev.did] += max(0, prevD_group_prob - curD_prob)
+            self.lw_benefit[driverPrev.did] += max(0, prevD_group_prob - curD_prob)
+            self.lw_frequency[driverPrev.did] += self.link_frequency[driverPrev.did]
             self.lw_fb[driverPrev.did] += self.link_frequency[driverPrev.did] * max(0, prevD_group_prob - curD_prob)
         z.add_driver_in_logQ(t, self)
         self.num_pickup += 1
