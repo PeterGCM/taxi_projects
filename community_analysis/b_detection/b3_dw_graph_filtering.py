@@ -5,7 +5,7 @@ from community_analysis import dwg_benefit_dir, dwg_benefit_prefix
 from community_analysis import dwg_frequency_dir, dwg_frequency_prefix
 from community_analysis import dwg_fb_dir, dwg_fb_prefix
 from community_analysis import fdwg_dir, fdw_graph_prefix
-from community_analysis import TOP5PERCENT
+from community_analysis import CHOSEN_PERCENT
 #
 from taxi_common.file_handling_functions import check_dir_create, load_pickle_file, \
                                                 save_pickle_file, check_path_exist
@@ -47,7 +47,7 @@ def process_file(period):
             logger.info('Filtering and pickling %s' % (fdw_graph_fpath))
             save_pickle_file(fdw_graph_fpath,
                              sorted([(k, v) for k, v in dw_graph.iteritems()], key=lambda x: x[1], reverse=True)[
-                             :int(len(dw_graph) * TOP5PERCENT)])
+                             :int(len(dw_graph) * CHOSEN_PERCENT)])
             del dw_graph
     except Exception as _:
         import sys
