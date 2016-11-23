@@ -11,7 +11,7 @@ from taxi_common.file_handling_functions import check_dir_create, load_pickle_fi
                                                 save_pickle_file, check_path_exist
 from taxi_common.log_handling_functions import get_logger
 #
-logger = get_logger('___dw graph filtering')
+logger = get_logger()
 
 
 def run():
