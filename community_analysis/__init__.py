@@ -33,7 +33,7 @@ TOPZP5PERCENT = 0.005
 CHOSEN_PERCENT = TOPZP5PERCENT
 fdwg_dir = '%s/%s' % (taxi_data, 'fdw_graph(%.3f)' % CHOSEN_PERCENT); fdw_graph_prefix = 'fdw-graph-'
 
-group_dir = '%s/%s' % (taxi_data, 'group(%.2f)' % CHOSEN_PERCENT); group_prepix = 'group-'
+group_dir = '%s/%s' % (taxi_data, 'group(%.3f)' % CHOSEN_PERCENT); group_prepix = 'group-'
 group_summary_fpath = '%s/%s.csv' % (group_dir , 'group-summary')
 
 
