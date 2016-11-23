@@ -48,7 +48,7 @@ def process_file(fdwg_fn):
         igid, did_igid = 0, {}
         igG = ig.Graph(directed=True)
         cur_percent = 0
-        for i, ((did0, did1), w) in enumerate(fdw_graph.iteritems()):
+        for i, ((did0, did1), w) in enumerate(fdw_graph):
             per = (i / float(num_edges))
             if per * 100 > cur_percent:
                 cur_percent += 25
