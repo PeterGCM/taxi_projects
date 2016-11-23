@@ -14,7 +14,7 @@ from taxi_common.multiprocess import init_multiprocessor, put_task, end_multipro
 import louvain
 import igraph as ig
 
-logger = get_logger('___partitioning')
+logger = get_logger()
 
 
 def run():

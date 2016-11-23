@@ -14,7 +14,7 @@ from taxi_common.log_handling_functions import get_logger
 import igraph as ig
 import csv
 
-logger = get_logger('___summary')
+logger = get_logger()
 
 
 def run():
