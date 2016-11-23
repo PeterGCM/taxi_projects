@@ -4,7 +4,7 @@ import __init__
 
 '''
 #
-from community_analysis import fdwg_dir, fdw_graph_prefix
+from community_analysis import fdwg_dir
 from community_analysis import group_dir, group_prepix
 #
 from taxi_common.file_handling_functions import load_pickle_file, check_path_exist, check_dir_create, get_all_files
@@ -20,13 +20,13 @@ logger = get_logger('___partitioning')
 def run():
     check_dir_create(group_dir)
     #
-    # init_multiprocessor(3)
-    # count_num_jobs = 0
+    init_multiprocessor(4)
+    count_num_jobs = 0
     for fdwg_fn in get_all_files(fdwg_dir, '', '.pkl'):
         process_file(fdwg_fn)
-        # put_task(process_file, [dw_per_fpath, dw_per_fn])
-    #     count_num_jobs += 1
-    # end_multiprocessor(count_num_jobs)
+        put_task(process_file, [fdwg_fn])
+        count_num_jobs += 1
+    end_multiprocessor(count_num_jobs)
 
 
 def process_file(fdwg_fn):
@@ -44,15 +44,15 @@ def process_file(fdwg_fn):
         logger.info('Start graph loading %s' % fdwg_fpath)
         fdw_graph = load_pickle_file(fdwg_fpath)
         num_edges = len(fdw_graph)
-        logger.info('igraph generation total number of edges %d' % num_edges)
+        logger.info('igraph generation total number of edges %d (%s)' % (num_edges, wc))
         igid, did_igid = 0, {}
         igG = ig.Graph(directed=True)
         cur_percent = 0
         for i, ((did0, did1), w) in enumerate(fdw_graph):
             per = (i / float(num_edges))
             if per * 100 > cur_percent:
-                cur_percent += 25
-                logger.info('processed %.3f edges' % (i / float(num_edges)))
+                cur_percent += 1
+                logger.info('processed %.3f edges (%s)' % (i / float(num_edges)), wc)
             if not did_igid.has_key(did0):
                 igG.add_vertex(did0)
                 did_igid[did0] = igid
