@@ -32,7 +32,7 @@ TOP1PERCENT = 0.01
 TOPZP5PERCENT = 0.005
 TOPZP1PERCENT = 0.001
 TOPZPZ5PERCENT = 0.0005
-CHOSEN_PERCENT = TOPZPZ5PERCENT
+CHOSEN_PERCENT = TOPZP1PERCENT
 fdwg_dir = '%s/%s' % (taxi_data, 'fdw_graph(%.4f)' % CHOSEN_PERCENT); fdw_graph_prefix = 'fdw-graph-'
 
 group_dir = '%s/%s' % (taxi_data, 'group(%.4f)' % CHOSEN_PERCENT); group_prepix = 'group-'
