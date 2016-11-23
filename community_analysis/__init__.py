@@ -31,6 +31,11 @@ fdwg_dir = '%s/%s' % (taxi_data, 'fdw_graph'); fdw_graph_prefix = 'fdw-graph-'
 TOP5PERCENT = 0.05
 group_dir = '%s/%s' % (taxi_data, 'group'); group_prepix = 'group-'
 group_summary_fpath = '%s/%s.csv' % (group_dir , 'group-summary')
+
+
+
+
+
 #
 CHOSEN_PERCENTILE = 99.970
 MIN_NUM_DRIVERS = 10
@@ -45,23 +50,6 @@ X_APPEAR, O_APPEAR = range(2)
 rt_appear_dir = '%s/%s' % (taxi_data, 'rt_appear'); rt_appear_prefix = 'rt-appear-'
 
 
-
-dw_graph_above_avg_prefix = 'dw-graph-above-avg-'
-dw_graph_above_per75_prefix = 'dw-graph-above-per75-'
-dw_graph_above_per90_prefix = 'dw-graph-above-per90-'
-dw_graph_above_per95_prefix = 'dw-graph-above-per95-'
-dw_graph_above_per95_prefix = 'dw-graph-above-per95-'
-dw_graph_above_per99_prefix = 'dw-graph-above-per99-'
-dw_graph_above_per999_prefix = 'dw-graph-above-per990-'
-dw_graph_per_prefix = 'dw-graph-above-per-'
-
-
-
-
-dw_month3_summary_fpath1 = '%s/%s.csv' % (dwg_dir, 'dw-month3-summary1')
-dw_month3_summary_fpath2 = '%s/%s.csv' % (dwg_dir, 'dw-month3-summary2')
-
-group_summary_fpath = '%s/%s.csv' % (group_dir, 'group-summary')
 
 
 # trip_dir = '%s/%s' % (taxi_data, 'trips')
@@ -101,15 +89,3 @@ group_summary_fpath = '%s/%s.csv' % (group_dir, 'group-summary')
 #
 # THRESHOLD_VALUE = 30 * 60
 # BY_COM_O, BY_COM_X = 'O', 'X'
-
-#
-# from community_analysis._classes import ca_zone
-# from taxi_common.sg_grid_zone import get_sg_zones
-#
-#
-# def generate_zones():
-#     zones = {}
-#     basic_zones = get_sg_zones()
-#     for k, z in basic_zones.iteritems():
-#         zones[k] = ca_zone(z.relation_with_poly, z.i, z.j, z.cCoor_gps, z.polyPoints_gps)
-#     return zones
