@@ -23,7 +23,7 @@ def run():
     init_multiprocessor(4)
     count_num_jobs = 0
     for fdwg_fn in get_all_files(fdwg_dir, '', '.pkl'):
-        process_file(fdwg_fn)
+        # process_file(fdwg_fn)
         put_task(process_file, [fdwg_fn])
         count_num_jobs += 1
     end_multiprocessor(count_num_jobs)
@@ -52,7 +52,7 @@ def process_file(fdwg_fn):
             per = (i / float(num_edges))
             if per * 100 > cur_percent:
                 cur_percent += 1
-                logger.info('processed %.3f edges (%s)' % (i / float(num_edges)), wc)
+                logger.info('processed %.3f edges (%s)' % (i / float(num_edges), wc))
             if not did_igid.has_key(did0):
                 igG.add_vertex(did0)
                 did_igid[did0] = igid
