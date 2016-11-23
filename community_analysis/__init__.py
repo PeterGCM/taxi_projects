@@ -29,8 +29,9 @@ dwg_fb_dir = '%s/%s' % (dwg_dir, 'fb'); dwg_fb_prefix = 'dw-graph-fb-'
 dwg_summary = '%s/%s' % (dwg_dir, 'dwg-summary.csv')
 TOP5PERCENT = 0.05
 TOP1PERCENT = 0.01
+TOPZP5PERCENT = 0.005
 CHOSEN_PERCENT = TOP1PERCENT
-fdwg_dir = '%s/%s' % (taxi_data, 'fdw_graph(%.2f)' % CHOSEN_PERCENT); fdw_graph_prefix = 'fdw-graph-'
+fdwg_dir = '%s/%s' % (taxi_data, 'fdw_graph(%.3f)' % CHOSEN_PERCENT); fdw_graph_prefix = 'fdw-graph-'
 
 group_dir = '%s/%s' % (taxi_data, 'group(%.2f)' % CHOSEN_PERCENT); group_prepix = 'group-'
 group_summary_fpath = '%s/%s.csv' % (group_dir , 'group-summary')
