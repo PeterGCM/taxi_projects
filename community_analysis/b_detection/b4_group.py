@@ -41,7 +41,7 @@ def process_file(fdwg_fn):
     try:
         logger.info('Start handling %s' % fdwg_fn)
         _, _, wc, period = fdwg_fn[:-len('.pkl')].split('-')
-        group_wc_dpath = '%s/%s_%s' % (group_dpath, wc, period)
+        group_wc_dpath = '%s/%s' % (group_dpath, wc)
         if check_path_exist(group_wc_dpath):
             logger.info('Already handled %s' % fdwg_fn)
             return None

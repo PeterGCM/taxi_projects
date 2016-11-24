@@ -18,7 +18,7 @@ from taxi_common import full_time_driver_dir, ft_drivers_prefix
 from bisect import bisect
 import csv, datetime
 #
-logger = get_logger('trips_ss_drivers')
+logger = get_logger()
 
 
 def run():
