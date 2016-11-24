@@ -6,19 +6,25 @@ import __init__
 #
 from community_analysis import fdwg_dir
 from community_analysis import group_dir, group_prepix
+from community_analysis import group_summary_fpath
 #
-from taxi_common.file_handling_functions import load_pickle_file, check_path_exist, check_dir_create, get_all_files
+from taxi_common.file_handling_functions import load_pickle_file, check_path_exist, check_dir_create, get_all_files, save_pickle_file
 from taxi_common.log_handling_functions import get_logger
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
+import csv, time
 import louvain
 import igraph as ig
 
 logger = get_logger()
+LOCK = False
 
 
 def run():
     check_dir_create(group_dir)
+    with open(group_summary_fpath, 'wt') as w_csvfile:
+        writer = csv.writer(w_csvfile, lineterminator='\n')
+        writer.writerow(['weightCalculation', 'period', 'groupName', 'numDrivers', 'tieStrength'])
     #
     init_multiprocessor(4)
     count_num_jobs = 0
@@ -62,12 +68,32 @@ def process_file(fdwg_fn):
                 did_igid[did1] = igid
                 igid += 1
             igG.add_edge(did_igid[did0], did_igid[did1], weight=w)
+        #
         logger.info('Partitioning')
         part = louvain.find_partition(igG, method='Modularity', weight='weight')
-        logger.info('Each group pickling')
+        #
+        logger.info('Each group pickling and summary')
+        group_drivers = {}
+        group_drivers_fpath = '%s/%s%s-%s-drivers.pkl' % (group_wc_dpath, group_prepix, wc, period)
         for i, sg in enumerate(part.subgraphs()):
-            group_fpath = '%s/%s%s-%s-G(%d).pkl' % (group_wc_dpath, group_prepix, wc, period, i)
+            gn = 'G(%d)' % i
+            group_fpath = '%s/%s%s-%s-%s.pkl' % (group_wc_dpath, group_prepix, wc, period, gn)
             sg.write_pickle(group_fpath)
+            #
+            drivers = [v['name'] for v in sg.vs]
+            weights = [e['weight'] for e in sg.es]
+            while True:
+                if not LOCK:
+                    LOCK = True
+                    with open(group_summary_fpath, 'a') as w_csvfile:
+                        writer = csv.writer(w_csvfile, lineterminator='\n')
+                        writer.writerow([wc, period, gn, len(drivers), sum(weights) / float(len(drivers))])
+                    LOCK = False
+                    break
+                else:
+                    time.sleep(1)
+            group_drivers[gn] = drivers
+        save_pickle_file(group_drivers_fpath, group_drivers)
     except Exception as _:
         import sys
         with open('___error_%s.txt' % (sys.argv[0]), 'w') as f:

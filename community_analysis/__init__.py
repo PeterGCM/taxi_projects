@@ -27,26 +27,21 @@ dwg_benefit_dir = '%s/%s' % (dwg_dir, 'benefit'); dwg_benefit_prefix = 'dw-graph
 dwg_frequency_dir = '%s/%s' % (dwg_dir, 'frequency'); dwg_frequency_prefix = 'dw-graph-frequency-'
 dwg_fb_dir = '%s/%s' % (dwg_dir, 'fb'); dwg_fb_prefix = 'dw-graph-fb-'
 dwg_summary = '%s/%s' % (dwg_dir, 'dwg-summary.csv')
-TOP5PERCENT = 0.05
-TOP1PERCENT = 0.01
-TOPZP5PERCENT = 0.005
-TOPZP1PERCENT = 0.001
-TOPZPZ5PERCENT = 0.0005
 TOPZPZ1PERCENT = 0.0001
 CHOSEN_PERCENT = TOPZPZ1PERCENT
 fdwg_dir = '%s/%s' % (taxi_data, 'fdw_graph(%.4f)' % CHOSEN_PERCENT); fdw_graph_prefix = 'fdw-graph-'
-
 group_dir = '%s/%s' % (taxi_data, 'group(%.4f)' % CHOSEN_PERCENT); group_prepix = 'group-'
 group_summary_fpath = '%s/%s.csv' % (group_dir , 'group-summary')
 
-
+MIN_NUM_DRIVERS = 10
 
 
 
 #
 CHOSEN_PERCENTILE = 99.970
-MIN_NUM_DRIVERS = 10
-com_drivers_dir = '%s/%s' % (taxi_data, 'com_drivers'); com_drivers_prefix = 'com-drivers-'
+
+group_drivers_dir = '%s/%s' % (taxi_data, 'group_drivers'); group_drivers_prefix = 'group-drivers-'
+
 com_trips_dir = '%s/%s' % (taxi_data, 'com_trips'); com_trips_prefix = 'com-trips-'
 #
 FREE = 0

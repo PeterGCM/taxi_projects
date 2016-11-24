@@ -2,7 +2,7 @@ import __init__
 #
 from community_analysis import taxi_home
 from community_analysis import roaming_time_dir, roaming_time_prefix
-from community_analysis import com_drivers_dir, com_drivers_prefix
+from community_analysis import group_drivers_dir, group_drivers_prefix
 from community_analysis import FREE
 from community_analysis import CHOSEN_PERCENTILE
 from community_analysis import FRI, SAT, SUN
@@ -42,7 +42,7 @@ def process_file(period):
         logger.info('Handling %s' % period)
         x_points, y_points = get_sg_grid_xy_points()
 
-        group_drivers_fpath = '%s/%s/%s%s.pkl' % (com_drivers_dir, percentile_dirname, com_drivers_prefix, period)
+        group_drivers_fpath = '%s/%s/%s%s.pkl' % (group_drivers_dir, percentile_dirname, group_drivers_prefix, period)
         group_drivers = load_pickle_file(group_drivers_fpath)
         driver_set = set()
         for gn, members in group_drivers.iteritems():

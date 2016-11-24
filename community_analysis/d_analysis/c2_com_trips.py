@@ -1,7 +1,7 @@
 import __init__
 #
 from community_analysis import ss_trips_dir, ss_trips_prefix
-from community_analysis import com_drivers_dir, com_drivers_prefix
+from community_analysis import group_drivers_dir, group_drivers_prefix
 from community_analysis import com_trips_dir, com_trips_prefix
 from community_analysis import CHOSEN_PERCENTILE
 from community_analysis._classes import ca_driver_with_com_prevD
@@ -34,7 +34,7 @@ def run():
 
 
 def process_files(period):
-    group_drivers_fpath = '%s/%s/%s%s.pkl' % (com_drivers_dir, percentile_dirname, com_drivers_prefix, period)
+    group_drivers_fpath = '%s/%s/%s%s.pkl' % (group_drivers_dir, percentile_dirname, group_drivers_prefix, period)
     if not check_path_exist(group_drivers_fpath):
         return None
     group_drivers = load_pickle_file(group_drivers_fpath)

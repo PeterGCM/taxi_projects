@@ -1,26 +1,29 @@
 import __init__
 #
+'''
+
+'''
+#
 from community_analysis import group_dir
-from community_analysis import com_drivers_dir, com_drivers_prefix
-from community_analysis import CHOSEN_PERCENTILE, MIN_NUM_DRIVERS
+from community_analysis import group_drivers_dir, group_drivers_prefix
+from community_analysis import MIN_NUM_DRIVERS
 #
 from taxi_common.file_handling_functions import check_dir_create, get_all_directories, get_all_files, save_pickle_file
 from taxi_common.log_handling_functions import get_logger
 #
 import igraph as ig
 #
-logger = get_logger('com_drivers')
-percentile_dirname = 'percentile(%.3f)' % CHOSEN_PERCENTILE
+logger = get_logger()
 
 
 def run():
-    check_dir_create(com_drivers_dir)
-    check_dir_create('%s/%s' % (com_drivers_dir, percentile_dirname))
+    check_dir_create(group_drivers_dir)
+    check_dir_create('%s/%s' % (group_drivers_dir, percentile_dirname))
     #
     percentile_dirpath = '%s/%s' % (group_dir, percentile_dirname)
     for dirname in get_all_directories(percentile_dirpath):
         dirpath = '%s/%s' % (percentile_dirpath, dirname)
-        group_drivers_fpath = '%s/%s/%s%s.pkl' % (com_drivers_dir, percentile_dirname, com_drivers_prefix, dirname)
+        group_drivers_fpath = '%s/%s/%s%s.pkl' % (group_drivers_dir, percentile_dirname, group_drivers_prefix, dirname)
         group_drivers = {}
         for group_fn in get_all_files(dirpath, '', '.pkl'):
             _, _, yyyy, gn = group_fn[:-len('.pkl')].split('-')
