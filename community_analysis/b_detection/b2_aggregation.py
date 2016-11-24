@@ -16,7 +16,7 @@ from taxi_common.log_handling_functions import get_logger
 import numpy as np
 import csv, time
 #
-logger = get_logger('___aggregation')
+logger = get_logger()
 FIVE_MINUTE = 5 * 60
 
 
