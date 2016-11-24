@@ -4,8 +4,8 @@ import __init__
 
 '''
 #
-from community_analysis import ss_trips_dir, ss_trips_prefix
-from community_analysis import tf_zone_counting_dir, tf_zone_counting_individuals_prefix, tf_zone_counting_groups_prefix
+from community_analysis import ss_trips_dpath, ss_trips_prefix
+from community_analysis import tfZ_counting_dpath, tfZ_counting_individuals_prefix, tfZ_counting_groups_prefix
 #
 from taxi_common.file_handling_functions import check_dir_create, save_pickle_file, check_path_exist
 from taxi_common.log_handling_functions import get_logger
@@ -18,7 +18,7 @@ logger = get_logger('tf zone counting')
 
 def run():
     logger.info('Execution')
-    check_dir_create(tf_zone_counting_dir)
+    check_dir_create(tfZ_counting_dpath)
     #
     init_multiprocessor(8)
     count_num_jobs = 0
@@ -36,13 +36,13 @@ def process_file(period):
     logger.info('Handle the file; %s' % period)
     from traceback import format_exc
     try:
-        ss_trips_fpath = '%s/%s%s.csv' % (ss_trips_dir, ss_trips_prefix, period)
+        ss_trips_fpath = '%s/%s%s.csv' % (ss_trips_dpath, ss_trips_prefix, period)
         if not check_path_exist(ss_trips_fpath):
             logger.info('The file X exists; %s' % period)
             return None
         #
-        tf_zone_counting_individuals_fpath = '%s/%s%s.pkl' % (tf_zone_counting_dir, tf_zone_counting_individuals_prefix, period)
-        tf_zone_counting_groups_fpath = '%s/%s%s.pkl' % (tf_zone_counting_dir, tf_zone_counting_groups_prefix, period)
+        tf_zone_counting_individuals_fpath = '%s/%s%s.pkl' % (tfZ_counting_dpath, tfZ_counting_individuals_prefix, period)
+        tf_zone_counting_groups_fpath = '%s/%s%s.pkl' % (tfZ_counting_dpath, tfZ_counting_groups_prefix, period)
         if check_path_exist(tf_zone_counting_individuals_fpath):
             logger.info('The file had already been processed; %s' % period)
             return None

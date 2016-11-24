@@ -4,14 +4,14 @@ import __init__
 
 '''
 #
-from community_analysis import ss_trips_dir, ss_trips_prefix
-from community_analysis import tf_zone_distribution_dir
-from community_analysis import tf_zone_distribution_individuals_prefix, tf_zone_distribution_groups_prefix
-from community_analysis import dwg_dir
-from community_analysis import dwg_count_dir, dwg_count_prefix
-from community_analysis import dwg_benefit_dir, dwg_benefit_prefix
-from community_analysis import dwg_frequency_dir, dwg_frequency_prefix
-from community_analysis import dwg_fb_dir, dwg_fb_prefix
+from community_analysis import ss_trips_dpath, ss_trips_prefix
+from community_analysis import tfZ_distribution_dpath
+from community_analysis import tfZ_distribution_individuals_prefix, tfZ_distribution_groups_prefix
+from community_analysis import dwg_dpath
+from community_analysis import dwg_count_dpath, dwg_count_prefix
+from community_analysis import dwg_benefit_dpath, dwg_benefit_prefix
+from community_analysis import dwg_frequency_dpath, dwg_frequency_prefix
+from community_analysis import dwg_fb_dpath, dwg_fb_prefix
 from community_analysis._classes import ca_driver_with_distribution, ca_zone
 #
 from taxi_common.file_handling_functions import check_path_exist, load_pickle_file, save_pickle_file, check_dir_create, save_pkl_threading
@@ -26,7 +26,7 @@ logger = get_logger('___dw_graph')
 
 def run():
     logger.info('Execution')
-    for dpath in [dwg_dir, dwg_count_dir, dwg_benefit_dir, dwg_frequency_dir, dwg_fb_dir]:
+    for dpath in [dwg_dpath, dwg_count_dpath, dwg_benefit_dpath, dwg_frequency_dpath, dwg_fb_dpath]:
         check_dir_create(dpath)
     #
     init_multiprocessor(2)
@@ -44,14 +44,14 @@ def process_file(period):
     from traceback import format_exc
     try:
         logger.info('Handling %s' % period)
-        ft_trips_fpath = '%s/%s%s.csv' % (ss_trips_dir, ss_trips_prefix, period)
+        ft_trips_fpath = '%s/%s%s.csv' % (ss_trips_dpath, ss_trips_prefix, period)
         if not check_path_exist(ft_trips_fpath):
             logger.info('No file %s' % period)
             return None
-        dwg_count_fpath = '%s/%s%s.pkl' % (dwg_count_dir, dwg_count_prefix, period)
-        dwg_benefit_fpath = '%s/%s%s.pkl' % (dwg_benefit_dir, dwg_benefit_prefix, period)
-        dwg_frequency_fpath = '%s/%s%s.pkl' % (dwg_frequency_dir, dwg_frequency_prefix, period)
-        dwg_fb_fpath = '%s/%s%s.pkl' % (dwg_fb_dir, dwg_fb_prefix, period)
+        dwg_count_fpath = '%s/%s%s.pkl' % (dwg_count_dpath, dwg_count_prefix, period)
+        dwg_benefit_fpath = '%s/%s%s.pkl' % (dwg_benefit_dpath, dwg_benefit_prefix, period)
+        dwg_frequency_fpath = '%s/%s%s.pkl' % (dwg_frequency_dpath, dwg_frequency_prefix, period)
+        dwg_fb_fpath = '%s/%s%s.pkl' % (dwg_fb_dpath, dwg_fb_prefix, period)
         if check_path_exist(dwg_fb_fpath):
             logger.info('Already processed %s' % period)
             return None
@@ -72,9 +72,9 @@ def process_file(period):
         logger.info('Start %s directed weighted graph processing' % period)
         #
         individual_distribution = load_pickle_file('%s/%s%s.pkl' %
-                                       (tf_zone_distribution_dir, tf_zone_distribution_individuals_prefix, period))
+                                                   (tfZ_distribution_dpath, tfZ_distribution_individuals_prefix, period))
         group_distribution = load_pickle_file('%s/%s%s.pkl' %
-                                                   (tf_zone_distribution_dir, tf_zone_distribution_groups_prefix, period))
+                                              (tfZ_distribution_dpath, tfZ_distribution_groups_prefix, period))
         logger.info('Finish distribution loading')
         #
         drivers = {}

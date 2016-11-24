@@ -4,11 +4,11 @@ import __init__
 
 '''
 #
-from community_analysis import dwg_count_dir, dwg_count_prefix
-from community_analysis import dwg_benefit_dir, dwg_benefit_prefix
-from community_analysis import dwg_frequency_dir, dwg_frequency_prefix
-from community_analysis import dwg_fb_dir, dwg_fb_prefix
-from community_analysis import dwg_summary
+from community_analysis import dwg_count_dpath, dwg_count_prefix
+from community_analysis import dwg_benefit_dpath, dwg_benefit_prefix
+from community_analysis import dwg_frequency_dpath, dwg_frequency_prefix
+from community_analysis import dwg_fb_dpath, dwg_fb_prefix
+from community_analysis import dwg_summary_fpath
 #
 from taxi_common.file_handling_functions import load_pickle_file, check_path_exist, save_pickle_file, check_dir_create
 from taxi_common.log_handling_functions import get_logger
@@ -21,8 +21,8 @@ FIVE_MINUTE = 5 * 60
 
 
 def run():
-    if not check_path_exist(dwg_summary):
-        with open(dwg_summary, 'wt') as w_csvfile:
+    if not check_path_exist(dwg_summary_fpath):
+        with open(dwg_summary_fpath, 'wt') as w_csvfile:
             writer = csv.writer(w_csvfile, lineterminator='\n')
             header = ['period', 'weightCalculation',
                       'numDrivers', 'numLinks',
@@ -30,12 +30,12 @@ def run():
                       'weightMedian', 'weightMin', 'weightMax']
             writer.writerow(header)
     for dpath, fprefix in [
-                            # (dwg_count_dir, dwg_count_prefix),
-                            # (dwg_benefit_dir, dwg_benefit_prefix),
-                            # (dwg_frequency_dir, dwg_frequency_prefix),
-                            (dwg_fb_dir, dwg_fb_prefix)
+                            (dwg_count_dpath, dwg_count_prefix),
+                            (dwg_benefit_dpath, dwg_benefit_prefix),
+                            (dwg_frequency_dpath, dwg_frequency_prefix),
+                            (dwg_fb_dpath, dwg_fb_prefix)
                            ]:
-        for y in range(9, 10):
+        for y in range(10, 13):
             yyyy = '20%02d' % y
             logger.info('Handle %s (%s)' % (yyyy, fprefix))
             year_aggregation_fpath = '%s/%s%s.pkl' % (dpath, fprefix, yyyy)
@@ -69,7 +69,7 @@ def run():
             logger.info('Saving year_dw_graph %s' % yyyy)
             save_pickle_file(year_aggregation_fpath, year_dwg)
             weights = np.asarray(year_dwg.values())
-            with open(dwg_summary, 'a') as w_csvfile:
+            with open(dwg_summary_fpath, 'a') as w_csvfile:
                 writer = csv.writer(w_csvfile, lineterminator='\n')
                 writer.writerow([yyyy, fprefix.split('-')[2],
                                  len(drivers), len(year_dwg),

@@ -1,10 +1,10 @@
 import __init__
 #
-from community_analysis import dwg_count_dir, dwg_count_prefix
-from community_analysis import dwg_benefit_dir, dwg_benefit_prefix
-from community_analysis import dwg_frequency_dir, dwg_frequency_prefix
-from community_analysis import dwg_fb_dir, dwg_fb_prefix
-from community_analysis import fdwg_dir, fdw_graph_prefix
+from community_analysis import dwg_count_dpath, dwg_count_prefix
+from community_analysis import dwg_benefit_dpath, dwg_benefit_prefix
+from community_analysis import dwg_frequency_dpath, dwg_frequency_prefix
+from community_analysis import dwg_fb_dpath, dwg_fb_prefix
+from community_analysis import fdwg_dpath, fdw_graph_prefix
 from community_analysis import CHOSEN_PERCENT
 #
 from taxi_common.file_handling_functions import check_dir_create, load_pickle_file, \
@@ -15,7 +15,7 @@ logger = get_logger()
 
 
 def run():
-    check_dir_create(fdwg_dir)
+    check_dir_create(fdwg_dpath)
     #
     for y in range(9, 10):
         yyyy = '20%02d' % y
@@ -28,12 +28,12 @@ def process_file(period):
     try:
         logger.info('Handle %s' % (period))
         for dpath, fprefix in [
-                               (dwg_count_dir, dwg_count_prefix),
-                               (dwg_benefit_dir, dwg_benefit_prefix),
-                               (dwg_frequency_dir, dwg_frequency_prefix),
-                               (dwg_fb_dir, dwg_fb_prefix)
+                               (dwg_count_dpath, dwg_count_prefix),
+                               (dwg_benefit_dpath, dwg_benefit_prefix),
+                               (dwg_frequency_dpath, dwg_frequency_prefix),
+                               (dwg_fb_dpath, dwg_fb_prefix)
                                ]:
-            fdw_graph_fpath = '%s/%s%s-%s.pkl' % (fdwg_dir, fdw_graph_prefix, fprefix.split('-')[2], period)
+            fdw_graph_fpath = '%s/%s%s-%s.pkl' % (fdwg_dpath, fdw_graph_prefix, fprefix.split('-')[2], period)
             if check_path_exist(fdw_graph_fpath):
                 logger.info('Already exist %s' % (fdw_graph_fpath))
                 continue

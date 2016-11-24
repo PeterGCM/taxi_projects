@@ -7,7 +7,7 @@ import __init__
 from community_analysis import FRI, SAT, SUN
 from community_analysis import PM2, PM11
 from community_analysis import taxi_home
-from community_analysis import ss_trips_dir, ss_trips_prefix
+from community_analysis import ss_trips_dpath, ss_trips_prefix
 #
 from taxi_common.file_handling_functions import load_pickle_file, check_dir_create, check_path_exist
 from taxi_common.log_handling_functions import get_logger
@@ -22,7 +22,7 @@ logger = get_logger('trips_ss_drivers')
 
 
 def run():
-    check_dir_create(ss_trips_dir)
+    check_dir_create(ss_trips_dpath)
     #
     init_multiprocessor(11)
     count_num_jobs = 0
@@ -50,7 +50,7 @@ def process_file(yymm):
     ft_drivers = load_pickle_file(ftd_list_fpath)
     x_points, y_points = get_sg_grid_xy_points()
     #
-    ss_trips_fpath = '%s/%s%s.csv' % (ss_trips_dir, ss_trips_prefix, yymm)
+    ss_trips_fpath = '%s/%s%s.csv' % (ss_trips_dpath, ss_trips_prefix, yymm)
     if check_path_exist(ss_trips_fpath):
         logger.info('The file had already been processed; %s' % yymm)
         return None

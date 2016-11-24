@@ -11,38 +11,43 @@ MON, TUE, WED, THR, FRI, SAT, SUN = range(7)
 PM2, PM11 = 14, 23
 THRESHOLD_VALUE = 30 * 60
 #
-ss_trips_dir = '%s/%s' % (taxi_data, 'trips_ss_drivers'); ss_trips_prefix = 'trips-ss-drivers-'
-tf_zone_counting_dir = '%s/%s' % (taxi_data, 'tf_zone_counting')
-tf_zone_counting_individuals_prefix = 'tf-zone-counting-individuals-'
-tf_zone_counting_groups_prefix = 'tf-zone-counting-groups-'
-tf_zone_distribution_dir = '%s/%s' % (taxi_data, 'tf_zone_distribution')
-tf_zone_distribution_individuals_prefix = 'tf-zone-distribution-individuals-'
-tf_zone_distribution_groups_prefix = 'tf-zone-distribution-groups-'
-tf_zone_distribution_whole_prefix = 'tf-zone-distribution-whole-'
+ss_trips_dpath = '%s/%s' % (taxi_data, 'trips_ss_drivers'); ss_trips_prefix = 'trips-ss-drivers-'
+tfZ_counting_dpath = '%s/%s' % (taxi_data, 'tf_zone_counting')
+tfZ_counting_individuals_prefix = 'tf-zone-counting-individuals-'
+tfZ_counting_groups_prefix = 'tf-zone-counting-groups-'
+tfZ_distribution_dpath = '%s/%s' % (taxi_data, 'tf_zone_distribution')
+tfZ_distribution_individuals_prefix = 'tf-zone-distribution-individuals-'
+tfZ_distribution_groups_prefix = 'tf-zone-distribution-groups-'
+tfZ_distribution_whole_prefix = 'tf-zone-distribution-whole-'
 #
 DEPRECIATION_LAMBDA = 0.5
-dwg_dir = '%s/%s' % (taxi_data, 'dw_graph'); dwg_prefix = 'dw-graph-'
-dwg_count_dir = '%s/%s' % (dwg_dir, 'count'); dwg_count_prefix = 'dw-graph-count-'
-dwg_benefit_dir = '%s/%s' % (dwg_dir, 'benefit'); dwg_benefit_prefix = 'dw-graph-benefit-'
-dwg_frequency_dir = '%s/%s' % (dwg_dir, 'frequency'); dwg_frequency_prefix = 'dw-graph-frequency-'
-dwg_fb_dir = '%s/%s' % (dwg_dir, 'fb'); dwg_fb_prefix = 'dw-graph-fb-'
-dwg_summary = '%s/%s' % (dwg_dir, 'dwg-summary.csv')
+dwg_dpath = '%s/%s' % (taxi_data, 'dw_graph'); dwg_prefix = 'dw-graph-'
+dwg_count_dpath = '%s/%s' % (dwg_dpath, 'count'); dwg_count_prefix = 'dw-graph-count-'
+dwg_benefit_dpath = '%s/%s' % (dwg_dpath, 'benefit'); dwg_benefit_prefix = 'dw-graph-benefit-'
+dwg_frequency_dpath = '%s/%s' % (dwg_dpath, 'frequency'); dwg_frequency_prefix = 'dw-graph-frequency-'
+dwg_fb_dpath = '%s/%s' % (dwg_dpath, 'fb'); dwg_fb_prefix = 'dw-graph-fb-'
+dwg_summary_fpath = '%s/%s' % (dwg_dpath, 'dwg-summary.csv')
 TOPZPZ1PERCENT = 0.0001
 CHOSEN_PERCENT = TOPZPZ1PERCENT
-fdwg_dir = '%s/%s' % (taxi_data, 'fdw_graph(%.4f)' % CHOSEN_PERCENT); fdw_graph_prefix = 'fdw-graph-'
-group_dir = '%s/%s' % (taxi_data, 'group(%.4f)' % CHOSEN_PERCENT); group_prepix = 'group-'
-group_summary_fpath = '%s/%s.csv' % (group_dir , 'group-summary')
+fdwg_dpath = '%s/%s' % (taxi_data, 'fdw_graph(%.4f)' % CHOSEN_PERCENT); fdw_graph_prefix = 'fdw-graph-'
+group_dpath = '%s/%s' % (taxi_data, 'group(%.4f)' % CHOSEN_PERCENT); group_prepix = 'group-'
+group_summary_fpath = '%s/%s.csv' % (group_dpath , 'group-summary')
+#
+pickUp_dpath = '%s/%s' % (taxi_data, 'pickUp'); pickUp_prepix = 'pickUp-'
+roamingTime_dpath = '%s/%s' % (taxi_data, 'roamingTime'); roamingTime_prepix = 'roamingTime-'
+
+
+
+
 
 MIN_NUM_DRIVERS = 10
 
 
 
 #
-CHOSEN_PERCENTILE = 99.970
 
-group_drivers_dir = '%s/%s' % (taxi_data, 'group_drivers'); group_drivers_prefix = 'group-drivers-'
 
-com_trips_dir = '%s/%s' % (taxi_data, 'com_trips'); com_trips_prefix = 'com-trips-'
+
 #
 FREE = 0
 roaming_time_dir = '%s/%s' % (taxi_data, 'roaming_time'); roaming_time_prefix = 'roaming-time-'

@@ -1,6 +1,6 @@
 import __init__
 #
-from community_analysis import com_trips_dir, com_trips_prefix
+from community_analysis import group_trips_dir, group_trips_prefix
 from community_analysis import tf_zone_drivers_dir, tf_zone_drivers_prefix
 from community_analysis import CHOSEN_PERCENTILE
 #
@@ -34,7 +34,7 @@ def process_file(period):
         if check_path_exist(tf_zone_drivers_fpath):
             logger.info('Already handled; %s' % period)
             return None
-        com_trips_fpath = '%s/%s/%s%s.csv' % (com_trips_dir, percentile_dirname, com_trips_prefix, period)
+        com_trips_fpath = '%s/%s/%s%s.csv' % (group_trips_dir, percentile_dirname, group_trips_prefix, period)
         if not check_path_exist(com_trips_fpath):
             logger.info('The file X exists; %s' % period)
             return None

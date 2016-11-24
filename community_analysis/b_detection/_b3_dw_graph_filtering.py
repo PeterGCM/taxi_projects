@@ -1,7 +1,7 @@
 import __init__
 #
-from community_analysis import dwg_dir
-from community_analysis import fdwg_dir, fdw_graph_prefix
+from community_analysis import dwg_dpath
+from community_analysis import fdwg_dpath, fdw_graph_prefix
 
 #
 from taxi_common.file_handling_functions import get_all_files, check_dir_create, load_pickle_file, \
@@ -20,7 +20,7 @@ percentiles = [99.970]
 
 
 def run():
-    check_dir_create(fdwg_dir)
+    check_dir_create(fdwg_dpath)
     #
     # if not check_path_exist(fdw_graph_summary):
     #     with open(fdw_graph_summary, 'wt') as w_csvfile:
@@ -36,7 +36,7 @@ def run():
 
     init_multiprocessor(8)
     count_num_jobs = 0
-    for dw_graph_fn in get_all_files(dwg_dir, '', '.pkl'):
+    for dw_graph_fn in get_all_files(dwg_dpath, '', '.pkl'):
         put_task(handle_file, [dw_graph_fn])
         count_num_jobs += 1
     end_multiprocessor(count_num_jobs)
@@ -48,7 +48,7 @@ def handle_file(dw_graph_fn):
     try:
         _, _, period = dw_graph_fn[:-len('.pkl')].split('-')
         logger.info('Start handling %s' % dw_graph_fn)
-        dw_graph_fpath = '%s/%s' % (dwg_dir, dw_graph_fn)
+        dw_graph_fpath = '%s/%s' % (dwg_dpath, dw_graph_fn)
         dw_graph = load_pickle_file(dw_graph_fpath)
         logger.info('Start filtering %s' % dw_graph_fn)
         num_drivers, num_pickups, num_links = 0, 0, 0
@@ -68,7 +68,7 @@ def handle_file(dw_graph_fn):
                     filtered_graph[percentiles[i]][k] = v
         logger.info('Start pickling %s' % dw_graph_fn)
         for per in percentiles:
-            percentile_dir = '%s/percentile(%.3f)' % (fdwg_dir, per)
+            percentile_dir = '%s/percentile(%.3f)' % (fdwg_dpath, per)
             check_dir_create(percentile_dir)
             fpath = '%s/%s%s-%s.pkl' % \
                     (percentile_dir, fdw_graph_prefix, 'percentile(%.3f)' % per, period)

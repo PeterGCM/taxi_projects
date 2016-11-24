@@ -4,8 +4,8 @@ import __init__
 
 '''
 #
-from community_analysis import fdwg_dir
-from community_analysis import group_dir, group_prepix
+from community_analysis import fdwg_dpath
+from community_analysis import group_dpath, group_prepix
 from community_analysis import group_summary_fpath
 #
 from taxi_common.file_handling_functions import load_pickle_file, check_path_exist, check_dir_create, get_all_files, save_pickle_file
@@ -21,14 +21,14 @@ LOCK = False
 
 
 def run():
-    check_dir_create(group_dir)
+    check_dir_create(group_dpath)
     with open(group_summary_fpath, 'wt') as w_csvfile:
         writer = csv.writer(w_csvfile, lineterminator='\n')
         writer.writerow(['weightCalculation', 'period', 'groupName', 'numDrivers', 'tieStrength'])
     #
     init_multiprocessor(4)
     count_num_jobs = 0
-    for fdwg_fn in get_all_files(fdwg_dir, '', '.pkl'):
+    for fdwg_fn in get_all_files(fdwg_dpath, '', '.pkl'):
         # process_file(fdwg_fn)
         put_task(process_file, [fdwg_fn])
         count_num_jobs += 1
@@ -41,12 +41,12 @@ def process_file(fdwg_fn):
     try:
         logger.info('Start handling %s' % fdwg_fn)
         _, _, wc, period = fdwg_fn[:-len('.pkl')].split('-')
-        group_wc_dpath = '%s/%s_%s' % (group_dir, wc, period)
+        group_wc_dpath = '%s/%s_%s' % (group_dpath, wc, period)
         if check_path_exist(group_wc_dpath):
             logger.info('Already handled %s' % fdwg_fn)
             return None
         check_dir_create(group_wc_dpath)
-        fdwg_fpath = '%s/%s' % (fdwg_dir, fdwg_fn)
+        fdwg_fpath = '%s/%s' % (fdwg_dpath, fdwg_fn)
         logger.info('Start graph loading %s' % fdwg_fpath)
         fdw_graph = load_pickle_file(fdwg_fpath)
         num_edges = len(fdw_graph)

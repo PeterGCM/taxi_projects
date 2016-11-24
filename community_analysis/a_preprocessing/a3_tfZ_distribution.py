@@ -4,11 +4,11 @@ import __init__
 
 '''
 #
-from community_analysis import tf_zone_counting_dir
-from community_analysis import tf_zone_counting_individuals_prefix, tf_zone_counting_groups_prefix
-from community_analysis import tf_zone_distribution_dir
-from community_analysis import tf_zone_distribution_individuals_prefix, tf_zone_distribution_groups_prefix, \
-                                tf_zone_distribution_whole_prefix
+from community_analysis import tfZ_counting_dpath
+from community_analysis import tfZ_counting_individuals_prefix, tfZ_counting_groups_prefix
+from community_analysis import tfZ_distribution_dpath
+from community_analysis import tfZ_distribution_individuals_prefix, tfZ_distribution_groups_prefix, \
+                                tfZ_distribution_whole_prefix
 from community_analysis import PM2, PM11
 #
 from taxi_common.file_handling_functions import check_dir_create, load_pickle_file, \
@@ -23,20 +23,20 @@ logger = get_logger('tf zone distribution')
 
 def run():
     logger.info('Execution')
-    check_dir_create(tf_zone_distribution_dir)
+    check_dir_create(tfZ_distribution_dpath)
     #
-    for fn in get_all_files(tf_zone_counting_dir, '', '.pkl'):
+    for fn in get_all_files(tfZ_counting_dpath, '', '.pkl'):
         logger.info('Handling %s' % fn)
         _, _, _, _, period = fn[:-len('.pkl')].split('-')
         #
-        whole_distribution_fpath = '%s/%s%s.csv' % (tf_zone_distribution_dir, tf_zone_distribution_whole_prefix, period)
+        whole_distribution_fpath = '%s/%s%s.csv' % (tfZ_distribution_dpath, tfZ_distribution_whole_prefix, period)
         if check_path_exist(whole_distribution_fpath):
             logger.info('Already handled %s' % fn)
             continue
-        tf_zone_counting_fpath = '%s/%s' % (tf_zone_counting_dir, fn)
+        tf_zone_counting_fpath = '%s/%s' % (tfZ_counting_dpath, fn)
         drivers = load_pickle_file(tf_zone_counting_fpath)
 
-        if fn.startswith(tf_zone_counting_individuals_prefix):
+        if fn.startswith(tfZ_counting_individuals_prefix):
             distribution = {}
             whole_counting = {}
             for did, tf_zone_counting in drivers.iteritems():
@@ -47,7 +47,7 @@ def run():
                     if not whole_counting.has_key(tf_zone):
                         whole_counting[tf_zone] = 0
                     whole_counting[tf_zone] += num_trips
-            distribution_fpath = '%s/%s%s.pkl' % (tf_zone_distribution_dir, tf_zone_distribution_individuals_prefix, period)
+            distribution_fpath = '%s/%s%s.pkl' % (tfZ_distribution_dpath, tfZ_distribution_individuals_prefix, period)
             save_pickle_file(distribution_fpath, distribution)
             #
             whole_distribution = {}
@@ -72,14 +72,14 @@ def run():
             df = pd.DataFrame(df_data)[headers]
             df.to_csv(whole_distribution_fpath, index=False)
         else:
-            assert fn.startswith(tf_zone_counting_groups_prefix)
+            assert fn.startswith(tfZ_counting_groups_prefix)
             distribution = {}
             for gn, tf_zone_counting in drivers.iteritems():
                 total_num_trips = sum(tf_zone_counting.values())
                 distribution[gn] = {}
                 for tf_zone, num_trips in tf_zone_counting.iteritems():
                     distribution[gn][tf_zone] = num_trips / float(total_num_trips)
-            distribution_fpath = '%s/%s%s.pkl' % (tf_zone_distribution_dir, tf_zone_distribution_groups_prefix, period)
+            distribution_fpath = '%s/%s%s.pkl' % (tfZ_distribution_dpath, tfZ_distribution_groups_prefix, period)
             save_pickle_file(distribution_fpath, distribution)
 
 

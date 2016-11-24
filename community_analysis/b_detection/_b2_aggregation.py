@@ -1,7 +1,7 @@
 import __init__
 #
-from community_analysis import ss_trips_dir, ss_trips_prefix
-from community_analysis import dwg_dir, dwg_prefix
+from community_analysis import ss_trips_dpath, ss_trips_prefix
+from community_analysis import dwg_dpath, dwg_prefix
 from community_analysis import dw_aggreg_dir, dw_aggreg_prefix
 from community_analysis import year_aggre_summary_fpath, month3_aggre_summary_fpath
 #
@@ -47,11 +47,11 @@ def run():
             month3_days = set()
             yymm = '%02d%02d' % (y, m)
             logger.info('Loading %s' % yymm)
-            month_dw_graph_fpath = '%s/%s%s.pkl' % (dwg_dir, dwg_prefix, yymm)
+            month_dw_graph_fpath = '%s/%s%s.pkl' % (dwg_dpath, dwg_prefix, yymm)
             if not check_path_exist(month_dw_graph_fpath):
                 continue
             #
-            ft_trips_fpath = '%s/%s%s.csv' % (ss_trips_dir, ss_trips_prefix, yymm)
+            ft_trips_fpath = '%s/%s%s.csv' % (ss_trips_dpath, ss_trips_prefix, yymm)
             with open(ft_trips_fpath, 'rb') as r_csvfile:
                 reader = csv.reader(r_csvfile)
                 headers = reader.next()
@@ -79,7 +79,7 @@ def run():
                     year_dw_graph[k] += weight
                     month3_dw_graph[k] += weight
             #
-            yymm_fns = get_all_files(dwg_dir, '%s%02d' % (dwg_prefix, y), '.pkl')
+            yymm_fns = get_all_files(dwg_dpath, '%s%02d' % (dwg_prefix, y), '.pkl')
             rolling_horizon_lm = m
             yymms, next_month_fns = [yymm], []
             for yymm_fn in yymm_fns:
@@ -89,7 +89,7 @@ def run():
                     next_month_fns.append(yymm_fn)
                     yymms.append(n_yymm)
                     #
-                    ft_trips_fpath = '%s/%s%s.csv' % (ss_trips_dir, ss_trips_prefix, n_yymm)
+                    ft_trips_fpath = '%s/%s%s.csv' % (ss_trips_dpath, ss_trips_prefix, n_yymm)
                     with open(ft_trips_fpath, 'rb') as r_csvfile:
                         reader = csv.reader(r_csvfile)
                         headers = reader.next()
@@ -104,7 +104,7 @@ def run():
                 continue
             for yymm_fn in next_month_fns:
                 logger.info('Loading %s for rolling horizon' % yymm_fn)
-                month_dw_graph1 = load_pickle_file('%s/%s' % (dwg_dir, yymm_fn))
+                month_dw_graph1 = load_pickle_file('%s/%s' % (dwg_dpath, yymm_fn))
                 for did0, num_pickup, weighted_link in month_dw_graph1:
                     if not month3_driver_pickup.has_key(did0):
                         month3_driver_pickup[did0] = 0

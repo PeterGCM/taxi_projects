@@ -1,9 +1,12 @@
 import __init__
 #
-from community_analysis import ss_trips_dir, ss_trips_prefix
-from community_analysis import group_drivers_dir, group_drivers_prefix
-from community_analysis import com_trips_dir, com_trips_prefix
-from community_analysis import CHOSEN_PERCENTILE
+'''
+
+'''
+#
+from community_analysis import ss_trips_dpath, ss_trips_prefix
+from community_analysis import group_dpath, group_prepix
+from community_analysis import group_trips_dir
 from community_analysis._classes import ca_driver_with_com_prevD
 from community_analysis.b_detection.b1_dw_graph_generation import generate_zones
 #
@@ -13,13 +16,11 @@ from taxi_common.log_handling_functions import get_logger
 #
 import csv
 #
-logger = get_logger('com_trips')
-percentile_dirname = 'percentile(%.3f)' % CHOSEN_PERCENTILE
+logger = get_logger()
 
 
 def run():
-    check_dir_create(com_trips_dir)
-    check_dir_create('%s/%s' % (com_trips_dir, percentile_dirname))
+    check_dir_create(group_trips_dir)
     #
     init_multiprocessor(4)
     count_num_jobs = 0
@@ -39,7 +40,7 @@ def process_files(period):
         return None
     group_drivers = load_pickle_file(group_drivers_fpath)
     #
-    group_trips_fpath = '%s/%s/%s%s.csv' % (com_trips_dir, percentile_dirname, com_trips_prefix, period)
+    group_trips_fpath = '%s/%s/%s%s.csv' % (group_trips_dir, percentile_dirname, group_trips_prefix, period)
     if check_path_exist(group_trips_fpath):
         return None
     with open(group_trips_fpath, 'wt') as w_csvfile:
@@ -51,7 +52,7 @@ def process_files(period):
                          'start-long', 'start-lat',
                          'distance', 'duration', 'fare'])
     #
-    new_gn_assigned_trip_fpath = '%s/%s%s.csv' % (ss_trips_dir, ss_trips_prefix, period)
+    new_gn_assigned_trip_fpath = '%s/%s%s.csv' % (ss_trips_dpath, ss_trips_prefix, period)
     logger.info('Start handing %s' % new_gn_assigned_trip_fpath)
     did_gn, drivers = {}, {}
     num_groups = 0

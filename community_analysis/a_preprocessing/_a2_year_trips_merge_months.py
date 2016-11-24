@@ -4,7 +4,7 @@ import __init__
 
 '''
 #
-from community_analysis import ss_trips_dir, ss_trips_prefix
+from community_analysis import ss_trips_dpath, ss_trips_prefix
 #
 from taxi_common.file_handling_functions import get_all_files, check_path_exist, get_modified_time
 from taxi_common.log_handling_functions import get_logger
@@ -17,7 +17,7 @@ logger = get_logger('year_trip_merge_months')
 def run():
     #
     for y in range(10, 13):
-        ss_year_trips_fpath = '%s/%s20%02d.csv' % (ss_trips_dir, ss_trips_prefix, y)
+        ss_year_trips_fpath = '%s/%s20%02d.csv' % (ss_trips_dpath, ss_trips_prefix, y)
         if check_path_exist(ss_year_trips_fpath):
             continue
         logger.info('Start handling 20%02d' % y)
@@ -30,9 +30,9 @@ def run():
                              'start-long', 'start-lat',
                              'distance', 'duration', 'fare'])
             drivers = {}
-            for ss_trips_fpath in get_all_files(ss_trips_dir, '%s%02d' % (ss_trips_prefix, y), '.csv'):
+            for ss_trips_fpath in get_all_files(ss_trips_dpath, '%s%02d' % (ss_trips_prefix, y), '.csv'):
                 logger.info('Handling %s' % ss_trips_fpath)
-                with open('%s/%s' % (ss_trips_dir, ss_trips_fpath), 'rb') as r_csvfile:
+                with open('%s/%s' % (ss_trips_dpath, ss_trips_fpath), 'rb') as r_csvfile:
                     reader = csv.reader(r_csvfile)
                     headers = reader.next()
                     hid = {h: i for i, h in enumerate(headers)}
