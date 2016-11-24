@@ -83,6 +83,7 @@ def process_file(fdwg_fn):
             drivers = [v['name'] for v in sg.vs]
             weights = [e['weight'] for e in sg.es]
             while True:
+                global LOCK
                 if not LOCK:
                     LOCK = True
                     with open(group_summary_fpath, 'a') as w_csvfile:
