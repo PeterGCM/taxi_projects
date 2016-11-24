@@ -22,9 +22,10 @@ LOCK = False
 
 def run():
     check_dir_create(group_dpath)
-    with open(group_summary_fpath, 'wt') as w_csvfile:
-        writer = csv.writer(w_csvfile, lineterminator='\n')
-        writer.writerow(['weightCalculation', 'period', 'groupName', 'numDrivers', 'tieStrength'])
+    if not check_path_exist(group_summary_fpath):
+        with open(group_summary_fpath, 'wt') as w_csvfile:
+            writer = csv.writer(w_csvfile, lineterminator='\n')
+            writer.writerow(['weightCalculation', 'period', 'groupName', 'numDrivers', 'tieStrength'])
     #
     init_multiprocessor(4)
     count_num_jobs = 0
@@ -42,8 +43,9 @@ def process_file(fdwg_fn):
         logger.info('Start handling %s' % fdwg_fn)
         _, _, wc, period = fdwg_fn[:-len('.pkl')].split('-')
         group_wc_dpath = '%s/%s' % (group_dpath, wc)
-        if check_path_exist(group_wc_dpath):
-            logger.info('Already handled %s' % fdwg_fn)
+        group_drivers_fpath = '%s/%s%s-%s-drivers.pkl' % (group_wc_dpath, group_prepix, wc, period)
+        if check_path_exist(group_drivers_fpath):
+            logger.info('Already handled %s' % group_drivers_fpath)
             return None
         check_dir_create(group_wc_dpath)
         fdwg_fpath = '%s/%s' % (fdwg_dpath, fdwg_fn)
@@ -74,7 +76,6 @@ def process_file(fdwg_fn):
         #
         logger.info('Each group pickling and summary')
         group_drivers = {}
-        group_drivers_fpath = '%s/%s%s-%s-drivers.pkl' % (group_wc_dpath, group_prepix, wc, period)
         for i, sg in enumerate(part.subgraphs()):
             gn = 'G(%d)' % i
             group_fpath = '%s/%s%s-%s-%s.pkl' % (group_wc_dpath, group_prepix, wc, period, gn)
