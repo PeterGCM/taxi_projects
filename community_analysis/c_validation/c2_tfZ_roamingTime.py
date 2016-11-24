@@ -28,7 +28,7 @@ def run():
         roamingTime_wc_dpath = '%s/%s' % (roamingTime_dpath, wc)
         check_dir_create(roamingTime_wc_dpath)
     #
-    init_multiprocessor(8)
+    init_multiprocessor(11)
     count_num_jobs = 0
     for y in range(9, 10):
         for m in range(1, 13):
