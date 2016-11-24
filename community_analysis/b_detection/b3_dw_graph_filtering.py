@@ -17,7 +17,7 @@ logger = get_logger()
 def run():
     check_dir_create(fdwg_dpath)
     #
-    for y in range(9, 10):
+    for y in range(10, 13):
         yyyy = '20%02d' % y
         process_file(yyyy)
 
