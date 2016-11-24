@@ -19,6 +19,9 @@ logger = get_logger()
 
 def run():
     check_dir_create(pickUp_dpath)
+    for wc in get_all_directories(group_dpath):
+        pickUp_wc_dpath = '%s/%s' % (pickUp_dpath, wc)
+        check_dir_create(pickUp_wc_dpath)
     #
     init_multiprocessor(6)
     count_num_jobs = 0
@@ -46,7 +49,6 @@ def process_file(period):
         wc_group_drivers = {}
         for wc in get_all_directories(group_dpath):
             pickUp_wc_dpath = '%s/%s' % (pickUp_dpath, wc)
-            check_dir_create(pickUp_wc_dpath)
             pickUp_fpath = '%s/%s%s-%s.pkl' % (pickUp_wc_dpath, pickUp_prepix, wc, period)
             if check_path_exist(pickUp_fpath):
                 logger.info('The file had already been processed; %s' % pickUp_fpath)
