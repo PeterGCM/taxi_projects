@@ -72,6 +72,14 @@ def process_file(period):
                 drivers = {}
                 handling_day = 0
                 for row in reader:
+                    t = eval(row[hid['time']])
+                    cur_dt = datetime.datetime.fromtimestamp(t)
+                    if cur_dt.weekday() in [FRI, SAT, SUN]:
+                        continue
+                    if cur_dt.hour < PM2:
+                        continue
+                    if PM11 < cur_dt.hour:
+                        continue
                     did = int(row[hid['driver-id']])
                     for gn_drivers in group_drivers.itervalues():
                         if did in gn_drivers:
@@ -109,18 +117,8 @@ class roaming_driver(object):
         self.pl_time, self.pl_zone, self.pl_state = cl_time, cl_zone, cl_state
 
     def update(self, cl_time, cl_zone, cl_state):
-        pl_dt = datetime.datetime.fromtimestamp(self.pl_time)
-        count_true = 0
         if self.pl_state == FREE:
-            count_true += 1
-        if pl_dt.weekday() not in [FRI, SAT, SUN]:
-            count_true += 1
-        if PM2 < pl_dt.hour:
-            count_true += 1
-        if pl_dt.hour < PM11:
-            count_true += 1
-        #
-        if count_true == 4:
+            pl_dt = datetime.datetime.fromtimestamp(self.pl_time)
             zi, zj = self.pl_zone
             roaming_time = cl_time - self.pl_time
             #
