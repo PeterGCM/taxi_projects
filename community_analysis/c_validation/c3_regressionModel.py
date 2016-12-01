@@ -38,7 +38,7 @@ def run():
     #         count_num_jobs += 1
     # end_multiprocessor(count_num_jobs)
 
-    for y in range(9, 10):
+    for y in range(10, 12):
         yyyy = '20%02d' % (y)
         merge_year(yyyy)
 
