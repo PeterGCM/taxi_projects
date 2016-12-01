@@ -28,19 +28,19 @@ def run():
         regressionModel_wc_dpath = '%s/%s' % (regressionModel_dpath, wc)
         check_dir_create(regressionModel_wc_dpath)
 
-    init_multiprocessor(8)
-    count_num_jobs = 0
-    for y in range(10, 12):
-        for m in range(1, 13):
-            yymm = '%02d%02d' % (y, m)
-            # process_file(yymm)
-            put_task(process_file, [yymm])
-            count_num_jobs += 1
-    end_multiprocessor(count_num_jobs)
+    # init_multiprocessor(8)
+    # count_num_jobs = 0
+    # for y in range(10, 12):
+    #     for m in range(1, 13):
+    #         yymm = '%02d%02d' % (y, m)
+    #         # process_file(yymm)
+    #         put_task(process_file, [yymm])
+    #         count_num_jobs += 1
+    # end_multiprocessor(count_num_jobs)
 
-    # for y in range(9, 10):
-    #     yyyy = '20%02d' % (y)
-    #     merge_year(yyyy)
+    for y in range(9, 10):
+        yyyy = '20%02d' % (y)
+        merge_year(yyyy)
 
 
 def merge_year(period):
