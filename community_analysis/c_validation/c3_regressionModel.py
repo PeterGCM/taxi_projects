@@ -37,7 +37,7 @@ def run():
     #         count_num_jobs += 1
     # end_multiprocessor(count_num_jobs)
 
-    for y in range(10, 12):
+    for y in range(9, 12):
         yyyy = '20%02d' % (y)
         merge_year(yyyy)
 
@@ -67,6 +67,8 @@ def merge_year(period):
                     gn_fpaths[gn].append(fpath)
             for gn, fpaths in gn_fpaths.iteritems():
                 merged_fpath = '%s/%s%s-%s-%s.csv' % (regressionModel_wc_dpath, regressionModel_prefix, wc, period, gn)
+                if check_path_exist(merged_fpath):
+                    continue
                 for fpath in fpaths:
                     if not check_path_exist(merged_fpath):
                         with open(merged_fpath, 'wt') as w_csvfile:
