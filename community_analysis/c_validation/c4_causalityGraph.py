@@ -70,7 +70,7 @@ def process_file(regressionModel_fpath):
             logger.info('Already handled %s' % causalityGraph_fpath)
             return None
         logger.info('Loading %s' % regressionModel_fn)
-        df = pd.read_csv('%s/%s' % (regressionModel_dpath, 'fb/regressionModel-fb-2009-G(3).csv'))
+        df = pd.read_csv(regressionModel_fpath)
         df = df[(df['roamingTime'] <= HOUR1) & (df['roamingTime'] > 0)]
         gn_drivers = set(df['did'])
         logger.info('Start regression %s' % regressionModel_fn)

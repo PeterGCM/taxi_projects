@@ -21,7 +21,7 @@ from taxi_common.sg_grid_zone import get_sg_zones
 #
 import csv, datetime
 
-logger = get_logger('___dw_graph')
+logger = get_logger()
 
 
 def run():
@@ -29,7 +29,7 @@ def run():
     for dpath in [dwg_dpath, dwg_count_dpath, dwg_benefit_dpath, dwg_frequency_dpath, dwg_fb_dpath]:
         check_dir_create(dpath)
     #
-    init_multiprocessor(2)
+    init_multiprocessor(6)
     count_num_jobs = 0
     for y in range(9, 13):
          for m in range(1, 13):
@@ -106,35 +106,34 @@ def process_file(period):
                 drivers[did].update_linkWeight(t, z)
         logger.info('Start %s aggregation' % period)
         dwg_count, dwg_benefit, dwg_frequency, dwg_fb = [], [], [], []
-        for did, d in drivers.iteritems():
-            #
+        for did0, did0_obj in drivers.iteritems():
             non_zero_one_weight_link = {}
-            for did0, w in d.lw_count.iteritems():
+            for did1, w in did0_obj.lw_count.iteritems():
                 if w < 1:
                     continue
-                non_zero_one_weight_link[did0] = w
-            dwg_count.append((did, d.num_pickup, non_zero_one_weight_link))
+                non_zero_one_weight_link[did1] = w
+            dwg_count.append((did0, did0_obj.num_pickup, non_zero_one_weight_link))
             #
             non_zero_weight_link = {}
-            for did0, w in d.lw_benefit.iteritems():
+            for did1, w in did0_obj.lw_benefit.iteritems():
                 if w == 0:
                     continue
-                non_zero_weight_link[did0] = w
-            dwg_benefit.append((did, d.num_pickup, non_zero_weight_link))
+                non_zero_weight_link[did1] = w
+            dwg_benefit.append((did0, did0_obj.num_pickup, non_zero_weight_link))
             #
             non_zero_weight_link = {}
-            for did0, w in d.lw_frequency.iteritems():
+            for did1, w in did0_obj.lw_frequency.iteritems():
                 if w == 0:
                     continue
-                non_zero_weight_link[did0] = w
-            dwg_frequency.append((did, d.num_pickup, non_zero_weight_link))
+                non_zero_weight_link[did1] = w
+            dwg_frequency.append((did0, did0_obj.num_pickup, non_zero_weight_link))
             #
             non_zero_weight_link = {}
-            for did0, w in d.lw_fb.iteritems():
+            for did1, w in did0_obj.lw_fb.iteritems():
                 if w == 0:
                     continue
-                non_zero_weight_link[did0] = w
-            dwg_fb.append((did, d.num_pickup, non_zero_weight_link))
+                non_zero_weight_link[did1] = w
+            dwg_fb.append((did0, did0_obj.num_pickup, non_zero_weight_link))
         #
         logger.info('Start %s pickling' % period)
         save_pkl_threading(dwg_count_fpath, dwg_count)
