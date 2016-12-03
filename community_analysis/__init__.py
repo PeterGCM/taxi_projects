@@ -38,6 +38,10 @@ roamingTime_dpath = '%s/%s' % (taxi_data, 'roamingTime'); roamingTime_prepix = '
 regressionModel_dpath = '%s/%s' % (taxi_data, 'regressionModel'); regressionModel_prefix = 'regressionModel-'
 X_PICKUP, O_PICKUP = range(2)
 HOUR1 = 60 * 60
+causalityGraph_dpath = '%s/%s' % (taxi_data, 'causalityGraph'); causalityGraph_prefix = 'causalityGraph-'
+SIGINIFICANCE_LEVEL = 0.05
+
+
 
 
 

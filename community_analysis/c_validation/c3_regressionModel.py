@@ -15,7 +15,6 @@ from taxi_common.file_handling_functions import check_dir_create, get_all_direct
 from taxi_common.log_handling_functions import get_logger
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
-from itertools import chain
 import csv
 
 logger = get_logger()
