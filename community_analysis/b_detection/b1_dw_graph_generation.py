@@ -107,26 +107,26 @@ def process_file(period):
         logger.info('Start %s aggregation' % period)
         dwg_count, dwg_benefit, dwg_frequency, dwg_fb = [], [], [], []
         for did0, did0_obj in drivers.iteritems():
-            non_zero_one_weight_link = {}
-            for did1, w in did0_obj.lw_count.iteritems():
-                if w < 1:
-                    continue
-                non_zero_one_weight_link[did1] = w
-            dwg_count.append((did0, did0_obj.num_pickup, non_zero_one_weight_link))
-            #
-            non_zero_weight_link = {}
-            for did1, w in did0_obj.lw_benefit.iteritems():
-                if w == 0:
-                    continue
-                non_zero_weight_link[did1] = w
-            dwg_benefit.append((did0, did0_obj.num_pickup, non_zero_weight_link))
-            #
-            non_zero_weight_link = {}
-            for did1, w in did0_obj.lw_frequency.iteritems():
-                if w == 0:
-                    continue
-                non_zero_weight_link[did1] = w
-            dwg_frequency.append((did0, did0_obj.num_pickup, non_zero_weight_link))
+            # non_zero_one_weight_link = {}
+            # for did1, w in did0_obj.lw_count.iteritems():
+            #     if w < 1:
+            #         continue
+            #     non_zero_one_weight_link[did1] = w
+            # dwg_count.append((did0, did0_obj.num_pickup, non_zero_one_weight_link))
+            # #
+            # non_zero_weight_link = {}
+            # for did1, w in did0_obj.lw_benefit.iteritems():
+            #     if w == 0:
+            #         continue
+            #     non_zero_weight_link[did1] = w
+            # dwg_benefit.append((did0, did0_obj.num_pickup, non_zero_weight_link))
+            # #
+            # non_zero_weight_link = {}
+            # for did1, w in did0_obj.lw_frequency.iteritems():
+            #     if w == 0:
+            #         continue
+            #     non_zero_weight_link[did1] = w
+            # dwg_frequency.append((did0, did0_obj.num_pickup, non_zero_weight_link))
             #
             non_zero_weight_link = {}
             for did1, w in did0_obj.lw_fb.iteritems():
@@ -136,9 +136,9 @@ def process_file(period):
             dwg_fb.append((did0, did0_obj.num_pickup, non_zero_weight_link))
         #
         logger.info('Start %s pickling' % period)
-        save_pkl_threading(dwg_count_fpath, dwg_count)
-        save_pkl_threading(dwg_benefit_fpath, dwg_benefit)
-        save_pkl_threading(dwg_frequency_fpath, dwg_frequency)
+        # save_pkl_threading(dwg_count_fpath, dwg_count)
+        # save_pkl_threading(dwg_benefit_fpath, dwg_benefit)
+        # save_pkl_threading(dwg_frequency_fpath, dwg_frequency)
         save_pickle_file(dwg_fb_fpath, dwg_fb)
     except Exception as _:
         import sys

@@ -48,9 +48,9 @@ class ca_driver_with_distribution(driver):
                 did0_obj.num_inDay[self.did] = 0
                 did0_obj.link_frequency[self.did] = 0.0
                 #
-                did0_obj.lw_count[self.did] = 0
-                did0_obj.lw_benefit[self.did] = 0.0
-                did0_obj.lw_frequency[self.did] = 0.0
+                # did0_obj.lw_count[self.did] = 0
+                # did0_obj.lw_benefit[self.did] = 0.0
+                # did0_obj.lw_frequency[self.did] = 0.0
                 did0_obj.lw_fb[self.did] = 0.0
             #
             did0_obj.num_inDay[self.did] += 1
@@ -61,9 +61,9 @@ class ca_driver_with_distribution(driver):
                 prevD_group_prob = 0.0
             else:
                 prevD_group_prob = did0_obj.group_distribution[k]
-            did0_obj.lw_count[self.did] += 1
-            did0_obj.lw_benefit[self.did] += max(0, prevD_group_prob - curD_prob)
-            did0_obj.lw_frequency[self.did] += did0_obj.link_frequency[self.did]
+            # did0_obj.lw_count[self.did] += 1
+            # did0_obj.lw_benefit[self.did] += max(0, prevD_group_prob - curD_prob)
+            # did0_obj.lw_frequency[self.did] += did0_obj.link_frequency[self.did]
             did0_obj.lw_fb[self.did] += did0_obj.link_frequency[self.did] * max(0, prevD_group_prob - curD_prob)
         z.add_driver_in_logQ(t, self)
         self.num_pickup += 1
