@@ -31,8 +31,8 @@ def run():
     regressionModel_fpaths = []
     for wc in get_all_directories(regressionModel_dpath):
         #
-        if wc != 'fb':
-            continue
+        # if wc != 'fb':
+        #     continue
         #
         regressionModel_wc_dpath = '%s/%s' % (regressionModel_dpath, wc)
         for regressionModel_wc_fn in get_all_files(regressionModel_wc_dpath, '', '.csv'):
