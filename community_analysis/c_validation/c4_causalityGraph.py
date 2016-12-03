@@ -15,7 +15,6 @@ from taxi_common.multiprocess import init_multiprocessor, put_task, end_multipro
 #
 import fnmatch
 import pandas as pd
-import numpy as np
 import statsmodels.api as sm
 
 logger = get_logger()
@@ -41,7 +40,7 @@ def run():
                 if fnmatch.fnmatch(regressionModel_wc_fn, '*-%s-*.csv' % yyyy):
                     regressionModel_fpaths.append('%s/%s' % (regressionModel_dpath, regressionModel_wc_fn))
     #
-    init_multiprocessor(8)
+    init_multiprocessor(6)
     count_num_jobs = 0
     for regressionModel_fpath in regressionModel_fpaths:
         # process_file(regressionModel_fpath)
