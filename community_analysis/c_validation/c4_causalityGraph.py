@@ -85,10 +85,12 @@ def process_file(regressionModel_fpath):
                     continue
                 if sum(vs) != 0:
                     candi_dummies.append(data_multi_reg.columns[i])
+            if not candi_dummies:
+                continue
             y = data_multi_reg['roamingTime']
             X = data_multi_reg[candi_dummies]
             X = sm.add_constant(X)
-            res = sm.OLS(y, X).fit()
+            res = sm.OLS(y, X, missing='drop').fit()
             #
             significant_drivers = set()
             for _did0, pv in res.pvalues.iteritems():
