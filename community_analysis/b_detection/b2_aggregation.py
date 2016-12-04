@@ -74,7 +74,7 @@ def run():
                 writer.writerow([yyyy, fprefix.split('-')[2],
                                  len(drivers), len(year_dwg),
                                  weights.mean(), weights.std(),
-                                 np.median(weights), min(weights), max(weights)])
+                                 np.median(weights), weights.min(), weights.max()])
 
 if __name__ == '__main__':
     from traceback import format_exc
