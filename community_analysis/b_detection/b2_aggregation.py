@@ -30,9 +30,9 @@ def run():
                       'weightMedian', 'weightMin', 'weightMax']
             writer.writerow(header)
     for dpath, fprefix in [
-                            (dwg_count_dpath, dwg_count_prefix),
-                            (dwg_benefit_dpath, dwg_benefit_prefix),
-                            (dwg_frequency_dpath, dwg_frequency_prefix),
+                            # (dwg_count_dpath, dwg_count_prefix),
+                            # (dwg_benefit_dpath, dwg_benefit_prefix),
+                            # (dwg_frequency_dpath, dwg_frequency_prefix),
                             (dwg_fb_dpath, dwg_fb_prefix)
                            ]:
         for y in range(9, 10):
@@ -74,7 +74,7 @@ def run():
                 writer.writerow([yyyy, fprefix.split('-')[2],
                                  len(drivers), len(year_dwg),
                                  weights.mean(), weights.std(),
-                                 np.median(weights), weights.min(), weights.max()])
+                                 np.median(weights), min(weights), max(weights)])
 
 if __name__ == '__main__':
     from traceback import format_exc
