@@ -40,13 +40,13 @@ def run():
                 if fnmatch.fnmatch(regressionModel_wc_fn, '*-%s-*.csv' % yyyy):
                     regressionModel_fpaths.append('%s/%s' % (regressionModel_wc_dpath, regressionModel_wc_fn))
     #
-    init_multiprocessor(6)
+    # init_multiprocessor(6)
     count_num_jobs = 0
     for regressionModel_fpath in regressionModel_fpaths:
-        # process_file(regressionModel_fpath)
-        put_task(process_file, [regressionModel_fpath])
-        count_num_jobs += 1
-    end_multiprocessor(count_num_jobs)
+        process_file(regressionModel_fpath)
+    #     put_task(process_file, [regressionModel_fpath])
+    #     count_num_jobs += 1
+    # end_multiprocessor(count_num_jobs)
     #
     # init_multiprocessor(8)
     # count_num_jobs = 0

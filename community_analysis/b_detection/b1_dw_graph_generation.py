@@ -52,7 +52,7 @@ def process_file(period):
         dwg_benefit_fpath = '%s/%s%s.pkl' % (dwg_benefit_dpath, dwg_benefit_prefix, period)
         dwg_frequency_fpath = '%s/%s%s.pkl' % (dwg_frequency_dpath, dwg_frequency_prefix, period)
         dwg_fb_fpath = '%s/%s%s.pkl' % (dwg_fb_dpath, dwg_fb_prefix, period)
-        if check_path_exist(dwg_fb_fpath):
+        if check_path_exist(dwg_benefit_fpath):
             logger.info('Already processed %s' % period)
             return None
         did_gn = {}
@@ -89,8 +89,8 @@ def process_file(period):
                 cur_dt = datetime.datetime.fromtimestamp(t)
                 if handling_day != cur_dt.day:
                     logger.info('Processing %s %dth day (month %d)' % (period, cur_dt.day, cur_dt.month))
-                    for d in drivers.itervalues():
-                        d.update_linkFrequency()
+                    # for d in drivers.itervalues():
+                    #     d.update_linkFrequency()
                     handling_day = cur_dt.day
                 did = int(row[hid['did']])
                 zi, zj = int(row[hid['zi']]), int(row[hid['zj']])
@@ -114,12 +114,12 @@ def process_file(period):
             #     non_zero_one_weight_link[did1] = w
             # dwg_count.append((did0, did0_obj.num_pickup, non_zero_one_weight_link))
             # #
-            # non_zero_weight_link = {}
-            # for did1, w in did0_obj.lw_benefit.iteritems():
-            #     if w == 0:
-            #         continue
-            #     non_zero_weight_link[did1] = w
-            # dwg_benefit.append((did0, did0_obj.num_pickup, non_zero_weight_link))
+            non_zero_weight_link = {}
+            for did1, w in did0_obj.lw_benefit.iteritems():
+                if w == 0:
+                    continue
+                non_zero_weight_link[did1] = w
+            dwg_benefit.append((did0, did0_obj.num_pickup, non_zero_weight_link))
             # #
             # non_zero_weight_link = {}
             # for did1, w in did0_obj.lw_frequency.iteritems():
@@ -128,18 +128,18 @@ def process_file(period):
             #     non_zero_weight_link[did1] = w
             # dwg_frequency.append((did0, did0_obj.num_pickup, non_zero_weight_link))
             #
-            non_zero_weight_link = {}
-            for did1, w in did0_obj.lw_fb.iteritems():
-                if w == 0:
-                    continue
-                non_zero_weight_link[did1] = w
-            dwg_fb.append((did0, did0_obj.num_pickup, non_zero_weight_link))
+            # non_zero_weight_link = {}
+            # for did1, w in did0_obj.lw_fb.iteritems():
+            #     if w == 0:
+            #         continue
+            #     non_zero_weight_link[did1] = w
+            # dwg_fb.append((did0, did0_obj.num_pickup, non_zero_weight_link))
         #
         logger.info('Start %s pickling' % period)
         # save_pkl_threading(dwg_count_fpath, dwg_count)
-        # save_pkl_threading(dwg_benefit_fpath, dwg_benefit)
+        save_pickle_file(dwg_benefit_fpath, dwg_benefit)
         # save_pkl_threading(dwg_frequency_fpath, dwg_frequency)
-        save_pickle_file(dwg_fb_fpath, dwg_fb)
+        # save_pickle_file(dwg_fb_fpath, dwg_fb)
     except Exception as _:
         import sys
         with open('%s_%s.txt' % (sys.argv[0], period), 'w') as f:
