@@ -49,10 +49,10 @@ def merge_year(period):
         logger.info('Handle merge %s' % period)
         yy = period[2:]
         for wc in get_all_directories(regressionModel_dpath):
-            #
-            # if wc != 'fb':
-            #     continue
-            #
+
+            if wc != 'fb':
+                continue
+
             regressionModel_wc_dpath = '%s/%s' % (regressionModel_dpath, wc)
             prefix = '%s%s-%s' % (regressionModel_prefix, wc, yy)
             gn_fpaths = {}
