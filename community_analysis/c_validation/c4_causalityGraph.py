@@ -38,7 +38,7 @@ def run():
             for y in range(9, 10):
                 yyyy = '20%02d' % (y)
                 if fnmatch.fnmatch(regressionModel_wc_fn, '*-%s-*.csv' % yyyy):
-                    regressionModel_fpaths.append('%s/%s' % (regressionModel_dpath, regressionModel_wc_fn))
+                    regressionModel_fpaths.append('%s/%s' % (regressionModel_wc_dpath, regressionModel_wc_fn))
     #
     init_multiprocessor(6)
     count_num_jobs = 0
