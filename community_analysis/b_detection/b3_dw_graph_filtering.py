@@ -32,9 +32,9 @@ def process_file(period):
     try:
         logger.info('Handle %s' % (period))
         for dpath, fprefix in [
-                               (dwg_count_dpath, dwg_count_prefix),
-                               (dwg_benefit_dpath, dwg_benefit_prefix),
-                               (dwg_frequency_dpath, dwg_frequency_prefix),
+                               # (dwg_count_dpath, dwg_count_prefix),
+                               # (dwg_benefit_dpath, dwg_benefit_prefix),
+                               # (dwg_frequency_dpath, dwg_frequency_prefix),
                                (dwg_fb_dpath, dwg_fb_prefix)
                                ]:
             fdw_graph_fpath = '%s/%s%s-%s.pkl' % (fdwg_dpath, fdw_graph_prefix, fprefix.split('-')[2], period)
