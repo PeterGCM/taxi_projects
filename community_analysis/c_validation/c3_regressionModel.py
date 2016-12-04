@@ -98,6 +98,10 @@ def process_file(period):
     try:
         logger.info('Handle %s' % period)
         for wc in get_all_directories(regressionModel_dpath):
+
+            if wc != 'fb':
+                continue
+
             regressionModel_wc_dpath = '%s/%s' % (regressionModel_dpath, wc)
             regressionModel_fpath = '%s/%s%s-%s.csv' % (regressionModel_wc_dpath, regressionModel_prefix, wc, period)
             if check_path_exist(regressionModel_fpath):
