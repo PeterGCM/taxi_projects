@@ -35,7 +35,7 @@ def run():
                             (dwg_frequency_dpath, dwg_frequency_prefix),
                             (dwg_fb_dpath, dwg_fb_prefix)
                            ]:
-        for y in range(10, 13):
+        for y in range(9, 10):
             yyyy = '20%02d' % y
             logger.info('Handle %s (%s)' % (yyyy, fprefix))
             year_aggregation_fpath = '%s/%s%s.pkl' % (dpath, fprefix, yyyy)
