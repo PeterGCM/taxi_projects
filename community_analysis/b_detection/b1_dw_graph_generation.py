@@ -52,7 +52,7 @@ def process_file(period):
         dwg_benefit_fpath = '%s/%s%s.pkl' % (dwg_benefit_dpath, dwg_benefit_prefix, period)
         dwg_frequency_fpath = '%s/%s%s.pkl' % (dwg_frequency_dpath, dwg_frequency_prefix, period)
         dwg_fb_fpath = '%s/%s%s.pkl' % (dwg_fb_dpath, dwg_fb_prefix, period)
-        if check_path_exist(dwg_benefit_fpath):
+        if check_path_exist(dwg_count_fpath):
             logger.info('Already processed %s' % period)
             return None
         did_gn = {}
