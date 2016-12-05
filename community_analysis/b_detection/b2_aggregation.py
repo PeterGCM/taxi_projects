@@ -31,9 +31,9 @@ def run():
             writer.writerow(header)
     for dpath, fprefix in [
                             # (dwg_count_dpath, dwg_count_prefix),
-                            # (dwg_benefit_dpath, dwg_benefit_prefix),
+                            (dwg_benefit_dpath, dwg_benefit_prefix),
                             # (dwg_frequency_dpath, dwg_frequency_prefix),
-                            (dwg_fb_dpath, dwg_fb_prefix)
+                            # (dwg_fb_dpath, dwg_fb_prefix)
                            ]:
         for y in range(9, 10):
             yyyy = '20%02d' % y
