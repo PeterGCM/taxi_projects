@@ -30,12 +30,12 @@ def run():
                       'weightMedian', 'weightMin', 'weightMax']
             writer.writerow(header)
     for dpath, fprefix in [
-                            # (dwg_count_dpath, dwg_count_prefix),
-                            (dwg_benefit_dpath, dwg_benefit_prefix),
-                            # (dwg_frequency_dpath, dwg_frequency_prefix),
+                            (dwg_count_dpath, dwg_count_prefix),
+                            # (dwg_benefit_dpath, dwg_benefit_prefix),
+                            (dwg_frequency_dpath, dwg_frequency_prefix),
                             # (dwg_fb_dpath, dwg_fb_prefix)
                            ]:
-        for y in range(9, 10):
+        for y in range(9, 13):
             yyyy = '20%02d' % y
             logger.info('Handle %s (%s)' % (yyyy, fprefix))
             year_aggregation_fpath = '%s/%s%s.pkl' % (dpath, fprefix, yyyy)
