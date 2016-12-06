@@ -21,9 +21,10 @@ logger = get_logger()
 def run():
     check_dir_create(fdwg_dpath)
     #
-    for y in range(9, 10):
-        yyyy = '20%02d' % y
-        process_file(yyyy)
+    # for y in range(9, 10):
+    #     yyyy = '20%02d' % y
+    #     process_file(yyyy)
+    process_file('20092010')
 
 
 def process_file(period):
@@ -33,9 +34,9 @@ def process_file(period):
         logger.info('Handle %s' % (period))
         for dpath, fprefix in [
                                # (dwg_count_dpath, dwg_count_prefix),
-                               (dwg_benefit_dpath, dwg_benefit_prefix),
+                               # (dwg_benefit_dpath, dwg_benefit_prefix),
                                # (dwg_frequency_dpath, dwg_frequency_prefix),
-                               # (dwg_fb_dpath, dwg_fb_prefix)
+                               (dwg_fb_dpath, dwg_fb_prefix)
                                ]:
             fdw_graph_fpath = '%s/%s%s-%s.pkl' % (fdwg_dpath, fdw_graph_prefix, fprefix.split('-')[2], period)
             if check_path_exist(fdw_graph_fpath):
