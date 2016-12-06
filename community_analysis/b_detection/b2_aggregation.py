@@ -41,7 +41,7 @@ def run():
             year_aggregation_fpath = '%s/%s%s.pkl' % (dpath, fprefix, yyyy)
             if check_path_exist(year_aggregation_fpath):
                 logger.info('Already handled %s (%s)' % (yyyy, fprefix))
-                return None
+                continue
             year_dwg = {}
             drivers = set()
             for m in range(1, 13):
