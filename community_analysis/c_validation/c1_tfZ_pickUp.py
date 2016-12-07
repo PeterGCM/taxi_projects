@@ -52,6 +52,10 @@ def process_file(period):
 
         wc_group_drivers = {}
         for wc in get_all_directories(group_dpath):
+
+            if wc != 'fb':
+                continue
+
             pickUp_wc_dpath = '%s/%s' % (pickUpY2_dpath, wc)
             pickUp_fpath = '%s/%s%s-%s.pkl' % (pickUp_wc_dpath, pickUpY2_prepix, wc, period)
             if check_path_exist(pickUp_fpath):
