@@ -68,7 +68,8 @@ def process_file(period):
                 logger.info('The file had already been processed; %s' % roamingTime_fpath)
                 continue
             group_wc_dpath = '%s/%s' % (group_dpath, wc)
-            group_drivers_fpath = '%s/%s%s-%s-drivers.pkl' % (group_wc_dpath, group_prepix, wc, yyyy)
+            # group_drivers_fpath = '%s/%s%s-%s-drivers.pkl' % (group_wc_dpath, group_prepix, wc, yyyy)
+            group_drivers_fpath = '%s/%s%s-%s-drivers.pkl' % (group_wc_dpath, group_prepix, wc, yyyy2)
             group_drivers = load_pickle_file(group_drivers_fpath)
             #
             logger.info('Process checking roamingTime; %s' % period)
