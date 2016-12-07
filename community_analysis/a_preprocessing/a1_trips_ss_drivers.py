@@ -8,8 +8,9 @@ from community_analysis import FRI, SAT, SUN
 from community_analysis import PM2, PM11
 from community_analysis import taxi_home
 from community_analysis import ss_trips_dpath, ss_trips_prefix
+from community_analysis import group_dpath, group_prepix
 #
-from taxi_common.file_handling_functions import load_pickle_file, check_dir_create, check_path_exist
+from taxi_common.file_handling_functions import load_pickle_file, check_dir_create, check_path_exist, get_all_directories
 from taxi_common.log_handling_functions import get_logger
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 from taxi_common.sg_grid_zone import get_sg_grid_xy_points
@@ -26,17 +27,77 @@ def run():
     #
     init_multiprocessor(11)
     count_num_jobs = 0
-    for y in range(9, 13):
+    for y in range(9, 10):
         for m in range(1, 13):
             yymm = '%02d%02d' % (y, m)
-            # yymm = '12%02d' % mm
             # process_file(yymm)
-            put_task(process_file, [yymm])
+            # put_task(initial_processing, [yymm])
+            put_task(group_defined_processing, [yymm])
             count_num_jobs += 1
     end_multiprocessor(count_num_jobs)
 
 
-def process_file(yymm):
+def group_defined_processing(yymm):
+    for wc in get_all_directories(group_dpath):
+        ss_trips_wc_dpath = '%s/%s' % (ss_trips_dpath, wc)
+        check_dir_create(ss_trips_wc_dpath)
+    #
+    for wc in get_all_directories(group_dpath):
+        if wc != 'fb':
+            continue
+        ss_trips_wc_dpath = '%s/%s' % (ss_trips_dpath, wc)
+        ss_trips_fpath = '%s/%s%s-%s.pkl' % (ss_trips_wc_dpath, ss_trips_prefix, wc, yymm)
+        if check_path_exist(ss_trips_fpath):
+            logger.info('The file had already been processed; %s' % ss_trips_fpath)
+            continue
+        with open(ss_trips_fpath, 'wt') as w_csvfile:
+            writer = csv.writer(w_csvfile, lineterminator='\n')
+            writer.writerow(['did',
+                             'timeFrame', 'zi', 'zj',
+                             'groupName', 'prevDriver',
+                             'time', 'day',
+                             'start-long', 'start-lat',
+                             'distance', 'duration', 'fare'])
+        #
+        logger.info('Process wc-yymm; %s-%s' % (wc, yymm))
+        yyyy = '20%s' % (yymm[:2])
+        group_wc_dpath = '%s/%s' % (group_dpath, wc)
+        group_drivers_fpath = '%s/%s%s-%s-drivers.pkl' % (group_wc_dpath, group_prepix, wc, yyyy)
+        group_drivers = load_pickle_file(group_drivers_fpath)
+        with open(ss_trips_fpath, 'rb') as r_csvfile:
+            reader = csv.reader(r_csvfile)
+            headers = reader.next()
+            hid = {h: i for i, h in enumerate(headers)}
+            handling_day = 0
+            for row in reader:
+                did = int(row[hid['did']])
+                gn = None
+                for gn0, drivers in group_drivers.iteritems():
+                    if did in drivers:
+                        gn = gn0
+                        break
+                if not gn:
+                    continue
+                t = eval(row[hid['time']])
+                cur_dt = datetime.datetime.fromtimestamp(t)
+                day = cur_dt.day
+                if handling_day != day:
+                    handling_day = day
+                    logger.info('handling; %s-%d' % (yymm, handling_day))
+                tf = int(row[hid['timeFrame']])
+                zi, zj = int(row[hid['zi']]), int(row[hid['zj']])
+                with open(ss_trips_fpath, 'a') as w_csvfile:
+                    writer = csv.writer(w_csvfile, lineterminator='\n')
+                    writer.writerow([did,
+                                     tf, zi, zj,
+                                     gn, 'None',
+                                     t, cur_dt.day,
+                                     row[hid['start-long']], row[hid['start-lat']],
+                                     row[hid['distance']], row[hid['duration']], row[hid['fare']]
+                                     ])
+
+
+def initial_processing(yymm):
     logger.info('handle the file; %s' % yymm)
     yy, mm = yymm[:2], yymm[2:]
     normal_fpath = '%s/20%s/%s/trips/trips-%s-normal.csv' % (taxi_home, yy, mm, yymm)
