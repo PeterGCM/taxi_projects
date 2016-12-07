@@ -6,6 +6,7 @@ import __init__
 from community_analysis import taxi_home
 from community_analysis import group_dpath, group_prepix
 from community_analysis import roamingTime_dpath, roamingTime_prepix
+from community_analysis import roamingTimeY2_dpath, roamingTimeY2_prepix
 from community_analysis import FRI, SAT, SUN
 from community_analysis import PM2, PM11
 from community_analysis import FREE
@@ -22,15 +23,15 @@ logger = get_logger()
 
 
 def run():
-    check_dir_create(roamingTime_dpath)
+    check_dir_create(roamingTimeY2_dpath)
     #
     for wc in get_all_directories(group_dpath):
-        roamingTime_wc_dpath = '%s/%s' % (roamingTime_dpath, wc)
+        roamingTime_wc_dpath = '%s/%s' % (roamingTimeY2_dpath, wc)
         check_dir_create(roamingTime_wc_dpath)
     #
     init_multiprocessor(11)
     count_num_jobs = 0
-    for y in range(9, 10):
+    for y in range(9, 11):
         for m in range(1, 13):
             yymm = '%02d%02d' % (y, m)
             # process_file(yymm)
@@ -51,11 +52,18 @@ def process_file(period):
             return None
         #
         logger.info('load group drivers; %s' % period)
-        yyyy = '20%s' % (period[:2])
+
+        # yyyy = '20%s' % (period[:2])
+        yyyy2 = '20092010'
+
         x_points, y_points = get_sg_grid_xy_points()
         for wc in get_all_directories(group_dpath):
-            roamingTime_wc_dpath = '%s/%s' % (roamingTime_dpath, wc)
-            roamingTime_fpath = '%s/%s%s-%s.pkl' % (roamingTime_wc_dpath, roamingTime_prepix, wc, period)
+
+            if wc != 'fb':
+                continue
+
+            roamingTime_wc_dpath = '%s/%s' % (roamingTimeY2_dpath, wc)
+            roamingTime_fpath = '%s/%s%s-%s.pkl' % (roamingTime_wc_dpath, roamingTimeY2_prepix, wc, period)
             if check_path_exist(roamingTime_fpath):
                 logger.info('The file had already been processed; %s' % roamingTime_fpath)
                 continue
