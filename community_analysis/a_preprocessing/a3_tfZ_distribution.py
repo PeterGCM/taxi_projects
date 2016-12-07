@@ -23,7 +23,6 @@ logger = get_logger('tfZ distribution')
 
 
 def run():
-    logger.info('Execution')
     check_dir_create(tfZ_distribution_dpath)
     #
     # init_multiprocessor(8)
@@ -36,7 +35,7 @@ def run():
     #         count_num_jobs += 1
     # end_multiprocessor(count_num_jobs)
     #
-    for y in range(9, 13):
+    for y in range(9, 10):
         yyyy = '20%02d' % y
         process_whole_distribution(yyyy)
 
