@@ -44,6 +44,7 @@ def run():
                 cur_dt = datetime.datetime.fromtimestamp(t)
                 if handling_day != cur_dt.day:
                     logger.info('...ing; %s(%dth)' % (yymm, handling_day))
+                    handling_day = cur_dt.day
                 apIn = 1 if int(row[hid['trip-mode']]) == DIn_PIn else 0
                 new_row = [
                     t, did, row[hid['duration']], row[hid['fare']],

@@ -1,4 +1,4 @@
-import __init__
+import community_analysis.c_validation
 #
 '''
 
