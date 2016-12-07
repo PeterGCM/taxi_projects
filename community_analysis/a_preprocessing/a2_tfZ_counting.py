@@ -13,7 +13,7 @@ from taxi_common.multiprocess import init_multiprocessor, put_task, end_multipro
 #
 import csv
 #
-logger = get_logger('tf zone counting')
+logger = get_logger()
 
 
 def run():
@@ -25,26 +25,25 @@ def run():
     for y in range(9, 13):
         for m in range(1, 13):
             yymm = '%02d%02d' % (y, m)
-            # yymm = '12%02d' % mm
             # process_file(yymm)
-            put_task(process_file, [yymm])
+            put_task(process_month, [yymm])
             count_num_jobs += 1
     end_multiprocessor(count_num_jobs)
 
 
-def process_file(period):
-    logger.info('Handle the file; %s' % period)
+def process_month(yymm):
+    logger.info('Handle the file; %s' % yymm)
     from traceback import format_exc
     try:
-        ss_trips_fpath = '%s/%s%s.csv' % (ss_trips_dpath, ss_trips_prefix, period)
+        ss_trips_fpath = '%s/%s%s.csv' % (ss_trips_dpath, ss_trips_prefix, yymm)
         if not check_path_exist(ss_trips_fpath):
-            logger.info('The file X exists; %s' % period)
+            logger.info('The file X exists; %s' % yymm)
             return None
         #
-        tf_zone_counting_individuals_fpath = '%s/%s%s.pkl' % (tfZ_counting_dpath, tfZ_counting_individuals_prefix, period)
-        tf_zone_counting_groups_fpath = '%s/%s%s.pkl' % (tfZ_counting_dpath, tfZ_counting_groups_prefix, period)
+        tf_zone_counting_individuals_fpath = '%s/%s%s.pkl' % (tfZ_counting_dpath, tfZ_counting_individuals_prefix, yymm)
+        tf_zone_counting_groups_fpath = '%s/%s%s.pkl' % (tfZ_counting_dpath, tfZ_counting_groups_prefix, yymm)
         if check_path_exist(tf_zone_counting_individuals_fpath):
-            logger.info('The file had already been processed; %s' % period)
+            logger.info('The file had already been processed; %s' % yymm)
             return None
         #
         individuals, groups = {}, {}
@@ -71,7 +70,7 @@ def process_file(period):
                     if not groups[gn].has_key((tf, zi, zj)):
                         groups[gn][tf, zi, zj] = 0
                 groups[gn][tf, zi, zj] += 1
-        logger.info('Start pickling %s' % period)
+        logger.info('Start pickling %s' % yymm)
         save_pickle_file(tf_zone_counting_individuals_fpath, individuals)
         save_pickle_file(tf_zone_counting_groups_fpath, groups)
     except Exception as _:

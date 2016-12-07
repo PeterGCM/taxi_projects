@@ -37,7 +37,7 @@ pickUp_dpath = '%s/%s' % (taxi_data, 'pickUp'); pickUp_prepix = 'pickUp-'
 pickUpY2_dpath = '%s/%s' % (taxi_data, 'pickUpY2'); pickUpY2_prepix = 'pickUpY2-'
 
 roamingTime_dpath = '%s/%s' % (taxi_data, 'roamingTime'); roamingTime_prepix = 'roamingTime-'
-roamingTimeY2_dpath = '%s/%s' % (taxi_data, 'roamingTimeY2'); roamingTimeY2_prepix = 'roamingTimeY2-'
+roamingTimeY2_dpath = '%s/%s' % (taxi_data, 'roamingTimeY2'); roamingTime_prepix = 'roamingTime-'
 
 regressionModel_dpath = '%s/%s' % (taxi_data, 'regressionModel'); regressionModel_prefix = 'regressionModel-'
 X_PICKUP, O_PICKUP = range(2)
