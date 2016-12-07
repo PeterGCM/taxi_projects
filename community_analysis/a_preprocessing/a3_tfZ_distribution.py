@@ -19,7 +19,7 @@ from taxi_common.multiprocess import init_multiprocessor, put_task, end_multipro
 #
 import pandas as pd
 #
-logger = get_logger('tfZ distribution')
+logger = get_logger()
 
 
 def run():
