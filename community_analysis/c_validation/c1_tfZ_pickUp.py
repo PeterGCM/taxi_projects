@@ -7,6 +7,7 @@ import __init__
 from community_analysis import ss_trips_dpath, ss_trips_prefix
 from community_analysis import group_dpath, group_prepix
 from community_analysis import pickUp_dpath, pickUp_prepix
+from community_analysis import pickUpY2_dpath, pickUpY2_prepix
 #
 from taxi_common.file_handling_functions import check_dir_create, get_all_directories, check_path_exist, load_pickle_file, save_pickle_file
 from taxi_common.log_handling_functions import get_logger
@@ -18,14 +19,14 @@ logger = get_logger()
 
 
 def run():
-    check_dir_create(pickUp_dpath)
+    check_dir_create(pickUpY2_dpath)
     for wc in get_all_directories(group_dpath):
-        pickUp_wc_dpath = '%s/%s' % (pickUp_dpath, wc)
+        pickUp_wc_dpath = '%s/%s' % (pickUpY2_dpath, wc)
         check_dir_create(pickUp_wc_dpath)
     #
     init_multiprocessor(11)
     count_num_jobs = 0
-    for y in range(9, 10):
+    for y in range(9, 11):
         for m in range(1, 13):
             yymm = '%02d%02d' % (y, m)
             # yymm = '12%02d' % mm
@@ -45,16 +46,20 @@ def process_file(period):
             return None
         #
         logger.info('load group drivers; %s' % period)
-        yyyy = '20%s' % (period[:2])
+
+        # yyyy = '20%s' % (period[:2])
+        yyyy2 ='20092010'
+
         wc_group_drivers = {}
         for wc in get_all_directories(group_dpath):
-            pickUp_wc_dpath = '%s/%s' % (pickUp_dpath, wc)
-            pickUp_fpath = '%s/%s%s-%s.pkl' % (pickUp_wc_dpath, pickUp_prepix, wc, period)
+            pickUp_wc_dpath = '%s/%s' % (pickUpY2_dpath, wc)
+            pickUp_fpath = '%s/%s%s-%s.pkl' % (pickUp_wc_dpath, pickUpY2_prepix, wc, period)
             if check_path_exist(pickUp_fpath):
                 logger.info('The file had already been processed; %s' % pickUp_fpath)
                 continue
             group_wc_dpath = '%s/%s' % (group_dpath, wc)
-            group_drivers_fpath = '%s/%s%s-%s-drivers.pkl' % (group_wc_dpath, group_prepix, wc, yyyy)
+            # group_drivers_fpath = '%s/%s%s-%s-drivers.pkl' % (group_wc_dpath, group_prepix, wc, yyyy)
+            group_drivers_fpath = '%s/%s%s-%s-drivers.pkl' % (group_wc_dpath, group_prepix, wc, yyyy2)
             group_drivers = load_pickle_file(group_drivers_fpath)
             wc_group_drivers[wc] = group_drivers
         #
@@ -84,8 +89,8 @@ def process_file(period):
         #
         logger.info('Pickling; %s' % period)
         for wc, gd_pickUp in wc_gd_pickUp.iteritems():
-            pickUp_wc_dpath = '%s/%s' % (pickUp_dpath, wc)
-            pickUp_fpath = '%s/%s%s-%s.pkl' % (pickUp_wc_dpath, pickUp_prepix, wc, period)
+            pickUp_wc_dpath = '%s/%s' % (pickUpY2_dpath, wc)
+            pickUp_fpath = '%s/%s%s-%s.pkl' % (pickUp_wc_dpath, pickUpY2_prepix, wc, period)
             save_pickle_file(pickUp_fpath, gd_pickUp)
     except Exception as _:
         import sys
