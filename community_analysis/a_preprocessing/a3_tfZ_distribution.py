@@ -53,7 +53,7 @@ def process_whole_distribution(yyyy):
         individual_tfZ_counting_fpath = '%s/%s%s.pkl' % (tfZ_counting_dpath, tfZ_counting_individuals_prefix, yymm)
         if not check_path_exist(individual_tfZ_counting_fpath):
             continue
-        for did, tfZ_counting in load_pickle_file(individual_tfZ_counting_fpath):
+        for did, tfZ_counting in load_pickle_file(individual_tfZ_counting_fpath).iteritems():
             for tfZ, num_trips in tfZ_counting.iteritems():
                 if not whole_counting.has_key(tfZ):
                     whole_counting[tfZ] = 0
@@ -91,7 +91,7 @@ def process_individual_group(yymm):
     logger.info('Processing individual distribution %s' % yymm)
     individual_tfZ_counting_fpath = '%s/%s%s.pkl' % (tfZ_counting_dpath, tfZ_counting_individuals_prefix, yymm)
     individual_distribution = {}
-    for did, tfZ_counting in load_pickle_file(individual_tfZ_counting_fpath):
+    for did, tfZ_counting in load_pickle_file(individual_tfZ_counting_fpath).iteritems():
         total_num_trips = sum(tfZ_counting.values())
         individual_distribution[did] = {}
         for tf_zone, num_trips in tfZ_counting.iteritems():
@@ -101,7 +101,7 @@ def process_individual_group(yymm):
     logger.info('Processing individual distribution %s' % yymm)
     group_tfZ_counting_fpath = '%s/%s%s.pkl' % (tfZ_counting_dpath, tfZ_counting_groups_prefix, yymm)
     group_distribution = {}
-    for gn, tfZ_counting in load_pickle_file(group_tfZ_counting_fpath):
+    for gn, tfZ_counting in load_pickle_file(group_tfZ_counting_fpath).iteritems():
         total_num_trips = sum(tfZ_counting.values())
         group_distribution[gn] = {}
         for tf_zone, num_trips in tfZ_counting.iteritems():
