@@ -29,8 +29,10 @@ def run():
             count_num_jobs += 1
     end_multiprocessor(count_num_jobs)
 
-    for y in xrange(9, 10):
-        yyyy = '20%02d' % y
+    # for y in xrange(9, 10):
+    #     yyyy = '20%02d' % y
+    #     process_year(yyyy)
+
 
 def process_year(yyyy):
     ss_drivers_year_fpath = '%s/%s%s.pkl' % (ss_drivers_dpath, ss_drivers_prefix, yyyy)
@@ -38,7 +40,7 @@ def process_year(yyyy):
         logger.info('Already handled; %s' % yyyy)
         return None
     yy = yyyy[2:]
-    ss_drivers = None
+    ss_drivers_year = None
     for m in xrange(1, 13):
         yymm = '%s%02d' % (yy, m)
         ss_drivers_month_fpath = '%s/%s%s.pkl' % (ss_drivers_dpath, ss_drivers_prefix, yymm)
@@ -46,15 +48,11 @@ def process_year(yyyy):
             logger.info('The file X exists; %s' % yymm)
             return None
             ss_drivers_month = load_pickle_file(ss_drivers_month_fpath)
-            if not ss_drivers:
-                ss_drivers = set(ss_drivers_month)
+            if not ss_drivers_year:
+                ss_drivers_year = ss_drivers_month
             else:
-                ss_drivers.intersection_update(set(ss_drivers_month))
-
-
-
-
-    pass
+                ss_drivers_year.intersection_update(set(ss_drivers_month))
+    save_pickle_file(ss_drivers_year_fpath, ss_drivers_year)
 
 
 def process_month(yymm):
@@ -99,13 +97,13 @@ def process_month(yymm):
                 vehicle_sharing[vid].add(did)
     #
     logger.info('Filtering single-shift drivers; %s' % yymm)
-    ss_drivers = []
+    ss_drivers = set()
     for vid, drivers in vehicle_sharing.iteritems():
         if len(drivers) > 1:
             continue
         did = drivers.pop()
         assert len(drivers) == 0
-        ss_drivers.append(did)
+        ss_drivers.add(did)
     save_pickle_file(ss_drivers_fpath, ss_drivers)
 
 if __name__ == '__main__':
