@@ -6,7 +6,7 @@ import __init__
 #
 from community_analysis import ss_trips_dpath, ss_trips_prefix
 from community_analysis import group_dpath, group_prepix
-from community_analysis import pickUp_dpath, pickUp_prepix
+from community_analysis import tfZ_pickUp_dpath, tfZ_pickUp_prepix
 from community_analysis import pickUpY2_dpath, pickUpY2_prepix
 #
 from taxi_common.file_handling_functions import check_dir_create, get_all_directories, check_path_exist, load_pickle_file, save_pickle_file

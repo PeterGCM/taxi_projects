@@ -41,12 +41,12 @@ def run():
 def initial_processing(yymm):
     logger.info('handle the file; %s' % yymm)
     yy, mm = yymm[:2], yymm[2:]
-    yyyy = '20%s' % yy
     normal_fpath = '%s/20%s/%s/trips/trips-%s-normal.csv' % (taxi_home, yy, mm, yymm)
     ext_fpath = '%s/20%s/%s/trips/trips-%s-normal-ext.csv' % (taxi_home, yy, mm, yymm)
     if not check_path_exist(normal_fpath):
         logger.info('The file X exists; %s' % yymm)
         return None
+    yyyy = '20%s' % yy
     ss_drivers_fpath = '%s/%s%s.pkl' % (ss_drivers_dpath, ss_drivers_prefix, yyyy)
     if not check_path_exist(ss_drivers_fpath):
         logger.info('The file X exists; %s' % yyyy)

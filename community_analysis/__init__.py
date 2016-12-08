@@ -33,7 +33,10 @@ fdwg_dpath = '%s/%s' % (taxi_data, 'fdw_graph(%.4f)' % CHOSEN_PERCENT); fdw_grap
 group_dpath = '%s/%s' % (taxi_data, 'group(%.4f)' % CHOSEN_PERCENT); group_prepix = 'group-'
 group_summary_fpath = '%s/%s.csv' % (group_dpath , 'group-summary')
 #
-pickUp_dpath = '%s/%s' % (taxi_data, 'pickUp'); pickUp_prepix = 'pickUp-'
+tfZ_pickUp_dpath = '%s/%s' % (taxi_data, 'tfZ_pickUp'); tfZ_pickUp_prepix = 'tfZ-pickUp-'
+tfZ_duration_dpath = '%s/%s' % (taxi_data, 'tfZ_duration'); tfZ_duration_prepix = 'tfZ-duration-'
+
+
 pickUpY2_dpath = '%s/%s' % (taxi_data, 'pickUpY2'); pickUpY2_prepix = 'pickUpY2-'
 
 roamingTime_dpath = '%s/%s' % (taxi_data, 'roamingTime'); roamingTime_prepix = 'roamingTime-'

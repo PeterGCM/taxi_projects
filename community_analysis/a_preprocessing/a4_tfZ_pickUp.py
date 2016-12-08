@@ -5,7 +5,7 @@ import __init__
 '''
 #
 from community_analysis import ss_trips_dpath, ss_trips_prefix
-from community_analysis import pickUp_dpath, pickUp_prepix
+from community_analysis import tfZ_pickUp_dpath, tfZ_pickUp_prepix
 #
 from taxi_common.file_handling_functions import check_dir_create, get_all_directories, check_path_exist, load_pickle_file, save_pickle_file
 from taxi_common.log_handling_functions import get_logger
@@ -17,7 +17,7 @@ logger = get_logger()
 
 
 def run():
-    check_dir_create(pickUp_dpath)
+    check_dir_create(tfZ_pickUp_dpath)
     #
     init_multiprocessor(11)
     count_num_jobs = 0
@@ -59,7 +59,7 @@ def process_file(yymm):
                 pickUp.add(k)
         #
         logger.info('Pickling; %s' % yymm)
-        pickUp_fpath = '%s/%s%s.pkl' % (pickUp_dpath, pickUp_prepix, yymm)
+        pickUp_fpath = '%s/%s%s.pkl' % (tfZ_pickUp_dpath, tfZ_pickUp_prepix, yymm)
         save_pickle_file(pickUp_fpath, pickUp)
     except Exception as _:
         import sys

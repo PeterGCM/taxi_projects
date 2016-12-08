@@ -5,7 +5,7 @@ import __init__
 '''
 #
 from community_analysis import group_dpath, group_prepix
-from community_analysis import pickUp_dpath, pickUp_prepix
+from community_analysis import tfZ_pickUp_dpath, tfZ_pickUp_prepix
 from community_analysis import roamingTime_dpath, roamingTime_prepix
 from community_analysis import regressionModel_dpath, regressionModel_prefix
 from community_analysis import X_PICKUP, O_PICKUP
@@ -115,8 +115,8 @@ def process_file(period):
             group_drivers = load_pickle_file(group_drivers_fpath)
             #
             logger.info('Loading pickUp %s' % period)
-            pickUp_wc_dpath = '%s/%s' % (pickUp_dpath, wc)
-            pickUp_fpath = '%s/%s%s-%s.pkl' % (pickUp_wc_dpath, pickUp_prepix, wc, period)
+            pickUp_wc_dpath = '%s/%s' % (tfZ_pickUp_dpath, wc)
+            pickUp_fpath = '%s/%s%s-%s.pkl' % (pickUp_wc_dpath, tfZ_pickUp_prepix, wc, period)
             pickUp = load_pickle_file(pickUp_fpath)
             #
             logger.info('Loading roamingTime %s' % period)
