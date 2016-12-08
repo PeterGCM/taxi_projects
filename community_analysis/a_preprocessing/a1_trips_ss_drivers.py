@@ -25,18 +25,17 @@ logger = get_logger()
 def run():
     check_dir_create(ss_trips_dpath)
     #
-    # init_multiprocessor(11)
-    # count_num_jobs = 0
+    init_multiprocessor(11)
+    count_num_jobs = 0
     for y in range(9, 10):
         for m in range(1, 13):
             yymm = '%02d%02d' % (y, m)
-            initial_processing(yymm)
-            # put_task(initial_processing, [yymm])
+            # initial_processing(yymm)
+            put_task(initial_processing, [yymm])
             # group_defined_processing(yymm)
             # put_task(group_defined_processing, [yymm])
-    #         count_num_jobs += 1
-    # end_multiprocessor(count_num_jobs)
-
+            count_num_jobs += 1
+    end_multiprocessor(count_num_jobs)
 
 
 def initial_processing(yymm):
