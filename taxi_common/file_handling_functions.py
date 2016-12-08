@@ -96,4 +96,4 @@ def get_fn_from_dir(dpath, filtering_prefix, filtering_postfix):
 
 
 if __name__ == '__main__':
-    pass
+    print len(load_pickle_file('ss-drivers-0901.pkl'))
