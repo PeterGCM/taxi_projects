@@ -12,6 +12,15 @@ PM2, PM11 = 14, 23
 THRESHOLD_VALUE = 30 * 60
 #
 ss_trips_dpath = '%s/%s' % (taxi_data, 'trips_ss_drivers'); ss_trips_prefix = 'trips-ss-drivers-'
+tfZ_pickUp_dpath = '%s/%s' % (taxi_data, 'tfZ_pickUp'); tfZ_pickUp_prepix = 'tfZ-pickUp-'
+tfZ_duration_dpath = '%s/%s' % (taxi_data, 'tfZ_duration'); tfZ_duration_prepix = 'tfZ-duration-'
+
+
+
+
+
+
+
 tfZ_counting_dpath = '%s/%s' % (taxi_data, 'tf_zone_counting')
 tfZ_counting_individuals_prefix = 'tf-zone-counting-individuals-'
 tfZ_counting_groups_prefix = 'tf-zone-counting-groups-'
@@ -33,8 +42,7 @@ fdwg_dpath = '%s/%s' % (taxi_data, 'fdw_graph(%.4f)' % CHOSEN_PERCENT); fdw_grap
 group_dpath = '%s/%s' % (taxi_data, 'group(%.4f)' % CHOSEN_PERCENT); group_prepix = 'group-'
 group_summary_fpath = '%s/%s.csv' % (group_dpath , 'group-summary')
 #
-tfZ_pickUp_dpath = '%s/%s' % (taxi_data, 'tfZ_pickUp'); tfZ_pickUp_prepix = 'tfZ-pickUp-'
-tfZ_duration_dpath = '%s/%s' % (taxi_data, 'tfZ_duration'); tfZ_duration_prepix = 'tfZ-duration-'
+
 
 
 pickUpY2_dpath = '%s/%s' % (taxi_data, 'pickUpY2'); pickUpY2_prepix = 'pickUpY2-'

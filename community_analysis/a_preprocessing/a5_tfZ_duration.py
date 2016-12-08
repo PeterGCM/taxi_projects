@@ -9,7 +9,7 @@ from community_analysis import FRI, SAT, SUN
 from community_analysis import PM2, PM11
 from community_analysis import FREE
 #
-from taxi_common.file_handling_functions import check_dir_create, get_all_directories, check_path_exist, load_pickle_file, save_pickle_file
+from taxi_common.file_handling_functions import check_dir_create, check_path_exist, load_pickle_file, save_pickle_file
 from taxi_common.log_handling_functions import get_logger
 from taxi_common import ss_drivers_dpath, ss_drivers_prefix
 from taxi_common.sg_grid_zone import get_sg_grid_xy_points
@@ -22,7 +22,7 @@ logger = get_logger()
 
 
 def run():
-    check_dir_create(roamingTime_dpath)
+    check_dir_create(tfZ_duration_dpath)
     #
     init_multiprocessor(11)
     count_num_jobs = 0
@@ -55,7 +55,7 @@ def process_file(yymm):
         ss_drivers = load_pickle_file(ss_drivers_fpath)
         x_points, y_points = get_sg_grid_xy_points()
         #
-        logger.info('Process checking roamingTime; %s' % yymm)
+        logger.info('Process duration; %s' % yymm)
         log_fpath = '%s/20%s/%s/logs/logs-%s-normal.csv' % (taxi_home, yy, mm, yymm)
         tfZ_duration = {}
         with open(log_fpath, 'rb') as r_csvfile:
