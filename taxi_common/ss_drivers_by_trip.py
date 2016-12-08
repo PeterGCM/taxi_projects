@@ -46,12 +46,12 @@ def process_year(yyyy):
         ss_drivers_month_fpath = '%s/%s%s.pkl' % (ss_drivers_dpath, ss_drivers_prefix, yymm)
         if not check_path_exist(ss_drivers_month_fpath):
             logger.info('The file X exists; %s' % yymm)
-            return None
-            ss_drivers_month = load_pickle_file(ss_drivers_month_fpath)
-            if not ss_drivers_year:
-                ss_drivers_year = ss_drivers_month
-            else:
-                ss_drivers_year.intersection_update(ss_drivers_month)
+            continue
+        ss_drivers_month = load_pickle_file(ss_drivers_month_fpath)
+        if not ss_drivers_year:
+            ss_drivers_year = ss_drivers_month
+        else:
+            ss_drivers_year.intersection_update(ss_drivers_month)
     save_pickle_file(ss_drivers_year_fpath, ss_drivers_year)
 
 
