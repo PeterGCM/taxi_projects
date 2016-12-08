@@ -24,8 +24,6 @@ def run():
     for y in xrange(9, 10):
         for m in xrange(1, 13):
             yymm = '%02d%02d' % (y, m)
-            if yymm in ['0912', '1010']:
-                continue
             # process_file(yymm)
             put_task(process_month, [yymm])
             count_num_jobs += 1
@@ -41,7 +39,7 @@ def process_month(yymm):
         logger.info('The file X exists; %s' % yymm)
         return None
     ss_drivers_fpath = '%s/%s%s.pkl' % (ss_drivers_dpath, ss_drivers_prefix, yymm)
-    if not check_path_exist(ss_drivers_fpath):
+    if check_path_exist(ss_drivers_fpath):
         logger.info('Already handled; %s' % yymm)
         return None
     vehicle_sharing = {}
