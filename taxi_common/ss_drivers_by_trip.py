@@ -51,7 +51,7 @@ def process_year(yyyy):
             if not ss_drivers_year:
                 ss_drivers_year = ss_drivers_month
             else:
-                ss_drivers_year.intersection_update(set(ss_drivers_month))
+                ss_drivers_year.intersection_update(ss_drivers_month)
     save_pickle_file(ss_drivers_year_fpath, ss_drivers_year)
 
 
