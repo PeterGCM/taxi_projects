@@ -7,7 +7,7 @@ import __init__
 from taxi_common import get_taxi_home_path
 from taxi_common import ss_drivers_dpath, ss_drivers_prefix
 #
-from file_handling_functions import check_dir_create, check_path_exist, save_pickle_file
+from file_handling_functions import check_dir_create, check_path_exist, save_pickle_file, load_pickle_file
 from log_handling_functions import get_logger
 from multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
@@ -28,6 +28,33 @@ def run():
             put_task(process_month, [yymm])
             count_num_jobs += 1
     end_multiprocessor(count_num_jobs)
+
+    for y in xrange(9, 10):
+        yyyy = '20%02d' % y
+
+def process_year(yyyy):
+    ss_drivers_year_fpath = '%s/%s%s.pkl' % (ss_drivers_dpath, ss_drivers_prefix, yyyy)
+    if check_path_exist(ss_drivers_year_fpath):
+        logger.info('Already handled; %s' % yyyy)
+        return None
+    yy = yyyy[2:]
+    ss_drivers = None
+    for m in xrange(1, 13):
+        yymm = '%s%02d' % (yy, m)
+        ss_drivers_month_fpath = '%s/%s%s.pkl' % (ss_drivers_dpath, ss_drivers_prefix, yymm)
+        if not check_path_exist(ss_drivers_month_fpath):
+            logger.info('The file X exists; %s' % yymm)
+            return None
+            ss_drivers_month = load_pickle_file(ss_drivers_month_fpath)
+            if not ss_drivers:
+                ss_drivers = set(ss_drivers_month)
+            else:
+                ss_drivers.intersection_update(set(ss_drivers_month))
+
+
+
+
+    pass
 
 
 def process_month(yymm):
@@ -79,11 +106,7 @@ def process_month(yymm):
         did = drivers.pop()
         assert len(drivers) == 0
         ss_drivers.append(did)
-        save_pickle_file(ss_drivers_fpath, ss_drivers)
-
-
-def aggregate_year(yyyy):
-    pass
+    save_pickle_file(ss_drivers_fpath, ss_drivers)
 
 if __name__ == '__main__':
     run()

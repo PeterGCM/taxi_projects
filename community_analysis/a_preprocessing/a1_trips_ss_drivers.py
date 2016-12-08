@@ -14,7 +14,6 @@ from taxi_common.file_handling_functions import load_pickle_file, check_dir_crea
 from taxi_common.log_handling_functions import get_logger
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 from taxi_common.sg_grid_zone import get_sg_grid_xy_points
-from taxi_common import full_time_driver_dir, ft_drivers_prefix
 from taxi_common import ss_drivers_dpath, ss_drivers_prefix
 #
 from bisect import bisect
@@ -31,12 +30,96 @@ def run():
     for y in range(9, 10):
         for m in range(1, 13):
             yymm = '%02d%02d' % (y, m)
-            # initial_processing(yymm)
+            initial_processing(yymm)
             # put_task(initial_processing, [yymm])
-            group_defined_processing(yymm)
+            # group_defined_processing(yymm)
             # put_task(group_defined_processing, [yymm])
     #         count_num_jobs += 1
     # end_multiprocessor(count_num_jobs)
+
+
+
+def initial_processing(yymm):
+    logger.info('handle the file; %s' % yymm)
+    yy, mm = yymm[:2], yymm[2:]
+    normal_fpath = '%s/20%s/%s/trips/trips-%s-normal.csv' % (taxi_home, yy, mm, yymm)
+    ext_fpath = '%s/20%s/%s/trips/trips-%s-normal-ext.csv' % (taxi_home, yy, mm, yymm)
+    if not check_path_exist(normal_fpath):
+        logger.info('The file X exists; %s' % yymm)
+        return None
+    ss_drivers_fpath = '%s/%s%s.pkl' % (ss_drivers_dpath, ss_drivers_prefix, yymm)
+    if not check_path_exist(ss_drivers_fpath):
+        return None
+    ft_drivers = load_pickle_file(ss_drivers_fpath)
+    x_points, y_points = get_sg_grid_xy_points()
+    #
+    ss_trips_fpath = '%s/%s%s.csv' % (ss_trips_dpath, ss_trips_prefix, yymm)
+    if check_path_exist(ss_trips_fpath):
+        logger.info('The file had already been processed; %s' % yymm)
+        return None
+    with open(ss_trips_fpath, 'wt') as w_csvfile:
+        writer = csv.writer(w_csvfile, lineterminator='\n')
+        writer.writerow(['did',
+                         'timeFrame', 'zi', 'zj',
+                         'groupName', 'prevDriver',
+                         'time', 'day',
+                         'start-long', 'start-lat',
+                         'distance', 'duration', 'fare'])
+    drivers = {}
+    with open(normal_fpath, 'rb') as r_csvfile1:
+        reader1 = csv.reader(r_csvfile1)
+        headers1 = reader1.next()
+        # {'trip-id': 0, 'job-id': 1, 'start-time': 2, 'end-time': 3,
+        #  'start-long': 4, 'start-lat': 5, 'end-long': 6, 'end-lat': 7,
+        #  'vehicle-id': 8, 'distance': 9, 'fare': 10, 'duration': 11,
+        #  'start-dow': 12, 'start-day': 13, 'start-hour': 14, 'start-minute': 15,
+        #  'end-dow': 16, 'end-day': 17, 'end-hour': 18, 'end-minute': 19}
+        hid1 = {h: i for i, h in enumerate(headers1)}
+        with open(ext_fpath, 'rb') as r_csvfile2:
+            reader2 = csv.reader(r_csvfile2)
+            headers2 = reader2.next()
+            #
+            # {'start-zone': 0, 'end-zone': 1, 'start-postal': 2, 'driver-id': 4, 'end-postal': 3}
+            #
+            hid2 = {h: i for i, h in enumerate(headers2)}
+            handling_day = 0
+            for row1 in reader1:
+                row2 = reader2.next()
+                did = int(row2[hid2['driver-id']])
+                if did == '-1':
+                    continue
+                #
+                if did not in ft_drivers:
+                    continue
+                t = eval(row1[hid1['start-time']])
+                cur_dt = datetime.datetime.fromtimestamp(t)
+                if handling_day != cur_dt.day:
+                    handling_day = cur_dt.day
+                    logger.info('Processing %s %dth day' % (yymm, cur_dt.day))
+                if cur_dt.weekday() in [FRI, SAT, SUN]:
+                    continue
+                if cur_dt.hour < PM2:
+                    continue
+                if PM11 < cur_dt.hour:
+                    continue
+                #
+                s_long, s_lat = eval(row1[hid1['start-long']]), eval(row1[hid1['start-lat']])
+                zi, zj = bisect(x_points, s_long) - 1, bisect(y_points, s_lat) - 1
+                if zi < 0 or zj < 0:
+                    continue
+                #
+                if not drivers.has_key(did):
+                    drivers[did] = 'G(%d)' % len(drivers)
+                gn = drivers[did]
+                with open(ss_trips_fpath, 'a') as w_csvfile:
+                    writer = csv.writer(w_csvfile, lineterminator='\n')
+                    writer.writerow([did,
+                                     cur_dt.hour, zi, zj,
+                                     gn, 'None',
+                                     t, cur_dt.day,
+                                     row1[hid1['start-long']], row1[hid1['start-lat']],
+                                     row1[hid1['distance']], row1[hid1['duration']], row1[hid1['fare']]
+                                     ])
 
 
 def group_defined_processing(yymm):
@@ -99,87 +182,6 @@ def group_defined_processing(yymm):
                                      row[hid['distance']], row[hid['duration']], row[hid['fare']]
                                      ])
 
-
-def initial_processing(yymm):
-    logger.info('handle the file; %s' % yymm)
-    yy, mm = yymm[:2], yymm[2:]
-    normal_fpath = '%s/20%s/%s/trips/trips-%s-normal.csv' % (taxi_home, yy, mm, yymm)
-    ext_fpath = '%s/20%s/%s/trips/trips-%s-normal-ext.csv' % (taxi_home, yy, mm, yymm)
-    if not check_path_exist(normal_fpath):
-        logger.info('The file X exists; %s' % yymm)
-        return None
-    ftd_list_fpath = '%s/%s%s.pkl' % (full_time_driver_dir, ft_drivers_prefix, yymm)
-    if not check_path_exist(ftd_list_fpath):
-        return None
-    ft_drivers = load_pickle_file(ftd_list_fpath)
-    x_points, y_points = get_sg_grid_xy_points()
-    #
-    ss_trips_fpath = '%s/%s%s.csv' % (ss_trips_dpath, ss_trips_prefix, yymm)
-    if check_path_exist(ss_trips_fpath):
-        logger.info('The file had already been processed; %s' % yymm)
-        return None
-    with open(ss_trips_fpath, 'wt') as w_csvfile:
-        writer = csv.writer(w_csvfile, lineterminator='\n')
-        writer.writerow(['did',
-                         'timeFrame', 'zi', 'zj',
-                         'groupName', 'prevDriver',
-                         'time', 'day',
-                         'start-long', 'start-lat',
-                         'distance', 'duration', 'fare'])
-    drivers = {}
-    with open(normal_fpath, 'rb') as r_csvfile1:
-        reader1 = csv.reader(r_csvfile1)
-        headers1 = reader1.next()
-        # {'trip-id': 0, 'job-id': 1, 'start-time': 2, 'end-time': 3,
-        #  'start-long': 4, 'start-lat': 5, 'end-long': 6, 'end-lat': 7,
-        #  'vehicle-id': 8, 'distance': 9, 'fare': 10, 'duration': 11,
-        #  'start-dow': 12, 'start-day': 13, 'start-hour': 14, 'start-minute': 15,
-        #  'end-dow': 16, 'end-day': 17, 'end-hour': 18, 'end-minute': 19}
-        hid1 = {h: i for i, h in enumerate(headers1)}
-        with open(ext_fpath, 'rb') as r_csvfile2:
-            reader2 = csv.reader(r_csvfile2)
-            headers2 = reader2.next()
-            # {'start-zone': 0, 'end-zone': 1, 'start-postal': 2, 'driver-id': 4, 'end-postal': 3}
-            hid2 = {h: i for i, h in enumerate(headers2)}
-            #
-            handling_day = 0
-            for row1 in reader1:
-                row2 = reader2.next()
-                did = row2[hid2['driver-id']]
-                if did == '-1':
-                    continue
-                #
-                if did not in ft_drivers:
-                    continue
-                t = eval(row1[hid1['start-time']])
-                cur_dt = datetime.datetime.fromtimestamp(t)
-                if handling_day != cur_dt.day:
-                    handling_day = cur_dt.day
-                    logger.info('Processing %s %dth day' % (yymm, cur_dt.day))
-                if cur_dt.weekday() in [FRI, SAT, SUN]:
-                    continue
-                if cur_dt.hour < PM2:
-                    continue
-                if PM11 < cur_dt.hour:
-                    continue
-                #
-                s_long, s_lat = eval(row1[hid1['start-long']]), eval(row1[hid1['start-lat']])
-                zi, zj = bisect(x_points, s_long) - 1, bisect(y_points, s_lat) - 1
-                if zi < 0 or zj < 0:
-                    continue
-                #
-                if not drivers.has_key(did):
-                    drivers[did] = 'G(%d)' % len(drivers)
-                gn = drivers[did]
-                with open(ss_trips_fpath, 'a') as w_csvfile:
-                    writer = csv.writer(w_csvfile, lineterminator='\n')
-                    writer.writerow([did,
-                                     cur_dt.hour, zi, zj,
-                                     gn, 'None',
-                                     t, cur_dt.day,
-                                     row1[hid1['start-long']], row1[hid1['start-lat']],
-                                     row1[hid1['distance']], row1[hid1['duration']], row1[hid1['fare']]
-                                     ])
 
 
 if __name__ == '__main__':
