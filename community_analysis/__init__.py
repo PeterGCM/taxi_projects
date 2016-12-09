@@ -10,11 +10,13 @@ taxi_data = os.path.dirname(os.path.realpath(__file__)) + '/data'; check_dir_cre
 MON, TUE, WED, THR, FRI, SAT, SUN = range(7)
 PM2, PM11 = 14, 23
 THRESHOLD_VALUE = 30 * 60
+FREE, POB = 0, 5
 #
 ss_trips_dpath, ss_trips_prefix = '%s/%s' % (taxi_data, 'trips_ss_drivers'), 'trips-ss-drivers-'
 tfZ_pickUp_dpath, tfZ_pickUp_prepix = '%s/%s' % (taxi_data, 'tfZ_pickUp'), 'tfZ-pickUp-'
 tfZ_duration_dpath, tfZ_duration_prepix = '%s/%s' % (taxi_data, 'tfZ_duration'), 'tfZ-duration-'
 tfZ_DP_dpath, tfZ_DP_prepix = '%s/%s' % (taxi_data, 'tfZ_DP'), 'tfZ-DP-'
+tfZ_roamingTime_dpath, tfZ_roamingTime_prefix = '%s/%s' % (taxi_data, 'tfZ_roamingTime'), 'tfZ-roamingTime-'
 
 
 
@@ -71,8 +73,6 @@ MIN_NUM_DRIVERS = 10
 
 
 #
-FREE = 0
-roaming_time_dir = '%s/%s' % (taxi_data, 'roaming_time'); roaming_time_prefix = 'roaming-time-'
 rt_day_dir = '%s/%s' % (roaming_time_dir, 'day'); rt_day_prefix = 'roaming-time-day-'
 tf_zone_drivers_dir = '%s/%s' % (taxi_data, 'tf_zone_drivers'); tf_zone_drivers_prefix = 'tf-zone-drivers-'
 X_APPEAR, O_APPEAR = range(2)

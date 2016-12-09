@@ -5,7 +5,7 @@ import __init__
 '''
 #
 from community_analysis import tfZ_DP_dpath, tfZ_DP_prepix
-from community_analysis import tfZ_duration_dpath, tfZ_duration_prepix
+from community_analysis import tfZ_roamingTime_dpath, tfZ_roamingTime_prefix
 from community_analysis import tfZ_pickUp_dpath, tfZ_pickUp_prepix
 from community_analysis import X_PICKUP, O_PICKUP
 from community_analysis import HOUR1
@@ -62,7 +62,7 @@ def process_month(yymm):
         tfZ_DP_fpath = '%s/%s%s.csv' % (tfZ_DP_dpath, tfZ_DP_prepix, yymm)
         ss_drivers_fpath = '%s/%s%s.pkl' % (ss_drivers_dpath, ss_drivers_prefix, yyyy)
         tfZ_pickUp_fpath = '%s/%s%s.pkl' % (tfZ_pickUp_dpath, tfZ_pickUp_prepix, yymm)
-        tfZ_duration_fpath = '%s/%s%s.pkl' % (tfZ_duration_dpath, tfZ_duration_prepix, yymm)
+        tfZ_roamingTime_fpath = '%s/%s%s.pkl' % (tfZ_roamingTime_dpath, tfZ_roamingTime_prefix, yymm)
         if check_path_exist(tfZ_DP_fpath):
             logger.info('Already handled %s' % yymm)
             return None
@@ -73,19 +73,19 @@ def process_month(yymm):
         logger.info('Loading pickUp %s' % yymm)
         pickUp = load_pickle_file(tfZ_pickUp_fpath)
         #
-        logger.info('Loading duration %s' % yymm)
-        tfZ_duration = load_pickle_file(tfZ_duration_fpath)
+        logger.info('Loading roamingTime %s' % yymm)
+        tfZ_roamingTime = load_pickle_file(tfZ_roamingTime_fpath)
         #
         logger.info('Generate duration-pickUp %s' % yymm)
         with open(tfZ_DP_fpath, 'wt') as w_csvfile:
             writer = csv.writer(w_csvfile, lineterminator='\n')
-            header = ['month', 'day', 'timeFrame', 'zi', 'zj', 'tfZ', 'did', 'duration']
+            header = ['month', 'day', 'timeFrame', 'zi', 'zj', 'tfZ', 'did', 'roamingTime']
             for did in ss_drivers:
                 header.append(did)
             writer.writerow(header)
         #
         old_per, per_interval = 0, 5
-        for i, ((did1, month, day, timeFrame, zi, zj), rt) in enumerate(tfZ_duration.iteritems()):
+        for i, ((did1, month, day, timeFrame, zi, zj), rt) in enumerate(tfZ_roamingTime.iteritems()):
             if rt <= 0:
                 continue
             if rt >= HOUR1:
@@ -99,7 +99,7 @@ def process_month(yymm):
                     k = (did0, month, day, timeFrame, zi, zj)
                     new_row.append(O_PICKUP if k in pickUp else X_PICKUP)
                 writer.writerow(new_row)
-            cur_per = i / float(len(tfZ_duration)) * 100
+            cur_per = i / float(len(tfZ_roamingTime)) * 100
             if old_per + per_interval < cur_per:
                 logger.info('\t processed %.2f  %s' % (cur_per, yymm))
                 old_per += per_interval
