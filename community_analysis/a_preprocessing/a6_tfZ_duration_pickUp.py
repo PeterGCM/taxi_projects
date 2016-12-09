@@ -33,8 +33,8 @@ def run():
     #         count_num_jobs += 1
     # end_multiprocessor(count_num_jobs)
     #
-    # init_multiprocessor(11)
-    # count_num_jobs = 0
+    init_multiprocessor(11)
+    count_num_jobs = 0
     numReducers = 100
     for y in range(9, 10):
         yyyy = '20%02d' % (y)
@@ -46,10 +46,10 @@ def run():
             driver_subsets[i % numReducers].append(did)
 
         for i, driver_subset in enumerate(driver_subsets):
-            year_arrangement(yyyy, i, driver_subset)
-            # put_task(year_arrangement, [yyyy, i, driver_subset])
-    #         count_num_jobs += 1
-    # end_multiprocessor(count_num_jobs)
+            # year_arrangement(yyyy, i, driver_subset)
+            put_task(year_arrangement, [yyyy, i, driver_subset])
+            count_num_jobs += 1
+    end_multiprocessor(count_num_jobs)
 
 
 def process_month(yymm):
