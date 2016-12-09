@@ -35,7 +35,7 @@ def run():
     #
     init_multiprocessor(11)
     count_num_jobs = 0
-    numReducers = 100
+    numReducers = 500
     for y in range(9, 10):
         yyyy = '20%02d' % (y)
         logger.info('loading ss drivers %s' % yyyy)
@@ -119,6 +119,7 @@ def year_arrangement(yyyy, reducerID, driver_subset):
         yy = yyyy[2:]
         for tfZ_DP_month_fn in get_all_files(tfZ_DP_dpath, '%s%s*.csv' % (tfZ_DP_prepix, yy)):
             tfZ_DP_month_fpath = '%s/%s' % (tfZ_DP_dpath, tfZ_DP_month_fn)
+            logger.info('Handling %s(%d); %s' % (yyyy, reducerID, tfZ_DP_month_fpath))
             with open(tfZ_DP_month_fpath, 'rb') as r_csvfile:
                 reader = csv.reader(r_csvfile)
                 header = reader.next()

@@ -65,7 +65,6 @@ def initial_processing(yymm):
                          'time', 'day', 'month',
                          'start-long', 'start-lat',
                          'distance', 'duration', 'fare'])
-    drivers = {}
     with open(normal_fpath, 'rb') as r_csvfile1:
         reader1 = csv.reader(r_csvfile1)
         headers1 = reader1.next()
