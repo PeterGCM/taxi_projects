@@ -73,10 +73,10 @@ MIN_NUM_DRIVERS = 10
 
 
 #
-rt_day_dir = '%s/%s' % (roaming_time_dir, 'day'); rt_day_prefix = 'roaming-time-day-'
-tf_zone_drivers_dir = '%s/%s' % (taxi_data, 'tf_zone_drivers'); tf_zone_drivers_prefix = 'tf-zone-drivers-'
-X_APPEAR, O_APPEAR = range(2)
-rt_appear_dir = '%s/%s' % (taxi_data, 'rt_appear'); rt_appear_prefix = 'rt-appear-'
+# rt_day_dir = '%s/%s' % (roaming_time_dir, 'day'); rt_day_prefix = 'roaming-time-day-'
+# tf_zone_drivers_dir = '%s/%s' % (taxi_data, 'tf_zone_drivers'); tf_zone_drivers_prefix = 'tf-zone-drivers-'
+# X_APPEAR, O_APPEAR = range(2)
+# rt_appear_dir = '%s/%s' % (taxi_data, 'rt_appear'); rt_appear_prefix = 'rt-appear-'
 
 
 
