@@ -55,7 +55,7 @@ def process_file(yymm):
         ss_drivers = load_pickle_file(ss_drivers_fpath)
         x_points, y_points = get_sg_grid_xy_points()
         #
-        logger.info('Process duration; %s' % yymm)
+        logger.info('Process roamingTime; %s' % yymm)
         log_fpath = '%s/20%s/%s/logs/logs-%s-normal.csv' % (taxi_home, yy, mm, yymm)
         tfZ_roamingTime = {}
         with open(log_fpath, 'rb') as r_csvfile:
@@ -116,7 +116,7 @@ class roaming_driver(object):
                 zi, zj = cl_zone
                 #
                 k = (self.did, cl_dt.month, cl_dt.day, cl_dt.hour, zi, zj)
-                self.tfZ_duration[k] = self.roaming_time
+                self.tfZ_roamingTime[k] = self.roaming_time
                 self.roaming_time = 0
             else:
                 self.roaming_time = 0
