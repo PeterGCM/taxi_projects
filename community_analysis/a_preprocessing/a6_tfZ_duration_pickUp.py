@@ -7,13 +7,6 @@ import __init__
 from community_analysis import tfZ_DP_dpath, tfZ_DP_prepix
 from community_analysis import tfZ_duration_dpath, tfZ_duration_prepix
 from community_analysis import tfZ_pickUp_dpath, tfZ_pickUp_prepix
-
-
-from community_analysis import group_dpath, group_prepix
-
-
-from community_analysis import roamingTime_dpath, roamingTime_prepix
-from community_analysis import regressionModel_dpath, regressionModel_prefix
 from community_analysis import X_PICKUP, O_PICKUP
 from community_analysis import HOUR1
 #
@@ -146,8 +139,6 @@ def merge_year(yymm):
         with open('%s_%s.txt' % (sys.argv[0], yymm), 'w') as f:
             f.write(format_exc())
         raise
-
-
 
 
 if __name__ == '__main__':
