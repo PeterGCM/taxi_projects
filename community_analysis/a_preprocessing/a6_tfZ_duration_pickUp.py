@@ -23,22 +23,36 @@ logger = get_logger()
 def run():
     check_dir_create(tfZ_DP_dpath)
     #
-    init_multiprocessor(6)
-    count_num_jobs = 0
-    for y in range(9, 10):
-        for m in range(1, 13):
-            yymm = '%02d%02d' % (y, m)
-            # process_file(yymm)
-            put_task(process_file, [yymm])
-            count_num_jobs += 1
-    end_multiprocessor(count_num_jobs)
-    #
+    # init_multiprocessor(6)
+    # count_num_jobs = 0
     # for y in range(9, 10):
-    #     yyyy = '20%02d' % (y)
-    #     merge_year(yyyy)
+    #     for m in range(1, 13):
+    #         yymm = '%02d%02d' % (y, m)
+    #         # process_file(yymm)
+    #         put_task(process_month, [yymm])
+    #         count_num_jobs += 1
+    # end_multiprocessor(count_num_jobs)
+    #
+    # init_multiprocessor(11)
+    # count_num_jobs = 0
+    numReducers = 100
+    for y in range(9, 10):
+        logger.info('loading ss drivers %s' % yyyy)
+        yyyy = '20%02d' % (y)
+        ss_drivers_fpath = '%s/%s%s.pkl' % (ss_drivers_dpath, ss_drivers_prefix, yyyy)
+        ss_drivers = load_pickle_file(ss_drivers_fpath)
+        driver_subsets = [[] for _ in range(numReducers)]
+        for i, did in enumerate(ss_drivers):
+            driver_subsets[i % numReducers].append(did)
+
+        for i, driver_subset in enumerate(driver_subsets):
+            year_arrangement(yyyy, i, driver_subset)
+            # put_task(year_arrangement, [yyyy, i, driver_subset])
+    #         count_num_jobs += 1
+    # end_multiprocessor(count_num_jobs)
 
 
-def process_file(yymm):
+def process_month(yymm):
     from traceback import format_exc
     #
     try:
@@ -59,7 +73,7 @@ def process_file(yymm):
         logger.info('Loading pickUp %s' % yymm)
         pickUp = load_pickle_file(tfZ_pickUp_fpath)
         #
-        logger.info('Loading roamingTime %s' % yymm)
+        logger.info('Loading duration %s' % yymm)
         tfZ_duration = load_pickle_file(tfZ_duration_fpath)
         #
         logger.info('Generate duration-pickUp %s' % yymm)
@@ -96,47 +110,33 @@ def process_file(yymm):
         raise
 
 
-def merge_year(yymm):
+def year_arrangement(yyyy, reducerID, driver_subset):
     from traceback import format_exc
     #
     try:
-        logger.info('Handle merge %s' % yymm)
-        yy = yymm[2:]
-
-        regressionModel_wc_dpath = '%s/%s' % (regressionModel_dpath, wc)
-        prefix = '%s%s-%s' % (regressionModel_prefix, wc, yy)
-        gn_fpaths = {}
-        for fn in get_all_files(regressionModel_wc_dpath, prefix, '.csv'):
-            if len(fn[:-len('.csv')].split('-')) == len('regressionModel-fb-0901.csv'[:-len('.csv')].split('-')):
-                continue
-            else:
-                _, _, _, gn = fn[:-len('.csv')].split('-')
-                fpath = '%s/%s' % (regressionModel_wc_dpath, fn)
-                if not gn_fpaths.has_key(gn):
-                    gn_fpaths[gn] = list()
-                gn_fpaths[gn].append(fpath)
-        for gn, fpaths in gn_fpaths.iteritems():
-            merged_fpath = '%s/%s%s-%s-%s.csv' % (regressionModel_wc_dpath, regressionModel_prefix, wc, yymm, gn)
-            if check_path_exist(merged_fpath):
-                continue
-            for fpath in fpaths:
-                if not check_path_exist(merged_fpath):
-                    with open(merged_fpath, 'wt') as w_csvfile:
+        logger.info('Handle arrange %s(%d)' % (yyyy, reducerID))
+        tfZ_DP_year_fpath = '%s/%s%s-%d.csv' % (tfZ_DP_dpath, tfZ_DP_prepix, yyyy, reducerID)
+        yy = yyyy[2:]
+        for tfZ_DP_month_fn in get_all_files(tfZ_DP_dpath, '%s%s*.csv' % (tfZ_DP_prepix, yy)):
+            tfZ_DP_month_fpath = '%s/%s' % (tfZ_DP_dpath, tfZ_DP_month_fn)
+            with open(tfZ_DP_month_fpath, 'rb') as r_csvfile:
+                reader = csv.reader(r_csvfile)
+                header = reader.next()
+                hid = {h: i for i, h in enumerate(header)}
+                if not check_path_exist(tfZ_DP_year_fpath):
+                    with open(tfZ_DP_year_fpath, 'wt') as w_csvfile:
                         writer = csv.writer(w_csvfile, lineterminator='\n')
-                        with open(fpath, 'rb') as r_csvfile:
-                            reader = csv.reader(r_csvfile)
-                            header = reader.next()
-                            writer.writerow(header)
-                with open(merged_fpath, 'a') as w_csvfile:
-                    writer = csv.writer(w_csvfile, lineterminator='\n')
-                    with open(fpath, 'rb') as r_csvfile:
-                        reader = csv.reader(r_csvfile)
-                        reader.next()
-                        for row in reader:
-                            writer.writerow(row)
+                        writer.writerow(header)
+                for row in reader:
+                    did = int(row[hid['did']])
+                    if did not in driver_subset:
+                        continue
+                    with open(tfZ_DP_year_fpath, 'a') as w_csvfile:
+                        writer = csv.writer(w_csvfile, lineterminator='\n')
+                        writer.writerow(row)
     except Exception as _:
         import sys
-        with open('%s_%s.txt' % (sys.argv[0], yymm), 'w') as f:
+        with open('%s_%s.txt' % (sys.argv[0], yyyy), 'w') as f:
             f.write(format_exc())
         raise
 

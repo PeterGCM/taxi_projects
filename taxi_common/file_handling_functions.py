@@ -1,6 +1,7 @@
 import os, shutil
 import pickle
 import threading
+import fnmatch
 #
 thread_writing = None
 
@@ -70,8 +71,8 @@ def remove_create_dir(path):
     os.makedirs(path)
 
 
-def get_all_files(path, filtering_prefix, filtering_postfix):
-    return sorted([fn for fn in os.listdir(path) if fn.startswith(filtering_prefix) and fn.endswith(filtering_postfix)])
+def get_all_files(path, wildcard_expression):
+    return sorted([fn for fn in os.listdir(path) if fnmatch.fnmatch(fn, wildcard_expression)])
 
 
 def get_all_directories(path):
