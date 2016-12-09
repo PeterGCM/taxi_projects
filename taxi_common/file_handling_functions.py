@@ -97,4 +97,4 @@ def get_fn_from_dir(dpath, filtering_prefix, filtering_postfix):
 
 
 if __name__ == '__main__':
-    print len(load_pickle_file('ss-drivers-2009.pkl'))
+    print get_all_files('./', '*.py')
