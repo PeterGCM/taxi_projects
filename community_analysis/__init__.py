@@ -17,6 +17,7 @@ tfZ_pickUp_dpath, tfZ_pickUp_prepix = '%s/%s' % (taxi_data, 'tfZ_pickUp'), 'tfZ-
 tfZ_duration_dpath, tfZ_duration_prepix = '%s/%s' % (taxi_data, 'tfZ_duration'), 'tfZ-duration-'
 tfZ_DP_dpath, tfZ_DP_prepix = '%s/%s' % (taxi_data, 'tfZ_DP'), 'tfZ-DP-'
 tfZ_roamingTime_dpath, tfZ_roamingTime_prefix = '%s/%s' % (taxi_data, 'tfZ_roamingTime'), 'tfZ-roamingTime-'
+tfZ_RP_dpath, tfZ_RP_prepix = '%s/%s' % (taxi_data, 'tfZ_RP'), 'tfZ-RP-'
 
 
 

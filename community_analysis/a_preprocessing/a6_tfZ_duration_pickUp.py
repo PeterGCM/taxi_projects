@@ -23,33 +23,35 @@ logger = get_logger()
 def run():
     check_dir_create(tfZ_DP_dpath)
     #
-    # init_multiprocessor(6)
+    init_multiprocessor(11)
+    count_num_jobs = 0
+    for y in range(9, 10):
+        for m in range(1, 13):
+            yymm = '%02d%02d' % (y, m)
+            # process_file(yymm)
+            put_task(process_month, [yymm])
+            count_num_jobs += 1
+    end_multiprocessor(count_num_jobs)
+    #
+    # numWorker = 11
+    # init_multiprocessor(numWorker)
     # count_num_jobs = 0
+    # numReducers = numWorker * 10
     # for y in range(9, 10):
-    #     for m in range(1, 13):
-    #         yymm = '%02d%02d' % (y, m)
-    #         # process_file(yymm)
-    #         put_task(process_month, [yymm])
+    #     yyyy = '20%02d' % (y)
+    #     logger.info('loading ss drivers %s' % yyyy)
+    #     ss_drivers_fpath = '%s/%s%s.pkl' % (ss_drivers_dpath, ss_drivers_prefix, yyyy)
+    #     ss_drivers = load_pickle_file(ss_drivers_fpath)
+    #     driver_subsets = [[] for _ in range(numReducers)]
+    #     for i, did in enumerate(ss_drivers):
+    #         driver_subsets[i % numReducers].append(did)
+    #
+    #     for i, driver_subset in enumerate(driver_subsets):
+    #         # year_arrangement(yyyy, i, driver_subset)
+    #         put_task(year_arrangement, [yyyy, i, driver_subset])
     #         count_num_jobs += 1
     # end_multiprocessor(count_num_jobs)
     #
-    init_multiprocessor(11)
-    count_num_jobs = 0
-    numReducers = 500
-    for y in range(9, 10):
-        yyyy = '20%02d' % (y)
-        logger.info('loading ss drivers %s' % yyyy)
-        ss_drivers_fpath = '%s/%s%s.pkl' % (ss_drivers_dpath, ss_drivers_prefix, yyyy)
-        ss_drivers = load_pickle_file(ss_drivers_fpath)
-        driver_subsets = [[] for _ in range(numReducers)]
-        for i, did in enumerate(ss_drivers):
-            driver_subsets[i % numReducers].append(did)
-
-        for i, driver_subset in enumerate(driver_subsets):
-            # year_arrangement(yyyy, i, driver_subset)
-            put_task(year_arrangement, [yyyy, i, driver_subset])
-            count_num_jobs += 1
-    end_multiprocessor(count_num_jobs)
 
 
 def process_month(yymm):
