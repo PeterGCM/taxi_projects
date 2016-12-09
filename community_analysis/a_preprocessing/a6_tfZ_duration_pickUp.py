@@ -37,8 +37,8 @@ def run():
     # count_num_jobs = 0
     numReducers = 100
     for y in range(9, 10):
-        logger.info('loading ss drivers %s' % yyyy)
         yyyy = '20%02d' % (y)
+        logger.info('loading ss drivers %s' % yyyy)
         ss_drivers_fpath = '%s/%s%s.pkl' % (ss_drivers_dpath, ss_drivers_prefix, yyyy)
         ss_drivers = load_pickle_file(ss_drivers_fpath)
         driver_subsets = [[] for _ in range(numReducers)]
