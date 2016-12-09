@@ -4,8 +4,8 @@ import __init__
 
 '''
 #
-from community_analysis import tfZ_DP_dpath, tfZ_DP_prepix
-from community_analysis import tfZ_duration_dpath, tfZ_duration_prepix
+from community_analysis import tfZ_SP_dpath, tfZ_SP_prepix
+from community_analysis import tfZ_spendingTime_dpath, tfZ_spendingTime_prepix
 from community_analysis import tfZ_pickUp_dpath, tfZ_pickUp_prepix
 from community_analysis import X_PICKUP, O_PICKUP
 from community_analysis import HOUR1
@@ -21,7 +21,7 @@ logger = get_logger()
 
 
 def run():
-    check_dir_create(tfZ_DP_dpath)
+    check_dir_create(tfZ_SP_dpath)
     #
     init_multiprocessor(11)
     count_num_jobs = 0
@@ -61,10 +61,10 @@ def process_month(yymm):
         logger.info('Handle %s' % yymm)
         yy, mm = yymm[:2], yymm[-2:]
         yyyy = '20%s' % yy
-        tfZ_DP_fpath = '%s/%s%s.csv' % (tfZ_DP_dpath, tfZ_DP_prepix, yymm)
+        tfZ_DP_fpath = '%s/%s%s.csv' % (tfZ_SP_dpath, tfZ_SP_prepix, yymm)
         ss_drivers_fpath = '%s/%s%s.pkl' % (ss_drivers_dpath, ss_drivers_prefix, yyyy)
         tfZ_pickUp_fpath = '%s/%s%s.pkl' % (tfZ_pickUp_dpath, tfZ_pickUp_prepix, yymm)
-        tfZ_duration_fpath = '%s/%s%s.pkl' % (tfZ_duration_dpath, tfZ_duration_prepix, yymm)
+        tfZ_duration_fpath = '%s/%s%s.pkl' % (tfZ_spendingTime_dpath, tfZ_spendingTime_prepix, yymm)
         if check_path_exist(tfZ_DP_fpath):
             logger.info('Already handled %s' % yymm)
             return None
@@ -81,7 +81,7 @@ def process_month(yymm):
         logger.info('Generate duration-pickUp %s' % yymm)
         with open(tfZ_DP_fpath, 'wt') as w_csvfile:
             writer = csv.writer(w_csvfile, lineterminator='\n')
-            header = ['month', 'day', 'timeFrame', 'zi', 'zj', 'tfZ', 'did', 'duration']
+            header = ['month', 'day', 'timeFrame', 'zi', 'zj', 'tfZ', 'did', 'spendingTime']
             for did in ss_drivers:
                 header.append(did)
             writer.writerow(header)
@@ -117,10 +117,10 @@ def year_arrangement(yyyy, reducerID, driver_subset):
     #
     try:
         logger.info('Handle arrange %s(%d)' % (yyyy, reducerID))
-        tfZ_DP_year_fpath = '%s/%s%s-%d.csv' % (tfZ_DP_dpath, tfZ_DP_prepix, yyyy, reducerID)
+        tfZ_DP_year_fpath = '%s/%s%s-%d.csv' % (tfZ_SP_dpath, tfZ_SP_prepix, yyyy, reducerID)
         yy = yyyy[2:]
-        for tfZ_DP_month_fn in get_all_files(tfZ_DP_dpath, '%s%s*.csv' % (tfZ_DP_prepix, yy)):
-            tfZ_DP_month_fpath = '%s/%s' % (tfZ_DP_dpath, tfZ_DP_month_fn)
+        for tfZ_DP_month_fn in get_all_files(tfZ_SP_dpath, '%s%s*.csv' % (tfZ_SP_prepix, yy)):
+            tfZ_DP_month_fpath = '%s/%s' % (tfZ_SP_dpath, tfZ_DP_month_fn)
             logger.info('Handling %s(%d); %s' % (yyyy, reducerID, tfZ_DP_month_fpath))
             with open(tfZ_DP_month_fpath, 'rb') as r_csvfile:
                 reader = csv.reader(r_csvfile)

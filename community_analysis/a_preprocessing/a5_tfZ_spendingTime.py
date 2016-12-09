@@ -4,7 +4,7 @@ import __init__
 
 '''
 from community_analysis import taxi_home
-from community_analysis import tfZ_duration_dpath, tfZ_duration_prepix
+from community_analysis import tfZ_spendingTime_dpath, tfZ_spendingTime_prepix
 from community_analysis import FRI, SAT, SUN
 from community_analysis import PM2, PM11
 from community_analysis import FREE
@@ -22,7 +22,7 @@ logger = get_logger()
 
 
 def run():
-    check_dir_create(tfZ_duration_dpath)
+    check_dir_create(tfZ_spendingTime_dpath)
     #
     init_multiprocessor(11)
     count_num_jobs = 0
@@ -40,7 +40,7 @@ def process_file(yymm):
     #
     try:
         logger.info('Handling %s' % yymm)
-        duration_fpath = '%s/%s%s.pkl' % (tfZ_duration_dpath, tfZ_duration_prepix, yymm)
+        duration_fpath = '%s/%s%s.pkl' % (tfZ_spendingTime_dpath, tfZ_spendingTime_prepix, yymm)
         if check_path_exist(duration_fpath):
             logger.info('Already processed; %s' % yymm)
             return None

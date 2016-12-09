@@ -14,8 +14,8 @@ FREE, POB = 0, 5
 #
 ss_trips_dpath, ss_trips_prefix = '%s/%s' % (taxi_data, 'trips_ss_drivers'), 'trips-ss-drivers-'
 tfZ_pickUp_dpath, tfZ_pickUp_prepix = '%s/%s' % (taxi_data, 'tfZ_pickUp'), 'tfZ-pickUp-'
-tfZ_duration_dpath, tfZ_duration_prepix = '%s/%s' % (taxi_data, 'tfZ_duration'), 'tfZ-duration-'
-tfZ_DP_dpath, tfZ_DP_prepix = '%s/%s' % (taxi_data, 'tfZ_DP'), 'tfZ-DP-'
+tfZ_spendingTime_dpath, tfZ_spendingTime_prepix = '%s/%s' % (taxi_data, 'tfZ_spendingTime'), 'tfZ-spendingTime-'
+tfZ_SP_dpath, tfZ_SP_prepix = '%s/%s' % (taxi_data, 'tfZ_SP'), 'tfZ-SP-'
 tfZ_roamingTime_dpath, tfZ_roamingTime_prefix = '%s/%s' % (taxi_data, 'tfZ_roamingTime'), 'tfZ-roamingTime-'
 tfZ_RP_dpath, tfZ_RP_prepix = '%s/%s' % (taxi_data, 'tfZ_RP'), 'tfZ-RP-'
 
