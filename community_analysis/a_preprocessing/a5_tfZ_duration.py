@@ -9,10 +9,10 @@ from community_analysis import FRI, SAT, SUN
 from community_analysis import PM2, PM11
 from community_analysis import FREE
 #
-from taxi_common.file_handling_functions import check_dir_create, check_path_exist, load_pickle_file, save_pickle_file
-from taxi_common.log_handling_functions import get_logger
 from taxi_common import ss_drivers_dpath, ss_drivers_prefix
 from taxi_common.sg_grid_zone import get_sg_grid_xy_points
+from taxi_common.file_handling_functions import check_dir_create, check_path_exist, load_pickle_file, save_pickle_file
+from taxi_common.log_handling_functions import get_logger
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
 from bisect import bisect
@@ -40,11 +40,11 @@ def process_file(yymm):
     #
     try:
         logger.info('Handling %s' % yymm)
-        yy, mm = yymm[:2], yymm[-2:]
         duration_fpath = '%s/%s%s.pkl' % (tfZ_duration_dpath, tfZ_duration_prepix, yymm)
         if check_path_exist(duration_fpath):
             logger.info('Already processed; %s' % yymm)
             return None
+        yy, mm = yymm[:2], yymm[-2:]
         yyyy = '20%s' % yy
         ss_drivers_fpath = '%s/%s%s.pkl' % (ss_drivers_dpath, ss_drivers_prefix, yyyy)
         if not check_path_exist(ss_drivers_fpath):

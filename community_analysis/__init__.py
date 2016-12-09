@@ -11,9 +11,10 @@ MON, TUE, WED, THR, FRI, SAT, SUN = range(7)
 PM2, PM11 = 14, 23
 THRESHOLD_VALUE = 30 * 60
 #
-ss_trips_dpath = '%s/%s' % (taxi_data, 'trips_ss_drivers'); ss_trips_prefix = 'trips-ss-drivers-'
-tfZ_pickUp_dpath = '%s/%s' % (taxi_data, 'tfZ_pickUp'); tfZ_pickUp_prepix = 'tfZ-pickUp-'
-tfZ_duration_dpath = '%s/%s' % (taxi_data, 'tfZ_duration'); tfZ_duration_prepix = 'tfZ-duration-'
+ss_trips_dpath, ss_trips_prefix = '%s/%s' % (taxi_data, 'trips_ss_drivers'), 'trips-ss-drivers-'
+tfZ_pickUp_dpath, tfZ_pickUp_prepix = '%s/%s' % (taxi_data, 'tfZ_pickUp'), 'tfZ-pickUp-'
+tfZ_duration_dpath, tfZ_duration_prepix = '%s/%s' % (taxi_data, 'tfZ_duration'), 'tfZ-duration-'
+tfZ_DP_dpath, tfZ_DP_prepix = '%s/%s' % (taxi_data, 'tfZ_DP'), 'tfZ-DP-'
 
 
 

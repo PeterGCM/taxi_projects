@@ -10,11 +10,11 @@ from community_analysis import taxi_home
 from community_analysis import ss_trips_dpath, ss_trips_prefix
 from community_analysis import group_dpath, group_prepix
 #
+from taxi_common import ss_drivers_dpath, ss_drivers_prefix
+from taxi_common.sg_grid_zone import get_sg_grid_xy_points
 from taxi_common.file_handling_functions import load_pickle_file, check_dir_create, check_path_exist, get_all_directories
 from taxi_common.log_handling_functions import get_logger
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
-from taxi_common.sg_grid_zone import get_sg_grid_xy_points
-from taxi_common import ss_drivers_dpath, ss_drivers_prefix
 #
 from bisect import bisect
 import csv, datetime
