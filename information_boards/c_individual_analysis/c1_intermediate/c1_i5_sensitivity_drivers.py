@@ -54,14 +54,18 @@ def run():
     #
     df = pd.read_csv(ssd_apIn_fpath)
     df = df[~(np.abs(df['apQTime'] - df['apQTime'].mean()) > (3 * df['apQTime'].std()))]
-    for did in set(df['did']) :
-        did_df = df[(df['did'] == did)]
-        y = did_df['apQTime']
-        X = did_df['apIn']
-        X = sm.add_constant(X)
-        res = sm.OLS(y, X).fit()
-        print res
-        assert False
+    with open(ssd_sensitivity_fpath, 'wb') as w_csvfile:
+        writer = csv.writer(w_csvfile, lineterminator='\n')
+        headers = ['did', 'F_pValue', 'rSqure', 'rSqureAdj', 'coef_apIn', 'pValue_apIn', 'coef_const', 'pValue_const']
+        writer.writerow(headers)
+        for did in set(df['did']) :
+            did_df = df[(df['did'] == did)]
+            y = did_df['apQTime']
+            X = did_df['apIn']
+            X = sm.add_constant(X)
+            res = sm.OLS(y, X).fit()
+            writer.writerow([did, res.f_pvalue, res.rsquared, res.rsquared_adj,
+                             res.params['apIn'], res.pvalues['apIn'], res.params['const'], res.pvalues['const']])
 
 
 if __name__ == '__main__':
