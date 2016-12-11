@@ -64,6 +64,8 @@ def run():
             X = did_df['apIn']
             X = sm.add_constant(X)
             res = sm.OLS(y, X).fit()
+            if np.isnan(res.f_pvalue):
+                continue
             try:
                 writer.writerow([did, res.f_pvalue, res.rsquared, res.rsquared_adj,
                                  res.params['apIn'], res.pvalues['apIn'], res.params['const'], res.pvalues['const']])
