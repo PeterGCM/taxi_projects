@@ -20,6 +20,8 @@ tfZ_roamingTime_dpath, tfZ_roamingTime_prefix = '%s/%s' % (taxi_data, 'tfZ_roami
 tfZ_RP_dpath, tfZ_RP_prepix = '%s/%s' % (taxi_data, 'tfZ_RP'), 'tfZ-RP-'
 
 
+RP_graph_dpath, RP_graph_prefix = '%s/%s' % (taxi_data, 'RP_graph'), 'RP-graph-'
+SP_graph_dpath, SP_graph_prefix = '%s/%s' % (taxi_data, 'SP_graph'), 'SP-graph-'
 
 
 

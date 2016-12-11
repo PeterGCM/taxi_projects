@@ -4,15 +4,18 @@ import __init__
 
 '''
 #
-from information_boards.c_individual_analysis import ssd_apIn_fpath
+from information_boards.c_individual_analysis import ssd_apIn_fpath, ssd_sensitivity_fpath
 from information_boards.b_aggregated_analysis import ap_ep_dir, ap_ep_prefix
-from information_boards import DIn_PIn
+from information_boards import DIn_PIn, SEC60
 #
 from taxi_common import full_time_driver_dir, ft_drivers_prefix
 from taxi_common.file_handling_functions import load_pickle_file
 from taxi_common.log_handling_functions import get_logger
 #
 import csv, datetime
+import pandas as pd
+import numpy as np
+import statsmodels.api as sm
 
 logger = get_logger()
 
@@ -20,9 +23,7 @@ logger = get_logger()
 def run():
     with open(ssd_apIn_fpath, 'wb') as w_csvfile:
         writer = csv.writer(w_csvfile, lineterminator='\n')
-        headers = ['timeStamp', 'did', 'duration', 'fare',
-                   'apIn', 'apQTime',
-                   'year', 'month',' day', 'hour']
+        headers = ['apQTime', 'apIn', 'did']
         writer.writerow(headers)
         for m in xrange(1, 13):
             yymm = '10%02d' % m
@@ -46,12 +47,20 @@ def run():
                         logger.info('...ing; %s(%dth)' % (yymm, handling_day))
                         handling_day = cur_dt.day
                     apIn = 1 if int(row[hid['trip-mode']]) == DIn_PIn else 0
-                    new_row = [
-                        t, did, row[hid['duration']], row[hid['fare']],
-                        apIn, row[hid['queueing-time']],
-                        row[hid['yy']], row[hid['mm']], row[hid['dd']], row[hid['hh']]
-                    ]
+                    apQTime = eval(row[hid['queueing-time']]) / float(SEC60)
+                    new_row = [apQTime, apIn, did]
                     writer.writerow(new_row)
+    #
+    df = pd.read_csv(ssd_apIn_fpath)
+    df = df[~(np.abs(df['apQTime'] - df['apQTime'].mean()) > (3 * df['apQTime'].std()))]
+    for did in set(df['did']) :
+        did_df = df[(df['did'] == did)]
+        y = did_df['apQTime']
+        X = did_df['apIn']
+        X = sm.add_constant(X)
+        res = sm.OLS(y, X).fit()
+        print res
+        assert False
 
 
 if __name__ == '__main__':

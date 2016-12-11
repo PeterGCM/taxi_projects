@@ -23,6 +23,7 @@ ftd_ap_daily_stat_fpath = '%s/%s' % (summary_dir, 'ftd_ap_daily_stats.csv')
 ftd_ap_daily_stat_filtered_fpath = '%s/%s' % (summary_dir, 'ftd_ap_daily_stats_filtered.csv')
 
 ssd_apIn_fpath = '%s/%s' % (summary_dir, 'ss_apIn.csv')
+ssd_sensitivity_fpath = '%s/%s' % (summary_dir, 'ss_sensitivity.csv')
 
 
 ftd_ns_stat_fpath = '%s/%s' % (summary_dir, 'ftd_ns_stats.csv')
