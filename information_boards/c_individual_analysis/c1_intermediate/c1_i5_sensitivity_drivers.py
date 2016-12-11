@@ -64,11 +64,16 @@ def run():
             X = did_df['apIn']
             X = sm.add_constant(X)
             res = sm.OLS(y, X).fit()
-            writer.writerow([did, res.f_pvalue, res.rsquared, res.rsquared_adj,
-                             res.params['apIn'], res.pvalues['apIn'], res.params['const'], res.pvalues['const']])
+            try:
+                writer.writerow([did, res.f_pvalue, res.rsquared, res.rsquared_adj,
+                                 res.params['apIn'], res.pvalues['apIn'], res.params['const'], res.pvalues['const']])
+            except Exception as _:
+                pass
+
 
 
 if __name__ == '__main__':
+    run()
     from traceback import format_exc
     #
     try:
