@@ -21,7 +21,7 @@ logger = get_logger()
 
 
 def run():
-    if not check_path_exist:
+    if not check_path_exist(ssd_apIn_fpath):
         with open(ssd_apIn_fpath, 'wb') as w_csvfile:
             writer = csv.writer(w_csvfile, lineterminator='\n')
             headers = ['apQTime', 'apIn', 'did']
