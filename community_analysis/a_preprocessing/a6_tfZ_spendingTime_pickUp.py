@@ -36,7 +36,7 @@ def run():
     numWorker = 11
     init_multiprocessor(numWorker)
     count_num_jobs = 0
-    numReducers = numWorker * 17
+    numReducers = numWorker * 20
     for y in range(9, 10):
         yyyy = '20%02d' % (y)
         logger.info('loading ss drivers %s' % yyyy)
