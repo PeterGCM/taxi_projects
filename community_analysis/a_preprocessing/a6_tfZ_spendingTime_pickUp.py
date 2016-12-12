@@ -145,6 +145,6 @@ def year_arrangement(yyyy, reducerID, driver_subset):
 
 
 if __name__ == '__main__':
-    import time
-    time.sleep(90 * 60)
+    # import time
+    # time.sleep(90 * 60)
     run()
