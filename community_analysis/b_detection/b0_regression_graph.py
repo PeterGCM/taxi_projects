@@ -36,7 +36,7 @@ def run():
 
 def process_file(fpath):
     logger.info('Start handling; %s' % fpath)
-    _, _, yyyy, reducerID = get_fn_only(fpath)[-len('.csv'):].split('-')
+    _, _, yyyy, reducerID = get_fn_only(fpath)[:-len('.csv')].split('-')
     SP_graph_fpath = '%s/%s%s-%s.csv' % (SP_graph_dpath, SP_graph_prefix, yyyy, reducerID)
     if check_path_exist(SP_graph_fpath):
         return None
