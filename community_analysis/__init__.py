@@ -22,6 +22,7 @@ tfZ_RP_dpath, tfZ_RP_prepix = '%s/%s' % (taxi_data, 'tfZ_RP'), 'tfZ-RP-'
 
 RP_graph_dpath, RP_graph_prefix = '%s/%s' % (taxi_data, 'RP_graph'), 'RP-graph-'
 SP_graph_dpath, SP_graph_prefix = '%s/%s' % (taxi_data, 'SP_graph'), 'SP-graph-'
+SIGINIFICANCE_LEVEL = 0.01
 
 
 
@@ -60,7 +61,7 @@ regressionModel_dpath = '%s/%s' % (taxi_data, 'regressionModel'); regressionMode
 X_PICKUP, O_PICKUP = range(2)
 HOUR1 = 60 * 60
 causalityGraph_dpath = '%s/%s' % (taxi_data, 'causalityGraph'); causalityGraph_prefix = 'causalityGraph-'
-SIGINIFICANCE_LEVEL = 0.05
+
 
 
 

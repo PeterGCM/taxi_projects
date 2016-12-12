@@ -54,12 +54,18 @@ def run():
     #
     df = pd.read_csv(ssd_apIn_fpath)
     df = df[~(np.abs(df['apQTime'] - df['apQTime'].mean()) > (3 * df['apQTime'].std()))]
+    minNumSample = 40
     with open(ssd_sensitivity_fpath, 'wb') as w_csvfile:
         writer = csv.writer(w_csvfile, lineterminator='\n')
         headers = ['did', 'F_pValue', 'rSqure', 'rSqureAdj', 'coef_apIn', 'pValue_apIn', 'coef_const', 'pValue_const']
         writer.writerow(headers)
         for did in set(df['did']) :
             did_df = df[(df['did'] == did)]
+            if len(did_df) < minNumSample:
+                continue
+
+            if len(did_df[(did_df['apIn'] == 0)]) < 4:
+                continue
             y = did_df['apQTime']
             X = did_df['apIn']
             X = sm.add_constant(X)
@@ -76,12 +82,12 @@ def run():
 
 if __name__ == '__main__':
     run()
-    from traceback import format_exc
-    #
-    try:
-        run()
-    except Exception as _:
-        import sys
-        with open('___error_%s.txt' % (sys.argv[0]), 'w') as f:
-            f.write(format_exc())
-        raise
+    # from traceback import format_exc
+    # #
+    # try:
+    #     run()
+    # except Exception as _:
+    #     import sys
+    #     with open('___error_%s.txt' % (sys.argv[0]), 'w') as f:
+    #         f.write(format_exc())
+    #     raise
