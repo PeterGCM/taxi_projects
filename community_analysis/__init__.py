@@ -23,7 +23,9 @@ tfZ_RP_dpath, tfZ_RP_prepix = '%s/%s' % (taxi_data, 'tfZ_RP'), 'tfZ-RP-'
 RP_graph_dpath, RP_graph_prefix = '%s/%s' % (taxi_data, 'RP_graph'), 'RP-graph-'
 SP_graph_dpath, SP_graph_prefix = '%s/%s' % (taxi_data, 'SP_graph'), 'SP-graph-'
 SIGINIFICANCE_LEVEL = 0.01
-
+RP_group_dpath, RP_group_prefix = '%s/%s' % (taxi_data, 'RP_group'), 'RP-group-'
+RP_group_drivers_fpath = '%s/%s' % (RP_group_dpath, 'RP-group-drivers.pkl')
+RP_group_summary_fpath = '%s/%s' % (RP_group_dpath, 'RP-group-summary.csv')
 
 
 
