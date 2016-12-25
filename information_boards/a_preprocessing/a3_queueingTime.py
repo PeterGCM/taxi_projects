@@ -1,23 +1,34 @@
-# -*- coding: utf-8 -*-
 import __init__
 #
+'''
+
+'''
+#
+from information_boards import trip_dpath, trip_prefix
+from information_boards import crossingTime_ap_dpath, crossingTime_ap_prefix
+from information_boards import crossingTime_ns_dpath, crossingTime_ns_prefix
+from information_boards import queueingTime_ap_dpath, queueingTime_ap_prefix
+from information_boards import queueingTime_ns_dpath, queueingTime_ns_prefix
+#
+
+
+
 from information_boards import DIn_PIn, DIn_POut, DOut_PIn, DOut_POut
 from information_boards import Q_LIMIT_MIN
-from information_boards.a_overall_analysis import trips_dpath, trip_prefix
-from information_boards.b_aggregated_analysis import ap_crossing_dir, ap_crossing_prefix
-from information_boards.b_aggregated_analysis import ns_crossing_dir, ns_crossing_prefix
-from information_boards.b_aggregated_analysis import ap_trips_dir, ap_trip_prefix
-from information_boards.b_aggregated_analysis import ns_trips_dir, ns_trip_prefix
-#
-from taxi_common.file_handling_functions import load_pickle_file, remove_create_dir, check_dir_create, check_path_exist
+
+
+
+from taxi_common.file_handling_functions import load_pickle_file, check_dir_create, check_path_exist
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
-import csv
 from bisect import bisect
+import csv
+
 
 
 def run():
-    check_dir_create(ap_trips_dir); check_dir_create(ns_trips_dir)
+    for dpath in [queueingTime_ap_dpath, queueingTime_ns_dpath]:
+        check_dir_create(dpath)
     #
     init_multiprocessor(11)
     count_num_jobs = 0
@@ -34,19 +45,19 @@ def run():
 
 
 def process_file(yymm):
-    ap_pkl_file_path = '%s/%s%s.pkl' % (ap_crossing_dir, ap_crossing_prefix, yymm)
-    ns_pkl_file_path = '%s/%s%s.pkl' % (ns_crossing_dir, ns_crossing_prefix, yymm)
-    if not (check_path_exist(ap_pkl_file_path) and check_path_exist(ns_pkl_file_path)):
+    ap_pkl_fpath = '%s/%s%s.pkl' % (crossingTime_ap_dpath, crossingTime_ap_prefix, yymm)
+    ns_pkl_fpath = '%s/%s%s.pkl' % (crossingTime_ns_dpath, crossingTime_ns_prefix, yymm)
+    if not (check_path_exist(ap_pkl_fpath) and check_path_exist(ns_pkl_fpath)):
         return None
     #
     # Load pickle files
     #
-    ap_crossing_time, ns_crossing_time = load_pickle_file(ap_pkl_file_path), load_pickle_file(ns_pkl_file_path)
+    crossingTime_ap, crossingTime_ns = load_pickle_file(ap_pkl_fpath), load_pickle_file(ns_pkl_fpath)
     #
     # Initiate csv files
     #
-    ap_trip_fpath = '%s/%s%s.csv' % (ap_trips_dir, ap_trip_prefix, yymm)
-    ns_trip_fpath = '%s/%s%s.csv' % (ns_trips_dir, ns_trip_prefix, yymm)
+    ap_trip_fpath = '%s/%s%s.csv' % (queueingTime_ap_dpath, queueingTime_ap_prefix, yymm)
+    ns_trip_fpath = '%s/%s%s.csv' % (queueingTime_ns_dpath, queueingTime_ns_prefix, yymm)
     if check_path_exist(ap_trip_fpath) and check_path_exist(ns_trip_fpath):
         return None
     print 'handle the file; %s' % yymm
@@ -55,11 +66,11 @@ def process_file(yymm):
                 writer = csv.writer(w_csvfile, lineterminator='\n')
                 new_headers = ['tid', 'vid', 'did',
                                'start-time', 'end-time', 'duration',
-                               'fare', 'prev-trip-end-time',
-                               'trip-mode', 'queue—join-time', 'queueing-time']
+                               'fare', 'prevTripEndTime',
+                               'tripMode', 'queueJoinTime', 'queueingTime']
                 writer.writerow(new_headers)
     #
-    with open('%s/%s%s.csv' % (trips_dpath, trip_prefix, yymm), 'rb') as r_csvfile:
+    with open('%s/%s%s.csv' % (trip_dpath, trip_prefix, yymm), 'rb') as r_csvfile:
         reader = csv.reader(r_csvfile)
         headers = reader.next()
         hid = {h : i for i, h in enumerate(headers)}
@@ -71,8 +82,8 @@ def process_file(yymm):
             ap_tm, ns_tm = int(row[hid['ap-trip-mode']]), int(row[hid['ns-trip-mode']]) 
             vid, st, prev_tet = row[hid['vid']], eval(row[hid['start-time']]), eval(row[hid['prev-trip-end-time']])
             #
-            for tm, crossing_time, fpath in [(ap_tm, ap_crossing_time, ap_trip_fpath),
-                                                             (ns_tm, ns_crossing_time, ns_trip_fpath)]:
+            for tm, crossing_time, fpath in [(ap_tm, crossingTime_ap, ap_trip_fpath),
+                                                             (ns_tm, crossingTime_ns, ns_trip_fpath)]:
                 if tm == DIn_POut or tm == DOut_POut:
                     continue
                 if tm == DIn_PIn:

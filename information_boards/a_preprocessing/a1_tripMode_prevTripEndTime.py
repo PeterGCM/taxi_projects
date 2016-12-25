@@ -55,10 +55,10 @@ def process_month(yymm):
         vehicle_prev_trip_position_time = {}
         with open(trip_fpath, 'wt') as w_csvfile:
             writer = csv.writer(w_csvfile, lineterminator='\n')
-            new_headers = ['tid', 'vid', 'did', 'start-time', 'end-time',
+            new_headers = ['tid', 'vid', 'did', 'startTime', 'endTime',
                            'duration', 'fare',
-                           'ap-trip-mode', 'ns-trip-mode',
-                           'prev-trip-end-time']
+                           'tripModeAP', 'tripModeNS',
+                           'prevTripEndTime']
             writer.writerow(new_headers)
             #
             with open(normal_file, 'rb') as r_csvfile1:
