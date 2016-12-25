@@ -7,7 +7,7 @@ from information_boards.b_aggregated_analysis.b2_summary import ALL, AP, AP_GEN,
 from information_boards.b_aggregated_analysis import productivity_dir, productivity_prefix
 from information_boards.b_aggregated_analysis import hourly_stats_fpath
 from information_boards import AM2, AM5
-from information_boards import error_period
+from information_boards import error_hours
 #
 from taxi_common.file_handling_functions import check_dir_create, get_all_files, save_pickle_file
 #
@@ -16,7 +16,7 @@ import datetime, csv
 
 def run():
     ignoring_periods = []
-    for ys, ms, ds, hs in error_period:
+    for ys, ms, ds, hs in error_hours:
         yyyy = 2000 + int(ys)
         mm, dd, hh = map(int, [ms, ds, hs])
         k = (yyyy, mm, dd, hh)
@@ -32,7 +32,7 @@ def run():
         if yyyy == 2011: continue
         if AM2 <= hh and hh <= AM5: continue
         need2skip = False
-        for ys, ms, ds, hs in error_period:
+        for ys, ms, ds, hs in error_hours:
             yyyy0 = 2000 + int(ys)
             mm0, dd0, hh0 = map(int, [ms, ds, hs])
             if (yyyy == yyyy0) and (mm == mm0) and (dd == dd0) and (hh == hh0):

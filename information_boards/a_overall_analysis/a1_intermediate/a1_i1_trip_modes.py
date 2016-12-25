@@ -6,16 +6,16 @@ from information_boards import DIn_PIn, DIn_POut, DOut_PIn, DOut_POut
 from information_boards import ap_poly, ns_poly
 from information_boards import IN, OUT
 from information_boards import AM2, AM5
-from information_boards import error_period
+from information_boards import error_hours
 #
-from taxi_common.file_handling_functions import remove_create_dir
+from taxi_common.file_handling_functions import check_dir_create
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
 import csv, datetime
 
 
 def run():
-    remove_create_dir(trips_dpath)
+    check_dir_create(trips_dpath)
     #
     init_multiprocessor(11)
     count_num_jobs = 0
@@ -25,12 +25,12 @@ def run():
             if yymm in ['0912', '1010']:
                 # both years data are corrupted
                 continue
-            put_task(process_file, [yymm])
+            put_task(tripMode_prevTripTime, [yymm])
             count_num_jobs += 1
     end_multiprocessor(count_num_jobs)
 
 
-def process_file(yymm):
+def tripMode_prevTripTime(yymm):
     print 'handle the file; %s' % yymm
     yy, mm = yymm[:2], yymm[-2:]
     yyyy = str(2000 + int(yy))
@@ -71,20 +71,6 @@ def process_file(yymm):
                     c_sl_ns, c_el_ns = ns_poly.is_including((s_long, s_lat)), ns_poly.is_including((e_long, e_lat))
                     did = row2[hid2['driver-id']]
                     #
-                    # Only consider trips whose start time is before 2 AM and after 6 AM
-                    #
-                    t = eval(row1[hid1['start-time']])
-                    cur_dt = datetime.datetime.fromtimestamp(t)
-                    if AM2 <= cur_dt.hour and cur_dt.hour <= AM5:
-                        continue
-                    need2skip = False
-                    for ys, ms, ds, hs in error_period:
-                        yyyy0 = 2000 + int(ys)
-                        mm0, dd0, hh0 = map(int, [ms, ds, hs])
-                        if (cur_dt.year == yyyy0) and (cur_dt.month == mm0) and (cur_dt.day == dd0) and (cur_dt.hour == hh0):
-                            need2skip = True
-                    if need2skip: continue
-                    #
                     if not vehicle_prev_trip_position_time.has_key(vid):
                         # ASSUMPTION
                         # If this trip is the driver's first trip in a month,
@@ -106,14 +92,30 @@ def process_file(yymm):
                     elif pt_el_ns == OUT and c_sl_ns == IN: ns_trip_mode = DOut_PIn
                     elif pt_el_ns == OUT and c_sl_ns == OUT: ns_trip_mode = DOut_POut   
                     else: assert False
-                    
+                    #
+                    vehicle_prev_trip_position_time[vid] = (c_el_ap, c_el_ns, et_ts)
+                    #
+                    # Only consider trips whose start time is before 2 AM and after 6 AM
+                    #
+                    t = eval(row1[hid1['start-time']])
+                    cur_dt = datetime.datetime.fromtimestamp(t)
+                    if AM2 <= cur_dt.hour and cur_dt.hour <= AM5:
+                        continue
+                    need2skip = False
+                    for ys, ms, ds, hs in error_hours:
+                        yyyy0 = 2000 + int(ys)
+                        mm0, dd0, hh0 = map(int, [ms, ds, hs])
+                        if (cur_dt.year == yyyy0) and (cur_dt.month == mm0) and (cur_dt.day == dd0) and (
+                            cur_dt.hour == hh0):
+                            need2skip = True
+                    if need2skip: continue
+                    #
                     new_row = [tid, vid, did,
                                st_ts, et_ts,
                                dur, fare,
                                ap_trip_mode, ns_trip_mode, pt_time]
                     writer.writerow(new_row)
-                    #
-                    vehicle_prev_trip_position_time[vid] = (c_el_ap, c_el_ns, et_ts)
+
 
 if __name__ == '__main__':
     run()

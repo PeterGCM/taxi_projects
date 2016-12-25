@@ -1,13 +1,13 @@
 import __init__
 #
 from information_boards.a_overall_analysis import trips_dpath, trip_prefix
-from information_boards import error_period
+from information_boards import error_hours
 #
 import csv, datetime
 
 
 def run():
-    for ys, ms, ds, hs in error_period:
+    for ys, ms, ds, hs in error_hours:
         yymm = '%02d%02d' % (int(ys), int(ms))
         dd, hh = int(ds), int(hs)
         fpath = '%s/%s%s.csv' % (trips_dpath, trip_prefix, yymm)
