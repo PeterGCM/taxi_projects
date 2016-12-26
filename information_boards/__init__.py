@@ -45,8 +45,10 @@ productivity_dpath, productivity_prefix = '%s/%s' % (taxi_data , 'productivity')
 productivity_summary_fpath = '%s/productivity-summary.csv' % productivity_dpath
 shift_dpath, shift_prefix = '/home/sfcheng/toolbox/results', 'shift-hour-state-'
 shiftProDur_dpath, shiftProDur_prefix = '%s/%s' % (productivity_dpath, 'shiftProDur'), 'shiftProDur-'
-
-
+#
+economicProfit_dpath = '%s/%s' % (trip_dpath, 'economicProfit')
+economicProfit_ap_dpath, economicProfit_ap_prefix = '%s/%s' % (economicProfit_dpath, 'ap'), 'trip-queueingTime-ap-'
+economicProfit_ns_dpath, economicProfit_ns_prefix = '%s/%s' % (economicProfit_dpath, 'ns'), 'trip-queueingTime-ns-'
 
 
 # Units
