@@ -25,18 +25,18 @@ logger = get_logger()
 def run():
     check_dir_create(trip_dpath)
     #
-    # init_multiprocessor(11)
-    # count_num_jobs = 0
+    init_multiprocessor(11)
+    count_num_jobs = 0
     for y in xrange(9, 11):
         for m in xrange(1, 13):
             yymm = '%02d%02d' % (y, m) 
             if yymm in ['0912', '1010']:
                 # both years data are corrupted
                 continue
-            process_month(yymm)
-            # put_task(process_month, [yymm])
-    #         count_num_jobs += 1
-    # end_multiprocessor(count_num_jobs)
+            # process_month(yymm)
+            put_task(process_month, [yymm])
+            count_num_jobs += 1
+    end_multiprocessor(count_num_jobs)
 
 
 def process_month(yymm):
