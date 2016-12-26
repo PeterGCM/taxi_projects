@@ -115,8 +115,9 @@ def process_month(yymm):
                         #
                         t = eval(row1[hid1['start-time']])
                         cur_dt = datetime.datetime.fromtimestamp(t)
+                        print cur_dt
                         if AM2 <= cur_dt.hour and cur_dt.hour <= AM5:
-                            print cur_dt.hour
+                            print 'continue'
                             continue
                         need2skip = False
                         for ys, ms, ds, hs in error_hours:
