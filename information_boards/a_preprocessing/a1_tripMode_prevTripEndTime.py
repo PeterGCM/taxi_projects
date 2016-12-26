@@ -56,10 +56,10 @@ def process_month(yymm):
         vehicle_prev_trip_position_time = {}
         with open(trip_fpath, 'wt') as w_csvfile:
             writer = csv.writer(w_csvfile, lineterminator='\n')
-            new_headers = ['tid', 'vid', 'did', 'startTime', 'endTime',
+            new_headers = ['did', 'startTime', 'endTime',
                            'duration', 'fare',
                            'tripModeAP', 'tripModeNS',
-                           'prevTripEndTime']
+                           'prevTripEndTime', 'hour']
             writer.writerow(new_headers)
             #
             with open(normal_file, 'rb') as r_csvfile1:
@@ -78,9 +78,26 @@ def process_month(yymm):
                     hid2 = {h : i for i, h in enumerate(headers2)}
                     for row1 in reader1:
                         row2 = reader2.next()
-                        tid, vid = row1[hid1['trip-id']], row1[hid1['vehicle-id']]
+                        #
+                        # Only consider trips whose start time is before 2 AM and after 6 AM
+                        #
+                        t = eval(row1[hid1['start-time']])
+                        cur_dt = datetime.datetime.fromtimestamp(t)
+                        if AM2 <= cur_dt.hour and cur_dt.hour <= AM5:
+                            continue
+                        need2skip = False
+                        for ys, ms, ds, hs in error_hours:
+                            yyyy0 = 2000 + int(ys)
+                            mm0, dd0, hh0 = map(int, [ms, ds, hs])
+                            if (cur_dt.year == yyyy0) and (cur_dt.month == mm0) and (cur_dt.day == dd0) and (
+                                        cur_dt.hour == hh0):
+                                need2skip = True
+                        if need2skip: continue
+                        #
+                        vid = row1[hid1['vehicle-id']]
                         st_ts, et_ts = row1[hid1['start-time']], row1[hid1['end-time']]
                         dur, fare = row1[hid1['duration']], row1[hid1['fare']]
+                        hour = row1[hid1['start-hour']]
                         s_long, s_lat = eval(row1[hid1['start-long']]), eval(row1[hid1['start-lat']])
                         e_long, e_lat = eval(row1[hid1['end-long']]), eval(row1[hid1['end-lat']])
                         c_sl_ap, c_el_ap = ap_poly.is_including((s_long, s_lat)), ap_poly.is_including((e_long, e_lat))
@@ -111,27 +128,10 @@ def process_month(yymm):
                         #
                         vehicle_prev_trip_position_time[vid] = (c_el_ap, c_el_ns, et_ts)
                         #
-                        # Only consider trips whose start time is before 2 AM and after 6 AM
-                        #
-                        t = eval(row1[hid1['start-time']])
-                        cur_dt = datetime.datetime.fromtimestamp(t)
-                        if AM2 <= cur_dt.hour and cur_dt.hour <= AM5:
-                            print 'continue'
-                            continue
-                        print cur_dt
-                        need2skip = False
-                        for ys, ms, ds, hs in error_hours:
-                            yyyy0 = 2000 + int(ys)
-                            mm0, dd0, hh0 = map(int, [ms, ds, hs])
-                            if (cur_dt.year == yyyy0) and (cur_dt.month == mm0) and (cur_dt.day == dd0) and (
-                                cur_dt.hour == hh0):
-                                need2skip = True
-                        if need2skip: continue
-                        #
-                        new_row = [tid, vid, did,
+                        new_row = [did,
                                    st_ts, et_ts,
                                    dur, fare,
-                                   ap_trip_mode, ns_trip_mode, pt_time]
+                                   ap_trip_mode, ns_trip_mode, pt_time, hour]
                         writer.writerow(new_row)
     except Exception as _:
         import sys
