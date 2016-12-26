@@ -103,14 +103,14 @@ def process_files(yymm):
                     #
                     sum_prop_fare_dur(hourly_stats, st_ts, et_ts, dur, fare, id_FARE, id_NUM, id_DUR)
                     sum_queueing_time(hourly_stats, st_ts, qt, id_QUEUE)
-        # Generate .csv file
-        print yymm, 'Generate .csv file'
+        #
+        logger.info('Generate .csv file; %s' % yymm)
         with open(productivity_fpath, 'wb') as w_csvfile:
             writer = csv.writer(w_csvfile, lineterminator='\n')
             header = ['yy', 'mm', 'dd', 'hh',
-                      'all-duration', 'all-fare', 'all-num',
-                      'ap-duration', 'ap-fare', 'ap-queueing-time', 'ap-num',
-                      'ns-duration', 'ns-fare', 'ns-queueing-time', 'ns-num']
+                      'allDuration', 'allFare', 'allNum',
+                      'apDuration', 'apFare', 'apQueueingTime', 'apNum',
+                      'nsDuration', 'nsFare', 'nsQueueingTime', 'nsNum']
             writer.writerow(header)
             for yyyy, mm, dd, hh in time_period_order:
                 all_dur, all_fare, all_num, \
