@@ -61,7 +61,7 @@ def process_file(yymm):
                     writer = csv.writer(w_csvfile, lineterminator='\n')
                     new_headers = ['did',
                                    'startTime', 'endTime', 'duration', 'fare',
-                                   'tripMode', 'queueJoinTime', 'queueingTime']
+                                   'tripMode', 'queueJoinTime', 'queueingTime', 'day', 'hour']
                     writer.writerow(new_headers)
         #
         logger.info('start recording; %s' % yymm)
@@ -92,11 +92,12 @@ def process_file(yymm):
                     queueing_time = st - queue_join_time
                     if queueing_time < Q_LIMIT_MIN:
                         continue
+                    day, hour = row[hid['day']], row[hid['hour']]
                     with open(fpath, 'a') as w_csvfile:
                         writer = csv.writer(w_csvfile, lineterminator='\n')
                         new_row = [did,
                                    st, et, duration, fare,
-                                   tm, queue_join_time, queueing_time]
+                                   tm, queue_join_time, queueing_time, day, hour]
                         writer.writerow(new_row)
         logger.info('end the file; %s' % yymm)
     except Exception as _:
