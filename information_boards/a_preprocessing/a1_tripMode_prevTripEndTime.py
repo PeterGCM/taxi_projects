@@ -59,7 +59,7 @@ def process_month(yymm):
             new_headers = ['did', 'startTime', 'endTime',
                            'duration', 'fare',
                            'tripModeAP', 'tripModeNS',
-                           'prevTripEndTime', 'hour']
+                           'prevTripEndTime', 'day', 'hour']
             writer.writerow(new_headers)
             #
             with open(normal_file, 'rb') as r_csvfile1:
@@ -97,7 +97,7 @@ def process_month(yymm):
                         vid = row1[hid1['vehicle-id']]
                         st_ts, et_ts = row1[hid1['start-time']], row1[hid1['end-time']]
                         dur, fare = row1[hid1['duration']], row1[hid1['fare']]
-                        hour = row1[hid1['start-hour']]
+                        day, hour = row1[hid1['start-day']], row1[hid1['start-hour']]
                         s_long, s_lat = eval(row1[hid1['start-long']]), eval(row1[hid1['start-lat']])
                         e_long, e_lat = eval(row1[hid1['end-long']]), eval(row1[hid1['end-lat']])
                         c_sl_ap, c_el_ap = ap_poly.is_including((s_long, s_lat)), ap_poly.is_including((e_long, e_lat))
@@ -131,7 +131,7 @@ def process_month(yymm):
                         new_row = [did,
                                    st_ts, et_ts,
                                    dur, fare,
-                                   ap_trip_mode, ns_trip_mode, pt_time, hour]
+                                   ap_trip_mode, ns_trip_mode, pt_time, day, hour]
                         writer.writerow(new_row)
     except Exception as _:
         import sys
