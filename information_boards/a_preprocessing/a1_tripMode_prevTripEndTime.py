@@ -56,10 +56,10 @@ def process_month(yymm):
         vehicle_prev_trip_position_time = {}
         with open(trip_fpath, 'wt') as w_csvfile:
             writer = csv.writer(w_csvfile, lineterminator='\n')
-            new_headers = ['did', 'startTime', 'endTime',
-                           'duration', 'fare',
-                           'tripModeAP', 'tripModeNS',
-                           'prevTripEndTime', 'day', 'hour']
+            new_headers = ['vid', 'did',
+                           'startTime', 'endTime', 'duration', 'fare',
+                           'tripModeAP', 'tripModeNS', 'prevTripEndTime',
+                           'day', 'hour']
             writer.writerow(new_headers)
             #
             with open(normal_file, 'rb') as r_csvfile1:
@@ -128,10 +128,10 @@ def process_month(yymm):
                         #
                         vehicle_prev_trip_position_time[vid] = (c_el_ap, c_el_ns, et_ts)
                         #
-                        new_row = [did,
-                                   st_ts, et_ts,
-                                   dur, fare,
-                                   ap_trip_mode, ns_trip_mode, pt_time, day, hour]
+                        new_row = [vid, did,
+                                   st_ts, et_ts, dur, fare,
+                                   ap_trip_mode, ns_trip_mode, pt_time,
+                                   day, hour]
                         writer.writerow(new_row)
     except Exception as _:
         import sys
