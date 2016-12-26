@@ -8,7 +8,9 @@ from information_boards import shift_dpath, shift_prefix
 from information_boards import trip_dpath, trip_prefix
 from information_boards import queueingTime_ap_dpath, queueingTime_ap_prefix
 from information_boards import queueingTime_ns_dpath, queueingTime_ns_prefix
+from information_boards import error_hours
 from information_boards import productivity_dpath, productivity_prefix
+from information_boards import productivity_summary_fpath
 from information_boards import shiftProDur_dpath, shiftProDur_prefix
 from information_boards import AM2, AM5
 from information_boards import SEC3600, SEC60
@@ -16,7 +18,7 @@ from information_boards import ALL_DUR, ALL_FARE, ALL_NUM
 from information_boards import AP_DUR, AP_FARE, AP_QUEUE, AP_NUM
 from information_boards import NS_DUR, NS_FARE, NS_QUEUE, NS_NUM
 #
-from taxi_common.file_handling_functions import check_dir_create, check_path_exist
+from taxi_common.file_handling_functions import check_dir_create, check_path_exist, get_all_files
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 from taxi_common.log_handling_functions import get_logger
 #
@@ -30,18 +32,203 @@ def run():
     for dpath in [productivity_dpath, shiftProDur_dpath]:
         check_dir_create(dpath)
     #
-    init_multiprocessor(11)
-    count_num_jobs = 0
-    for y in xrange(9, 11):
-        for m in xrange(1, 13):
-            yymm = '%02d%02d' % (y, m)
-            if yymm in ['0912', '1010']:
-                continue
-            # process_file(yymm)
-            # put_task(productive_duration, [yymm])
-            put_task(process_files, [yymm])
-            count_num_jobs += 1
-    end_multiprocessor(count_num_jobs)
+    # init_multiprocessor(11)
+    # count_num_jobs = 0
+    # for y in xrange(9, 11):
+    #     for m in xrange(1, 13):
+    #         yymm = '%02d%02d' % (y, m)
+    #         if yymm in ['0912', '1010']:
+    #             continue
+    #         # process_file(yymm)
+    #         # put_task(productive_duration, [yymm])
+    #         put_task(process_files, [yymm])
+    #         count_num_jobs += 1
+    # end_multiprocessor(count_num_jobs)
+    #
+    summary()
+
+
+def summary():
+    from traceback import format_exc
+    try:
+        logger.info('Start summary')
+        ignoring_periods = []
+        for ys, ms, ds, hs in error_hours:
+            yyyy = 2000 + int(ys)
+            mm, dd, hh = map(int, [ms, ds, hs])
+            k = (yyyy, mm, dd, hh)
+            ignoring_periods.append(k)
+        cur_timestamp = datetime.datetime(2008, 12, 31, 23)
+        last_timestamp = datetime.datetime(2011, 1, 1, 0)
+        hp_summary, time_period_order = {}, []
+        while cur_timestamp < last_timestamp:
+            cur_timestamp += datetime.timedelta(hours=1)
+            yyyy, mm, dd, hh = cur_timestamp.year, cur_timestamp.month, cur_timestamp.day, cur_timestamp.hour
+            if yyyy == 2009 and mm == 12: continue
+            if yyyy == 2010 and mm == 10: continue
+            if yyyy == 2011: continue
+            if AM2 <= hh and hh <= AM5: continue
+            need2skip = False
+            for ys, ms, ds, hs in error_hours:
+                yyyy0 = 2000 + int(ys)
+                mm0, dd0, hh0 = map(int, [ms, ds, hs])
+                if (yyyy == yyyy0) and (mm == mm0) and (dd == dd0) and (hh == hh0):
+                    need2skip = True
+            if need2skip: continue
+            #
+            k = (str(yyyy - 2000), str(mm), str(dd), str(hh))
+            hp_summary[k] = [0 for _ in range(len([ALL_DUR, ALL_FARE, ALL_NUM, \
+                                                   AP_DUR, AP_FARE, AP_QUEUE, AP_NUM, \
+                                                   NS_DUR, NS_FARE, NS_QUEUE, NS_NUM]))]
+            time_period_order.append(k)
+            #
+        yy_l, mm_l, dd_l, hh_l = 'yy', 'mm', 'dd', 'hh'
+        for fn in get_all_files(productivity_dpath, '%s*.csv' % productivity_prefix):
+            with open('%s/%s' % (productivity_dpath, fn), 'rb') as r_csvfile:
+                reader = csv.reader(r_csvfile)
+                headers = reader.next()
+                hid = {h: i for i, h in enumerate(headers)}
+                for row in reader:
+                    yy, mm, dd, hh = row[hid[yy_l]], row[hid[mm_l]], row[hid[dd_l]], row[hid[hh_l]]
+                    k = (yy, mm, dd, hh)
+                    if not hp_summary.has_key(k): continue
+                    hp_summary[k][ALL_DUR] += eval(row[hid['allDuration']])
+                    hp_summary[k][ALL_FARE] += eval(row[hid['allFare']])
+                    hp_summary[k][ALL_NUM] += eval(row[hid['allNum']])
+
+                    hp_summary[k][AP_DUR] += eval(row[hid['apDuration']])
+                    hp_summary[k][AP_FARE] += eval(row[hid['apFare']])
+                    hp_summary[k][AP_QUEUE] += eval(row[hid['apQueueingTime']])
+                    hp_summary[k][AP_NUM] += eval(row[hid['apNum']])
+
+                    hp_summary[k][NS_DUR] += eval(row[hid['nsDuration']])
+                    hp_summary[k][NS_FARE] += eval(row[hid['nsFare']])
+                    hp_summary[k][NS_QUEUE] += eval(row[hid['nsQueueingTime']])
+                    hp_summary[k][NS_NUM] += eval(row[hid['nsNum']])
+
+        #
+        with open(productivity_summary_fpath, 'wt') as w_csvfile:
+            writer = csv.writer(w_csvfile)
+            header = ['year', 'month', 'day', 'hour',
+                      'allNum',
+                      'allTotalDuration', 'allAvgDuration',
+                      'allTotalFare', 'allAvgFare',
+                      'allProductivity',
+                      'apNum',
+                      'apTotalDuration', 'apAvgDuration',
+                      'apTotalFare', 'apAvgFare',
+                      'apTotalQueueing', 'apAvgQueueing',
+                      'apProductivity',
+                      'apGenNum',
+                      'apGenTotalDuration', 'apGenAvgDuration',
+                      'apGenTotalFare', 'apGenAvgFare',
+                      'apGenProductivity',
+                      'nsNum',
+                      'nsTotalDuration', 'nsAvgDuration',
+                      'nsTotalFare', 'nsAvgFare',
+                      'nsTotalQueueing', 'nsAvgQueueing',
+                      'nsProductivity',
+                      'nsGenNum',
+                      'nsGenTotalDuration', 'nsGenAvgDuration',
+                      'nsGenTotalFare', 'nsGenAvgFare',
+                      'nsGenProductivity',
+                      'key']
+            writer.writerow(header)
+            for k in time_period_order:
+                all_total_dur, all_total_fare, all_num, \
+                ap_total_dur, ap_total_fare, ap_total_queue, ap_num, \
+                ns_total_dur, ns_total_fare, ns_total_queue, ns_num = hp_summary[k]
+                #
+                if all_num == 0:
+                    all_avg_dur, all_avg_fare = -1, -1
+                    all_prod = -1
+                else:
+                    all_avg_dur, all_avg_fare = all_total_dur / float(all_num), all_total_fare / float(all_num)
+                    if all_total_dur == 0:
+                        all_prod = -1
+                    else:
+                        all_prod = all_total_fare / float(all_total_dur)
+                #
+                yy, mm, dd, hh = k
+                if ap_num == 0:
+                    ap_avg_dur, ap_avg_fare, ap_avg_queue = -1, -1, -1
+                    ap_prod = -1
+                else:
+                    ap_avg_dur, ap_avg_fare, ap_avg_queue = \
+                        ap_total_dur / float(ap_num), ap_total_fare / float(ap_num), ap_total_queue / float(ap_num)
+                    if ap_total_dur == 0:
+                        ap_prod = -1
+                    else:
+                        ap_prod = ap_total_fare / float(ap_total_dur)
+                ap_gen_num = all_num - ap_num
+                ap_gen_total_dur = all_total_dur - (ap_total_dur + ap_total_queue)
+                ap_gen_total_fare = all_total_fare - ap_total_fare
+                if ap_gen_num == 0:
+                    ap_gen_avg_dur, ap_gen_avg_fare = -1, -1
+                    ap_gen_prod = -1
+                else:
+                    ap_gen_avg_dur, ap_gen_avg_fare = \
+                        ap_gen_total_dur / float(ap_gen_num), ap_gen_total_fare / float(ap_gen_num)
+                    if ap_gen_total_dur == 0:
+                        ap_gen_prod = -1
+                    else:
+                        ap_gen_prod = ap_gen_total_fare / float(ap_gen_total_dur)
+                #
+                if ns_num == 0:
+                    ns_avg_dur, ns_avg_fare, ns_avg_queue = -1, -1, -1
+                    ns_prod = -1
+                else:
+                    ns_avg_dur, ns_avg_fare, ns_avg_queue = \
+                        ns_total_dur / float(ns_num), ns_total_fare / float(ns_num), ns_total_queue / float(ns_num)
+                    if ns_total_dur == 0:
+                        ns_prod = -1
+                    else:
+                        ns_prod = ns_total_fare / float(ns_total_dur)
+                ns_gen_num = all_num - ns_num
+                ns_gen_total_dur = all_total_dur - (ns_total_dur + ns_total_queue)
+                ns_gen_total_fare = all_total_fare - ns_total_fare
+                if ns_gen_num == 0:
+                    ns_gen_avg_dur, ns_gen_avg_fare = -1, -1
+                    ns_gen_prod = -1
+                else:
+                    ns_gen_avg_dur, ns_gen_avg_fare = \
+                        ns_gen_total_dur / float(ns_gen_num), ns_gen_total_fare / float(ns_gen_num)
+                    if ns_gen_total_dur == 0:
+                        ns_gen_prod = -1
+                    else:
+                        ns_gen_prod = ns_gen_total_fare / float(ns_gen_total_dur)
+                #
+                writer.writerow([yy, mm, dd, hh,
+                                 all_num,
+                                 all_total_dur, all_avg_dur,
+                                 all_total_fare, all_avg_fare,
+                                 all_prod,
+                                 ap_num,
+                                 ap_total_dur, ap_avg_dur,
+                                 ap_total_fare, ap_avg_fare,
+                                 ap_total_queue, ap_avg_queue,
+                                 ap_prod,
+                                 ap_gen_num,
+                                 ap_gen_total_dur, ap_gen_avg_dur,
+                                 ap_gen_total_fare, ap_gen_avg_fare,
+                                 ap_gen_prod,
+                                 ns_num,
+                                 ns_total_dur, ap_avg_dur,
+                                 ns_total_fare, ns_avg_fare,
+                                 ns_total_queue, ns_avg_queue,
+                                 ns_prod,
+                                 ns_gen_num,
+                                 ns_gen_total_dur, ap_gen_avg_dur,
+                                 ns_gen_total_fare, ns_gen_avg_fare,
+                                 ns_gen_prod,
+                                 k])
+
+
+    except Exception as _:
+        import sys
+        with open('%s_%s.txt' % (sys.argv[0], 'summary'), 'w') as f:
+            f.write(format_exc())
+        raise
 
 
 def process_files(yymm):
@@ -122,7 +309,7 @@ def process_files(yymm):
                                  ap_dur, ap_fare, ap_qt, ap_num,
                                  ns_dur, ns_fare, ns_qt, ns_num
                                  ])
-        print 'end the file; %s' % yymm
+        logger.info('end the file; %s' % yymm)
     except Exception as _:
         import sys
         with open('%s_%s.txt' % (sys.argv[0], yymm), 'w') as f:
