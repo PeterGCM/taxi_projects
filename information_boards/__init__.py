@@ -23,6 +23,10 @@ error_hours = [('9', '3', '15', '1'), ('10', '3', '17', '1'), ('10', '7', '4', '
                 ('9', '3', '1', '1'), ('9', '11', '8', '1'), ('10', '5', '16', '1'), ('10', '1', '24', '1')  # Abnormal (short) active duration
                ]
 #
+ALL_DUR, ALL_FARE, ALL_NUM, \
+AP_DUR, AP_FARE, AP_QUEUE, AP_NUM, \
+NS_DUR, NS_FARE, NS_QUEUE, NS_NUM = range(11)
+#
 # directory path and file's prefix
 #
 trip_dpath, trip_prefix = '%s/%s' % (taxi_data, 'trip'), 'trip-'
@@ -53,13 +57,3 @@ TIME_SLOTS = range(24)
 
 
 
-
-
-
-
-# summary and charts directory
-# summary_dir = '%s/%s' % (taxi_data, 'summary')
-# charts_dir = '%s/%s' % (taxi_data, 'charts')
-# tables_dir = '%s/%s' % (taxi_data, 'tables')
-# for dpath in [summary_dir, charts_dir, tables_dir]:
-#     check_dir_create(dpath)
