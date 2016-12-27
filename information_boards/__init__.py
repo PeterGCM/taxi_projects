@@ -16,6 +16,7 @@ DIn_PIn, DIn_POut, DOut_PIn, DOut_POut = range(4)
 IN, OUT = True, False
 #
 AM2, AM5 = 2, 5
+NUM, DUR, FARE = range(3)
 # For meaningless data filtering
 error_hours = [('9', '3', '15', '1'), ('10', '3', '17', '1'), ('10', '7', '4', '6'), ('10', '7', '4', '7'), ('10', '7', '4', '8'),
                # second filtering
@@ -30,6 +31,8 @@ NS_DUR, NS_FARE, NS_QUEUE, NS_NUM = range(11)
 # directory path and file's prefix
 #
 trip_dpath, trip_prefix = '%s/%s' % (taxi_data, 'trip'), 'trip-'
+trip_ap_summary_fpath = '%s/trip-ap-summary.csv' % (trip_dpath)
+trip_ns_summary_fpath = '%s/trip-ns-summary.csv' % (trip_dpath)
 #
 crossingTime_dpath = '%s/%s' % (taxi_data, 'crossingTime')
 crossingTime_ap_dpath, crossingTime_ap_prefix = '%s/%s' % (crossingTime_dpath, 'ap'), 'crossingTime-ap-'

@@ -23,17 +23,18 @@ def run():
     for dpath in [economicProfit_ap_dpath, economicProfit_ns_dpath]:
         check_dir_create(dpath)
     #
-    init_multiprocessor(6)
-    count_num_jobs = 0
-    for y in xrange(9, 11):
-        for m in xrange(1, 13):
-            yymm = '%02d%02d' % (y, m)
-            if yymm in ['0912', '1010']:
-                continue
-            process_files(yymm)
-            # put_task(process_files, [yymm])
-            count_num_jobs += 1
-    end_multiprocessor(count_num_jobs)
+    # init_multiprocessor(6)
+    # count_num_jobs = 0
+    # for y in xrange(9, 11):
+    #     for m in xrange(1, 13):
+    #         yymm = '%02d%02d' % (y, m)
+    #         if yymm in ['0912', '1010']:
+    #             continue
+    #         process_files(yymm)
+    #         # put_task(process_files, [yymm])
+    #         count_num_jobs += 1
+    # end_multiprocessor(count_num_jobs)
+
 
 
 def process_files(yymm):
