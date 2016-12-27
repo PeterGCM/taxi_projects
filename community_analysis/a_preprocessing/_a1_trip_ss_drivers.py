@@ -145,6 +145,8 @@ def process_month(yymm):
                             continue
                         if not drivers.has_key(didT):
                             continue
+                        if drivers[didT].firstFreeStateTime == -1:
+                            continue
                         spendingTime = tripTime - drivers[didT].zoneEnteredTime
                         roamingTime = tripTime - drivers[didT].firstFreeStateTime
                         with open(ss_trips_fpath, 'a') as w_csvfile:
