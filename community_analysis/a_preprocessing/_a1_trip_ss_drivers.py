@@ -89,38 +89,55 @@ def process_month(yymm):
                 logHeader = logReader.next()
                 hidL = {h: i for i, h in enumerate(logHeader)}
                 handling_day = 0
+                drivers = {}
                 for rowN in tripReaderN:
                     rowE = tripReaderE.next()
                     didT = int(rowE[hidE['driver-id']])
                     if didT not in ss_drivers:
                         continue
                     tripTime = eval(rowN[hidN['start-time']])
+                    cur_dtT = datetime.datetime.fromtimestamp(tripTime)
+                    if handling_day != cur_dtT.day:
+                        handling_day = cur_dtT.day
+                        logger.info('Processing %s %dth day' % (yymm, cur_dtT.day))
+                    if cur_dtT.weekday() in [FRI, SAT, SUN]:
+                        continue
+                    if cur_dtT.hour < PM2:
+                        continue
+                    if PM11 < cur_dtT.hour:
+                        continue
                     while True:
                         rowL = logReader.next()
                         logTime = eval(rowL[hidL['time']])
-
-
-
-
-
-
+                        didL = int(rowL[hidL['driver-id']])
+                        if didL not in ss_drivers:
+                            continue
+                        t = eval(rowL[hidL['time']])
+                        cur_dtL = datetime.datetime.fromtimestamp(t)
+                        if cur_dtL.weekday() in [FRI, SAT, SUN]:
+                            continue
+                        if cur_dtL.hour < PM2:
+                            continue
+                        if PM11 < cur_dtL.hour:
+                            continue
+                        longitude, latitude = eval(rowL[hidL['longitude']]), eval(rowL[hidL['latitude']])
+                        zi, zj = bisect(x_points, longitude) - 1, bisect(y_points, latitude) - 1
+                        if zi < 0 or zj < 0:
+                            continue
+                        t, s = eval(rowL[hidL['time']]), eval(rowL[hidL['state']])
+                        z = (zi, zj)
+                        cur_dt = datetime.datetime.fromtimestamp(t)
+                        if handling_day != cur_dt.day:
+                            handling_day = cur_dt.day
+                            logger.info('Processing %s %dth day' % (yymm, cur_dt.day))
+                        if not drivers.has_key(didL):
+                            drivers[didL] = driver(didL, t, z, s)
+                        else:
+                            drivers[didL].update(t, z, s)
                         if tripTime <= logTime:
                             break
 
 
-
-
-
-                    cur_dt = datetime.datetime.fromtimestamp(tripTime)
-                    if handling_day != cur_dt.day:
-                        handling_day = cur_dt.day
-                        logger.info('Processing %s %dth day' % (yymm, cur_dt.day))
-                    if cur_dt.weekday() in [FRI, SAT, SUN]:
-                        continue
-                    if cur_dt.hour < PM2:
-                        continue
-                    if PM11 < cur_dt.hour:
-                        continue
                     s_long, s_lat = eval(rowN[hidN['start-long']]), eval(rowN[hidN['start-lat']])
                     zi, zj = bisect(x_points, s_long) - 1, bisect(y_points, s_lat) - 1
                     if zi < 0 or zj < 0:
@@ -128,8 +145,8 @@ def process_month(yymm):
                     with open(ss_trips_fpath, 'a') as w_csvfile:
                         writer = csv.writer(w_csvfile, lineterminator='\n')
                         writer.writerow([didT,
-                                         cur_dt.hour, zi, zj,
-                                         tripTime, cur_dt.day, cur_dt.month,
+                                         cur_dtT.hour, zi, zj,
+                                         tripTime, cur_dtT.day, cur_dtT.month,
                                          s_long, s_lat,
                                          rowN[hidN['distance']], rowN[hidN['duration']], rowN[hidN['fare']]
                                          ])
