@@ -25,19 +25,19 @@ logger = get_logger()
 def run():
     check_dir_create(ss_trips_dpath)
     #
-    # init_multiprocessor(11)
-    # count_num_jobs = 0
+    init_multiprocessor(11)
+    count_num_jobs = 0
     for y in range(9, 10):
         for m in range(1, 13):
             yymm = '%02d%02d' % (y, m)
             if yymm in ['0912', '1010']:
                 continue
             # initial_processing(yymm)
-            # put_task(initial_processing, [yymm])
+            put_task(process_month, [yymm])
             # group_defined_processing(yymm)
             # put_task(group_defined_processing, [yymm])
-            # count_num_jobs += 1
-    # end_multiprocessor(count_num_jobs)
+            count_num_jobs += 1
+    end_multiprocessor(count_num_jobs)
 
 
 def process_month(yymm):
@@ -67,7 +67,8 @@ def process_month(yymm):
                          'timeFrame', 'zi', 'zj',
                          'time', 'day', 'month',
                          'start-long', 'start-lat',
-                         'distance', 'duration', 'fare', 'spendingTime', 'roamingTime'])
+                         'distance', 'duration', 'fare',
+                         'spendingTime', 'roamingTime'])
     with open(trip_normal_fpath, 'rb') as tripFileN:
         tripReaderN = csv.reader(tripFileN)
         tripHeaderN = tripReaderN.next()
@@ -136,20 +137,20 @@ def process_month(yymm):
                             drivers[didL].update(t, z, s)
                         if tripTime <= logTime:
                             break
-
-
                     s_long, s_lat = eval(rowN[hidN['start-long']]), eval(rowN[hidN['start-lat']])
                     zi, zj = bisect(x_points, s_long) - 1, bisect(y_points, s_lat) - 1
                     if zi < 0 or zj < 0:
                         continue
+                    spendingTime = drivers[didT].zoneEnteredTime - tripTime
+                    roamingTime = drivers[didT].firstFreeStateTime - tripTime
                     with open(ss_trips_fpath, 'a') as w_csvfile:
                         writer = csv.writer(w_csvfile, lineterminator='\n')
                         writer.writerow([didT,
                                          cur_dtT.hour, zi, zj,
                                          tripTime, cur_dtT.day, cur_dtT.month,
                                          s_long, s_lat,
-                                         rowN[hidN['distance']], rowN[hidN['duration']], rowN[hidN['fare']]
-                                         ])
+                                         rowN[hidN['distance']], rowN[hidN['duration']], rowN[hidN['fare']],
+                                         spendingTime, roamingTime])
 
 
 class driver(object):

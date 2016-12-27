@@ -22,18 +22,18 @@ logger = get_logger()
 def run():
     for dpath in [economicProfit_ap_dpath, economicProfit_ns_dpath]:
         check_dir_create(dpath)
-    #
-    # init_multiprocessor(6)
-    # count_num_jobs = 0
-    # for y in xrange(9, 11):
-    #     for m in xrange(1, 13):
-    #         yymm = '%02d%02d' % (y, m)
-    #         if yymm in ['0912', '1010']:
-    #             continue
-    #         process_files(yymm)
-    #         # put_task(process_files, [yymm])
-    #         count_num_jobs += 1
-    # end_multiprocessor(count_num_jobs)
+
+    init_multiprocessor(6)
+    count_num_jobs = 0
+    for y in xrange(9, 11):
+        for m in xrange(1, 13):
+            yymm = '%02d%02d' % (y, m)
+            if yymm in ['0912', '1010']:
+                continue
+            # process_files(yymm)
+            put_task(process_files, [yymm])
+            count_num_jobs += 1
+    end_multiprocessor(count_num_jobs)
 
 
 
@@ -41,7 +41,6 @@ def process_files(yymm):
     from traceback import format_exc
     try:
         logger.info('Start summary')
-        yy, mm = yymm[:2], yymm[-2:]
         #
         ap_gen_productivity, ns_gen_productivity = {}, {}
         with open(productivity_summary_fpath) as r_csvfile:
@@ -54,6 +53,8 @@ def process_files(yymm):
                 ap_gen_productivity[(yyyy, mm, dd, hh)] = eval(row[hid['apGenProductivity']])
                 ns_gen_productivity[(yyyy, mm, dd, hh)] = eval(row[hid['nsGenProductivity']])
         #
+        yy, mm = yymm[:2], yymm[-2:]
+        year, month = 2000 + int(yy), int(mm)
         for queueingTime_dpath, queueingTime_prefix, economicProfit_dpath, economicProfit_prefix, gen_productivity in [
             (queueingTime_ap_dpath, queueingTime_ap_prefix, economicProfit_ap_dpath, economicProfit_ap_prefix, ap_gen_productivity),
             (queueingTime_ns_dpath, queueingTime_ns_prefix, economicProfit_ns_dpath, economicProfit_ns_prefix, ns_gen_productivity)]:
@@ -69,18 +70,15 @@ def process_files(yymm):
                     writer.writerow(new_headers)
                     #
                     for row in reader:
-                        st_ts = eval(row[hid['startTime']])
-                        st_dt = datetime.datetime.fromtimestamp(st_ts)
-                        k = (st_dt.year, st_dt.month, st_dt.day, st_dt.hour)
-                        print k
-                        # print row
-                        # qt = eval(row[hid['queueingTime']])
-                        # dur, fare = eval(row[hid['duration']]), eval(row[hid['fare']])
-                        # eco_profit = fare - gen_productivity[k] * (qt + dur)
-                        # #
-                        # writer.writerow([st_ts, row[hid['did']], dur, fare,
-                        #                  row[hid['tripMode']], qt, eco_profit,
-                        #                  yy, st_dt.month, st_dt.day, st_dt.hour])
+                        day, hour = int(row[hid['day']]), int(row[hid['hour']])
+                        k = (year, month, day, hour)
+                        qt = eval(row[hid['queueingTime']])
+                        dur, fare = eval(row[hid['duration']]), eval(row[hid['fare']])
+                        eco_profit = fare - gen_productivity[k] * (qt + dur)
+                        #
+                        writer.writerow([row[hid['startTime']], row[hid['did']], dur, fare,
+                                         row[hid['tripMode']], qt, eco_profit,
+                                         year, month, day, hour])
         #
         logger.info('end the file; %s' % yymm)
     except Exception as _:
