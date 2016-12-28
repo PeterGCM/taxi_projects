@@ -51,10 +51,9 @@ def process_month(yymm):
         if not check_path_exist(trip_normal_fpath):
             logger.info('The file X exists; %s' % yymm)
             return None
-        yyyy = '20%s' % yy
-        ss_drivers_fpath = '%s/%s%s.pkl' % (ss_drivers_dpath, ss_drivers_prefix, yyyy)
+        ss_drivers_fpath = '%s/%s%s.pkl' % (ss_drivers_dpath, ss_drivers_prefix, yymm)
         if not check_path_exist(ss_drivers_fpath):
-            logger.info('The file X exists; %s' % yyyy)
+            logger.info('The file X exists; %s' % ss_drivers_fpath)
             return None
         ss_drivers = load_pickle_file(ss_drivers_fpath)
         x_points, y_points = get_sg_grid_xy_points()
