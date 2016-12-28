@@ -147,6 +147,8 @@ def process_month(yymm):
                         if drivers[didT].firstFreeStateTime == -1:
                             continue
                         spendingTime = tripTime - drivers[didT].zoneEnteredTime
+                        if spendingTime < 0:
+                            continue
                         roamingTime = tripTime - drivers[didT].firstFreeStateTime
                         with open(ss_trips_fpath, 'a') as w_csvfile:
                             writer = csv.writer(w_csvfile, lineterminator='\n')
