@@ -37,21 +37,21 @@ def run():
             #
             yyyy, mm, dd, hh = cur_day_time.year, cur_day_time.month, cur_day_time.day, cur_day_time.hour
             #
-            filtered_trip = trip_df[(st_timestamp <= trip_df['start-time']) & (trip_df['start-time'] < et_timestamp)]
+            filtered_trip = trip_df[(st_timestamp <= trip_df['startTime']) & (trip_df['startTime'] < et_timestamp)]
             if len(filtered_trip) != 0:
                 for fn, label in [(trip_ap_summary_fpath, 'tripModeAP'),
                                   (trip_ns_summary_fpath, 'tripModeNS')]:
                     gp_f_trip = filtered_trip.groupby([label])
                     num_totalDuration_totalFare_tm = [[0, 0, 0, tm] for tm in [DIn_PIn, DIn_POut, DOut_PIn, DOut_POut]]
-                    tm_num_df = gp_f_trip.count()['fare'].to_frame('total_tm_num').reset_index()
+                    tm_num_df = gp_f_trip.count()['fare'].to_frame('totalTmNum').reset_index()
                     for tm, num in tm_num_df.values:
                         num_totalDuration_totalFare_tm[int(tm)][NUM] += num
                     #
-                    tm_dur_df = gp_f_trip.sum()['duration'].to_frame('total_tm_dur').reset_index()
+                    tm_dur_df = gp_f_trip.sum()['duration'].to_frame('totalTmDur').reset_index()
                     for tm, dur in tm_dur_df.values:
                         num_totalDuration_totalFare_tm[int(tm)][DUR] += dur
                     #
-                    tm_fare_df = gp_f_trip.sum()['fare'].to_frame('total_tm_fare').reset_index()
+                    tm_fare_df = gp_f_trip.sum()['fare'].to_frame('totalTmFare').reset_index()
                     for tm, fare in tm_fare_df.values:
                         num_totalDuration_totalFare_tm[int(tm)][FARE] += fare
                     dow = cur_day_time.strftime("%a")
