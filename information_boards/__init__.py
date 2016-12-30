@@ -56,7 +56,7 @@ economicProfit_ns_dpath, economicProfit_ns_prefix = '%s/%s' % (economicProfit_dp
 ssDriver_dpath = '%s/%s' % (taxi_data, 'ssDriver')
 ssDriverTrip_dpath, ssDriverTrip_prefix = '%s/%s' % (ssDriver_dpath, 'ssDriverTrip'), 'ssDriverTrip-'
 ssDriverShiftProDur_dpath, ssDriverShiftProDur_prefix = '%s/%s' % (ssDriver_dpath, 'ssDriverShiftProDur'), 'ssDriverShiftProDur-'
-ssDriverEP_dpath = '%s/%s' % (taxi_data, 'ssDriverEP')
+ssDriverEP_dpath = '%s/%s' % (ssDriver_dpath, 'ssDriverEP')
 ssDriverEP_ap_dpath, ssDriverEP_ap_prefix = '%s/%s' % (ssDriverEP_dpath, 'ap'), 'ssDriverEP-ap-'
 ssDriverEP_ns_dpath, ssDriverEP_ns_prefix = '%s/%s' % (ssDriverEP_dpath, 'ns'), 'ssDriverEP-ns-'
 # Units
