@@ -44,7 +44,7 @@ def process_files(yymm):
     all_trip_df = pd.read_csv('%s/%s%s.csv' % (ftd_trips_dir, ftd_trips_prefix, yymm))
     loc_trip_df = pd.read_csv('%s/%s%s.csv' % (ap_ep_dir, ap_ep_prefix, yymm))
     ft_drivers = map(int, load_pickle_file('%s/%s%s.pkl' % (full_time_driver_dir, ft_drivers_prefix, yymm)))
-    days = set(loc_trip_df['dd'])
+    days = set(loc_trip_df['day'])
     #
     yy, mm = int(yymm[:2]), int(yymm[2:])
     for dd in days:
