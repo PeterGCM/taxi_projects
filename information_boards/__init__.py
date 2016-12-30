@@ -50,10 +50,15 @@ shift_dpath, shift_prefix = '/home/sfcheng/toolbox/results', 'shift-hour-state-'
 shiftProDur_dpath, shiftProDur_prefix = '%s/%s' % (productivity_dpath, 'shiftProDur'), 'shiftProDur-'
 #
 economicProfit_dpath = '%s/%s' % (trip_dpath, 'economicProfit')
-economicProfit_ap_dpath, economicProfit_ap_prefix = '%s/%s' % (economicProfit_dpath, 'ap'), 'trip-queueingTime-ap-'
-economicProfit_ns_dpath, economicProfit_ns_prefix = '%s/%s' % (economicProfit_dpath, 'ns'), 'trip-queueingTime-ns-'
-
-
+economicProfit_ap_dpath, economicProfit_ap_prefix = '%s/%s' % (economicProfit_dpath, 'ap'), 'trip-EP-ap-'
+economicProfit_ns_dpath, economicProfit_ns_prefix = '%s/%s' % (economicProfit_dpath, 'ns'), 'trip-EP-ns-'
+#
+ssDriver_dpath = '%s/%s' % (taxi_data, 'ssDriver')
+ssDriverTrip_dpath, ssDriverTrip_prefix = '%s/%s' % (ssDriver_dpath, 'ssDriverTrip'), 'ssDriverTrip-'
+ssDriverShiftProDur_dpath, ssDriverShiftProDur_prefix = '%s/%s' % (ssDriver_dpath, 'ssDriverShiftProDur'), 'ssDriverShiftProDur-'
+ssDriverEP_dpath = '%s/%s' % (taxi_data, 'ssDriverEP')
+ssDriverEP_ap_dpath, ssDriverEP_ap_prefix = '%s/%s' % (ssDriverEP_dpath, 'ap'), 'ssDriverEP-ap-'
+ssDriverEP_ns_dpath, ssDriverEP_ns_prefix = '%s/%s' % (ssDriverEP_dpath, 'ns'), 'ssDriverEP-ns-'
 # Units
 SEC3600, SEC60 = 60 * 60, 60
 CENT = 100
