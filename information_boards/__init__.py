@@ -59,6 +59,8 @@ ssDriverShiftProDur_dpath, ssDriverShiftProDur_prefix = '%s/%s' % (ssDriver_dpat
 ssDriverEP_dpath = '%s/%s' % (ssDriver_dpath, 'ssDriverEP')
 ssDriverEP_ap_dpath, ssDriverEP_ap_prefix = '%s/%s' % (ssDriverEP_dpath, 'ap'), 'ssDriverEP-ap-'
 ssDriverEP_ns_dpath, ssDriverEP_ns_prefix = '%s/%s' % (ssDriverEP_dpath, 'ns'), 'ssDriverEP-ns-'
+ssDriversStatisticsDayBased_ap_fpath = '%s/ssDriversStatisticsDayBased-ap.csv' % (ssDriverEP_ap_dpath)
+
 # Units
 SEC3600, SEC60 = 60 * 60, 60
 CENT = 100

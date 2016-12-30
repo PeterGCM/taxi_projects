@@ -4,22 +4,22 @@ import __init__
 
 '''
 #
-import csv
-
-import pandas as pd
-from information_boards.b_aggregated_analysis import ap_ep_dir, ap_ep_prefix
-
+from information_boards import ssDriverTrip_dpath, ssDriverTrip_prefix
+from information_boards import ssDriverShiftProDur_dpath, ssDriverShiftProDur_prefix
+from information_boards import ssDriverEP_ap_dpath, ssDriverEP_ap_prefix
+from information_boards import ssDriversStatisticsDayBased_ap_fpath
 from information_boards import DIn_PIn, DOut_PIn
 from information_boards import SEC60
-from information_boards.old_codes.c_individual_analysis import ftd_ap_daily_stat_fpath
-from information_boards.old_codes.c_individual_analysis import ftd_shift_dir, ftd_shift_prefix
-from information_boards.old_codes.c_individual_analysis import ftd_trips_dir, ftd_trips_prefix
+#
 from taxi_common import full_time_driver_dir, ft_drivers_prefix
 from taxi_common.file_handling_functions import load_pickle_file
+#
+import pandas as pd
+import csv
 
 
 def run():
-    with open(ftd_ap_daily_stat_fpath, 'wb') as w_csvfile:
+    with open(ssDriversStatisticsDayBased_ap_fpath, 'wb') as w_csvfile:
         writer = csv.writer(w_csvfile, lineterminator='\n')
         headers = ['year', 'month', 'day',
                    'did',
@@ -40,18 +40,18 @@ def run():
 def process_files(yymm):
     print 'handle the file; %s' % yymm
     #
-    shift_df = pd.read_csv('%s/%s%s.csv' % (ftd_shift_dir, ftd_shift_prefix, yymm))
-    all_trip_df = pd.read_csv('%s/%s%s.csv' % (ftd_trips_dir, ftd_trips_prefix, yymm))
-    loc_trip_df = pd.read_csv('%s/%s%s.csv' % (ap_ep_dir, ap_ep_prefix, yymm))
-    ft_drivers = map(int, load_pickle_file('%s/%s%s.pkl' % (full_time_driver_dir, ft_drivers_prefix, yymm)))
-    days = set(loc_trip_df['day'])
+    shift_df = pd.read_csv('%s/%s%s.csv' % (ssDriverShiftProDur_dpath, ssDriverShiftProDur_prefix, yymm))
+    all_trip_df = pd.read_csv('%s/%s%s.csv' % (ssDriverTrip_dpath, ssDriverTrip_prefix, yymm))
+    EP_df = pd.read_csv('%s/%s%s.csv' % (ssDriverEP_ap_dpath, ssDriverEP_ap_prefix, yymm))
+    ssDrivers = map(int, load_pickle_file('%s/%s%s.pkl' % (full_time_driver_dir, ft_drivers_prefix, yymm)))
+    days = set(EP_df['day'])
     #
     yy, mm = int(yymm[:2]), int(yymm[2:])
     for dd in days:
-        day_all_trip_df = all_trip_df[(all_trip_df['dd'] == dd)]
-        day_loc_trip_df = loc_trip_df[(loc_trip_df['dd'] == dd)]
-        day_shift_df = shift_df[(shift_df['dd'] == dd)]
-        for did in ft_drivers:
+        day_all_trip_df = all_trip_df[(all_trip_df['day'] == dd)]
+        day_loc_trip_df = EP_df[(EP_df['day'] == dd)]
+        day_shift_df = shift_df[(shift_df['day'] == dd)]
+        for did in ssDrivers:
             #
             # All
             #
@@ -67,24 +67,24 @@ def process_files(yymm):
             loc_num = len(d_loc_trip['fare'])
             loc_dur = sum(d_loc_trip['duration'])
             loc_fare = sum(d_loc_trip['fare'])
-            loc_ep = sum(d_loc_trip['economic-profit'])
-            loc_qtime = sum(d_loc_trip['queueing-time'])
+            loc_ep = sum(d_loc_trip['economicProfit'])
+            loc_qtime = sum(d_loc_trip['queueingTime'])
             #
-            d_loc_trip_in = d_loc_trip[(d_loc_trip['trip-mode'] == DIn_PIn)]
+            d_loc_trip_in = d_loc_trip[(d_loc_trip['tripMode'] == DIn_PIn)]
             locIn_num = len(d_loc_trip_in['fare'])
             locIn_dur = sum(d_loc_trip_in['duration'])
             locIn_fare = sum(d_loc_trip_in['fare'])
-            locIn_ep = sum(d_loc_trip_in['economic-profit'])
-            locIn_qtime = sum(d_loc_trip_in['queueing-time'])
+            locIn_ep = sum(d_loc_trip_in['economicProfit'])
+            locIn_qtime = sum(d_loc_trip_in['queueingTime'])
             #
-            d_loc_trip_out = d_loc_trip[(d_loc_trip['trip-mode'] == DOut_PIn)]
+            d_loc_trip_out = d_loc_trip[(d_loc_trip['tripMode'] == DOut_PIn)]
             locOut_num = len(d_loc_trip_out['fare'])
             locOut_dur = sum(d_loc_trip_out['duration'])
             locOut_fare = sum(d_loc_trip_out['fare'])
-            locOut_ep = sum(d_loc_trip_out['economic-profit'])
-            locOut_qtime = sum(d_loc_trip_out['queueing-time'])
+            locOut_ep = sum(d_loc_trip_out['economicProfit'])
+            locOut_qtime = sum(d_loc_trip_out['queueingTime'])
             #
-            with open(ftd_ap_daily_stat_fpath, 'a') as w_csvfile:
+            with open(ssDriversStatisticsDayBased_ap_fpath, 'a') as w_csvfile:
                 writer = csv.writer(w_csvfile, lineterminator='\n')
                 writer.writerow([yy, mm, dd, did,
                                  all_num, pro_dur, all_fare,
