@@ -59,10 +59,14 @@ ssDriverShiftProDur_dpath, ssDriverShiftProDur_prefix = '%s/%s' % (ssDriver_dpat
 ssDriverEP_dpath = '%s/%s' % (ssDriver_dpath, 'ssDriverEP')
 ssDriverEP_ap_dpath, ssDriverEP_ap_prefix = '%s/%s' % (ssDriverEP_dpath, 'ap'), 'ssDriverEP-ap-'
 ssDriverEP_ns_dpath, ssDriverEP_ns_prefix = '%s/%s' % (ssDriverEP_dpath, 'ns'), 'ssDriverEP-ns-'
+ssDriversStatistics_ap_fpath = '%s/ssDriversStatistics-ap.csv' % (ssDriverEP_ap_dpath)
 ssDriversStatisticsDayBased_ap_fpath = '%s/ssDriversStatisticsDayBased-ap.csv' % (ssDriverEP_ap_dpath)
+ssDriversStatisticsMonthBased2009_ap_fpath = '%s/ssDriversStatisticsMonthBased2009-ap.csv' % (ssDriverEP_ap_dpath)
+ssDriversStatisticsMonthBased2010_ap_fpath = '%s/ssDriversStatisticsMonthBased2010-ap.csv' % (ssDriverEP_ap_dpath)
 
 # Units
-SEC3600, SEC60 = 60 * 60, 60
+SEC3600, SEC600, SEC60 = 60 * 60.0, 10 * 60.0, 60.0
+HOUR1 = SEC3600
 CENT = 100
 Q_LIMIT_MIN = 0
 DAY_OF_WEEK = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
