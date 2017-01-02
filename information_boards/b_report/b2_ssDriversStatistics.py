@@ -40,8 +40,70 @@ def run():
     #             continue
     #         process_files(yymm)
     #
-    arrange_dataAndUnits_dayBased()
-    # arrange_dataAndUnits_monthBased()
+    # arrange_dataAndUnits_dayBased()
+    arrange_dataAndUnits_monthBased()
+
+
+def arrange_dataAndUnits_tripBased():
+    Y2009_df = pd.read_csv(ssDriversStatisticsMonthBased2009_ap_fpath)
+    Y2010_df = pd.read_csv(ssDriversStatisticsMonthBased2010_ap_fpath)
+    #
+    drivers09 = set(Y2009_df['driverID'])
+    drivers10 = set(Y2010_df['driverID'])
+    both_year_drivers = drivers09.intersection(drivers10)
+    #
+    df = pd.read_csv(ssDriversStatistics_ap_fpath)
+
+    EP_df = pd.read_csv('%s/%s%s.csv' % (ssDriverEP_ap_dpath, ssDriverEP_ap_prefix, yymm))
+
+
+    df = df[(df['did'].isin(both_year_drivers))]
+    # remove outlier
+    fdf = df.copy(deep=True)
+    fdf = fdf[(fdf['apQueueingTime'] >= SEC600)]
+    for v in df.columns:
+        if v in ['year', 'month', 'day', 'did']:
+            continue
+        fdf = fdf[~(np.abs(fdf[v] - fdf[v].mean()) > (3 * fdf[v].std()))]
+    fdf = fdf[['year', 'month', 'day',
+               'did',
+               'allNum', 'allDur', 'allFare',
+               'apNum', 'apDur', 'apFare',
+               'apEP', 'apQueueingTime',
+               'apInNum', 'apOutNum']]
+
+    col_renaming_map = {
+        'year': 'year', 'month': 'month', 'day': 'day',
+        'did': 'driverID',
+        'allNum': 'tripNumber', 'allDur': 'operatingHour', 'allFare': 'Fare',
+        'apNum': 'apNumber', 'apDur': 'apDuration', 'apFare': 'apFare',
+        'apEP': 'apEconomicProfit', 'apQueueingTime': 'apQTime',
+        'apInNum': 'apInNumber', 'apOutNum': 'apOutNumber'
+    }
+    fdf = fdf.rename(columns=col_renaming_map)
+    fdf['year'] = fdf['year'].apply(lambda x: x + 2000)
+    fdf['operatingHour'] = fdf['operatingHour'].apply(lambda x: x / SEC3600)
+    fdf['apDuration'] = fdf['apDuration'].apply(lambda x: x / SEC60)
+    fdf['apQTime'] = fdf['apQTime'].apply(lambda x: x / SEC60)
+    fdf['Fare'] = fdf['Fare'].apply(lambda x: x / CENT)
+    fdf['apFare'] = fdf['apFare'].apply(lambda x: x / CENT)
+    fdf['apEconomicProfit'] = fdf['apEconomicProfit'].apply(lambda x: x / CENT)
+    #
+    fdf['QTime/apTrip'] = fdf['apQTime'] / fdf['apNumber']
+    fdf['economicProfit/apTrip'] = fdf['apEconomicProfit'] / fdf['apNumber']
+    fdf['Productivity'] = fdf['Fare'] / fdf['operatingHour']
+    fdf['apProductivity'] = fdf['apFare'] / (fdf['apDuration'] + fdf['apQTime']) * SEC60
+    #
+    fdf.to_csv(ssDriversStatisticsDayBased_ap_fpath, index=False)
+
+
+
+
+
+    Y2009_df = df[(df['year'] == 2009)].copy(deep=True)
+    Y2010_df = df[(df['year'] == 2010)].copy(deep=True)
+
+
 
 
 def arrange_dataAndUnits_monthBased():
@@ -65,6 +127,7 @@ def arrange_dataAndUnits_monthBased():
         all_month_drivers = [k for k, v in drivers.iteritems() if v == len(months)]
         Y_allMonths = monthBased_df[(monthBased_df['driverID'].isin(all_month_drivers))]
         #
+        Y_allMonths['month^2'] = Y_allMonths['month'].apply(lambda x: x ** 2)
         Y_allMonths['QTime/apTrip'] = Y_allMonths['apQTime'] / Y_allMonths['apNumber']
         Y_allMonths['economicProfit/apTrip'] = Y_allMonths['apEconomicProfit'] / Y_allMonths['apNumber']
         Y_allMonths['Productivity'] = Y_allMonths['Fare'] / Y_allMonths['operatingHour']
@@ -89,13 +152,6 @@ def arrange_dataAndUnits_dayBased():
               'apNum', 'apDur', 'apFare',
               'apEP', 'apQueueingTime',
               'apInNum', 'apOutNum']]
-    #
-    df09 = fdf[(fdf['year'] == 9)]
-    df10 = fdf[(fdf['year'] == 10)]
-    drivers09 = set(df09['did'])
-    drivers10 = set(df10['did'])
-    both_year_drivers = drivers09.intersection(drivers10)
-    fdf = fdf[(fdf['did'].isin(both_year_drivers))]
 
     col_renaming_map = {
         'year': 'year', 'month': 'month', 'day': 'day',
@@ -112,6 +168,7 @@ def arrange_dataAndUnits_dayBased():
     fdf['apQTime'] = fdf['apQTime'].apply(lambda x: x / SEC60)
     fdf['Fare'] = fdf['Fare'].apply(lambda x: x / CENT)
     fdf['apFare'] = fdf['apFare'].apply(lambda x: x / CENT)
+    fdf['apEconomicProfit'] = fdf['apEconomicProfit'].apply(lambda x: x / CENT)
     #
     fdf['QTime/apTrip'] = fdf['apQTime'] / fdf['apNumber']
     fdf['economicProfit/apTrip'] = fdf['apEconomicProfit'] / fdf['apNumber']
