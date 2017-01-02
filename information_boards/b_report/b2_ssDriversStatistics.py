@@ -7,10 +7,13 @@ import __init__
 from information_boards import ssDriverTrip_dpath, ssDriverTrip_prefix
 from information_boards import ssDriverShiftProDur_dpath, ssDriverShiftProDur_prefix
 from information_boards import ssDriverEP_ap_dpath, ssDriverEP_ap_prefix
+from information_boards import ssDriverEP_ap_all_fpath
 from information_boards import ssDriversStatistics_ap_fpath
-from information_boards import ssDriversStatisticsDayBased_ap_fpath
+from information_boards import ssDriversStatisticsDayBasedModi_ap_fpath
 from information_boards import ssDriversStatisticsMonthBased2009_ap_fpath
 from information_boards import ssDriversStatisticsMonthBased2010_ap_fpath
+from information_boards import ssDriversStatisticsTripBased2009_ap_fpath
+from information_boards import ssDriversStatisticsTripBased2010_ap_fpath
 from information_boards import DIn_PIn, DOut_PIn
 from information_boards import SEC3600, SEC600, SEC60, CENT
 #
@@ -23,7 +26,7 @@ import csv
 
 
 def run():
-    # with open(ssDriversStatisticsDayBased_ap_ori_fpath, 'wb') as w_csvfile:
+    # with open(ssDriversStatistics_ap_fpath, 'wb') as w_csvfile:
     #     writer = csv.writer(w_csvfile, lineterminator='\n')
     #     headers = ['year', 'month', 'day',
     #                'did',
@@ -38,10 +41,11 @@ def run():
     #         yymm = '%02d%02d' % (y, m)
     #         if yymm in ['0912', '1010']:
     #             continue
-    #         process_files(yymm)
+    #         aggregate_dayBased(yymm)
     #
     # arrange_dataAndUnits_dayBased()
-    arrange_dataAndUnits_monthBased()
+    # arrange_dataAndUnits_monthBased()
+    arrange_dataAndUnits_tripBased()
 
 
 def arrange_dataAndUnits_tripBased():
@@ -52,62 +56,37 @@ def arrange_dataAndUnits_tripBased():
     drivers10 = set(Y2010_df['driverID'])
     both_year_drivers = drivers09.intersection(drivers10)
     #
-    df = pd.read_csv(ssDriversStatistics_ap_fpath)
-
-    EP_df = pd.read_csv('%s/%s%s.csv' % (ssDriverEP_ap_dpath, ssDriverEP_ap_prefix, yymm))
-
-
+    df = pd.read_csv(ssDriverEP_ap_all_fpath)
     df = df[(df['did'].isin(both_year_drivers))]
     # remove outlier
     fdf = df.copy(deep=True)
-    fdf = fdf[(fdf['apQueueingTime'] >= SEC600)]
-    for v in df.columns:
-        if v in ['year', 'month', 'day', 'did']:
-            continue
+    fdf = fdf[(fdf['queueingTime'] >= SEC600)]
+    for v in ['queueingTime', 'economicProfit']:
         fdf = fdf[~(np.abs(fdf[v] - fdf[v].mean()) > (3 * fdf[v].std()))]
-    fdf = fdf[['year', 'month', 'day',
-               'did',
-               'allNum', 'allDur', 'allFare',
-               'apNum', 'apDur', 'apFare',
-               'apEP', 'apQueueingTime',
-               'apInNum', 'apOutNum']]
+    fdf['apIn'] = np.where(fdf['tripMode'] == DIn_PIn, 1, 0)
 
-    col_renaming_map = {
-        'year': 'year', 'month': 'month', 'day': 'day',
-        'did': 'driverID',
-        'allNum': 'tripNumber', 'allDur': 'operatingHour', 'allFare': 'Fare',
-        'apNum': 'apNumber', 'apDur': 'apDuration', 'apFare': 'apFare',
-        'apEP': 'apEconomicProfit', 'apQueueingTime': 'apQTime',
-        'apInNum': 'apInNumber', 'apOutNum': 'apOutNumber'
-    }
+    fdf = fdf[['did',
+               'duration', 'fare',
+               'apIn', 'queueingTime', 'economicProfit',
+               'year', 'month', 'day', 'hour']]
+    col_renaming_map = {'year': 'year', 'month': 'month', 'day': 'day',
+                        'did': 'driverID',
+                        'duration': 'apDuration', 'fare': 'apFare',
+                        'queueingTime': 'apQTime', 'economicProfit': 'apEconomicProfit'}
     fdf = fdf.rename(columns=col_renaming_map)
-    fdf['year'] = fdf['year'].apply(lambda x: x + 2000)
-    fdf['operatingHour'] = fdf['operatingHour'].apply(lambda x: x / SEC3600)
     fdf['apDuration'] = fdf['apDuration'].apply(lambda x: x / SEC60)
     fdf['apQTime'] = fdf['apQTime'].apply(lambda x: x / SEC60)
-    fdf['Fare'] = fdf['Fare'].apply(lambda x: x / CENT)
     fdf['apFare'] = fdf['apFare'].apply(lambda x: x / CENT)
     fdf['apEconomicProfit'] = fdf['apEconomicProfit'].apply(lambda x: x / CENT)
     #
-    fdf['QTime/apTrip'] = fdf['apQTime'] / fdf['apNumber']
-    fdf['economicProfit/apTrip'] = fdf['apEconomicProfit'] / fdf['apNumber']
-    fdf['Productivity'] = fdf['Fare'] / fdf['operatingHour']
-    fdf['apProductivity'] = fdf['apFare'] / (fdf['apDuration'] + fdf['apQTime']) * SEC60
-    #
-    fdf.to_csv(ssDriversStatisticsDayBased_ap_fpath, index=False)
-
-
-
-
-
-    Y2009_df = df[(df['year'] == 2009)].copy(deep=True)
-    Y2010_df = df[(df['year'] == 2010)].copy(deep=True)
-
-
+    Y2009_df = fdf[(fdf['year'] == 2009)].copy(deep=True)
+    Y2010_df = fdf[(fdf['year'] == 2010)].copy(deep=True)
+    Y2009_df.to_csv(ssDriversStatisticsTripBased2009_ap_fpath, index=False)
+    Y2010_df.to_csv(ssDriversStatisticsTripBased2010_ap_fpath, index=False)
 
 
 def arrange_dataAndUnits_monthBased():
-    df = pd.read_csv(ssDriversStatisticsDayBased_ap_fpath)
+    df = pd.read_csv(ssDriversStatisticsDayBasedModi_ap_fpath)
     Y2009_df = df[(df['year'] == 2009)].copy(deep=True)
     Y2010_df = df[(df['year'] == 2010)].copy(deep=True)
     months_2009 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
@@ -175,10 +154,10 @@ def arrange_dataAndUnits_dayBased():
     fdf['Productivity'] = fdf['Fare'] / fdf['operatingHour']
     fdf['apProductivity'] = fdf['apFare'] / (fdf['apDuration'] + fdf['apQTime']) * SEC60
     #
-    fdf.to_csv(ssDriversStatisticsDayBased_ap_fpath, index=False)
+    fdf.to_csv(ssDriversStatisticsDayBasedModi_ap_fpath, index=False)
 
 
-def process_files(yymm):
+def aggregate_dayBased(yymm):
     print 'handle the file; %s' % yymm
     #
     shift_df = pd.read_csv('%s/%s%s.csv' % (ssDriverShiftProDur_dpath, ssDriverShiftProDur_prefix, yymm))
