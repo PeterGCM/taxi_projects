@@ -74,10 +74,12 @@ def arrange_dataAndUnits_tripBased():
                         'duration': 'apDuration', 'fare': 'apFare',
                         'queueingTime': 'apQTime', 'economicProfit': 'apEconomicProfit'}
     fdf = fdf.rename(columns=col_renaming_map)
+    fdf['month^2'] = fdf['month'].apply(lambda x: x ** 2)
     fdf['apDuration'] = fdf['apDuration'].apply(lambda x: x / SEC60)
     fdf['apQTime'] = fdf['apQTime'].apply(lambda x: x / SEC60)
     fdf['apFare'] = fdf['apFare'].apply(lambda x: x / CENT)
     fdf['apEconomicProfit'] = fdf['apEconomicProfit'].apply(lambda x: x / CENT)
+    fdf['apProductivity'] = fdf['apFare'] / (fdf['apDuration'] + fdf['apQTime']) * SEC60
     #
     Y2009_df = fdf[(fdf['year'] == 2009)].copy(deep=True)
     Y2010_df = fdf[(fdf['year'] == 2010)].copy(deep=True)
