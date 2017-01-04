@@ -38,16 +38,55 @@ def run():
                    'nsOutNum', 'nsOutDur', 'nsOutFare', 'nsOutEP', 'nsOutQueueingTime']
         writer.writerow(headers)
     #
-    for y in xrange(10, 11):
-        for m in xrange(1, 13):
-            yymm = '%02d%02d' % (y, m)
-            if yymm in ['0912', '1010']:
-                continue
-            aggregate_dayBased(yymm)
-
-    # arrange_dataAndUnits_dayBased()
+    # for y in xrange(9, 11):
+    #     for m in xrange(1, 13):
+    #         yymm = '%02d%02d' % (y, m)
+    #         if yymm in ['0912', '1010']:
+    #             continue
+    #         aggregate_dayBased(yymm)
+    arrange_dataAndUnits_dayBased()
     # arrange_dataAndUnits_monthBased()
     # arrange_dataAndUnits_tripBased()
+
+def arrange_dataAndUnits_dayBased():
+    df = pd.read_csv(ssDriversStatistics_ap_fpath)
+    # remove outlier
+    fdf = df.copy(deep=True)
+    fdf = fdf[(fdf['apQueueingTime'] >= SEC600)]
+    for v in df.columns:
+        if v in ['year', 'month', 'day', 'did']:
+            continue
+        fdf = fdf[~(np.abs(fdf[v] - fdf[v].mean()) > (3 * fdf[v].std()))]
+    fdf = fdf[['year', 'month', 'day',
+              'did',
+              'allNum', 'allDur', 'allFare',
+              'apNum', 'apDur', 'apFare',
+              'apEP', 'apQueueingTime',
+              'apInNum', 'apOutNum']]
+
+    col_renaming_map = {
+        'year': 'year', 'month': 'month', 'day': 'day',
+        'did': 'driverID',
+        'allNum': 'tripNumber', 'allDur': 'operatingHour', 'allFare': 'Fare',
+        'apNum': 'apNumber', 'apDur': 'apDuration', 'apFare': 'apFare',
+        'apEP': 'apEconomicProfit', 'apQueueingTime': 'apQTime',
+        'apInNum': 'apInNumber', 'apOutNum': 'apOutNumber'
+    }
+    fdf = fdf.rename(columns=col_renaming_map)
+    fdf['year'] = fdf['year'].apply(lambda x: x + 2000)
+    fdf['operatingHour'] = fdf['operatingHour'].apply(lambda x: x / SEC3600)
+    fdf['apDuration'] = fdf['apDuration'].apply(lambda x: x / SEC60)
+    fdf['apQTime'] = fdf['apQTime'].apply(lambda x: x / SEC60)
+    fdf['Fare'] = fdf['Fare'].apply(lambda x: x / CENT)
+    fdf['apFare'] = fdf['apFare'].apply(lambda x: x / CENT)
+    fdf['apEconomicProfit'] = fdf['apEconomicProfit'].apply(lambda x: x / CENT)
+    #
+    fdf['QTime/apTrip'] = fdf['apQTime'] / fdf['apNumber']
+    fdf['economicProfit/apTrip'] = fdf['apEconomicProfit'] / fdf['apNumber']
+    fdf['Productivity'] = fdf['Fare'] / fdf['operatingHour']
+    fdf['apProductivity'] = fdf['apFare'] / (fdf['apDuration'] + fdf['apQTime']) * SEC60
+    #
+    fdf.to_csv(ssDriversStatisticsDayBasedModi_ap_fpath, index=False)
 
 
 def aggregate_dayBased(yymm):
@@ -66,6 +105,17 @@ def aggregate_dayBased(yymm):
         day_shift_df = shift_df[(shift_df['dd'] == dd)]
         for did in ssDrivers:
             #
+            # Specific location
+            #
+            d_loc_trip = day_loc_trip_df[(day_loc_trip_df['did'] == did)]
+            if len(d_loc_trip) == 0:
+                continue
+            loc_num = len(d_loc_trip['fare'])
+            loc_dur = sum(d_loc_trip['duration'])
+            loc_fare = sum(d_loc_trip['fare'])
+            loc_ep = sum(d_loc_trip['economicProfit'])
+            loc_qtime = sum(d_loc_trip['queueingTime'])
+            #
             # All
             #
             d_all_trip = day_all_trip_df[(day_all_trip_df['did'] == did)]
@@ -73,15 +123,6 @@ def aggregate_dayBased(yymm):
             all_num = len(d_all_trip['fare'])
             pro_dur = sum(d_shift['pro-dur']) * SEC60
             all_fare = sum(d_all_trip['fare'])
-            #
-            # Specific location
-            #
-            d_loc_trip = day_loc_trip_df[(day_loc_trip_df['did'] == did)]
-            loc_num = len(d_loc_trip['fare'])
-            loc_dur = sum(d_loc_trip['duration'])
-            loc_fare = sum(d_loc_trip['fare'])
-            loc_ep = sum(d_loc_trip['economicProfit'])
-            loc_qtime = sum(d_loc_trip['queueingTime'])
             #
             d_loc_trip_in = d_loc_trip[(d_loc_trip['tripMode'] == DIn_PIn)]
             locIn_num = len(d_loc_trip_in['fare'])
@@ -175,45 +216,7 @@ def aggregate_dayBased(yymm):
 #         Y_allMonths.to_csv(fpath, index=False)
 #
 #
-# def arrange_dataAndUnits_dayBased():
-#     df = pd.read_csv(ssDriversStatistics_ap_fpath)
-#     # remove outlier
-#     fdf = df.copy(deep=True)
-#     fdf = fdf[(fdf['apQueueingTime'] >= SEC600)]
-#     for v in df.columns:
-#         if v in ['year', 'month', 'day', 'did']:
-#             continue
-#         fdf = fdf[~(np.abs(fdf[v] - fdf[v].mean()) > (3 * fdf[v].std()))]
-#     fdf = fdf[['year', 'month', 'day',
-#               'did',
-#               'allNum', 'allDur', 'allFare',
-#               'apNum', 'apDur', 'apFare',
-#               'apEP', 'apQueueingTime',
-#               'apInNum', 'apOutNum']]
-#
-#     col_renaming_map = {
-#         'year': 'year', 'month': 'month', 'day': 'day',
-#         'did': 'driverID',
-#         'allNum': 'tripNumber', 'allDur': 'operatingHour', 'allFare': 'Fare',
-#         'apNum': 'apNumber', 'apDur': 'apDuration', 'apFare': 'apFare',
-#         'apEP': 'apEconomicProfit', 'apQueueingTime': 'apQTime',
-#         'apInNum': 'apInNumber', 'apOutNum': 'apOutNumber'
-#     }
-#     fdf = fdf.rename(columns=col_renaming_map)
-#     fdf['year'] = fdf['year'].apply(lambda x: x + 2000)
-#     fdf['operatingHour'] = fdf['operatingHour'].apply(lambda x: x / SEC3600)
-#     fdf['apDuration'] = fdf['apDuration'].apply(lambda x: x / SEC60)
-#     fdf['apQTime'] = fdf['apQTime'].apply(lambda x: x / SEC60)
-#     fdf['Fare'] = fdf['Fare'].apply(lambda x: x / CENT)
-#     fdf['apFare'] = fdf['apFare'].apply(lambda x: x / CENT)
-#     fdf['apEconomicProfit'] = fdf['apEconomicProfit'].apply(lambda x: x / CENT)
-#     #
-#     fdf['QTime/apTrip'] = fdf['apQTime'] / fdf['apNumber']
-#     fdf['economicProfit/apTrip'] = fdf['apEconomicProfit'] / fdf['apNumber']
-#     fdf['Productivity'] = fdf['Fare'] / fdf['operatingHour']
-#     fdf['apProductivity'] = fdf['apFare'] / (fdf['apDuration'] + fdf['apQTime']) * SEC60
-#     #
-#     fdf.to_csv(ssDriversStatisticsDayBasedModi_ap_fpath, index=False)
+
 
 
 if __name__ == '__main__':
