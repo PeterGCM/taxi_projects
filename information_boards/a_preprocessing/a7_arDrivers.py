@@ -69,8 +69,8 @@ def process_files(yymm):
         logger.info('handle %s' % yymm)
         yy = int(yymm[:2])
 
-        ap_fn = get_all_files(arDriver_dpath, '*%s-ap.pkl')[0]
-        ns_fn = get_all_files(arDriver_dpath, '*%s-ns.pkl')[0]
+        ap_fn = get_all_files(arDriver_dpath, '*%s-ap.pkl' % yy)[0]
+        ns_fn = get_all_files(arDriver_dpath, '*%s-ns.pkl' % yy)[0]
         arDrivers_ap = load_pickle_file('%s/%s' % (arDriver_dpath, ap_fn))
         arDrivers_ns = load_pickle_file('%s/%s' % (arDriver_dpath, ns_fn))
         #
