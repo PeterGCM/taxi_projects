@@ -17,6 +17,7 @@ from information_boards import arDriverEP_ap_dpath, arDriverEP_ap_prefix
 from information_boards import arDriverEP_ns_dpath, arDriverEP_ns_prefix
 #
 from taxi_common.file_handling_functions import check_dir_create, get_all_files, save_pickle_file, get_fn_only, load_pickle_file
+from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 from taxi_common.log_handling_functions import get_logger
 #
 import pandas as pd
@@ -26,10 +27,22 @@ logger = get_logger()
 
 
 def run():
-    for dpath in [arDriver_dpath]:
+    for dpath in [arDriver_dpath, arDriverTrip_dpath, arDriverShiftProDur_dpath, arDriverEP_ap_dpath, arDriverEP_ns_dpath]:
         check_dir_create(dpath)
     #
-    find_arDriver()
+    # find_arDriver()
+    #
+    init_multiprocessor(11)
+    count_num_jobs = 0
+    for y in xrange(10, 11):
+        for m in xrange(1, 13):
+            yymm = '%02d%02d' % (y, m)
+            if yymm in ['0912', '1010']:
+                continue
+                #             process_files(yymm)
+            put_task(process_files, [yymm])
+            count_num_jobs += 1
+    end_multiprocessor(count_num_jobs)
 
 
 def find_arDriver():
