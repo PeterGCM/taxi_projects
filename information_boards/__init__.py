@@ -66,6 +66,18 @@ ssDriversStatisticsMonthBased2009_ap_fpath = '%s/ssDriversStatisticsMonthBased20
 ssDriversStatisticsMonthBased2010_ap_fpath = '%s/ssDriversStatisticsMonthBased2010-ap.csv' % (ssDriverEP_ap_dpath)
 ssDriversStatisticsTripBased2009_ap_fpath = '%s/ssDriversStatisticsTripBased2009-ap.csv' % (ssDriverEP_ap_dpath)
 ssDriversStatisticsTripBased2010_ap_fpath = '%s/ssDriversStatisticsTripBased2010-ap.csv' % (ssDriverEP_ap_dpath)
+#
+arDriver_dpath = '%s/%s' % (taxi_data, 'arDriver')
+arDriver2009_ap_fpath = '%s/aiDriver2009-ap.pkl' % (arDriver_dpath)
+arDriver2010_ap_fpath = '%s/aiDriver2010-ap.pkl' % (arDriver_dpath)
+arDriver2009_ns_fpath = '%s/aiDriver2009-ns.pkl' % (arDriver_dpath)
+arDriver2010_ns_fpath = '%s/aiDriver2010-ns.pkl' % (arDriver_dpath)
+arDriverTrip_dpath, arDriverTrip_prefix = '%s/%s' % (arDriver_dpath, 'arDriverTrip'), 'arDriverTrip-'
+arDriverShiftProDur_dpath, arDriverShiftProDur_prefix = '%s/%s' % (arDriver_dpath, 'arDriverShiftProDur'), 'arDriverShiftProDur-'
+arDriverEP_dpath = '%s/%s' % (arDriver_dpath, 'arDriverEP')
+arDriverEP_ap_dpath, arDriverEP_ap_prefix = '%s/%s' % (arDriverEP_dpath, 'ap'), 'arDriverEP-ap-'
+arDriverEP_ap_all_fpath = '%s/arDriverEP-ap-all.csv' % (arDriverEP_ap_dpath)
+arDriverEP_ns_dpath, arDriverEP_ns_prefix = '%s/%s' % (arDriverEP_dpath, 'ns'), 'arDriverEP-ns-'
 # Units
 SEC3600, SEC600, SEC60 = 60 * 60.0, 10 * 60.0, 60.0
 HOUR1 = SEC3600
