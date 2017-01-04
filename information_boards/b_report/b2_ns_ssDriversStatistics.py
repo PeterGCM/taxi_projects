@@ -9,13 +9,8 @@ from information_boards import ssDriverShiftProDur_dpath, ssDriverShiftProDur_pr
 from information_boards import ssDriverEP_ns_dpath, ssDriverEP_ns_prefix
 from information_boards import ssDriversStatistics_ns1519_fpath
 from information_boards import ssDriversStatistics_ns2000_fpath
-
-
-
 from information_boards import ssDriversStatisticsDayBasedModi_ns1519_fpath
 from information_boards import ssDriversStatisticsDayBasedModi_ns2000_fpath
-
-
 from information_boards import ssDriversStatisticsMonthBased2009_ns1519_fpath
 from information_boards import ssDriversStatisticsMonthBased2009_ns2000_fpath
 from information_boards import ssDriversStatisticsMonthBased2010_ns1519_fpath
@@ -41,108 +36,106 @@ import csv
 
 
 def run():
-    for fpath in [ssDriversStatistics_ns1519_fpath, ssDriversStatistics_ns2000_fpath]:
-        with open(fpath, 'wb') as w_csvfile:
-            writer = csv.writer(w_csvfile, lineterminator='\n')
-            headers = ['year', 'month', 'day',
-                       'did',
-                       'allNum', 'allDur', 'allFare',
-                       'nsNum', 'nsDur', 'nsFare', 'nsEP', 'nsQueueingTime',
-                       'nsInNum', 'nsInDur', 'nsInFare', 'nsInEP', 'nsInQueueingTime',
-                       'nsOutNum', 'nsOutDur', 'nsOutFare', 'nsOutEP', 'nsOutQueueingTime']
-            writer.writerow(headers)
-    #
-    for y in xrange(9, 11):
-        for m in xrange(1, 13):
-            yymm = '%02d%02d' % (y, m)
-            if yymm in ['0912', '1010']:
-                continue
-            aggregate_dayBased(yymm)
+    # for fpath in [ssDriversStatistics_ns1519_fpath, ssDriversStatistics_ns2000_fpath]:
+    #     with open(fpath, 'wb') as w_csvfile:
+    #         writer = csv.writer(w_csvfile, lineterminator='\n')
+    #         headers = ['year', 'month', 'day',
+    #                    'did',
+    #                    'allNum', 'allDur', 'allFare',
+    #                    'nsNum', 'nsDur', 'nsFare', 'nsEP', 'nsQueueingTime',
+    #                    'nsInNum', 'nsInDur', 'nsInFare', 'nsInEP', 'nsInQueueingTime',
+    #                    'nsOutNum', 'nsOutDur', 'nsOutFare', 'nsOutEP', 'nsOutQueueingTime']
+    #         writer.writerow(headers)
+    # #
+    # for y in xrange(9, 11):
+    #     for m in xrange(1, 13):
+    #         yymm = '%02d%02d' % (y, m)
+    #         if yymm in ['0912', '1010']:
+    #             continue
+    #         aggregate_dayBased(yymm)
     #
     # arrange_dataAndUnits_dayBased()
-    # arrange_dataAndUnits_monthBased()
+    arrange_dataAndUnits_monthBased()
     # arrange_dataAndUnits_tripBased()
 
-# def arrange_dataAndUnits_monthBased():
-#     df = pd.read_csv(ssDriversStatisticsDayBasedModi_ns_fpath)
-#     Y2009_df = df[(df['year'] == 2009)].copy(deep=True)
-#     Y2010_df = df[(df['year'] == 2010)].copy(deep=True)
-#     months_2009 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
-#     months_2010 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12]
-#     for Y_df, months, fpath1519, fpath2000 in [(Y2009_df, months_2009,
-#                                                  ssDriversStatisticsMonthBased2009_ns1519_fpath,
-#                                                  ssDriversStatisticsMonthBased2009_ns2000_fpath),
-#                                                (Y2010_df, months_2010,
-#                                                  ssDriversStatisticsMonthBased2010_ns1519_fpath,
-#                                                  ssDriversStatisticsMonthBased2010_ns2000_fpath)]:
-#         Y_df = Y_df.drop(['year', 'day',
-#                    'QTime/nsTrip', 'economicProfit/nsTrip', 'Productivity', 'nsProductivity'], axis=1)
-#         monthBased_df = Y_df.groupby(['month', 'driverID']).sum().reset_index()
-#         drivers = {}
-#         for m in months:
-#             for did in monthBased_df[(monthBased_df['month'] == m)]['driverID']:
-#                 if not drivers.has_key(did):
-#                     drivers[did] = 0
-#                 drivers[did] += 1
-#         # filtering
-#         all_month_drivers = [k for k, v in drivers.iteritems() if v == len(months)]
-#         Y_allMonths = monthBased_df[(monthBased_df['driverID'].isin(all_month_drivers))]
-#         #
-#         Y_allMonths['month^2'] = Y_allMonths['month'].apply(lambda x: x ** 2)
-#         Y_allMonths['QTime/nsTrip'] = Y_allMonths['nsQTime'] / Y_allMonths['nsNumber']
-#         Y_allMonths['economicProfit/nsTrip'] = Y_allMonths['nsEconomicProfit'] / Y_allMonths['nsNumber']
-#         Y_allMonths['Productivity'] = Y_allMonths['Fare'] / Y_allMonths['operatingHour']
-#         Y_allMonths['nsProductivity'] = Y_allMonths['nsFare'] / (Y_allMonths['nsDuration'] + Y_allMonths['nsQTime']) * 60
-#         Y_allMonths['nsInRatio'] = Y_allMonths['nsInNumber'] / Y_allMonths['nsNumber']
-#         #
-#         Y_allMonths1519 = Y_allMonths[Y_allMonths['hour'].isin([15, 16, 17, 18, 19])]
-#         Y_allMonths1519.to_csv(fpath1519, index=False)
-#         Y_allMonths2000 = Y_allMonths[Y_allMonths['hour'].isin([20, 21, 22, 23, 0])]
-#         Y_allMonths2000.to_csv(fpath2000, index=False)
-#
-#
-# def arrange_dataAndUnits_dayBased():
-#     df = pd.read_csv(ssDriversStatistics_ns_fpath)
-#     # remove outlier
-#     fdf = df.copy(deep=True)
-#     fdf = fdf[(fdf['nsQueueingTime'] >= SEC600)]
-#     for v in df.columns:
-#         if v in ['year', 'month', 'day', 'did']:
-#             continue
-#         fdf = fdf[~(np.abs(fdf[v] - fdf[v].mean()) > (3 * fdf[v].std()))]
-#     fdf = fdf[['year', 'month', 'day',
-#               'did',
-#               'allNum', 'allDur', 'allFare',
-#               'nsNum', 'nsDur', 'nsFare',
-#               'nsEP', 'nsQueueingTime',
-#               'nsInNum', 'nsOutNum']]
-#
-#     col_renaming_map = {
-#         'year': 'year', 'month': 'month', 'day': 'day',
-#         'did': 'driverID',
-#         'allNum': 'tripNumber', 'allDur': 'operatingHour', 'allFare': 'Fare',
-#         'nsNum': 'nsNumber', 'nsDur': 'nsDuration', 'nsFare': 'nsFare',
-#         'nsEP': 'nsEconomicProfit', 'nsQueueingTime': 'nsQTime',
-#         'nsInNum': 'nsInNumber', 'nsOutNum': 'nsOutNumber'
-#     }
-#     fdf = fdf.rename(columns=col_renaming_map)
-#     fdf['year'] = fdf['year'].apply(lambda x: x + 2000)
-#     fdf['operatingHour'] = fdf['operatingHour'].apply(lambda x: x / SEC3600)
-#     fdf['nsDuration'] = fdf['nsDuration'].apply(lambda x: x / SEC60)
-#     fdf['nsQTime'] = fdf['nsQTime'].apply(lambda x: x / SEC60)
-#     fdf['Fare'] = fdf['Fare'].apply(lambda x: x / CENT)
-#     fdf['nsFare'] = fdf['nsFare'].apply(lambda x: x / CENT)
-#     fdf['nsEconomicProfit'] = fdf['nsEconomicProfit'].apply(lambda x: x / CENT)
-#     #
-#     fdf['QTime/nsTrip'] = fdf['nsQTime'] / fdf['nsNumber']
-#     fdf['economicProfit/nsTrip'] = fdf['nsEconomicProfit'] / fdf['nsNumber']
-#     fdf['Productivity'] = fdf['Fare'] / fdf['operatingHour']
-#     fdf['nsProductivity'] = fdf['nsFare'] / (fdf['nsDuration'] + fdf['nsQTime']) * SEC60
-#     #
-#     fdf1519 = fdf[fdf['hour'].isin([15, 16, 17, 18, 19])]
-#     fdf1519.to_csv(ssDriversStatisticsDayBasedModi_ns1519_fpath, index=False)
-#     fdf2000 = fdf[fdf['hour'].isin([20, 21, 22, 23, 0])]
-#     fdf2000.to_csv(ssDriversStatisticsDayBasedModi_ns2000_fpath, index=False)
+def arrange_dataAndUnits_monthBased():
+    for modi_fpath, monthBased2009_fpath, monthBased2010_fpath in [(ssDriversStatisticsDayBasedModi_ns1519_fpath,
+                                                                      ssDriversStatisticsMonthBased2009_ns1519_fpath,
+                                                                      ssDriversStatisticsMonthBased2010_ns1519_fpath),
+                                                                   (ssDriversStatisticsDayBasedModi_ns2000_fpath,
+                                                                    ssDriversStatisticsMonthBased2009_ns2000_fpath,
+                                                                    ssDriversStatisticsMonthBased2010_ns2000_fpath)]:
+        df = pd.read_csv(modi_fpath)
+        Y2009_df = df[(df['year'] == 2009)].copy(deep=True)
+        Y2010_df = df[(df['year'] == 2010)].copy(deep=True)
+        months_2009 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+        months_2010 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12]
+        for Y_df, months, fpath in [(Y2009_df, months_2009, monthBased2009_fpath),
+                                    (Y2010_df, months_2010, monthBased2010_fpath)]:
+            Y_df = Y_df.drop(['year', 'day',
+                       'QTime/nsTrip', 'economicProfit/nsTrip', 'Productivity', 'nsProductivity'], axis=1)
+            monthBased_df = Y_df.groupby(['month', 'driverID']).sum().reset_index()
+            drivers = {}
+            for m in months:
+                for did in monthBased_df[(monthBased_df['month'] == m)]['driverID']:
+                    if not drivers.has_key(did):
+                        drivers[did] = 0
+                    drivers[did] += 1
+            # filtering
+            all_month_drivers = [k for k, v in drivers.iteritems() if v == len(months)]
+            Y_allMonths = monthBased_df[(monthBased_df['driverID'].isin(all_month_drivers))]
+            #
+            Y_allMonths['month^2'] = Y_allMonths['month'].apply(lambda x: x ** 2)
+            Y_allMonths['QTime/nsTrip'] = Y_allMonths['nsQTime'] / Y_allMonths['nsNumber']
+            Y_allMonths['economicProfit/nsTrip'] = Y_allMonths['nsEconomicProfit'] / Y_allMonths['nsNumber']
+            Y_allMonths['Productivity'] = Y_allMonths['Fare'] / Y_allMonths['operatingHour']
+            Y_allMonths['nsProductivity'] = Y_allMonths['nsFare'] / (Y_allMonths['nsDuration'] + Y_allMonths['nsQTime']) * 60
+            Y_allMonths['nsInRatio'] = Y_allMonths['nsInNumber'] / Y_allMonths['nsNumber']
+            #
+            Y_allMonths.to_csv(fpath, index=False)
+
+
+def arrange_dataAndUnits_dayBased():
+    for ori_fpath, modi_fpath in [(ssDriversStatistics_ns1519_fpath, ssDriversStatisticsDayBasedModi_ns1519_fpath),
+                                  (ssDriversStatistics_ns2000_fpath, ssDriversStatisticsDayBasedModi_ns2000_fpath)]:
+        df = pd.read_csv(ori_fpath)
+        # remove outlier
+        fdf = df.copy(deep=True)
+        fdf = fdf[(fdf['nsQueueingTime'] >= SEC600)]
+        for v in df.columns:
+            if v in ['year', 'month', 'day', 'did']:
+                continue
+            fdf = fdf[~(np.abs(fdf[v] - fdf[v].mean()) > (3 * fdf[v].std()))]
+        fdf = fdf[['year', 'month', 'day',
+                  'did',
+                  'allNum', 'allDur', 'allFare',
+                  'nsNum', 'nsDur', 'nsFare',
+                  'nsEP', 'nsQueueingTime',
+                  'nsInNum', 'nsOutNum']]
+
+        col_renaming_map = {
+            'year': 'year', 'month': 'month', 'day': 'day',
+            'did': 'driverID',
+            'allNum': 'tripNumber', 'allDur': 'operatingHour', 'allFare': 'Fare',
+            'nsNum': 'nsNumber', 'nsDur': 'nsDuration', 'nsFare': 'nsFare',
+            'nsEP': 'nsEconomicProfit', 'nsQueueingTime': 'nsQTime',
+            'nsInNum': 'nsInNumber', 'nsOutNum': 'nsOutNumber'
+        }
+        fdf = fdf.rename(columns=col_renaming_map)
+        fdf['year'] = fdf['year'].apply(lambda x: x + 2000)
+        fdf['operatingHour'] = fdf['operatingHour'].apply(lambda x: x / SEC3600)
+        fdf['nsDuration'] = fdf['nsDuration'].apply(lambda x: x / SEC60)
+        fdf['nsQTime'] = fdf['nsQTime'].apply(lambda x: x / SEC60)
+        fdf['Fare'] = fdf['Fare'].apply(lambda x: x / CENT)
+        fdf['nsFare'] = fdf['nsFare'].apply(lambda x: x / CENT)
+        fdf['nsEconomicProfit'] = fdf['nsEconomicProfit'].apply(lambda x: x / CENT)
+        #
+        fdf['QTime/nsTrip'] = fdf['nsQTime'] / fdf['nsNumber']
+        fdf['economicProfit/nsTrip'] = fdf['nsEconomicProfit'] / fdf['nsNumber']
+        fdf['Productivity'] = fdf['Fare'] / fdf['operatingHour']
+        fdf['nsProductivity'] = fdf['nsFare'] / (fdf['nsDuration'] + fdf['nsQTime']) * SEC60
+        #
+        fdf.to_csv(modi_fpath, index=False)
 
 
 def aggregate_dayBased(yymm):
