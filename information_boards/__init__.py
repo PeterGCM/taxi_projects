@@ -58,14 +58,17 @@ ssDriverTrip_dpath, ssDriverTrip_prefix = '%s/%s' % (ssDriver_dpath, 'ssDriverTr
 ssDriverShiftProDur_dpath, ssDriverShiftProDur_prefix = '%s/%s' % (ssDriver_dpath, 'ssDriverShiftProDur'), 'ssDriverShiftProDur-'
 ssDriverEP_dpath = '%s/%s' % (ssDriver_dpath, 'ssDriverEP')
 ssDriverEP_ap_dpath, ssDriverEP_ap_prefix = '%s/%s' % (ssDriverEP_dpath, 'ap'), 'ssDriverEP-ap-'
+##
 ssDriverEP_ap_all_fpath = '%s/ssDriverEP-ap-all.csv' % (ssDriverEP_ap_dpath)
 ssDriverEP_ns_dpath, ssDriverEP_ns_prefix = '%s/%s' % (ssDriverEP_dpath, 'ns'), 'ssDriverEP-ns-'
 ssDriversStatistics_ap_fpath = '%s/ssDriversStatisticsDayBased-ap.csv' % (ssDriverEP_ap_dpath)
+ssDriversStatistics_ns_fpath = '%s/ssDriversStatisticsDayBased-ap.csv' % (ssDriverEP_ns_dpath)
 ssDriversStatisticsDayBasedModi_ap_fpath = '%s/ssDriversStatisticsDayBasedModi-ap.csv' % (ssDriverEP_ap_dpath)
 ssDriversStatisticsMonthBased2009_ap_fpath = '%s/ssDriversStatisticsMonthBased2009-ap.csv' % (ssDriverEP_ap_dpath)
 ssDriversStatisticsMonthBased2010_ap_fpath = '%s/ssDriversStatisticsMonthBased2010-ap.csv' % (ssDriverEP_ap_dpath)
 ssDriversStatisticsTripBased2009_ap_fpath = '%s/ssDriversStatisticsTripBased2009-ap.csv' % (ssDriverEP_ap_dpath)
 ssDriversStatisticsTripBased2010_ap_fpath = '%s/ssDriversStatisticsTripBased2010-ap.csv' % (ssDriverEP_ap_dpath)
+##
 #
 arDriver_dpath = '%s/%s' % (taxi_data, 'arDriver')
 arDriver2009_ap_fpath = '%s/aiDriver2009-ap.pkl' % (arDriver_dpath)
