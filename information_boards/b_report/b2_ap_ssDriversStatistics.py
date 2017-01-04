@@ -88,7 +88,7 @@ def arrange_dataAndUnits_tripBased():
 
     for Y_df, holidays, ap_fpath in [(Y2009_df, holidays2009, ssDriversStatisticsTripBased2009_ap_fpath),
                                      (Y2010_df, holidays2010, ssDriversStatisticsTripBased2010_ap_fpath)]:
-        with open(ssDriversStatistics_ap_fpath, 'wb') as w_csvfile:
+        with open(ap_fpath, 'wb') as w_csvfile:
             writer = csv.writer(w_csvfile, lineterminator='\n')
             header = map(str, Y_df.columns)
             writer.writerow(header + ['weekend'])
