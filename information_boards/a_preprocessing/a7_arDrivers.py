@@ -34,7 +34,7 @@ def run():
     #
     init_multiprocessor(11)
     count_num_jobs = 0
-    for y in xrange(10, 11):
+    for y in xrange(9, 11):
         for m in xrange(1, 13):
             yymm = '%02d%02d' % (y, m)
             if yymm in ['0912', '1010']:
@@ -68,7 +68,6 @@ def process_files(yymm):
     try:
         logger.info('handle %s' % yymm)
         yy = int(yymm[:2])
-
         ap_fn = get_all_files(arDriver_dpath, '*%s-ap.pkl' % yy)[0]
         ns_fn = get_all_files(arDriver_dpath, '*%s-ns.pkl' % yy)[0]
         arDrivers_ap = load_pickle_file('%s/%s' % (arDriver_dpath, ap_fn))
