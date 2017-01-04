@@ -14,6 +14,8 @@ from information_boards import ssDriversStatisticsMonthBased2009_ap_fpath
 from information_boards import ssDriversStatisticsMonthBased2010_ap_fpath
 from information_boards import ssDriversStatisticsTripBased2009_ap_fpath
 from information_boards import ssDriversStatisticsTripBased2010_ap_fpath
+from information_boards import holidays2009, holidays2010
+from information_boards import WEEKENDS
 from information_boards import DIn_PIn, DOut_PIn
 from information_boards import SEC3600, SEC600, SEC60, CENT
 #
@@ -22,7 +24,7 @@ from taxi_common.file_handling_functions import load_pickle_file
 #
 import pandas as pd
 import numpy as np
-import csv
+import csv, datetime
 
 
 def run():
@@ -83,8 +85,21 @@ def arrange_dataAndUnits_tripBased():
     #
     Y2009_df = fdf[(fdf['year'] == 2009)].copy(deep=True)
     Y2010_df = fdf[(fdf['year'] == 2010)].copy(deep=True)
-    Y2009_df.to_csv(ssDriversStatisticsTripBased2009_ap_fpath, index=False)
-    Y2010_df.to_csv(ssDriversStatisticsTripBased2010_ap_fpath, index=False)
+
+    for Y_df, holidays, ap_fpath in [(Y2009_df, holidays2009, ssDriversStatisticsTripBased2009_ap_fpath),
+                                     (Y2010_df, holidays2010, ssDriversStatisticsTripBased2010_ap_fpath)]:
+        with open(ssDriversStatistics_ap_fpath, 'wb') as w_csvfile:
+            writer = csv.writer(w_csvfile, lineterminator='\n')
+            header = map(str, Y_df.columns)
+            writer.writerow(header + ['weekend'])
+            for _, row in Y_df.iterrows():
+                isWeekend = 0
+                year, month, day = row['year'], row['month'], row['day']
+                if (year, month, day) in holidays:
+                    isWeekend = 1
+                if datetime.datetime(year, month, day).weekday() in WEEKENDS:
+                    isWeekend = 1
+                writer.writerow(row + [isWeekend])
 
 
 def arrange_dataAndUnits_monthBased():
