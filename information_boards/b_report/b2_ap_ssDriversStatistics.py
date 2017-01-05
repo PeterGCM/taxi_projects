@@ -94,12 +94,12 @@ def arrange_dataAndUnits_tripBased():
             writer.writerow(header + ['weekend'])
             for _, row in Y_df.iterrows():
                 isWeekend = 0
-                year, month, day = row['year'], row['month'], row['day']
+                year, month, day = map(int, [row['year'], row['month'], row['day']])
                 if (year, month, day) in holidays:
                     isWeekend = 1
                 if datetime.datetime(year, month, day).weekday() in WEEKENDS:
                     isWeekend = 1
-                writer.writerow(row + [isWeekend])
+                writer.writerow(list(row) + [isWeekend])
 
 
 def arrange_dataAndUnits_monthBased():
