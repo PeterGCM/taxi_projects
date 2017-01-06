@@ -65,16 +65,16 @@ def aggregate_monthBased(yyyy):
                 k = (year, month, did)
                 if not dateDid_statistics.has_key(k):
                     dateDid_statistics[k] = [0.0 for _ in [WTN, WOH, WF, LTN, LIN, LON, LQ, LEP, LD, LF]]
-                dateDid_statistics[k][WTN] += row[hid['wleTripNumber']]
-                dateDid_statistics[k][WOH] += row[hid['wleOperatingHour']]
-                dateDid_statistics[k][WF] += row[hid['wleFare']]
-                dateDid_statistics[k][LTN] += row[hid['locTripNumber']]
-                dateDid_statistics[k][LIN] += row[hid['locInNumber']]
-                dateDid_statistics[k][LON] += row[hid['locOutNumber']]
-                dateDid_statistics[k][LQ] += row[hid['locQTime']]
-                dateDid_statistics[k][LEP] += row[hid['locEP']]
-                dateDid_statistics[k][LD] += row[hid['locDuration']]
-                dateDid_statistics[k][LF] += row[hid['locFare']]
+                dateDid_statistics[k][WTN] += int(row[hid['wleTripNumber']])
+                dateDid_statistics[k][WOH] += float(row[hid['wleOperatingHour']])
+                dateDid_statistics[k][WF] += float(row[hid['wleFare']])
+                dateDid_statistics[k][LTN] += int(row[hid['locTripNumber']])
+                dateDid_statistics[k][LIN] += int(row[hid['locInNumber']])
+                dateDid_statistics[k][LON] += int(row[hid['locOutNumber']])
+                dateDid_statistics[k][LQ] += float(row[hid['locQTime']])
+                dateDid_statistics[k][LEP] += float(row[hid['locEP']])
+                dateDid_statistics[k][LD] += float(row[hid['locDuration']])
+                dateDid_statistics[k][LF] += float(row[hid['locFare']])
     #
     with open(statistics_fpath, 'wb') as w_csvfile:
         writer = csv.writer(w_csvfile, lineterminator='\n')
@@ -93,7 +93,7 @@ def aggregate_monthBased(yyyy):
             locTripNumber, locInNumber, locOutNumber = map(int, [statistics[LTN], statistics[LIN], statistics[LON]])
             locQTime, locEP, locDuration, locFare = statistics[LQ], statistics[LEP], statistics[LD], statistics[LF]
             #
-            wleProductivity = statistics[WF] / statistics[WOH]
+            wleProductivity = wleFare / wleOperatingHour
             QTime_locTrip, EP_locTrip = locQTime / float(locTripNumber), locEP / float(locTripNumber)
             locProductivity = locFare / ((locQTime + locDuration) * SEC60)
             locInRatio = locInNumber / float(locTripNumber)
@@ -191,7 +191,7 @@ def aggregate_dayBased(yymm):
             wleTripNumber, wleOperatingHour, wleFare = int(statistics[WTN]), statistics[WOH], statistics[WF],
             if wleOperatingHour == 0.0:
                 continue
-            wleProductivity = statistics[WF] / statistics[WOH]
+            wleProductivity = wleFare / wleOperatingHour
             #
             locTripNumber, locInNumber, locOutNumber = map(int, [statistics[LTN], statistics[LIN], statistics[LON]])
             if locTripNumber == 0.0:
