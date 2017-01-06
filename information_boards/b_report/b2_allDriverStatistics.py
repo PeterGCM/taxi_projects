@@ -8,15 +8,17 @@ from information_boards import trip_dpath, trip_prefix
 from information_boards import shiftProDur_dpath, shiftProDur_prefix
 from information_boards import economicProfit_ap_dpath, economicProfit_ap_prefix
 from information_boards import statisticsAllDrivers_ap_dpath
-from information_boards import statisticsAllDriversDay_ap_prefix, statisticsAllDriversMonth_ap_prefix
+from information_boards import statisticsAllDriversDay_ap_prefix, statisticsAllDriversMonth_ap_prefix, statisticsAllDriversTrip_ap_prefix
 from information_boards import DIn_PIn, DOut_PIn
 from information_boards import SEC3600, SEC600, SEC60, CENT
+from information_boards import HOLIDAYS2009, HOLIDAYS2010
+from information_boards import WEEKENDS
 #
 from taxi_common.file_handling_functions import check_dir_create, check_path_exist, get_all_files
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 from taxi_common.log_handling_functions import get_logger
 #
-import csv
+import csv, datetime
 
 logger = get_logger()
 
@@ -36,9 +38,64 @@ def run():
     #         put_task(aggregate_dayBased, [yymm])
     #         count_num_jobs += 1
     # end_multiprocessor(count_num_jobs)
+    #
+    # for y in range(9, 11):
+    #     yyyy = '20%02d' % y
+    #     aggregate_monthBased(yyyy)
+    #
     for y in range(9, 11):
         yyyy = '20%02d' % y
-        aggregate_monthBased(yyyy)
+        process_tripbased(yyyy)
+
+
+def process_tripbased(yyyy):
+    logger.info('handle the file; %s' % yyyy)
+    #
+    statistics_fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ap_dpath, statisticsAllDriversTrip_ap_prefix, yyyy)
+    if check_path_exist(statistics_fpath):
+        logger.info('The file had already been processed; %s' % yyyy)
+        return
+    yy = yyyy[2:]
+    holidays = HOLIDAYS2009 if yyyy == '2009' else HOLIDAYS2010
+    with open(statistics_fpath, 'wb') as w_csvfile:
+        writer = csv.writer(w_csvfile, lineterminator='\n')
+        header = ['year', 'month', 'day', 'hour',
+                  'driverID',
+                  'locQTime', 'locEP', 'locDuration', 'locFare',
+                  'locProductivity',
+                  'locIn', 'weekEnd',
+                  'timePassed', 'timePassed^2']
+        writer.writerow(header)
+        for fn in get_all_files(economicProfit_ap_dpath, '%s%s*' % (economicProfit_ap_prefix, yy)):
+            with open('%s/%s' % (economicProfit_ap_dpath, fn), 'rt') as r_csvfile:
+                reader = csv.reader(r_csvfile)
+                headers = reader.next()
+                hid = {h: i for i, h in enumerate(headers)}
+                for row in reader:
+                    year, month, day, hour = map(int, [row[hid[cn]] for cn in ['year', 'month', 'day', 'hour']])
+                    did = int(row[hid['did']])
+                    locQTime = float(row[hid['queueingTime']]) / SEC60
+                    locEP = float(row[hid['economicProfit']]) / CENT
+                    locDuration = float(row[hid['duration']]) / SEC60
+                    locFare = float(row[hid['fare']]) / CENT
+                    locProductivity = locFare / ((locQTime + locDuration) * SEC60)
+                    locIn = 1 if int(row[hid['tripMode']]) == DIn_PIn else 0
+                    weekEnd = 0
+                    if (year, month, day) in holidays:
+                        weekEnd = 1
+                    if datetime.datetime(year, month, day).weekday() in WEEKENDS:
+                        weekEnd = 1
+                    timePassed = (year - 2009) * 12 + max(0, (month - 1))
+                    timePassed_2 = timePassed ** 2
+                    new_row = [
+                        year, month, day, hour,
+                        did,
+                        locQTime, locEP, locDuration, locFare,
+                        locProductivity,
+                        locIn, weekEnd,
+                        timePassed, timePassed_2
+                    ]
+                    writer.writerow(new_row)
 
 
 def aggregate_monthBased(yyyy):

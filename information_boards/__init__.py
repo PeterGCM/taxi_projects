@@ -24,7 +24,7 @@ error_hours = [('9', '3', '15', '1'), ('10', '3', '17', '1'), ('10', '7', '4', '
                 ('9', '3', '1', '1'), ('9', '11', '8', '1'), ('10', '5', '16', '1'), ('10', '1', '24', '1')  # Abnormal (short) active duration
                ]
 # Singapore Public Holidays
-holidays2009 = [
+HOLIDAYS2009 = [
             (2009,1,1),    # New Year's Day, Thursday, 1 January 2009
             (2009,1,26),    # Chinese New Year, Monday, 26 January 2009
             (2009,1,27),    # Chinese New Year, Tuesday, 27 January 2009
@@ -37,18 +37,18 @@ holidays2009 = [
             (2009,11,27),   # Hari Raya Haji, Friday, 27 November 2009
             (2009,12,25),   # Christmas Day, Friday, 25 December 2009
 ]
-holidays2010 = [(2010,1,1),     # New Year's Day, Friday, 1 January 2010
-            (2010,2,16),    # Chinese New Year, Sunday*, 14 February 2010
-            (2010,2,15),    # Chinese New Year, Monday, 15 February 2010
-            (2010,4,2),     # Good Friday, Friday, 2 April 2010
-            (2010,5,1),     # Labour Day, Saturday, 1 May 2010
-            (2010,5,28),    # Vesak Day, Friday, 28 May 2010
-            (2010,8,9),     # National Day, Monday, 9 August 2010
-            (2010,9,10),    # Hari Raya Puasa, Friday, 10 September 2010
-            (2010,11,5),    # Deepavali, Friday, 5 November 2010
-            (2010,11,17),   # Hari Raya Haji, Wednesday, 17 November 2010
-            (2010,11,17),   # Christmas Day, Saturday, 25 December 2010
-]
+HOLIDAYS2010 = [(2010, 1, 1),  # New Year's Day, Friday, 1 January 2010
+            (2010,2,16),  # Chinese New Year, Sunday*, 14 February 2010
+            (2010,2,15),  # Chinese New Year, Monday, 15 February 2010
+            (2010,4,2),  # Good Friday, Friday, 2 April 2010
+            (2010,5,1),  # Labour Day, Saturday, 1 May 2010
+            (2010,5,28),  # Vesak Day, Friday, 28 May 2010
+            (2010,8,9),  # National Day, Monday, 9 August 2010
+            (2010,9,10),  # Hari Raya Puasa, Friday, 10 September 2010
+            (2010,11,5),  # Deepavali, Friday, 5 November 2010
+            (2010,11,17),  # Hari Raya Haji, Wednesday, 17 November 2010
+            (2010,11,17),  # Christmas Day, Saturday, 25 December 2010
+                ]
 MON, TUE, WED, THR, FRI, SAT, SUN = range(7)
 WEEKENDS = [SAT, SUN]
 #
@@ -86,6 +86,7 @@ statisticsAllDrivers_dpath = '%s/%s' % (statistics_dpath, 'statisticsAllDrivers'
 statisticsAllDrivers_ap_dpath = '%s/%s' % (statisticsAllDrivers_dpath, 'ap')
 statisticsAllDriversDay_ap_prefix = 'statisticsAllDriversDay-ap-'
 statisticsAllDriversMonth_ap_prefix = 'statisticsAllDriversMonth-ap-'
+statisticsAllDriversTrip_ap_prefix = 'statisticsAllDriversTrip-ap-'
 
 
 

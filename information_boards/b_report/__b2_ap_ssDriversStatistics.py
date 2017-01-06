@@ -14,7 +14,7 @@ from information_boards import ssDriversStatisticsMonthBased2009_ap_fpath
 from information_boards import ssDriversStatisticsMonthBased2010_ap_fpath
 from information_boards import ssDriversStatisticsTripBased2009_ap_fpath
 from information_boards import ssDriversStatisticsTripBased2010_ap_fpath
-from information_boards import holidays2009, holidays2010
+from information_boards import HOLIDAYS2009, HOLIDAYS2010
 from information_boards import WEEKENDS
 from information_boards import DIn_PIn, DOut_PIn
 from information_boards import SEC3600, SEC600, SEC60, CENT
@@ -86,8 +86,8 @@ def arrange_dataAndUnits_tripBased():
     Y2009_df = fdf[(fdf['year'] == 2009)].copy(deep=True)
     Y2010_df = fdf[(fdf['year'] == 2010)].copy(deep=True)
 
-    for Y_df, holidays, ap_fpath in [(Y2009_df, holidays2009, ssDriversStatisticsTripBased2009_ap_fpath),
-                                     (Y2010_df, holidays2010, ssDriversStatisticsTripBased2010_ap_fpath)]:
+    for Y_df, holidays, ap_fpath in [(Y2009_df, HOLIDAYS2009, ssDriversStatisticsTripBased2009_ap_fpath),
+                                     (Y2010_df, HOLIDAYS2010, ssDriversStatisticsTripBased2010_ap_fpath)]:
         with open(ap_fpath, 'wb') as w_csvfile:
             writer = csv.writer(w_csvfile, lineterminator='\n')
             header = map(str, Y_df.columns)
