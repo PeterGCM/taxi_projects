@@ -9,7 +9,7 @@ from Cython.Distutils import build_ext
 # All path should be fully qualified starting at the codeRootFolder
 # your include_dirs must contains the '.' for setup to search all the subfolder of the codeRootFolder
 ext_modules = [
-    Extension("b_report.helloworld", ["b_report/helloworld.pyx"], include_dirs=['.']),
+    Extension("b_report._b1_immediate_decision", ["b_report/_b1_immediate_decision.pyx"], include_dirs=['.']),
     # Extension("codeRootFolder.cythonAnimal.dog", ["codeRootFolder/cythonAnimal/dog.pyx"], include_dirs=['.'])
 ]
 
