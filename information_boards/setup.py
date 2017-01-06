@@ -3,7 +3,7 @@ from distutils.extension import Extension
 from Cython.Distutils import build_ext
 
 ext_modules = [
-    Extension("b_report._cy_b2_ap_allDriverStatistics", ["b_report/_cy_b2_ap_allDriverStatistics.pyx"], include_dirs=['.']),
+    Extension("b_report._cy_b2_1_DayProcessing", ["b_report/_cy_b2_1_DayProcessing.pyx"], include_dirs=['.']),
 ]
 
 setup(
