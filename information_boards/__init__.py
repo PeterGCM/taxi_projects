@@ -83,9 +83,9 @@ economicProfit_ns_dpath, economicProfit_ns_prefix = '%s/%s' % (economicProfit_dp
 #
 statistics_dpath= '%s/%s' % (taxi_data, 'statistics')
 statisticsAllDrivers_dpath = '%s/%s' % (statistics_dpath, 'statisticsAllDrivers')
-statisticsAllDriversDay_ap_dpath = '%s/%s' % (statisticsAllDrivers_dpath, 'ap')
+statisticsAllDrivers_ap_dpath = '%s/%s' % (statisticsAllDrivers_dpath, 'ap')
 statisticsAllDriversDay_ap_prefix = 'statisticsAllDriversDay-ap-'
-
+statisticsAllDriversMonth_ap_prefix = 'statisticsAllDriversMonth-ap-'
 
 
 
