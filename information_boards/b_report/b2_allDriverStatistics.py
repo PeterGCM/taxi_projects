@@ -54,7 +54,7 @@ def aggregate_monthBased(yyyy):
     LTN, LIN, LON, \
     LQ, LEP, \
     LD, LF = range(10)
-    for dayBased_fn in get_all_files(statisticsAllDrivers_ap_dpath, '%s%s'% (statisticsAllDriversDay_ap_prefix,yy)):
+    for dayBased_fn in get_all_files(statisticsAllDrivers_ap_dpath, '%s%s*'% (statisticsAllDriversDay_ap_prefix,yy)):
         with open('%s/%s' % (statisticsAllDrivers_ap_dpath, dayBased_fn), 'rt') as r_csvfile:
             reader = csv.reader(r_csvfile)
             headers = reader.next()
