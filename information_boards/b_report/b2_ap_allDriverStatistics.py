@@ -42,7 +42,7 @@ def process_month(yymm):
     #
     statistics_fpath = '%s/%s%s.csv' % (statisticsAllDriversDay_ap_dpath, statisticsAllDriversDay_ap_prefix, yymm)
     if check_path_exist(statistics_fpath):
-        logger.info('The file had already been processed; %s' % statistics_fpath)
+        logger.info('The file had already been processed; %s' % yymm)
         return
     dateDid_statistics = {}
     WTN, WOH, WF, \
@@ -83,7 +83,7 @@ def process_month(yymm):
             k = (year, month, day, did)
             if not dateDid_statistics.has_key(k):
                 continue
-            dateDid_statistics[k][WOH] += float(row[hid['pro-dur']]) * SEC60 / SEC3600
+            dateDid_statistics[k][WOH] += (float(row[hid['pro-dur']]) * SEC60) / SEC3600
     #
     logger.info('process trip; %s' % yymm)
     yy, mm = yymm[:2], yymm[-2:]
@@ -93,7 +93,7 @@ def process_month(yymm):
         headers = reader.next()
         hid = {h: i for i, h in enumerate(headers)}
         for row in reader:
-            day = row[hid['day']]
+            day = int(row[hid['day']])
             did = int(row[hid['did']])
             k = (year, month, day, did)
             if not dateDid_statistics.has_key(k):
@@ -109,21 +109,31 @@ def process_month(yymm):
                   'wleProductivity',
                   'locTripNumber', 'locInNumber', 'locOutNumber',
                   'locQTime', 'locEP', 'locDuration', 'locFare',
-                  'QTime/locTrip',
-                  'EP/locTrip',
+                  'QTime/locTrip', 'EP/locTrip',
                   'locProductivity']
         writer.writerow(header)
         for (year, month, day, did), statistics in dateDid_statistics.iteritems():
+            wleTripNumber, wleOperatingHour, wleFare = int(statistics[WTN]), statistics[WOH], statistics[WF],
+            if wleOperatingHour == 0.0:
+                continue
+            wleProductivity = statistics[WF] / statistics[WOH]
+            #
+            locTripNumber, locInNumber, locOutNumber = map(int, [statistics[LTN], statistics[LIN], statistics[LON]])
+            if locTripNumber == 0.0:
+                continue
+            locQTime, locEP, locDuration, locFare = statistics[LQ], statistics[LEP], statistics[LD], statistics[LF]
+            if (locQTime + locDuration) == 0.0:
+                continue
+            QTime_locTrip, EP_locTrip = locQTime / float(locTripNumber), locEP / float(locTripNumber)
+            locProductivity = locFare / ((locQTime + locDuration) * SEC60)
             new_row = [
                 year, month, day, did,
-                int(statistics[WTN]), statistics[WOH], statistics[WF],
-                statistics[WOH] / statistics[WF],
-                statistics[LTN], statistics[LIN], statistics[LON],
-                statistics[LQ], statistics[LEP], statistics[LD], statistics[LF],
-                statistics[LQ] / statistics[LTN],
-                statistics[LEP] / statistics[LTN],
-                statistics[LF] / ((statistics[LD] + statistics[LQ]) * SEC60)
-            ]
+                wleTripNumber, wleOperatingHour, wleFare,
+                wleProductivity,
+                locTripNumber, locInNumber, locOutNumber,
+                locQTime, locEP, locDuration, locFare,
+                QTime_locTrip, EP_locTrip,
+                locProductivity]
             writer.writerow(new_row)
 
 
