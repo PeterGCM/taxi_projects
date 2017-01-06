@@ -61,7 +61,7 @@ def aggregate_monthBased(yyyy):
             hid = {h: i for i, h in enumerate(headers)}
             for row in reader:
                 year, month = map(int, [row[hid[cn]] for cn in ['year', 'month']])
-                did = int(row[hid['did']])
+                did = int(row[hid['driverID']])
                 k = (year, month, did)
                 if not dateDid_statistics.has_key(k):
                     dateDid_statistics[k] = [0.0 for _ in [WTN, WOH, WF, LTN, LIN, LON, LQ, LEP, LD, LF]]
