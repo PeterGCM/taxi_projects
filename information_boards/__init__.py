@@ -81,6 +81,19 @@ economicProfit_dpath = '%s/%s' % (trip_dpath, 'economicProfit')
 economicProfit_ap_dpath, economicProfit_ap_prefix = '%s/%s' % (economicProfit_dpath, 'ap'), 'trip-EP-ap-'
 economicProfit_ns_dpath, economicProfit_ns_prefix = '%s/%s' % (economicProfit_dpath, 'ns'), 'trip-EP-ns-'
 #
+statistics_dpath= '%s/%s' % (taxi_data, 'statistics')
+statisticsAllDrivers_dpath = '%s/%s' % (statistics_dpath, 'statisticsAllDrivers')
+statisticsAllDriversDay_ap_dpath = '%s/%s' % (statisticsAllDrivers_dpath, 'ap')
+statisticsAllDriversDay_ap_prefix = 'statisticsAllDriversDay-ap-'
+
+
+
+
+
+
+
+
+
 ssDriver_dpath = '%s/%s' % (taxi_data, 'ssDriver')
 ssDriverTrip_dpath, ssDriverTrip_prefix = '%s/%s' % (ssDriver_dpath, 'ssDriverTrip'), 'ssDriverTrip-'
 ssDriverShiftProDur_dpath, ssDriverShiftProDur_prefix = '%s/%s' % (ssDriver_dpath, 'ssDriverShiftProDur'), 'ssDriverShiftProDur-'
@@ -130,7 +143,7 @@ arDriverEP_ns_dpath, arDriverEP_ns_prefix = '%s/%s' % (arDriverEP_dpath, 'ns'), 
 # Units
 SEC3600, SEC600, SEC60 = 60 * 60.0, 10 * 60.0, 60.0
 HOUR1 = SEC3600
-CENT = 100
+CENT = 100.0
 Q_LIMIT_MIN = 0
 DAY_OF_WEEK = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 TIME_SLOTS = range(24)
