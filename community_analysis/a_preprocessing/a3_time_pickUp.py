@@ -11,17 +11,18 @@ from community_analysis import X_PICKUP, O_PICKUP
 #
 from taxi_common.file_handling_functions import check_dir_create, load_pickle_file, get_all_files
 from taxi_common.log_handling_functions import get_logger
+from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
-import csv
+import csv, datetime
 
 logger = get_logger()
 
 
 def run():
     check_dir_create(tfZ_TP_dpath)
-    numWorker = 11
-    # init_multiprocessor(numWorker)
-    # count_num_jobs = 0
+    numWorker = 6
+    init_multiprocessor(numWorker)
+    count_num_jobs = 0
     numReducers = numWorker * 10
     #
     yyyy = '20%02d' % (9)
@@ -33,11 +34,8 @@ def run():
         driver_subsets[i % numReducers].append(did)
     for i, driver_subset in enumerate(driver_subsets):
         process_files(yyyy, i, driver_subset, driversRelations)
-
-            # year_arrangement(yyyy, i, driver_subset)
-            # put_task(year_arrangement, [yyyy, i, driver_subset])
-    #         count_num_jobs += 1
-    # end_multiprocessor(count_num_jobs)
+        count_num_jobs += 1
+    end_multiprocessor(count_num_jobs)
 
 
 def process_files(yyyy, reducerID, driver_subset, driversRelations):
@@ -65,7 +63,12 @@ def process_files(yyyy, reducerID, driver_subset, driversRelations):
                 reader = csv.reader(r_csvfile)
                 header = reader.next()
                 hid = {h: i for i, h in enumerate(header)}
+                handling_day = 0
                 for row in reader:
+                    cur_dtT = datetime.datetime.fromtimestamp(eval(row[hid['time']]))
+                    if handling_day != cur_dtT.day:
+                        handling_day = cur_dtT.day
+                        logger.info('Processing %s %dth day' % (fn, cur_dtT.day))
                     did1 = int(row[hid['did']])
                     if did1 not in driver_subset:
                         continue
