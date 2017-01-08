@@ -6,11 +6,12 @@ import __init__
 #
 from community_analysis import ss_trips_dpath, ss_trips_prefix
 from community_analysis import prevDriversDefined_dpath, prevDriversDefined_prefix
+from community_analysis import driversRelations2009_fpath
 from community_analysis import THRESHOLD_VALUE
 #
 from taxi_common._classes import zone, driver
 from taxi_common.sg_grid_zone import get_sg_zones
-from taxi_common.file_handling_functions import check_dir_create, check_path_exist
+from taxi_common.file_handling_functions import check_dir_create, check_path_exist, get_all_files, save_pickle_file
 from taxi_common.log_handling_functions import get_logger
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
@@ -22,17 +23,37 @@ logger = get_logger()
 def run():
     check_dir_create(prevDriversDefined_dpath)
     #
-    init_multiprocessor(6)
-    count_num_jobs = 0
-    for y in range(9, 10):
-        for m in range(1, 13):
-            yymm = '%02d%02d' % (y, m)
-            if yymm in ['0912', '1010']:
-                continue
-            # process_month(yymm)
-            put_task(process_month, [yymm])
-            count_num_jobs += 1
-    end_multiprocessor(count_num_jobs)
+    # init_multiprocessor(6)
+    # count_num_jobs = 0
+    # for y in range(9, 10):
+    #     for m in range(1, 13):
+    #         yymm = '%02d%02d' % (y, m)
+    #         if yymm in ['0912', '1010']:
+    #             continue
+    #         # process_month(yymm)
+    #         put_task(process_month, [yymm])
+    #         count_num_jobs += 1
+    # end_multiprocessor(count_num_jobs)
+    find_driversRelations()
+
+
+def find_driversRelations():
+    driversRelations = {}
+    for fn in get_all_files(prevDriversDefined_dpath, '%s*' % prevDriversDefined_prefix):
+        with open('%s/%s' % (prevDriversDefined_dpath, fn), 'rb') as r_csvfile:
+            reader = csv.reader(r_csvfile)
+            headers = reader.next()
+            hid = {h: i for i, h in enumerate(headers)}
+            for row in reader:
+                did1 = int(row[hid['did']])
+                prevDrivers = row[hid['prevDrivers']].split('&')
+                if len(prevDrivers) == 1 and prevDrivers[0] == '':
+                    continue
+                if not driversRelations.has_key(did1):
+                    driversRelations[did1] = set()
+                for did0 in map(int, prevDrivers):
+                    driversRelations[did1].add(did0)
+    save_pickle_file(driversRelations2009_fpath, driversRelations)
 
 
 def process_month(yymm):

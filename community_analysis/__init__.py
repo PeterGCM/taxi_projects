@@ -14,7 +14,7 @@ FREE, POB = 0, 5
 #
 ss_trips_dpath, ss_trips_prefix = '%s/%s' % (taxi_data, 'trips_ss_drivers'), 'trips-ss-drivers-'
 prevDriversDefined_dpath, prevDriversDefined_prefix =  '%s/%s' % (taxi_data, 'prevDriversDefined'), 'prevDriversDefined-'
-
+driversRelations2009_fpath = '%s/driversRelations2009.pkl' % prevDriversDefined_dpath
 
 
 
