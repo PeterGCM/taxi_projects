@@ -25,7 +25,7 @@ def run():
     numReducers = numWorker * 10
     #
     yyyy = '20%02d' % (9)
-    logger.info('loading ss drivers %s' % yyyy)
+    logger.info('loading driversRelations %s' % yyyy)
     driversRelations = load_pickle_file(driversRelations2009_fpath)
     whole_drivers = driversRelations.keys()
     driver_subsets = [[] for _ in range(numReducers)]
@@ -90,3 +90,7 @@ def process_files(yyyy, reducerID, driver_subset, driversRelations):
         with open('%s_%s.txt' % (sys.argv[0], yyyy), 'w') as f:
             f.write(format_exc())
         raise
+
+
+if __name__ == '__main__':
+    run()
