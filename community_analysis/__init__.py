@@ -13,6 +13,12 @@ THRESHOLD_VALUE = 30 * 60
 FREE, POB = 0, 5
 #
 ss_trips_dpath, ss_trips_prefix = '%s/%s' % (taxi_data, 'trips_ss_drivers'), 'trips-ss-drivers-'
+prevDriversDefined_dpath, prevDriversDefined_prefix =  '%s/%s' % (taxi_data, 'prevDriversDefined'), 'prevDriversDefined-'
+
+
+
+
+
 tfZ_pickUp_dpath, tfZ_pickUp_prepix = '%s/%s' % (taxi_data, 'tfZ_pickUp'), 'tfZ-pickUp-'
 tfZ_spendingTime_dpath, tfZ_spendingTime_prepix = '%s/%s' % (taxi_data, 'tfZ_spendingTime'), 'tfZ-spendingTime-'
 tfZ_SP_dpath, tfZ_SP_prepix = '%s/%s' % (taxi_data, 'tfZ_SP'), 'tfZ-SP-'
