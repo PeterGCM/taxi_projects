@@ -40,6 +40,7 @@ def run():
 def find_driversRelations():
     driversRelations = {}
     for fn in get_all_files(prevDriversDefined_dpath, '%s*' % prevDriversDefined_prefix):
+        logger.info('handle the file; %s' % fn)
         with open('%s/%s' % (prevDriversDefined_dpath, fn), 'rb') as r_csvfile:
             reader = csv.reader(r_csvfile)
             headers = reader.next()
