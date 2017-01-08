@@ -41,7 +41,7 @@ def process_month(yymm):
     from traceback import format_exc
     try:
         logger.info('handle the file; %s' % yymm)
-        prevDriversDefined_fpath = '%s/%s%s.pkl' % (prevDriversDefined_dpath, prevDriversDefined_prefix, yymm)
+        prevDriversDefined_fpath = '%s/%s%s.csv' % (prevDriversDefined_dpath, prevDriversDefined_prefix, yymm)
         if check_path_exist(prevDriversDefined_fpath):
             logger.info('The processed; %s' % yymm)
             return None
