@@ -42,7 +42,7 @@ def process_month(yymm):
     try:
         logger.info('handle the file; %s' % yymm)
         prevDriversDefined_fpath = '%s/%s%s.pkl' % (prevDriversDefined_dpath, prevDriversDefined_prefix, yymm)
-        if not check_path_exist(prevDriversDefined_fpath):
+        if check_path_exist(prevDriversDefined_fpath):
             logger.info('The processed; %s' % yymm)
             return None
         drivers = {}
