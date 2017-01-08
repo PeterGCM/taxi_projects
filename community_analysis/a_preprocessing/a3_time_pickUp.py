@@ -34,20 +34,20 @@ def run():
         driver_subsets[i % numReducers].append(did)
     for i, driver_subset in enumerate(driver_subsets):
         # process_files(yyyy, i, driver_subset, driversRelations)
-        put_task(process_files, [yyyy, i, driver_subset, driversRelations])
+        pickUp_drivers = set()
+        for did1 in driver_subset:
+            pickUp_drivers = pickUp_drivers.union(driversRelations[did1])
+        put_task(process_files, [yyyy, i, driver_subset, driversRelations, pickUp_drivers])
         count_num_jobs += 1
     end_multiprocessor(count_num_jobs)
 
 
-def process_files(yyyy, reducerID, driver_subset, driversRelations):
+def process_files(yyyy, reducerID, driver_subset, pickUp_drivers):
     from traceback import format_exc
     #
     try:
         logger.info('Handle arrange %s(%d)' % (yyyy, reducerID))
         tfZ_TP_fpath = '%s/%s%s-%d.csv' % (tfZ_TP_dpath, tfZ_TP_prefix, yyyy, reducerID)
-        pickUp_drivers = set()
-        for did1 in driver_subset:
-            pickUp_drivers = pickUp_drivers.union(driversRelations[did1])
         with open(tfZ_TP_fpath, 'wt') as w_csvfile:
             writer = csv.writer(w_csvfile, lineterminator='\n')
             header = ['month', 'day',
@@ -69,7 +69,7 @@ def process_files(yyyy, reducerID, driver_subset, driversRelations):
                     cur_dtT = datetime.datetime.fromtimestamp(eval(row[hid['time']]))
                     if handling_day != cur_dtT.day:
                         handling_day = cur_dtT.day
-                        logger.info('Processing %s %dth day' % (fn, cur_dtT.day))
+                        logger.info('Processing %s %dth day; reducer %d' % (fn, cur_dtT.day, reducerID))
                     did1 = int(row[hid['did']])
                     if did1 not in driver_subset:
                         continue
