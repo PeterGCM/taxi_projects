@@ -72,7 +72,7 @@ def process_files(yyyy, reducerID, driver_subset, driversRelations):
                     _prevDrivers = row[hid['prevDrivers']].split('&')
                     if len(_prevDrivers) == 1 and _prevDrivers[0] == '':
                         continue
-                    prevDrivers = map(int, prevDrivers)
+                    prevDrivers = map(int, _prevDrivers)
                     tf = row[hid['timeFrame']]
                     zi, zj = row[hid['zi']], row[hid['zj']]
                     tfZ = '(%s,%s,%s)' % (tf, zi, zj)
