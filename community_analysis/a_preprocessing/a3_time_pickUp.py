@@ -33,7 +33,8 @@ def run():
     for i, did in enumerate(whole_drivers):
         driver_subsets[i % numReducers].append(did)
     for i, driver_subset in enumerate(driver_subsets):
-        process_files(yyyy, i, driver_subset, driversRelations)
+        # process_files(yyyy, i, driver_subset, driversRelations)
+        put_task(process_files, [yyyy, i, driver_subset, driversRelations])
         count_num_jobs += 1
     end_multiprocessor(count_num_jobs)
 
