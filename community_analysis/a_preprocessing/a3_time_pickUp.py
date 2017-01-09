@@ -37,7 +37,7 @@ def run():
         pickUp_drivers = set()
         for did1 in driver_subset:
             pickUp_drivers = pickUp_drivers.union(driversRelations[did1])
-        put_task(process_files, [yyyy, i, driver_subset, driversRelations, pickUp_drivers])
+        put_task(process_files, [yyyy, i, driver_subset, pickUp_drivers])
         count_num_jobs += 1
     end_multiprocessor(count_num_jobs)
 
