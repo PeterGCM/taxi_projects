@@ -30,6 +30,11 @@ SP_group_summary_fpath = '%s/%s' % (SP_group_dpath, 'SP-group-summary.csv')
 RP_group_dpath, RP_group_prefix = '%s/%s' % (taxi_data, 'RP_group'), 'RP-group-'
 RP_group_drivers_fpath = '%s/%s' % (RP_group_dpath, 'RP-group-drivers.pkl')
 RP_group_summary_fpath = '%s/%s' % (RP_group_dpath, 'RP-group-summary.csv')
+#
+
+SP_groupDefinedTrip_dpath, SP_groupDefinedTrip_prefix = '%s/%s' % (taxi_data, 'SP-groupDefinedTrip'), 'SP-groupDefinedTrip-'
+
+
 
 #
 #

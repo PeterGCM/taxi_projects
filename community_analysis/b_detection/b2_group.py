@@ -24,11 +24,13 @@ logger = get_logger()
 
 
 def run():
-    for graph_dpath, graph_prefix, group_dpath, group_prefix, group_drivers_fapth, summary_fpath in \
-        [(SP_graph_dpath, SP_graph_prefix, SP_group_dpath, SP_group_prefix, SP_group_drivers_fpath, SP_group_summary_fpath),
-         (RP_graph_dpath, RP_graph_prefix, RP_group_dpath, RP_group_prefix, RP_group_drivers_fpath, RP_group_summary_fpath)]:
+    for graph_dpath, graph_prefix, group_dpath, group_prefix, group_drivers_fapth, group_summary_fpath in \
+        [
+         (SP_graph_dpath, SP_graph_prefix, SP_group_dpath, SP_group_prefix, SP_group_drivers_fpath, SP_group_summary_fpath),
+         # (RP_graph_dpath, RP_graph_prefix, RP_group_dpath, RP_group_prefix, RP_group_drivers_fpath, RP_group_summary_fpath)
+        ]:
         check_dir_create(group_dpath)
-        with open(summary_fpath, 'wt') as w_csvfile:
+        with open(group_summary_fpath, 'wt') as w_csvfile:
             writer = csv.writer(w_csvfile, lineterminator='\n')
             writer.writerow(['groupName', 'numDrivers', 'tieStrength'])
         #
@@ -52,7 +54,7 @@ def run():
                     igG.add_vertex(did1)
                     did_igid[did1] = igid
                     igid += 1
-                igG.add_edge(did_igid[did0], did_igid[did1], weight=w)
+                igG.add_edge(did_igid[did0], did_igid[did1], weight=abs(w))
         logger.info('Partitioning')
         part = louvain.find_partition(igG, method='Modularity', weight='weight')
         #
@@ -65,7 +67,7 @@ def run():
             #
             drivers = [v['name'] for v in sg.vs]
             weights = [e['weight'] for e in sg.es]
-            with open(SP_group_summary_fpath, 'a') as w_csvfile:
+            with open(group_summary_fpath, 'a') as w_csvfile:
                 writer = csv.writer(w_csvfile, lineterminator='\n')
                 writer.writerow([gn, len(drivers), sum(weights) / float(len(drivers))])
             group_drivers[gn] = drivers
