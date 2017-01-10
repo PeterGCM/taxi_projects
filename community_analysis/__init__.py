@@ -16,67 +16,80 @@ ss_trips_dpath, ss_trips_prefix = '%s/%s' % (taxi_data, 'trips_ss_drivers'), 'tr
 prevDriversDefined_dpath, prevDriversDefined_prefix =  '%s/%s' % (taxi_data, 'prevDriversDefined'), 'prevDriversDefined-'
 driversRelations2009_fpath = '%s/driversRelations2009.pkl' % prevDriversDefined_dpath
 tfZ_TP_dpath, tfZ_TP_prefix = '%s/%s' % (taxi_data, 'tfZ_TP'), 'tfZ_TP-'
-
-
-
-tfZ_pickUp_dpath, tfZ_pickUp_prepix = '%s/%s' % (taxi_data, 'tfZ_pickUp'), 'tfZ-pickUp-'
-tfZ_spendingTime_dpath, tfZ_spendingTime_prepix = '%s/%s' % (taxi_data, 'tfZ_spendingTime'), 'tfZ-spendingTime-'
-tfZ_SP_dpath, tfZ_SP_prepix = '%s/%s' % (taxi_data, 'tfZ_SP'), 'tfZ-SP-'
-tfZ_roamingTime_dpath, tfZ_roamingTime_prefix = '%s/%s' % (taxi_data, 'tfZ_roamingTime'), 'tfZ-roamingTime-'
-tfZ_RP_dpath, tfZ_RP_prepix = '%s/%s' % (taxi_data, 'tfZ_RP'), 'tfZ-RP-'
-
-
-RP_graph_dpath, RP_graph_prefix = '%s/%s' % (taxi_data, 'RP_graph'), 'RP-graph-'
 SP_graph_dpath, SP_graph_prefix = '%s/%s' % (taxi_data, 'SP_graph'), 'SP-graph-'
+RP_graph_dpath, RP_graph_prefix = '%s/%s' % (taxi_data, 'RP_graph'), 'RP-graph-'
+
+
 SIGINIFICANCE_LEVEL = 0.01
+MIN_PICKUP_RATIO = 0.1
+
+group_dpath = '%s/%s' % (taxi_data, 'group')
+SP_group_dpath, SP_group_prefix = '%s/%s' % (taxi_data, 'SP_group'), 'SP-group-'
+SP_group_drivers_fpath = '%s/%s' % (SP_group_dpath, 'SP-group-drivers.pkl')
+SP_group_summary_fpath = '%s/%s' % (SP_group_dpath, 'SP-group-summary.csv')
 RP_group_dpath, RP_group_prefix = '%s/%s' % (taxi_data, 'RP_group'), 'RP-group-'
 RP_group_drivers_fpath = '%s/%s' % (RP_group_dpath, 'RP-group-drivers.pkl')
 RP_group_summary_fpath = '%s/%s' % (RP_group_dpath, 'RP-group-summary.csv')
 
-
-
-
-tfZ_counting_dpath = '%s/%s' % (taxi_data, 'tf_zone_counting')
-tfZ_counting_individuals_prefix = 'tf-zone-counting-individuals-'
-tfZ_counting_groups_prefix = 'tf-zone-counting-groups-'
-tfZ_distribution_dpath = '%s/%s' % (taxi_data, 'tf_zone_distribution')
-tfZ_distribution_individuals_prefix = 'tf-zone-distribution-individuals-'
-tfZ_distribution_groups_prefix = 'tf-zone-distribution-groups-'
-tfZ_distribution_whole_prefix = 'tf-zone-distribution-whole-'
 #
-DEPRECIATION_LAMBDA = 0.5
-dwg_dpath = '%s/%s' % (taxi_data, 'dw_graph'); dwg_prefix = 'dw-graph-'
-dwg_count_dpath = '%s/%s' % (dwg_dpath, 'count'); dwg_count_prefix = 'dw-graph-count-'
-dwg_benefit_dpath = '%s/%s' % (dwg_dpath, 'benefit'); dwg_benefit_prefix = 'dw-graph-benefit-'
-dwg_frequency_dpath = '%s/%s' % (dwg_dpath, 'frequency'); dwg_frequency_prefix = 'dw-graph-frequency-'
-dwg_fb_dpath = '%s/%s' % (dwg_dpath, 'fb'); dwg_fb_prefix = 'dw-graph-fb-'
-dwg_summary_fpath = '%s/%s' % (dwg_dpath, 'dwg-summary.csv')
-TOPZPZ1PERCENT = 0.0001
-CHOSEN_PERCENT = TOPZPZ1PERCENT
-fdwg_dpath = '%s/%s' % (taxi_data, 'fdw_graph(%.4f)' % CHOSEN_PERCENT); fdw_graph_prefix = 'fdw-graph-'
-group_dpath = '%s/%s' % (taxi_data, 'group(%.4f)' % CHOSEN_PERCENT); group_prepix = 'group-'
-group_summary_fpath = '%s/%s.csv' % (group_dpath , 'group-summary')
 #
-
-
-
-pickUpY2_dpath = '%s/%s' % (taxi_data, 'pickUpY2'); pickUpY2_prepix = 'pickUpY2-'
-
-roamingTime_dpath = '%s/%s' % (taxi_data, 'roamingTime'); roamingTime_prepix = 'roamingTime-'
-roamingTimeY2_dpath = '%s/%s' % (taxi_data, 'roamingTimeY2'); roamingTime_prepix = 'roamingTime-'
-
-regressionModel_dpath = '%s/%s' % (taxi_data, 'regressionModel'); regressionModel_prefix = 'regressionModel-'
-X_PICKUP, O_PICKUP = range(2)
-HOUR1 = 60 * 60
-causalityGraph_dpath = '%s/%s' % (taxi_data, 'causalityGraph'); causalityGraph_prefix = 'causalityGraph-'
-
-
-
-
-
-
-
-MIN_NUM_DRIVERS = 10
+# tfZ_pickUp_dpath, tfZ_pickUp_prepix = '%s/%s' % (taxi_data, 'tfZ_pickUp'), 'tfZ-pickUp-'
+# tfZ_spendingTime_dpath, tfZ_spendingTime_prepix = '%s/%s' % (taxi_data, 'tfZ_spendingTime'), 'tfZ-spendingTime-'
+# tfZ_SP_dpath, tfZ_SP_prepix = '%s/%s' % (taxi_data, 'tfZ_SP'), 'tfZ-SP-'
+# tfZ_roamingTime_dpath, tfZ_roamingTime_prefix = '%s/%s' % (taxi_data, 'tfZ_roamingTime'), 'tfZ-roamingTime-'
+# tfZ_RP_dpath, tfZ_RP_prepix = '%s/%s' % (taxi_data, 'tfZ_RP'), 'tfZ-RP-'
+#
+#
+#
+#
+# RP_group_dpath, RP_group_prefix = '%s/%s' % (taxi_data, 'RP_group'), 'RP-group-'
+# RP_group_drivers_fpath = '%s/%s' % (RP_group_dpath, 'RP-group-drivers.pkl')
+# RP_group_summary_fpath = '%s/%s' % (RP_group_dpath, 'RP-group-summary.csv')
+#
+#
+#
+#
+# tfZ_counting_dpath = '%s/%s' % (taxi_data, 'tf_zone_counting')
+# tfZ_counting_individuals_prefix = 'tf-zone-counting-individuals-'
+# tfZ_counting_groups_prefix = 'tf-zone-counting-groups-'
+# tfZ_distribution_dpath = '%s/%s' % (taxi_data, 'tf_zone_distribution')
+# tfZ_distribution_individuals_prefix = 'tf-zone-distribution-individuals-'
+# tfZ_distribution_groups_prefix = 'tf-zone-distribution-groups-'
+# tfZ_distribution_whole_prefix = 'tf-zone-distribution-whole-'
+# #
+# DEPRECIATION_LAMBDA = 0.5
+# dwg_dpath = '%s/%s' % (taxi_data, 'dw_graph'); dwg_prefix = 'dw-graph-'
+# dwg_count_dpath = '%s/%s' % (dwg_dpath, 'count'); dwg_count_prefix = 'dw-graph-count-'
+# dwg_benefit_dpath = '%s/%s' % (dwg_dpath, 'benefit'); dwg_benefit_prefix = 'dw-graph-benefit-'
+# dwg_frequency_dpath = '%s/%s' % (dwg_dpath, 'frequency'); dwg_frequency_prefix = 'dw-graph-frequency-'
+# dwg_fb_dpath = '%s/%s' % (dwg_dpath, 'fb'); dwg_fb_prefix = 'dw-graph-fb-'
+# dwg_summary_fpath = '%s/%s' % (dwg_dpath, 'dwg-summary.csv')
+# TOPZPZ1PERCENT = 0.0001
+# CHOSEN_PERCENT = TOPZPZ1PERCENT
+# fdwg_dpath = '%s/%s' % (taxi_data, 'fdw_graph(%.4f)' % CHOSEN_PERCENT); fdw_graph_prefix = 'fdw-graph-'
+# group_dpath = '%s/%s' % (taxi_data, 'group(%.4f)' % CHOSEN_PERCENT); group_prepix = 'group-'
+# group_summary_fpath = '%s/%s.csv' % (group_dpath , 'group-summary')
+# #
+#
+#
+#
+# pickUpY2_dpath = '%s/%s' % (taxi_data, 'pickUpY2'); pickUpY2_prepix = 'pickUpY2-'
+#
+# roamingTime_dpath = '%s/%s' % (taxi_data, 'roamingTime'); roamingTime_prepix = 'roamingTime-'
+# roamingTimeY2_dpath = '%s/%s' % (taxi_data, 'roamingTimeY2'); roamingTime_prepix = 'roamingTime-'
+#
+# regressionModel_dpath = '%s/%s' % (taxi_data, 'regressionModel'); regressionModel_prefix = 'regressionModel-'
+# X_PICKUP, O_PICKUP = range(2)
+# HOUR1 = 60 * 60
+# causalityGraph_dpath = '%s/%s' % (taxi_data, 'causalityGraph'); causalityGraph_prefix = 'causalityGraph-'
+#
+#
+#
+#
+#
+#
+#
+# MIN_NUM_DRIVERS = 10
 
 
 
