@@ -78,7 +78,7 @@ def process_tripbased(yyyy):
                     locEP = float(row[hid['economicProfit']]) / CENT
                     locDuration = float(row[hid['duration']]) / SEC60
                     locFare = float(row[hid['fare']]) / CENT
-                    locProductivity = locFare / ((locQTime + locDuration) * SEC60)
+                    locProductivity = (locFare / (locQTime + locDuration)) * SEC60
                     locIn = 1 if int(row[hid['tripMode']]) == DIn_PIn else 0
                     weekEnd = 0
                     if (year, month, day) in holidays:
@@ -152,7 +152,7 @@ def aggregate_monthBased(yyyy):
             #
             wleProductivity = wleFare / wleOperatingHour
             QTime_locTrip, EP_locTrip = locQTime / float(locTripNumber), locEP / float(locTripNumber)
-            locProductivity = locFare / ((locQTime + locDuration) * SEC60)
+            locProductivity = (locFare / (locQTime + locDuration)) * SEC60
             locInRatio = locInNumber / float(locTripNumber)
             timePassed = (year - 2009) * 12 + max(0, (month - 1))
             timePassed_2 = timePassed ** 2
