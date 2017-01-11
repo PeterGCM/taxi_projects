@@ -46,19 +46,20 @@ def run():
     #         count_num_jobs += 1
     # end_multiprocessor(count_num_jobs)
     #
-    for y in range(9, 11):
-        yyyy = '20%02d' % y
-        aggregate_monthBased(yyyy)
-    #
     # for y in range(9, 11):
     #     yyyy = '20%02d' % y
-    #     process_tripbased(yyyy)
+    #     aggregate_monthBased(yyyy)
+    #
+    for y in range(9, 11):
+        yyyy = '20%02d' % y
+        process_tripbased(yyyy)
 
 
 def process_tripbased(yyyy):
     logger.info('handle the file; %s' % yyyy)
     #
-    statistics_fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ap_dpath, statisticsAllDriversTrip_ap_prefix, yyyy)
+    # statistics_fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ap_dpath, statisticsAllDriversTrip_ap_prefix, yyyy)
+    statistics_fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ns_dpath, statisticsAllDriversTrip_ns_prefix, yyyy)
     if check_path_exist(statistics_fpath):
         logger.info('The file had already been processed; %s' % yyyy)
         return
@@ -73,8 +74,10 @@ def process_tripbased(yyyy):
                   'locIn', 'weekEnd',
                   'timePassed', 'timePassed^2']
         writer.writerow(header)
-        for fn in get_all_files(economicProfit_ap_dpath, '%s%s*' % (economicProfit_ap_prefix, yy)):
-            with open('%s/%s' % (economicProfit_ap_dpath, fn), 'rt') as r_csvfile:
+        # for fn in get_all_files(economicProfit_ap_dpath, '%s%s*' % (economicProfit_ap_prefix, yy)):
+        for fn in get_all_files(economicProfit_ns_dpath, '%s%s*' % (economicProfit_ns_prefix, yy)):
+            # with open('%s/%s' % (economicProfit_ap_dpath, fn), 'rt') as r_csvfile:
+            with open('%s/%s' % (economicProfit_ns_dpath, fn), 'rt') as r_csvfile:
                 reader = csv.reader(r_csvfile)
                 headers = reader.next()
                 hid = {h: i for i, h in enumerate(headers)}
