@@ -6,13 +6,10 @@ import __init__
 #
 from information_boards import trip_dpath, trip_prefix
 from information_boards import shiftProDur_dpath, shiftProDur_prefix
-from information_boards import economicProfit_ap_dpath, economicProfit_ap_prefix
-from information_boards import statisticsAllDrivers_ap_dpath
-from information_boards import statisticsAllDriversDay_ap_prefix, statisticsAllDriversMonth_ap_prefix, statisticsAllDriversTrip_ap_prefix
-
 from information_boards import economicProfit_ns_dpath, economicProfit_ns_prefix
 from information_boards import statisticsAllDrivers_ns_dpath
-from information_boards import statisticsAllDriversDay_ns_prefix, statisticsAllDriversMonth_ns_prefix, statisticsAllDriversTrip_ns_prefix
+from information_boards import statisticsAllDriversDay_ns1519_prefix, statisticsAllDriversMonth_ns1519_prefix, statisticsAllDriversTrip_ns1519_prefix
+from information_boards import statisticsAllDriversDay_ns2000_prefix, statisticsAllDriversMonth_ns2000_prefix, statisticsAllDriversTrip_ns2000_prefix
 
 
 from information_boards import DIn_PIn, DOut_PIn
@@ -30,25 +27,24 @@ logger = get_logger()
 
 
 def run():
-    # check_dir_create(statisticsAllDrivers_ap_dpath)
     check_dir_create(statisticsAllDrivers_ns_dpath)
     #
-    # init_multiprocessor(11)
-    # count_num_jobs = 0
-    # for y in xrange(9, 11):
-    #     for m in xrange(1, 13):
-    #         yymm = '%02d%02d' % (y, m)
-    #         if yymm in ['0912', '1010']:
-    #             # both years data are corrupted
-    #             continue
-    #         # process_month(yymm)
-    #         put_task(aggregate_dayBased, [yymm])
-    #         count_num_jobs += 1
-    # end_multiprocessor(count_num_jobs)
+    init_multiprocessor(11)
+    count_num_jobs = 0
+    for y in xrange(9, 11):
+        for m in xrange(1, 13):
+            yymm = '%02d%02d' % (y, m)
+            if yymm in ['0912', '1010']:
+                # both years data are corrupted
+                continue
+            # process_month(yymm)
+            put_task(aggregate_dayBased, [yymm])
+            count_num_jobs += 1
+    end_multiprocessor(count_num_jobs)
     #
-    for y in range(9, 11):
-        yyyy = '20%02d' % y
-        aggregate_monthBased(yyyy)
+    # for y in range(9, 11):
+    #     yyyy = '20%02d' % y
+    #     aggregate_monthBased(yyyy)
     #
     for y in range(9, 11):
         yyyy = '20%02d' % y
@@ -58,14 +54,14 @@ def run():
 def process_tripbased(yyyy):
     logger.info('handle the file; %s' % yyyy)
     #
-    # statistics_fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ap_dpath, statisticsAllDriversTrip_ap_prefix, yyyy)
-    statistics_fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ns_dpath, statisticsAllDriversTrip_ns_prefix, yyyy)
-    if check_path_exist(statistics_fpath):
+    statistics1519_fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ns_dpath, statisticsAllDriversTrip_ns1519_prefix, yyyy)
+    statistics2000_fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ns_dpath, statisticsAllDriversTrip_ns2000_prefix, yyyy)
+    if check_path_exist(statistics1519_fpath):
         logger.info('The file had already been processed; %s' % yyyy)
         return
     yy = yyyy[2:]
     holidays = HOLIDAYS2009 if yyyy == '2009' else HOLIDAYS2010
-    with open(statistics_fpath, 'wb') as w_csvfile:
+    with open(statistics1519_fpath, 'wb') as w_csvfile:
         writer = csv.writer(w_csvfile, lineterminator='\n')
         header = ['year', 'month', 'day', 'hour',
                   'driverID',
@@ -185,12 +181,12 @@ def aggregate_monthBased(yyyy):
 def aggregate_dayBased(yymm):
     logger.info('handle the file; %s' % yymm)
     #
-    # statistics_fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ap_dpath, statisticsAllDriversDay_ap_prefix, yymm)
-    statistics_fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ns_dpath, statisticsAllDriversDay_ns_prefix, yymm)
-    if check_path_exist(statistics_fpath):
+    statistics1519_fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ns_dpath, statisticsAllDriversDay_ns1519_prefix, yymm)
+    statistics2000_fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ns_dpath, statisticsAllDriversDay_ns2000_prefix, yymm)
+    if check_path_exist(statistics1519_fpath):
         logger.info('The file had already been processed; %s' % yymm)
         return
-    dateDid_statistics = {}
+    dateDid_statistics1519, dateDid_statistics2000 = {}, {}
     WTN, WOH, WF, \
     LTN, LIN, LON, \
     LQ, LEP, \
@@ -203,7 +199,13 @@ def aggregate_dayBased(yymm):
         headers = reader.next()
         hid = {h: i for i, h in enumerate(headers)}
         for row in reader:
-            year, month, day = map(int, [row[hid[cn]] for cn in ['year', 'month', 'day']])
+            year, month, day, hour = map(int, [row[hid[cn]] for cn in ['year', 'month', 'day', 'hour']])
+            if hour in [15, 16, 17, 18, 19]:
+                dateDid_statistics = dateDid_statistics1519
+            elif hour in [20, 21, 22, 23, 0]:
+                dateDid_statistics = dateDid_statistics2000
+            else:
+                continue
             did = int(row[hid['did']])
             k = (year, month, day, did)
             if not dateDid_statistics.has_key(k):
@@ -225,7 +227,13 @@ def aggregate_dayBased(yymm):
         headers = reader.next()
         hid = {h: i for i, h in enumerate(headers)}
         for row in reader:
-            year, month, day = 2000 + int(row[hid['yy']]), int(row[hid['mm']]), int(row[hid['dd']])
+            year, month, day, hour = 2000 + int(row[hid['yy']]), int(row[hid['mm']]), int(row[hid['dd']]), int(row[hid['hh']])
+            if hour in [15, 16, 17, 18, 19]:
+                dateDid_statistics = dateDid_statistics1519
+            elif hour in [20, 21, 22, 23, 0]:
+                dateDid_statistics = dateDid_statistics2000
+            else:
+                continue
             did = int(row[hid['did']])
             k = (year, month, day, did)
             if not dateDid_statistics.has_key(k):
@@ -240,7 +248,13 @@ def aggregate_dayBased(yymm):
         headers = reader.next()
         hid = {h: i for i, h in enumerate(headers)}
         for row in reader:
-            day = int(row[hid['day']])
+            day, hour = int(row[hid['day']]), int(row[hid['hour']])
+            if hour in [15, 16, 17, 18, 19]:
+                dateDid_statistics = dateDid_statistics1519
+            elif hour in [20, 21, 22, 23, 0]:
+                dateDid_statistics = dateDid_statistics2000
+            else:
+                continue
             did = int(row[hid['did']])
             k = (year, month, day, did)
             if not dateDid_statistics.has_key(k):
@@ -249,39 +263,41 @@ def aggregate_dayBased(yymm):
             dateDid_statistics[k][WF] += float(row[hid['fare']]) / CENT
     #
     logger.info('write statistics; %s' % yymm)
-    with open(statistics_fpath, 'wb') as w_csvfile:
-        writer = csv.writer(w_csvfile, lineterminator='\n')
-        header = ['year', 'month', 'day', 'driverID',
-                  'wleTripNumber', 'wleOperatingHour', 'wleFare',
-                  'wleProductivity',
-                  'locTripNumber', 'locInNumber', 'locOutNumber',
-                  'locQTime', 'locEP', 'locDuration', 'locFare',
-                  'QTime/locTrip', 'EP/locTrip',
-                  'locProductivity']
-        writer.writerow(header)
-        for (year, month, day, did), statistics in dateDid_statistics.iteritems():
-            wleTripNumber, wleOperatingHour, wleFare = int(statistics[WTN]), statistics[WOH], statistics[WF],
-            if wleOperatingHour == 0.0:
-                continue
-            wleProductivity = wleFare / wleOperatingHour
-            #
-            locTripNumber, locInNumber, locOutNumber = map(int, [statistics[LTN], statistics[LIN], statistics[LON]])
-            if locTripNumber == 0.0:
-                continue
-            locQTime, locEP, locDuration, locFare = statistics[LQ], statistics[LEP], statistics[LD], statistics[LF]
-            if (locQTime + locDuration) == 0.0:
-                continue
-            QTime_locTrip, EP_locTrip = locQTime / float(locTripNumber), locEP / float(locTripNumber)
-            locProductivity = (locFare / (locQTime + locDuration)) * SEC60
-            new_row = [
-                year, month, day, did,
-                wleTripNumber, wleOperatingHour, wleFare,
-                wleProductivity,
-                locTripNumber, locInNumber, locOutNumber,
-                locQTime, locEP, locDuration, locFare,
-                QTime_locTrip, EP_locTrip,
-                locProductivity]
-            writer.writerow(new_row)
+    for statistics_fpath, dateDid_statistics in [(statistics1519_fpath, dateDid_statistics1519),
+                                                 (statistics2000_fpath, dateDid_statistics2000)]:
+        with open(statistics_fpath, 'wb') as w_csvfile:
+            writer = csv.writer(w_csvfile, lineterminator='\n')
+            header = ['year', 'month', 'day', 'driverID',
+                      'wleTripNumber', 'wleOperatingHour', 'wleFare',
+                      'wleProductivity',
+                      'locTripNumber', 'locInNumber', 'locOutNumber',
+                      'locQTime', 'locEP', 'locDuration', 'locFare',
+                      'QTime/locTrip', 'EP/locTrip',
+                      'locProductivity']
+            writer.writerow(header)
+            for (year, month, day, did), statistics in dateDid_statistics.iteritems():
+                wleTripNumber, wleOperatingHour, wleFare = int(statistics[WTN]), statistics[WOH], statistics[WF],
+                if wleOperatingHour == 0.0:
+                    continue
+                wleProductivity = wleFare / wleOperatingHour
+                #
+                locTripNumber, locInNumber, locOutNumber = map(int, [statistics[LTN], statistics[LIN], statistics[LON]])
+                if locTripNumber == 0.0:
+                    continue
+                locQTime, locEP, locDuration, locFare = statistics[LQ], statistics[LEP], statistics[LD], statistics[LF]
+                if (locQTime + locDuration) == 0.0:
+                    continue
+                QTime_locTrip, EP_locTrip = locQTime / float(locTripNumber), locEP / float(locTripNumber)
+                locProductivity = (locFare / (locQTime + locDuration)) * SEC60
+                new_row = [
+                    year, month, day, did,
+                    wleTripNumber, wleOperatingHour, wleFare,
+                    wleProductivity,
+                    locTripNumber, locInNumber, locOutNumber,
+                    locQTime, locEP, locDuration, locFare,
+                    QTime_locTrip, EP_locTrip,
+                    locProductivity]
+                writer.writerow(new_row)
 
 
 if __name__ == '__main__':

@@ -21,7 +21,10 @@ import csv
 
 
 def run():
-    for dpath in [statisticsSsDrivers_ap_dpath, statisticsSsDrivers_ns_dpath]:
+    for dpath in [
+                    # statisticsSsDrivers_ap_dpath,
+                    statisticsSsDrivers_ns_dpath
+                    ]:
         check_dir_create(dpath)
     #
     ssDrivers = set()
