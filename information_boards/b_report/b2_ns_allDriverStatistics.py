@@ -46,9 +46,9 @@ def run():
     #     yyyy = '20%02d' % y
     #     aggregate_monthBased(yyyy)
     #
-    for y in range(9, 11):
-        yyyy = '20%02d' % y
-        process_tripbased(yyyy)
+    # for y in range(9, 11):
+    #     yyyy = '20%02d' % y
+    #     process_tripbased(yyyy)
 
 
 def process_tripbased(yyyy):
