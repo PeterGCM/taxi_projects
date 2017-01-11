@@ -33,26 +33,26 @@ def run():
     # check_dir_create(statisticsAllDrivers_ap_dpath)
     check_dir_create(statisticsAllDrivers_ns_dpath)
     #
-    init_multiprocessor(11)
-    count_num_jobs = 0
-    for y in xrange(9, 11):
-        for m in xrange(1, 13):
-            yymm = '%02d%02d' % (y, m)
-            if yymm in ['0912', '1010']:
-                # both years data are corrupted
-                continue
-            # process_month(yymm)
-            put_task(aggregate_dayBased, [yymm])
-            count_num_jobs += 1
-    end_multiprocessor(count_num_jobs)
+    # init_multiprocessor(11)
+    # count_num_jobs = 0
+    # for y in xrange(9, 11):
+    #     for m in xrange(1, 13):
+    #         yymm = '%02d%02d' % (y, m)
+    #         if yymm in ['0912', '1010']:
+    #             # both years data are corrupted
+    #             continue
+    #         # process_month(yymm)
+    #         put_task(aggregate_dayBased, [yymm])
+    #         count_num_jobs += 1
+    # end_multiprocessor(count_num_jobs)
     #
-    # for y in range(9, 11):
-    #     yyyy = '20%02d' % y
-    #     aggregate_monthBased(yyyy)
-    # #
-    # for y in range(9, 11):
-    #     yyyy = '20%02d' % y
-    #     process_tripbased(yyyy)
+    for y in range(9, 11):
+        yyyy = '20%02d' % y
+        aggregate_monthBased(yyyy)
+    #
+    for y in range(9, 11):
+        yyyy = '20%02d' % y
+        process_tripbased(yyyy)
 
 
 def process_tripbased(yyyy):
