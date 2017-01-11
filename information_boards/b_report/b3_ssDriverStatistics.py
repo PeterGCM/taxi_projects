@@ -7,7 +7,8 @@ import __init__
 from information_boards import statisticsAllDrivers_ap_dpath
 from information_boards import statisticsAllDriversDay_ap_prefix, statisticsAllDriversMonth_ap_prefix, statisticsAllDriversTrip_ap_prefix
 from information_boards import statisticsAllDrivers_ns_dpath
-from information_boards import statisticsAllDriversDay_ns_prefix, statisticsAllDriversMonth_ns_prefix, statisticsAllDriversTrip_ns_prefix
+from information_boards import statisticsAllDriversDay_ns1519_prefix, statisticsAllDriversMonth_ns1519_prefix, statisticsAllDriversTrip_ns1519_prefix
+# from information_boards import statisticsAllDriversDay_ns_prefix, statisticsAllDriversMonth_ns_prefix, statisticsAllDriversTrip_ns_prefix
 
 from information_boards import statisticsSsDrivers_ap_dpath
 from information_boards import statisticsSsDriversDay_ap_prefix, statisticsSsDriversMonth_ap_prefix, statisticsSsDriversTrip_ap_prefix
@@ -22,8 +23,8 @@ import csv
 
 def run():
     for dpath in [
-                    # statisticsSsDrivers_ap_dpath,
-                    statisticsSsDrivers_ns_dpath
+                    statisticsSsDrivers_ap_dpath,
+                    # statisticsSsDrivers_ns_dpath
                     ]:
         check_dir_create(dpath)
     #
@@ -37,18 +38,18 @@ def run():
             ssDrivers = ssDrivers.union(load_pickle_file('%s/%s%s.pkl' % (ss_drivers_dpath, ss_drivers_prefix, yymm)))
     #
     for all_dpath, ss_dpath in [
-                                # (statisticsAllDrivers_ap_dpath, statisticsSsDrivers_ap_dpath),
-                                (statisticsAllDrivers_ns_dpath, statisticsSsDrivers_ns_dpath)
+                                (statisticsAllDrivers_ap_dpath, statisticsSsDrivers_ap_dpath),
+                                # (statisticsAllDrivers_ns_dpath, statisticsSsDrivers_ns_dpath)
                                 ]:
         for all_prefix, ss_prefix in [
-                                    # (statisticsAllDriversDay_ap_prefix, statisticsSsDriversDay_ap_prefix),
-                                      (statisticsAllDriversDay_ns_prefix, statisticsSsDriversDay_ns_prefix),
+                                    (statisticsAllDriversDay_ap_prefix, statisticsSsDriversDay_ap_prefix),
+                                      # (statisticsAllDriversDay_ns_prefix, statisticsSsDriversDay_ns_prefix),
 
-                                      # (statisticsAllDriversMonth_ap_prefix, statisticsSsDriversMonth_ap_prefix),
-                                      (statisticsAllDriversMonth_ns_prefix, statisticsSsDriversMonth_ns_prefix),
+                                      (statisticsAllDriversMonth_ap_prefix, statisticsSsDriversMonth_ap_prefix),
+                                      # (statisticsAllDriversMonth_ns_prefix, statisticsSsDriversMonth_ns_prefix),
 
-                                      # (statisticsAllDriversTrip_ap_prefix, statisticsSsDriversTrip_ap_prefix),
-                                      (statisticsAllDriversTrip_ns_prefix, statisticsSsDriversTrip_ns_prefix),
+                                      (statisticsAllDriversTrip_ap_prefix, statisticsSsDriversTrip_ap_prefix),
+                                      # (statisticsAllDriversTrip_ns_prefix, statisticsSsDriversTrip_ns_prefix),
                                       ]:
             for fn in get_all_files(all_dpath, '%s*' % all_prefix):
                 period = fn[:-len('.csv')].split('-')[2]
