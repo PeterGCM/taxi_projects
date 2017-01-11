@@ -12,7 +12,8 @@ from information_boards import statisticsAllDriversDay_ap_prefix, statisticsAllD
 
 from information_boards import economicProfit_ns_dpath, economicProfit_ns_prefix
 from information_boards import statisticsAllDrivers_ns_dpath
-from information_boards import statisticsAllDriversDay_ns_prefix
+from information_boards import statisticsAllDriversDay_ns_prefix, statisticsAllDriversMonth_ns_prefix, statisticsAllDriversTrip_ns_prefix
+
 
 from information_boards import DIn_PIn, DOut_PIn
 from information_boards import SEC3600, SEC600, SEC60, CENT
@@ -32,22 +33,22 @@ def run():
     # check_dir_create(statisticsAllDrivers_ap_dpath)
     check_dir_create(statisticsAllDrivers_ns_dpath)
     #
-    init_multiprocessor(11)
-    count_num_jobs = 0
-    for y in xrange(9, 11):
-        for m in xrange(1, 13):
-            yymm = '%02d%02d' % (y, m)
-            if yymm in ['0912', '1010']:
-                # both years data are corrupted
-                continue
-            # process_month(yymm)
-            put_task(aggregate_dayBased, [yymm])
-            count_num_jobs += 1
-    end_multiprocessor(count_num_jobs)
+    # init_multiprocessor(11)
+    # count_num_jobs = 0
+    # for y in xrange(9, 11):
+    #     for m in xrange(1, 13):
+    #         yymm = '%02d%02d' % (y, m)
+    #         if yymm in ['0912', '1010']:
+    #             # both years data are corrupted
+    #             continue
+    #         # process_month(yymm)
+    #         put_task(aggregate_dayBased, [yymm])
+    #         count_num_jobs += 1
+    # end_multiprocessor(count_num_jobs)
     #
-    # for y in range(9, 11):
-    #     yyyy = '20%02d' % y
-    #     aggregate_monthBased(yyyy)
+    for y in range(9, 11):
+        yyyy = '20%02d' % y
+        aggregate_monthBased(yyyy)
     #
     # for y in range(9, 11):
     #     yyyy = '20%02d' % y
@@ -107,7 +108,8 @@ def process_tripbased(yyyy):
 def aggregate_monthBased(yyyy):
     logger.info('handle the file; %s' % yyyy)
     #
-    statistics_fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ap_dpath, statisticsAllDriversMonth_ap_prefix, yyyy)
+    # statistics_fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ap_dpath, statisticsAllDriversMonth_ap_prefix, yyyy)
+    statistics_fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ns_dpath, statisticsAllDriversMonth_ns_prefix, yyyy)
     if check_path_exist(statistics_fpath):
         logger.info('The file had already been processed; %s' % yyyy)
         return
@@ -117,8 +119,10 @@ def aggregate_monthBased(yyyy):
     LTN, LIN, LON, \
     LQ, LEP, \
     LD, LF = range(10)
-    for dayBased_fn in get_all_files(statisticsAllDrivers_ap_dpath, '%s%s*'% (statisticsAllDriversDay_ap_prefix,yy)):
-        with open('%s/%s' % (statisticsAllDrivers_ap_dpath, dayBased_fn), 'rt') as r_csvfile:
+    # for dayBased_fn in get_all_files(statisticsAllDrivers_ap_dpath, '%s%s*' % (statisticsAllDriversDay_ap_prefix, yy)):
+    for dayBased_fn in get_all_files(statisticsAllDrivers_ns_dpath, '%s%s*'% (statisticsAllDriversDay_ns_prefix, yy)):
+        # with open('%s/%s' % (statisticsAllDrivers_ap_dpath, dayBased_fn), 'rt') as r_csvfile:
+        with open('%s/%s' % (statisticsAllDrivers_ns_dpath, dayBased_fn), 'rt') as r_csvfile:
             reader = csv.reader(r_csvfile)
             headers = reader.next()
             hid = {h: i for i, h in enumerate(headers)}

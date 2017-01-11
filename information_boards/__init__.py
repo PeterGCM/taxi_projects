@@ -89,7 +89,8 @@ statisticsAllDriversMonth_ap_prefix = 'statisticsAllDriversMonth-ap-'
 statisticsAllDriversTrip_ap_prefix = 'statisticsAllDriversTrip-ap-'
 statisticsAllDrivers_ns_dpath = '%s/%s' % (statisticsAllDrivers_dpath, 'ns')
 statisticsAllDriversDay_ns_prefix = 'statisticsAllDriversDay-ns-'
-
+statisticsAllDriversMonth_ns_prefix = 'statisticsAllDriversMonth-ns-'
+statisticsAllDriversTrip_ns_prefix = 'statisticsAllDriversTrip-ns-'
 
 
 

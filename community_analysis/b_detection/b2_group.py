@@ -24,6 +24,40 @@ logger = get_logger()
 
 
 def run():
+    init_process()
+    # repeat()
+
+
+def repeat():
+    for group_dpath, group_prefix, group_summary_fpath in \
+            [
+                (SP_group_dpath, SP_group_prefix, SP_group_summary_fpath),
+                (RP_group_dpath, RP_group_prefix, RP_group_summary_fpath)
+            ]:
+        group_fns = get_all_files(SP_group_dpath, '%sG*' % SP_group_prefix)[:]
+        for fn in group_fns:
+            if '&' in fn:
+                continue
+            print fn
+            gn = fn[:-len('.pkl')].split('-')[2]
+            ori_i = int(gn[len('G('):-len(')')])
+            igG = ig.Graph.Read_Pickle('%s/%s' % (SP_group_dpath, fn))
+            drivers = [v['name'] for v in igG.vs]
+            if len(drivers) > 50:
+                part = louvain.find_partition(igG, method='Modularity', weight='weight')
+                for i, sg in enumerate(part.subgraphs()):
+                    sub_gn = 'G(%d&%d)' % (ori_i, i)
+                    group_fpath = '%s/%s%s.pkl' % (group_dpath, group_prefix, sub_gn)
+                    sg.write_pickle(group_fpath)
+                    #
+                    drivers = [v['name'] for v in sg.vs]
+                    weights = [e['weight'] for e in sg.es]
+                    with open(group_summary_fpath, 'a') as w_csvfile:
+                        writer = csv.writer(w_csvfile, lineterminator='\n')
+                        writer.writerow([sub_gn, len(drivers), sum(weights) / float(len(drivers))])
+
+
+def init_process():
     for graph_dpath, graph_prefix, group_dpath, group_prefix, group_drivers_fapth, group_summary_fpath in \
         [
          (SP_graph_dpath, SP_graph_prefix, SP_group_dpath, SP_group_prefix, SP_group_drivers_fpath, SP_group_summary_fpath),
@@ -56,11 +90,21 @@ def run():
                     igid += 1
                 igG.add_edge(did_igid[did0], did_igid[did1], weight=abs(w))
         logger.info('Partitioning')
-        part = louvain.find_partition(igG, method='Modularity', weight='weight')
+        graphs = [igG]
+        groups = []
+        while graphs:
+            G = graphs.pop()
+            part = louvain.find_partition(G, method='Modularity', weight='weight')
+            for sg in part.subgraphs():
+                num_drivers = len(sg.vs)
+                if num_drivers > 100:
+                    graphs.append(sg)
+                else:
+                    groups.append((num_drivers, sg))
         #
         logger.info('Each group pickling and summary')
         group_drivers = {}
-        for i, sg in enumerate(part.subgraphs()):
+        for i, (_, sg) in enumerate(sorted(groups, reverse=True)):
             gn = 'G(%d)' % i
             group_fpath = '%s/%s%s.pkl' % (group_dpath, group_prefix, gn)
             sg.write_pickle(group_fpath)
