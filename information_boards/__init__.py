@@ -102,10 +102,14 @@ statisticsSsDriversDay_ap_prefix = 'statisticsSsDriversDay-ap-'
 statisticsSsDriversMonth_ap_prefix = 'statisticsSsDriversMonth-ap-'
 statisticsSsDriversTrip_ap_prefix = 'statisticsSsDriversTrip-ap-'
 statisticsSsDrivers_ns_dpath = '%s/%s' % (statisticsSsDrivers_dpath, 'ns')
-statisticsSsDriversDay_ns_prefix = 'statisticsSsDriversDay-ns-'
-statisticsSsDriversMonth_ns_prefix = 'statisticsSsDriversMonth-ns-'
-statisticsSsDriversTrip_ns_prefix = 'statisticsSsDriversTrip-ns-'
 
+statisticsSsDriversDay_ns1519_prefix = 'statisticsSsDriversDay-ns1519-'
+statisticsSsDriversMonth_ns1519_prefix = 'statisticsSsDriversMonth-ns1519-'
+statisticsSsDriversTrip_ns1519_prefix = 'statisticsSsDriversTrip-ns1519-'
+
+statisticsSsDriversDay_ns2000_prefix = 'statisticsSsDriversDay-ns2000-'
+statisticsSsDriversMonth_ns2000_prefix = 'statisticsSsDriversMonth-ns2000-'
+statisticsSsDriversTrip_ns2000_prefix = 'statisticsSsDriversTrip-ns2000-'
 
 
 
