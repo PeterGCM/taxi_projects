@@ -8,11 +8,12 @@ from community_analysis import FRI, SAT, SUN
 from community_analysis import PM2, PM11
 from community_analysis import taxi_home
 from community_analysis import ss_trips_dpath, ss_trips_prefix
-from community_analysis import FREE, POB
+from community_analysis import FREE
+from community_analysis import MIN20
 #
 from taxi_common import ss_drivers_dpath, ss_drivers_prefix
 from taxi_common.sg_grid_zone import get_sg_grid_xy_points
-from taxi_common.file_handling_functions import load_pickle_file, check_dir_create, check_path_exist, get_all_directories
+from taxi_common.file_handling_functions import load_pickle_file, check_dir_create, check_path_exist
 from taxi_common.log_handling_functions import get_logger
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
@@ -179,8 +180,13 @@ class driver(object):
         if cl_state != FREE:
             self.firstFreeStateTime = -1
         else:
+            # Handle previous log's state is not FREE
             if self.firstFreeStateTime == -1:
                 self.firstFreeStateTime = cl_time
+            # Handle driver's break
+            if self.pl_state == FREE and (cl_time - self.pl_time) > MIN20:
+                self.firstFreeStateTime = cl_time
+        #
         if self.pl_zone != cl_zone:
             self.zoneEnteredTime = cl_time
         self.pl_time, self.pl_zone, self.pl_state = cl_time, cl_zone, cl_state
