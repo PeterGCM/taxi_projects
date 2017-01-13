@@ -42,13 +42,13 @@ def run():
     #         count_num_jobs += 1
     # end_multiprocessor(count_num_jobs)
     #
-    for y in range(9, 11):
-        yyyy = '20%02d' % y
-        aggregate_monthBased(yyyy)
-    #
     # for y in range(9, 11):
     #     yyyy = '20%02d' % y
-    #     process_tripbased(yyyy)
+    #     aggregate_monthBased(yyyy)
+    #
+    for y in range(9, 11):
+        yyyy = '20%02d' % y
+        process_tripbased(yyyy)
 
 
 def process_tripbased(yyyy):
@@ -92,9 +92,9 @@ def process_tripbased(yyyy):
                     weekEnd = 1
                 timePassed = (year - 2009) * 12 + max(0, (month - 1))
                 timePassed_2 = timePassed ** 2
-                if hour in [15, 16, 17, 18, 19]:
+                if hour in [15, 16, 17]:
                     statistics_fpath = statistics1517_fpath
-                elif hour in [20, 21, 22, 23, 0]:
+                elif hour in [20, 21, 22, 23]:
                     statistics_fpath = statistics2023_fpath
                 else:
                     continue
