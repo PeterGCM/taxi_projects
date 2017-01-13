@@ -7,14 +7,14 @@ import __init__
 from information_boards import statisticsAllDrivers_ap_dpath
 from information_boards import statisticsAllDriversDay_ap_prefix, statisticsAllDriversMonth_ap_prefix, statisticsAllDriversTrip_ap_prefix
 from information_boards import statisticsAllDrivers_ns_dpath
-from information_boards import statisticsAllDriversDay_ns1519_prefix, statisticsAllDriversMonth_ns1519_prefix, statisticsAllDriversTrip_ns1519_prefix
-from information_boards import statisticsAllDriversDay_ns2000_prefix, statisticsAllDriversMonth_ns2000_prefix, statisticsAllDriversTrip_ns2000_prefix
+from information_boards import statisticsAllDriversDay_ns1517_prefix, statisticsAllDriversMonth_ns1517_prefix, statisticsAllDriversTrip_ns1517_prefix
+from information_boards import statisticsAllDriversDay_ns2023_prefix, statisticsAllDriversMonth_ns2023_prefix, statisticsAllDriversTrip_ns2023_prefix
 
 from information_boards import statisticsSsDrivers_ap_dpath
 from information_boards import statisticsSsDriversDay_ap_prefix, statisticsSsDriversMonth_ap_prefix, statisticsSsDriversTrip_ap_prefix
 from information_boards import statisticsSsDrivers_ns_dpath
-from information_boards import statisticsSsDriversDay_ns1519_prefix, statisticsSsDriversMonth_ns1519_prefix, statisticsSsDriversTrip_ns1519_prefix
-from information_boards import statisticsSsDriversDay_ns2000_prefix, statisticsSsDriversMonth_ns2000_prefix, statisticsSsDriversTrip_ns2000_prefix
+from information_boards import statisticsSsDriversDay_ns1517_prefix, statisticsSsDriversMonth_ns1517_prefix, statisticsSsDriversTrip_ns1517_prefix
+from information_boards import statisticsSsDriversDay_ns2023_prefix, statisticsSsDriversMonth_ns2023_prefix, statisticsSsDriversTrip_ns2023_prefix
 #
 from taxi_common import ss_drivers_dpath, ss_drivers_prefix
 from taxi_common.file_handling_functions import check_dir_create, load_pickle_file, get_all_files
@@ -44,16 +44,16 @@ def run():
                                 ]:
         for all_prefix, ss_prefix in [
                                     # (statisticsAllDriversDay_ap_prefix, statisticsSsDriversDay_ap_prefix),
-                                      (statisticsAllDriversDay_ns1519_prefix, statisticsSsDriversDay_ns1519_prefix),
-                                      (statisticsAllDriversDay_ns2000_prefix, statisticsSsDriversDay_ns2000_prefix),
+                                      (statisticsAllDriversDay_ns1517_prefix, statisticsSsDriversDay_ns1517_prefix),
+                                      (statisticsAllDriversDay_ns2023_prefix, statisticsSsDriversDay_ns2023_prefix),
 
                                       # (statisticsAllDriversMonth_ap_prefix, statisticsSsDriversMonth_ap_prefix),
-                                      (statisticsAllDriversMonth_ns1519_prefix, statisticsSsDriversMonth_ns1519_prefix),
-                                      (statisticsAllDriversMonth_ns2000_prefix, statisticsSsDriversMonth_ns2000_prefix),
+                                      (statisticsAllDriversMonth_ns1517_prefix, statisticsSsDriversMonth_ns1517_prefix),
+                                      (statisticsAllDriversMonth_ns2023_prefix, statisticsSsDriversMonth_ns2023_prefix),
 
                                       # (statisticsAllDriversTrip_ap_prefix, statisticsSsDriversTrip_ap_prefix),
-                                      (statisticsAllDriversTrip_ns1519_prefix, statisticsSsDriversTrip_ns1519_prefix),
-                                      (statisticsAllDriversTrip_ns2000_prefix, statisticsSsDriversTrip_ns2000_prefix),
+                                      (statisticsAllDriversTrip_ns1517_prefix, statisticsSsDriversTrip_ns1517_prefix),
+                                      (statisticsAllDriversTrip_ns2023_prefix, statisticsSsDriversTrip_ns2023_prefix),
                                       ]:
             for fn in get_all_files(all_dpath, '%s*' % all_prefix):
                 period = fn[:-len('.csv')].split('-')[2]

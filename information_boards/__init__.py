@@ -89,12 +89,12 @@ statisticsAllDriversMonth_ap_prefix = 'statisticsAllDriversMonth-ap-'
 statisticsAllDriversTrip_ap_prefix = 'statisticsAllDriversTrip-ap-'
 
 statisticsAllDrivers_ns_dpath = '%s/%s' % (statisticsAllDrivers_dpath, 'ns')
-statisticsAllDriversDay_ns1519_prefix = 'statisticsAllDriversDay-ns1519-'
-statisticsAllDriversMonth_ns1519_prefix = 'statisticsAllDriversMonth-ns1519-'
-statisticsAllDriversTrip_ns1519_prefix = 'statisticsAllDriversTrip-ns1519-'
-statisticsAllDriversDay_ns2000_prefix = 'statisticsAllDriversDay-ns2000-'
-statisticsAllDriversMonth_ns2000_prefix = 'statisticsAllDriversMonth-ns2000-'
-statisticsAllDriversTrip_ns2000_prefix = 'statisticsAllDriversTrip-ns2000-'
+statisticsAllDriversDay_ns1517_prefix = 'statisticsAllDriversDay-ns1517-'
+statisticsAllDriversMonth_ns1517_prefix = 'statisticsAllDriversMonth-ns1517-'
+statisticsAllDriversTrip_ns1517_prefix = 'statisticsAllDriversTrip-ns1517-'
+statisticsAllDriversDay_ns2023_prefix = 'statisticsAllDriversDay-ns2023-'
+statisticsAllDriversMonth_ns2023_prefix = 'statisticsAllDriversMonth-ns2023-'
+statisticsAllDriversTrip_ns2023_prefix = 'statisticsAllDriversTrip-ns2023-'
 
 statisticsSsDrivers_dpath = '%s/%s' % (statistics_dpath, 'statisticsSsDrivers')
 statisticsSsDrivers_ap_dpath = '%s/%s' % (statisticsSsDrivers_dpath, 'ap')
@@ -103,13 +103,13 @@ statisticsSsDriversMonth_ap_prefix = 'statisticsSsDriversMonth-ap-'
 statisticsSsDriversTrip_ap_prefix = 'statisticsSsDriversTrip-ap-'
 statisticsSsDrivers_ns_dpath = '%s/%s' % (statisticsSsDrivers_dpath, 'ns')
 
-statisticsSsDriversDay_ns1519_prefix = 'statisticsSsDriversDay-ns1519-'
-statisticsSsDriversMonth_ns1519_prefix = 'statisticsSsDriversMonth-ns1519-'
-statisticsSsDriversTrip_ns1519_prefix = 'statisticsSsDriversTrip-ns1519-'
+statisticsSsDriversDay_ns1517_prefix = 'statisticsSsDriversDay-ns1517-'
+statisticsSsDriversMonth_ns1517_prefix = 'statisticsSsDriversMonth-ns1517-'
+statisticsSsDriversTrip_ns1517_prefix = 'statisticsSsDriversTrip-ns1517-'
 
-statisticsSsDriversDay_ns2000_prefix = 'statisticsSsDriversDay-ns2000-'
-statisticsSsDriversMonth_ns2000_prefix = 'statisticsSsDriversMonth-ns2000-'
-statisticsSsDriversTrip_ns2000_prefix = 'statisticsSsDriversTrip-ns2000-'
+statisticsSsDriversDay_ns2023_prefix = 'statisticsSsDriversDay-ns2023-'
+statisticsSsDriversMonth_ns2023_prefix = 'statisticsSsDriversMonth-ns2023-'
+statisticsSsDriversTrip_ns2023_prefix = 'statisticsSsDriversTrip-ns2023-'
 
 
 

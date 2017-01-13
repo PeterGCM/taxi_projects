@@ -8,8 +8,8 @@ from information_boards import trip_dpath, trip_prefix
 from information_boards import shiftProDur_dpath, shiftProDur_prefix
 from information_boards import economicProfit_ns_dpath, economicProfit_ns_prefix
 from information_boards import statisticsAllDrivers_ns_dpath
-from information_boards import statisticsAllDriversDay_ns1519_prefix, statisticsAllDriversMonth_ns1519_prefix, statisticsAllDriversTrip_ns1519_prefix
-from information_boards import statisticsAllDriversDay_ns2000_prefix, statisticsAllDriversMonth_ns2000_prefix, statisticsAllDriversTrip_ns2000_prefix
+from information_boards import statisticsAllDriversDay_ns1517_prefix, statisticsAllDriversMonth_ns1517_prefix, statisticsAllDriversTrip_ns1517_prefix
+from information_boards import statisticsAllDriversDay_ns2023_prefix, statisticsAllDriversMonth_ns2023_prefix, statisticsAllDriversTrip_ns2023_prefix
 
 
 from information_boards import DIn_PIn, DOut_PIn
@@ -29,39 +29,39 @@ logger = get_logger()
 def run():
     check_dir_create(statisticsAllDrivers_ns_dpath)
     #
-    # init_multiprocessor(11)
-    # count_num_jobs = 0
-    # for y in xrange(9, 11):
-    #     for m in xrange(1, 13):
-    #         yymm = '%02d%02d' % (y, m)
-    #         if yymm in ['0912', '1010']:
-    #             # both years data are corrupted
-    #             continue
-    #         # process_month(yymm)
-    #         put_task(aggregate_dayBased, [yymm])
-    #         count_num_jobs += 1
-    # end_multiprocessor(count_num_jobs)
+    init_multiprocessor(11)
+    count_num_jobs = 0
+    for y in xrange(9, 11):
+        for m in xrange(1, 13):
+            yymm = '%02d%02d' % (y, m)
+            if yymm in ['0912', '1010']:
+                # both years data are corrupted
+                continue
+            # process_month(yymm)
+            put_task(aggregate_dayBased, [yymm])
+            count_num_jobs += 1
+    end_multiprocessor(count_num_jobs)
     #
-    for y in range(9, 11):
-        yyyy = '20%02d' % y
-        aggregate_monthBased(yyyy)
-
-    for y in range(9, 11):
-        yyyy = '20%02d' % y
-        process_tripbased(yyyy)
+    # for y in range(9, 11):
+    #     yyyy = '20%02d' % y
+    #     aggregate_monthBased(yyyy)
+    #
+    # for y in range(9, 11):
+    #     yyyy = '20%02d' % y
+    #     process_tripbased(yyyy)
 
 
 def process_tripbased(yyyy):
     logger.info('handle the file; %s' % yyyy)
     #
-    statistics1519_fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ns_dpath, statisticsAllDriversTrip_ns1519_prefix, yyyy)
-    statistics2000_fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ns_dpath, statisticsAllDriversTrip_ns2000_prefix, yyyy)
-    if check_path_exist(statistics1519_fpath):
+    statistics1517_fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ns_dpath, statisticsAllDriversTrip_ns1517_prefix, yyyy)
+    statistics2023_fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ns_dpath, statisticsAllDriversTrip_ns2023_prefix, yyyy)
+    if check_path_exist(statistics1517_fpath):
         logger.info('The file had already been processed; %s' % yyyy)
         return
     yy = yyyy[2:]
     holidays = HOLIDAYS2009 if yyyy == '2009' else HOLIDAYS2010
-    for statistics_fpath in [statistics1519_fpath, statistics2000_fpath]:
+    for statistics_fpath in [statistics1517_fpath, statistics2023_fpath]:
         with open(statistics_fpath, 'wb') as w_csvfile:
             writer = csv.writer(w_csvfile, lineterminator='\n')
             header = ['year', 'month', 'day', 'hour',
@@ -93,9 +93,9 @@ def process_tripbased(yyyy):
                 timePassed = (year - 2009) * 12 + max(0, (month - 1))
                 timePassed_2 = timePassed ** 2
                 if hour in [15, 16, 17, 18, 19]:
-                    statistics_fpath = statistics1519_fpath
+                    statistics_fpath = statistics1517_fpath
                 elif hour in [20, 21, 22, 23, 0]:
-                    statistics_fpath = statistics2000_fpath
+                    statistics_fpath = statistics2023_fpath
                 else:
                     continue
                 with open(statistics_fpath, 'a') as w_csvfile:
@@ -114,9 +114,9 @@ def process_tripbased(yyyy):
 def aggregate_monthBased(yyyy):
     logger.info('handle the file; %s' % yyyy)
     #
-    statistics1519_fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ns_dpath, statisticsAllDriversMonth_ns1519_prefix, yyyy)
-    statistics2000_fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ns_dpath, statisticsAllDriversMonth_ns2000_prefix, yyyy)
-    if check_path_exist(statistics1519_fpath):
+    statistics1517_fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ns_dpath, statisticsAllDriversMonth_ns1517_prefix, yyyy)
+    statistics2023_fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ns_dpath, statisticsAllDriversMonth_ns2023_prefix, yyyy)
+    if check_path_exist(statistics1517_fpath):
         logger.info('The file had already been processed; %s' % yyyy)
         return
     yy = yyyy[2:]
@@ -125,8 +125,8 @@ def aggregate_monthBased(yyyy):
     LTN, LIN, LON, \
     LQ, LEP, \
     LD, LF = range(10)
-    for statisticsAllDriversDay_ns_prefix, statistics_fpath in [(statisticsAllDriversDay_ns1519_prefix, statistics1519_fpath),
-                                                                (statisticsAllDriversDay_ns2000_prefix, statistics2000_fpath)]:
+    for statisticsAllDriversDay_ns_prefix, statistics_fpath in [(statisticsAllDriversDay_ns1517_prefix, statistics1517_fpath),
+                                                                (statisticsAllDriversDay_ns2023_prefix, statistics2023_fpath)]:
         for dayBased_fn in get_all_files(statisticsAllDrivers_ns_dpath, '%s%s*'% (statisticsAllDriversDay_ns_prefix, yy)):
             with open('%s/%s' % (statisticsAllDrivers_ns_dpath, dayBased_fn), 'rt') as r_csvfile:
                 reader = csv.reader(r_csvfile)
@@ -188,29 +188,30 @@ def aggregate_monthBased(yyyy):
 def aggregate_dayBased(yymm):
     logger.info('handle the file; %s' % yymm)
     #
-    statistics1519_fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ns_dpath, statisticsAllDriversDay_ns1519_prefix, yymm)
-    statistics2000_fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ns_dpath, statisticsAllDriversDay_ns2000_prefix, yymm)
-    if check_path_exist(statistics1519_fpath):
+    statistics1517_fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ns_dpath, statisticsAllDriversDay_ns1517_prefix, yymm)
+    statistics2023_fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ns_dpath, statisticsAllDriversDay_ns2023_prefix, yymm)
+    if check_path_exist(statistics1517_fpath):
         logger.info('The file had already been processed; %s' % yymm)
         return
-    dateDid_statistics1519, dateDid_statistics2000 = {}, {}
+    dateDid_statistics1517, dateDid_statistics2023 = {}, {}
     WTN, WOH, WF, \
     LTN, LIN, LON, \
     LQ, LEP, \
     LD, LF = range(10)
+    tf_ns1517 = [15, 16, 17]
+    tf_ns2023 = [20, 21, 22, 23]
     #
     logger.info('process locTrip; %s' % yymm)
-    # with open('%s/%s%s.csv' % (economicProfit_ap_dpath, economicProfit_ap_prefix, yymm), 'rt') as r_csvfile:
     with open('%s/%s%s.csv' % (economicProfit_ns_dpath, economicProfit_ns_prefix, yymm), 'rt') as r_csvfile:
         reader = csv.reader(r_csvfile)
         headers = reader.next()
         hid = {h: i for i, h in enumerate(headers)}
         for row in reader:
             year, month, day, hour = map(int, [row[hid[cn]] for cn in ['year', 'month', 'day', 'hour']])
-            if hour in [15, 16, 17, 18, 19]:
-                dateDid_statistics = dateDid_statistics1519
-            elif hour in [20, 21, 22, 23, 0]:
-                dateDid_statistics = dateDid_statistics2000
+            if hour in tf_ns1517:
+                dateDid_statistics = dateDid_statistics1517
+            elif hour in tf_ns2023:
+                dateDid_statistics = dateDid_statistics2023
             else:
                 continue
             did = int(row[hid['did']])
@@ -235,10 +236,10 @@ def aggregate_dayBased(yymm):
         hid = {h: i for i, h in enumerate(headers)}
         for row in reader:
             year, month, day, hour = 2000 + int(row[hid['yy']]), int(row[hid['mm']]), int(row[hid['dd']]), int(row[hid['hh']])
-            if hour in [15, 16, 17, 18, 19]:
-                dateDid_statistics = dateDid_statistics1519
-            elif hour in [20, 21, 22, 23, 0]:
-                dateDid_statistics = dateDid_statistics2000
+            if hour in tf_ns1517:
+                dateDid_statistics = dateDid_statistics1517
+            elif hour in tf_ns2023:
+                dateDid_statistics = dateDid_statistics2023
             else:
                 continue
             did = int(row[hid['did']])
@@ -256,10 +257,10 @@ def aggregate_dayBased(yymm):
         hid = {h: i for i, h in enumerate(headers)}
         for row in reader:
             day, hour = int(row[hid['day']]), int(row[hid['hour']])
-            if hour in [15, 16, 17, 18, 19]:
-                dateDid_statistics = dateDid_statistics1519
-            elif hour in [20, 21, 22, 23, 0]:
-                dateDid_statistics = dateDid_statistics2000
+            if hour in tf_ns1517:
+                dateDid_statistics = dateDid_statistics1517
+            elif hour in tf_ns2023:
+                dateDid_statistics = dateDid_statistics2023
             else:
                 continue
             did = int(row[hid['did']])
@@ -270,8 +271,8 @@ def aggregate_dayBased(yymm):
             dateDid_statistics[k][WF] += float(row[hid['fare']]) / CENT
     #
     logger.info('write statistics; %s' % yymm)
-    for statistics_fpath, dateDid_statistics in [(statistics1519_fpath, dateDid_statistics1519),
-                                                 (statistics2000_fpath, dateDid_statistics2000)]:
+    for statistics_fpath, dateDid_statistics in [(statistics1517_fpath, dateDid_statistics1517),
+                                                 (statistics2023_fpath, dateDid_statistics2023)]:
         with open(statistics_fpath, 'wb') as w_csvfile:
             writer = csv.writer(w_csvfile, lineterminator='\n')
             header = ['year', 'month', 'day', 'driverID',
