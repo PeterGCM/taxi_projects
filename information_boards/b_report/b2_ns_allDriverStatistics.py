@@ -29,22 +29,22 @@ logger = get_logger()
 def run():
     check_dir_create(statisticsAllDrivers_ns_dpath)
     #
-    init_multiprocessor(11)
-    count_num_jobs = 0
-    for y in xrange(9, 11):
-        for m in xrange(1, 13):
-            yymm = '%02d%02d' % (y, m)
-            if yymm in ['0912', '1010']:
-                # both years data are corrupted
-                continue
-            # process_month(yymm)
-            put_task(aggregate_dayBased, [yymm])
-            count_num_jobs += 1
-    end_multiprocessor(count_num_jobs)
+    # init_multiprocessor(11)
+    # count_num_jobs = 0
+    # for y in xrange(9, 11):
+    #     for m in xrange(1, 13):
+    #         yymm = '%02d%02d' % (y, m)
+    #         if yymm in ['0912', '1010']:
+    #             # both years data are corrupted
+    #             continue
+    #         # process_month(yymm)
+    #         put_task(aggregate_dayBased, [yymm])
+    #         count_num_jobs += 1
+    # end_multiprocessor(count_num_jobs)
     #
-    # for y in range(9, 11):
-    #     yyyy = '20%02d' % y
-    #     aggregate_monthBased(yyyy)
+    for y in range(9, 11):
+        yyyy = '20%02d' % y
+        aggregate_monthBased(yyyy)
     #
     # for y in range(9, 11):
     #     yyyy = '20%02d' % y
@@ -119,35 +119,35 @@ def aggregate_monthBased(yyyy):
     if check_path_exist(statistics1517_fpath):
         logger.info('The file had already been processed; %s' % yyyy)
         return
-    yy = yyyy[2:]
-    dateDid_statistics = {}
     WTN, WOH, WF, \
     LTN, LIN, LON, \
     LQ, LEP, \
     LD, LF = range(10)
     for statisticsAllDriversDay_ns_prefix, statistics_fpath in [(statisticsAllDriversDay_ns1517_prefix, statistics1517_fpath),
                                                                 (statisticsAllDriversDay_ns2023_prefix, statistics2023_fpath)]:
-        for dayBased_fn in get_all_files(statisticsAllDrivers_ns_dpath, '%s%s*'% (statisticsAllDriversDay_ns_prefix, yy)):
-            with open('%s/%s' % (statisticsAllDrivers_ns_dpath, dayBased_fn), 'rt') as r_csvfile:
-                reader = csv.reader(r_csvfile)
-                headers = reader.next()
-                hid = {h: i for i, h in enumerate(headers)}
-                for row in reader:
-                    year, month = map(int, [row[hid[cn]] for cn in ['year', 'month']])
-                    did = int(row[hid['driverID']])
-                    k = (year, month, did)
-                    if not dateDid_statistics.has_key(k):
-                        dateDid_statistics[k] = [0.0 for _ in [WTN, WOH, WF, LTN, LIN, LON, LQ, LEP, LD, LF]]
-                    dateDid_statistics[k][WTN] += int(row[hid['wleTripNumber']])
-                    dateDid_statistics[k][WOH] += float(row[hid['wleOperatingHour']])
-                    dateDid_statistics[k][WF] += float(row[hid['wleFare']])
-                    dateDid_statistics[k][LTN] += int(row[hid['locTripNumber']])
-                    dateDid_statistics[k][LIN] += int(row[hid['locInNumber']])
-                    dateDid_statistics[k][LON] += int(row[hid['locOutNumber']])
-                    dateDid_statistics[k][LQ] += float(row[hid['locQTime']])
-                    dateDid_statistics[k][LEP] += float(row[hid['locEP']])
-                    dateDid_statistics[k][LD] += float(row[hid['locDuration']])
-                    dateDid_statistics[k][LF] += float(row[hid['locFare']])
+        dateDid_statistics = {}
+        with open('%s/Filtered-%sall.csv' % (statisticsAllDrivers_ns_dpath, statisticsAllDriversDay_ns_prefix), 'rt') as r_csvfile:
+            reader = csv.reader(r_csvfile)
+            headers = reader.next()
+            hid = {h: i for i, h in enumerate(headers)}
+            for row in reader:
+                year, month = map(int, [row[hid[cn]] for cn in ['year', 'month']])
+                if year != int(yyyy):
+                    continue
+                did = int(row[hid['driverID']])
+                k = (year, month, did)
+                if not dateDid_statistics.has_key(k):
+                    dateDid_statistics[k] = [0.0 for _ in [WTN, WOH, WF, LTN, LIN, LON, LQ, LEP, LD, LF]]
+                dateDid_statistics[k][WTN] += int(row[hid['wleTripNumber']])
+                dateDid_statistics[k][WOH] += float(row[hid['wleOperatingHour']])
+                dateDid_statistics[k][WF] += float(row[hid['wleFare']])
+                dateDid_statistics[k][LTN] += int(row[hid['locTripNumber']])
+                dateDid_statistics[k][LIN] += int(row[hid['locInNumber']])
+                dateDid_statistics[k][LON] += int(row[hid['locOutNumber']])
+                dateDid_statistics[k][LQ] += float(row[hid['locQTime']])
+                dateDid_statistics[k][LEP] += float(row[hid['locEP']])
+                dateDid_statistics[k][LD] += float(row[hid['locDuration']])
+                dateDid_statistics[k][LF] += float(row[hid['locFare']])
         #
         with open(statistics_fpath, 'wb') as w_csvfile:
             writer = csv.writer(w_csvfile, lineterminator='\n')
