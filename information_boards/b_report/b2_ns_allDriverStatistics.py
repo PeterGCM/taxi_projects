@@ -32,7 +32,7 @@ def run():
     # init_multiprocessor(11)
     # count_num_jobs = 0
     # for y in xrange(9, 11):
-    #     for m in xrange(1, 13):
+    #     for m in xrange(1, 13):`
     #         yymm = '%02d%02d' % (y, m)
     #         if yymm in ['0912', '1010']:
     #             # both years data are corrupted
