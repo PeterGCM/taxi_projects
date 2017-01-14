@@ -187,7 +187,7 @@ def process_dayBased():
                 headers = reader.next()
                 hid = {h: i for i, h in enumerate(headers)}
                 for row in reader:
-                    year, month, day = 2000 + int(row[hid['yy']]), int(row[hid['mm']]), int(row[hid['dd']])
+                    year, month, day, hour = 2000 + int(row[hid['yy']]), int(row[hid['mm']]), int(row[hid['dd']]), int(row[hid['hh']])
                     if hour in tf_ns1517:
                         dateDid_statistics = dateDid_statistics1517
                     elif hour in tf_ns2023:
