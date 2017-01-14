@@ -323,7 +323,7 @@ def aggregate_yearBased():
         yyyy = '20%02d' % y
         statistics_fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ap_dpath, statisticsAllDriversYear_ap_prefix, yyyy)
         dateDid_statistics = {}
-        with open('%s/%s%s.csv' % (statisticsAllDrivers_ap_dpath, statisticsAllDriversMonth_ap_prefix, yyyy), 'rt') as r_csvfile:
+        with open('%s/Filtered-%s%s.csv' % (statisticsAllDrivers_ap_dpath, statisticsAllDriversMonth_ap_prefix, yyyy), 'rt') as r_csvfile:
             reader = csv.reader(r_csvfile)
             headers = reader.next()
             hid = {h: i for i, h in enumerate(headers)}
