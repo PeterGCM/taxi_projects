@@ -306,7 +306,7 @@ def filter_monthBased():
         for cn in Ydf.columns:
             if cn in ['year', 'month', 'day', 'hour', 'driverID']:
                 continue
-            if cn == 'wleNumDriver':
+            if cn == 'locTripNumber':
                 outlier_set = set(np.where(Ydf[cn] < 4)[0].tolist())
                 outlier_index = outlier_index.union(set(outlier_set))
         Ydf = Ydf.drop(Ydf.index[list(outlier_index)])
