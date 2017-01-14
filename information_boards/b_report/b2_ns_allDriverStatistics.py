@@ -27,15 +27,22 @@ import pandas as pd
 
 logger = get_logger()
 
+WTN, WOH, WF, \
+LTN, LIN, LON, \
+LQ, LEP, \
+LD, LF = range(10)
 
 tf_ns1517 = [15, 16, 17]
 tf_ns2023 = [20, 21, 22, 23]
+
 
 def run():
     check_dir_create(statisticsAllDrivers_ns_dpath)
     #
     process_tripbased()
     filter_tripbased()
+    #
+    process_dayBased()
     #
     # init_multiprocessor(11)
     # count_num_jobs = 0
@@ -134,6 +141,125 @@ def filter_tripbased():
                     outlier_index = outlier_index.union(set(outlier_set))
             Ydf = Ydf.drop(Ydf.index[list(outlier_index)])
             Ydf.to_csv('%s/Filtered-%s%s.csv' % (statisticsAllDrivers_ns_dpath, statisticsAllDriversTrip_ns_prefix, yyyy), index=False)
+
+
+def process_dayBased():
+    logger.info('handle dayBased')
+    #
+    for y in range(9, 11):
+        yyyy = '20%02d' % y
+        logger.info('handle the file; %s' % yyyy)
+        statistics1517_fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ns_dpath, statisticsAllDriversDay_ns1517_prefix, yymm)
+        statistics2023_fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ns_dpath, statisticsAllDriversDay_ns2023_prefix, yymm)
+        #
+        dateDid_statistics1517, dateDid_statistics2023 = {}, {}
+        logger.info('process locTrip')
+        for ns_prefix, dateDid_statistics in [(statisticsAllDriversTrip_ns1517_prefix, dateDid_statistics1517),
+                                                   (statisticsAllDriversTrip_ns2023_prefix, dateDid_statistics2023)]:
+            tripBased_fpath = '%s/Filtered-%s%s.csv' % (statisticsAllDrivers_ns_dpath, ns_prefix, yyyy)
+            logger.info('process locTrip')
+            with open(tripBased_fpath, 'rt') as r_csvfile:
+                reader = csv.reader(r_csvfile)
+                headers = reader.next()
+                hid = {h: i for i, h in enumerate(headers)}
+                for row in reader:
+                    year, month, day = map(int, [row[hid[cn]] for cn in ['year', 'month', 'day']])
+                    did = int(row[hid['did']])
+                    k = (year, month, day, did)
+                    if not dateDid_statistics.has_key(k):
+                        dateDid_statistics[k] = [0.0 for _ in [WTN, WOH, WF, LTN, LIN, LON, LQ, LEP, LD, LF]]
+                    dateDid_statistics[k][LTN] += 1
+                    if int(row[hid['tripMode']]) == DIn_PIn:
+                        dateDid_statistics[k][LIN] += 1
+                    else:
+                        assert int(row[hid['tripMode']]) == DOut_PIn
+                        dateDid_statistics[k][LON] += 1
+                    dateDid_statistics[k][LQ] += float(row[hid['queueingTime']]) / SEC60
+                    dateDid_statistics[k][LEP] += float(row[hid['economicProfit']]) / CENT
+                    dateDid_statistics[k][LD] += float(row[hid['duration']]) / SEC60
+                    dateDid_statistics[k][LF] += float(row[hid['fare']]) / CENT
+        yy = yyyy[2:]
+        logger.info('process shift')
+        for fn in get_all_files(shiftProDur_dpath, '%s%s*' % (shiftProDur_prefix, yy)):
+            with open('%s/%s' % (shiftProDur_dpath, fn), 'rt') as r_csvfile:
+                reader = csv.reader(r_csvfile)
+                headers = reader.next()
+                hid = {h: i for i, h in enumerate(headers)}
+                for row in reader:
+                    year, month, day = 2000 + int(row[hid['yy']]), int(row[hid['mm']]), int(row[hid['dd']])
+                    if hour in tf_ns1517:
+                        dateDid_statistics = dateDid_statistics1517
+                    elif hour in tf_ns2023:
+                        dateDid_statistics = dateDid_statistics2023
+                    else:
+                        continue
+                    did = int(row[hid['did']])
+                    k = (year, month, day, did)
+                    if not dateDid_statistics.has_key(k):
+                        continue
+                    dateDid_statistics[k][WOH] += (float(row[hid['pro-dur']]) * SEC60) / SEC3600
+
+        logger.info('process trip')
+        for fn in get_all_files(trip_dpath, '%s%s*' % (trip_prefix, yy)):
+            _, yymm = fn[:-len('.csv')].split('-')
+            yy, mm = yymm[:2], yymm[-2:]
+            year, month = 2000 + int(yy), int(mm)
+            with open('%s/%s' % (trip_dpath, fn), 'rt') as r_csvfile:
+                reader = csv.reader(r_csvfile)
+                headers = reader.next()
+                hid = {h: i for i, h in enumerate(headers)}
+                for row in reader:
+                    day, hour = int(row[hid['day']]), int(row[hid['hour']])
+                    if hour in tf_ns1517:
+                        dateDid_statistics = dateDid_statistics1517
+                    elif hour in tf_ns2023:
+                        dateDid_statistics = dateDid_statistics2023
+                    else:
+                        continue
+                    did = int(row[hid['did']])
+                    k = (year, month, day, did)
+                    if not dateDid_statistics.has_key(k):
+                        continue
+                    dateDid_statistics[k][WTN] += 1
+                    dateDid_statistics[k][WF] += float(row[hid['fare']]) / CENT
+        #
+        logger.info('write statistics; %s' % yymm)
+        for statistics_fpath, dateDid_statistics in [(statistics1517_fpath, dateDid_statistics1517),
+                                                     (statistics2023_fpath, dateDid_statistics2023)]:
+            with open(statistics_fpath, 'wb') as w_csvfile:
+                writer = csv.writer(w_csvfile, lineterminator='\n')
+                header = ['year', 'month', 'day', 'driverID',
+                          'wleTripNumber', 'wleOperatingHour', 'wleFare',
+                          'wleProductivity',
+                          'locTripNumber', 'locInNumber', 'locOutNumber',
+                          'locQTime', 'locEP', 'locDuration', 'locFare',
+                          'QTime/locTrip', 'EP/locTrip',
+                          'locProductivity']
+                writer.writerow(header)
+                for (year, month, day, did), statistics in dateDid_statistics.iteritems():
+                    wleTripNumber, wleOperatingHour, wleFare = int(statistics[WTN]), statistics[WOH], statistics[WF],
+                    if wleOperatingHour == 0.0:
+                        continue
+                    wleProductivity = wleFare / wleOperatingHour
+                    #
+                    locTripNumber, locInNumber, locOutNumber = map(int, [statistics[LTN], statistics[LIN], statistics[LON]])
+                    if locTripNumber == 0.0:
+                        continue
+                    locQTime, locEP, locDuration, locFare = statistics[LQ], statistics[LEP], statistics[LD], statistics[LF]
+                    if (locQTime + locDuration) == 0.0:
+                        continue
+                    QTime_locTrip, EP_locTrip = locQTime / float(locTripNumber), locEP / float(locTripNumber)
+                    locProductivity = (locFare / (locQTime + locDuration)) * SEC60
+                    new_row = [
+                        year, month, day, did,
+                        wleTripNumber, wleOperatingHour, wleFare,
+                        wleProductivity,
+                        locTripNumber, locInNumber, locOutNumber,
+                        locQTime, locEP, locDuration, locFare,
+                        QTime_locTrip, EP_locTrip,
+                        locProductivity]
+                    writer.writerow(new_row)
+
 
 def aggregate_yearBased():
     logger.info('handle year based')
@@ -270,128 +396,6 @@ def aggregate_monthBased(yyyy):
                     locInRatio]
                 writer.writerow(new_row)
 
-
-def aggregate_dayBased(yymm):
-    logger.info('handle the file; %s' % yymm)
-    #
-    statistics1517_fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ns_dpath, statisticsAllDriversDay_ns1517_prefix, yymm)
-    statistics2023_fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ns_dpath, statisticsAllDriversDay_ns2023_prefix, yymm)
-    if check_path_exist(statistics1517_fpath):
-        logger.info('The file had already been processed; %s' % yymm)
-        return
-    dateDid_statistics1517, dateDid_statistics2023 = {}, {}
-    WTN, WOH, WF, \
-    LTN, LIN, LON, \
-    LQ, LEP, \
-    LD, LF = range(10)
-    tf_ns1517 = [15, 16, 17]
-    tf_ns2023 = [20, 21, 22, 23]
-    #
-    logger.info('process locTrip; %s' % yymm)
-    with open('%s/%s%s.csv' % (economicProfit_ns_dpath, economicProfit_ns_prefix, yymm), 'rt') as r_csvfile:
-        reader = csv.reader(r_csvfile)
-        headers = reader.next()
-        hid = {h: i for i, h in enumerate(headers)}
-        for row in reader:
-            year, month, day, hour = map(int, [row[hid[cn]] for cn in ['year', 'month', 'day', 'hour']])
-            if hour in tf_ns1517:
-                dateDid_statistics = dateDid_statistics1517
-            elif hour in tf_ns2023:
-                dateDid_statistics = dateDid_statistics2023
-            else:
-                continue
-            did = int(row[hid['did']])
-            k = (year, month, day, did)
-            if not dateDid_statistics.has_key(k):
-                dateDid_statistics[k] = [0.0 for _ in [WTN, WOH, WF, LTN, LIN, LON, LQ, LEP, LD, LF]]
-            dateDid_statistics[k][LTN] += 1
-            if int(row[hid['tripMode']]) == DIn_PIn:
-                dateDid_statistics[k][LIN] += 1
-            else:
-                assert int(row[hid['tripMode']]) == DOut_PIn
-                dateDid_statistics[k][LON] += 1
-            dateDid_statistics[k][LQ] += float(row[hid['queueingTime']]) / SEC60
-            dateDid_statistics[k][LEP] += float(row[hid['economicProfit']]) / CENT
-            dateDid_statistics[k][LD] += float(row[hid['duration']]) / SEC60
-            dateDid_statistics[k][LF] += float(row[hid['fare']]) / CENT
-    #
-    logger.info('process shift; %s' % yymm)
-    with open('%s/%s%s.csv' % (shiftProDur_dpath, shiftProDur_prefix, yymm), 'rt') as r_csvfile:
-        reader = csv.reader(r_csvfile)
-        headers = reader.next()
-        hid = {h: i for i, h in enumerate(headers)}
-        for row in reader:
-            year, month, day, hour = 2000 + int(row[hid['yy']]), int(row[hid['mm']]), int(row[hid['dd']]), int(row[hid['hh']])
-            if hour in tf_ns1517:
-                dateDid_statistics = dateDid_statistics1517
-            elif hour in tf_ns2023:
-                dateDid_statistics = dateDid_statistics2023
-            else:
-                continue
-            did = int(row[hid['did']])
-            k = (year, month, day, did)
-            if not dateDid_statistics.has_key(k):
-                continue
-            dateDid_statistics[k][WOH] += (float(row[hid['pro-dur']]) * SEC60) / SEC3600
-    #
-    logger.info('process trip; %s' % yymm)
-    yy, mm = yymm[:2], yymm[-2:]
-    year, month = 2000 + int(yy), int(mm)
-    with open('%s/%s%s.csv' % (trip_dpath, trip_prefix, yymm), 'rb') as r_csvfile:
-        reader = csv.reader(r_csvfile)
-        headers = reader.next()
-        hid = {h: i for i, h in enumerate(headers)}
-        for row in reader:
-            day, hour = int(row[hid['day']]), int(row[hid['hour']])
-            if hour in tf_ns1517:
-                dateDid_statistics = dateDid_statistics1517
-            elif hour in tf_ns2023:
-                dateDid_statistics = dateDid_statistics2023
-            else:
-                continue
-            did = int(row[hid['did']])
-            k = (year, month, day, did)
-            if not dateDid_statistics.has_key(k):
-                continue
-            dateDid_statistics[k][WTN] += 1
-            dateDid_statistics[k][WF] += float(row[hid['fare']]) / CENT
-    #
-    logger.info('write statistics; %s' % yymm)
-    for statistics_fpath, dateDid_statistics in [(statistics1517_fpath, dateDid_statistics1517),
-                                                 (statistics2023_fpath, dateDid_statistics2023)]:
-        with open(statistics_fpath, 'wb') as w_csvfile:
-            writer = csv.writer(w_csvfile, lineterminator='\n')
-            header = ['year', 'month', 'day', 'driverID',
-                      'wleTripNumber', 'wleOperatingHour', 'wleFare',
-                      'wleProductivity',
-                      'locTripNumber', 'locInNumber', 'locOutNumber',
-                      'locQTime', 'locEP', 'locDuration', 'locFare',
-                      'QTime/locTrip', 'EP/locTrip',
-                      'locProductivity']
-            writer.writerow(header)
-            for (year, month, day, did), statistics in dateDid_statistics.iteritems():
-                wleTripNumber, wleOperatingHour, wleFare = int(statistics[WTN]), statistics[WOH], statistics[WF],
-                if wleOperatingHour == 0.0:
-                    continue
-                wleProductivity = wleFare / wleOperatingHour
-                #
-                locTripNumber, locInNumber, locOutNumber = map(int, [statistics[LTN], statistics[LIN], statistics[LON]])
-                if locTripNumber == 0.0:
-                    continue
-                locQTime, locEP, locDuration, locFare = statistics[LQ], statistics[LEP], statistics[LD], statistics[LF]
-                if (locQTime + locDuration) == 0.0:
-                    continue
-                QTime_locTrip, EP_locTrip = locQTime / float(locTripNumber), locEP / float(locTripNumber)
-                locProductivity = (locFare / (locQTime + locDuration)) * SEC60
-                new_row = [
-                    year, month, day, did,
-                    wleTripNumber, wleOperatingHour, wleFare,
-                    wleProductivity,
-                    locTripNumber, locInNumber, locOutNumber,
-                    locQTime, locEP, locDuration, locFare,
-                    QTime_locTrip, EP_locTrip,
-                    locProductivity]
-                writer.writerow(new_row)
 
 
 if __name__ == '__main__':
