@@ -44,16 +44,9 @@ def run():
     # process_dayBased()
     # filter_dayBased()
     #
-    process_monthBased()
+    # aggregate_monthBased()
     #
-    # for y in range(9, 11):
-    #     yyyy = '20%02d' % y
-    #     aggregate_monthBased(yyyy)
-    #
-    # aggregate_yearBased()
-    # for y in range(9, 11):
-    #     yyyy = '20%02d' % y
-    #     process_tripbased(yyyy)
+    aggregate_yearBased()
 
 
 def process_tripBased():
@@ -269,7 +262,7 @@ def filter_dayBased():
             Ydf.to_csv('%s/Filtered-%s%s.csv' % (statisticsAllDrivers_ns_dpath, statisticsAllDriversDay_ns_prefix , yyyy), index=False)
 
 
-def process_monthBased():
+def aggregate_monthBased():
     logger.info('handle dayBased')
     #
     for y in range(9, 11):
@@ -337,10 +330,6 @@ def process_monthBased():
 
 def aggregate_yearBased():
     logger.info('handle year based')
-    WTN, WOH, WF, \
-    LTN, LIN, LON, \
-    LQ, LEP, \
-    LD, LF = range(10)
     for y in range(9, 11):
         yyyy = '20%02d' % y
         statistics1517_fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ns_dpath, statisticsAllDriversYear_ns1517_prefix, yyyy)
@@ -349,7 +338,7 @@ def aggregate_yearBased():
             (statisticsAllDriversMonth_ns1517_prefix, statistics1517_fpath),
             (statisticsAllDriversMonth_ns2023_prefix, statistics2023_fpath)]:
             dateDid_statistics = {}
-            with open('%s/Filtered-%s%s.csv' % (statisticsAllDrivers_ns_dpath, statisticsAllDriversMonth_ns_prefix, yyyy), 'rt') as r_csvfile:
+            with open('%s/%s%s.csv' % (statisticsAllDrivers_ns_dpath, statisticsAllDriversMonth_ns_prefix, yyyy), 'rt') as r_csvfile:
                 reader = csv.reader(r_csvfile)
                 headers = reader.next()
                 hid = {h: i for i, h in enumerate(headers)}
