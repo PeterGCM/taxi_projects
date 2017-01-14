@@ -26,8 +26,13 @@ import csv, datetime
 logger = get_logger()
 
 
+tf_ns1517 = [15, 16, 17]
+tf_ns2023 = [20, 21, 22, 23]
+
 def run():
     check_dir_create(statisticsAllDrivers_ns_dpath)
+    #
+    process_tripbased()
     #
     # init_multiprocessor(11)
     # count_num_jobs = 0
@@ -46,70 +51,69 @@ def run():
     #     yyyy = '20%02d' % y
     #     aggregate_monthBased(yyyy)
     #
-    aggregate_yearBased()
+    # aggregate_yearBased()
     # for y in range(9, 11):
     #     yyyy = '20%02d' % y
     #     process_tripbased(yyyy)
 
 
-def process_tripbased(yyyy):
-    logger.info('handle the file; %s' % yyyy)
-    #
-    statistics1517_fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ns_dpath, statisticsAllDriversTrip_ns1517_prefix, yyyy)
-    statistics2023_fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ns_dpath, statisticsAllDriversTrip_ns2023_prefix, yyyy)
-    if check_path_exist(statistics1517_fpath):
-        logger.info('The file had already been processed; %s' % yyyy)
-        return
-    yy = yyyy[2:]
-    holidays = HOLIDAYS2009 if yyyy == '2009' else HOLIDAYS2010
-    for statistics_fpath in [statistics1517_fpath, statistics2023_fpath]:
-        with open(statistics_fpath, 'wb') as w_csvfile:
-            writer = csv.writer(w_csvfile, lineterminator='\n')
-            header = ['year', 'month', 'day', 'hour',
-                      'driverID',
-                      'locQTime', 'locEP', 'locDuration', 'locFare',
-                      'locProductivity',
-                      'locIn', 'weekEnd',
-                      'timePassed', 'timePassed^2']
-            writer.writerow(header)
-    for fn in get_all_files(economicProfit_ns_dpath, '%s%s*' % (economicProfit_ns_prefix, yy)):
-        with open('%s/%s' % (economicProfit_ns_dpath, fn), 'rt') as r_csvfile:
-            reader = csv.reader(r_csvfile)
-            headers = reader.next()
-            hid = {h: i for i, h in enumerate(headers)}
-            for row in reader:
-                year, month, day, hour = map(int, [row[hid[cn]] for cn in ['year', 'month', 'day', 'hour']])
-                did = int(row[hid['did']])
-                locQTime = float(row[hid['queueingTime']]) / SEC60
-                locEP = float(row[hid['economicProfit']]) / CENT
-                locDuration = float(row[hid['duration']]) / SEC60
-                locFare = float(row[hid['fare']]) / CENT
-                locProductivity = (locFare / (locQTime + locDuration)) * SEC60
-                locIn = 1 if int(row[hid['tripMode']]) == DIn_PIn else 0
-                weekEnd = 0
-                if (year, month, day) in holidays:
-                    weekEnd = 1
-                if datetime.datetime(year, month, day).weekday() in WEEKENDS:
-                    weekEnd = 1
-                timePassed = (year - 2009) * 12 + max(0, (month - 1))
-                timePassed_2 = timePassed ** 2
-                if hour in [15, 16, 17]:
-                    statistics_fpath = statistics1517_fpath
-                elif hour in [20, 21, 22, 23]:
-                    statistics_fpath = statistics2023_fpath
-                else:
-                    continue
-                with open(statistics_fpath, 'a') as w_csvfile:
-                    writer = csv.writer(w_csvfile, lineterminator='\n')
-                    new_row = [
-                        year, month, day, hour,
-                        did,
-                        locQTime, locEP, locDuration, locFare,
-                        locProductivity,
-                        locIn, weekEnd,
-                        timePassed, timePassed_2
-                    ]
-                    writer.writerow(new_row)
+def process_tripbased():
+    for y in range(9, 11):
+        yyyy = '20%02d' % y
+        logger.info('handle the file; %s' % yyyy)
+        logger.info('handle the file; %s' % yyyy)
+        #
+        statistics1517_fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ns_dpath, statisticsAllDriversTrip_ns1517_prefix, yyyy)
+        statistics2023_fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ns_dpath, statisticsAllDriversTrip_ns2023_prefix, yyyy)
+        if check_path_exist(statistics1517_fpath):
+            logger.info('The file had already been processed; %s' % yyyy)
+            return
+        yy = yyyy[2:]
+        holidays = HOLIDAYS2009 if yyyy == '2009' else HOLIDAYS2010
+        for statistics_fpath in [statistics1517_fpath, statistics2023_fpath]:
+            with open(statistics_fpath, 'wb') as w_csvfile:
+                writer = csv.writer(w_csvfile, lineterminator='\n')
+                header = ['year', 'month', 'day', 'hour',
+                          'driverID',
+                          'locQTime', 'locEP', 'locDuration', 'locFare',
+                          'locProductivity',
+                          'locIn', 'weekEnd',
+                          'timePassed', 'timePassed^2']
+                writer.writerow(header)
+        for fn in get_all_files(economicProfit_ns_dpath, '%s%s*' % (economicProfit_ns_prefix, yy)):
+            with open('%s/%s' % (economicProfit_ns_dpath, fn), 'rt') as r_csvfile:
+                reader = csv.reader(r_csvfile)
+                headers = reader.next()
+                hid = {h: i for i, h in enumerate(headers)}
+                for row in reader:
+                    year, month, day, hour = map(int, [row[hid[cn]] for cn in ['year', 'month', 'day', 'hour']])
+                    did = int(row[hid['did']])
+                    locQTime = float(row[hid['queueingTime']]) / SEC60
+                    locEP = float(row[hid['economicProfit']]) / CENT
+                    locDuration = float(row[hid['duration']]) / SEC60
+                    locFare = float(row[hid['fare']]) / CENT
+                    locProductivity = (locFare / (locQTime + locDuration)) * SEC60
+                    locIn = 1 if int(row[hid['tripMode']]) == DIn_PIn else 0
+                    weekEnd = 0
+                    if (year, month, day) in holidays:
+                        weekEnd = 1
+                    if datetime.datetime(year, month, day).weekday() in WEEKENDS:
+                        weekEnd = 1
+                    if hour in tf_ns1517:
+                        statistics_fpath = statistics1517_fpath
+                    elif hour in tf_ns2023:
+                        statistics_fpath = statistics2023_fpath
+                    else:
+                        continue
+                    with open(statistics_fpath, 'a') as w_csvfile:
+                        writer = csv.writer(w_csvfile, lineterminator='\n')
+                        new_row = [
+                            year, month, day, hour,
+                            did,
+                            locQTime, locEP, locDuration, locFare,
+                            locProductivity,
+                            locIn, weekEnd]
+                        writer.writerow(new_row)
 
 
 def aggregate_yearBased():
