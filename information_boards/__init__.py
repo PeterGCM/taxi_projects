@@ -86,15 +86,19 @@ statisticsAllDrivers_dpath = '%s/%s' % (statistics_dpath, 'statisticsAllDrivers'
 statisticsAllDrivers_ap_dpath = '%s/%s' % (statisticsAllDrivers_dpath, 'ap')
 statisticsAllDriversDay_ap_prefix = 'statisticsAllDriversDay-ap-'
 statisticsAllDriversMonth_ap_prefix = 'statisticsAllDriversMonth-ap-'
+statisticsAllDriversYear_ap_prefix = 'statisticsAllDriversYear-ap-'
 statisticsAllDriversTrip_ap_prefix = 'statisticsAllDriversTrip-ap-'
 
 statisticsAllDrivers_ns_dpath = '%s/%s' % (statisticsAllDrivers_dpath, 'ns')
+statisticsAllDriversTrip_ns1517_prefix = 'statisticsAllDriversTrip-ns1517-'
 statisticsAllDriversDay_ns1517_prefix = 'statisticsAllDriversDay-ns1517-'
 statisticsAllDriversMonth_ns1517_prefix = 'statisticsAllDriversMonth-ns1517-'
-statisticsAllDriversTrip_ns1517_prefix = 'statisticsAllDriversTrip-ns1517-'
+statisticsAllDriversYear_ns1517_prefix = 'statisticsAllDriversYear-ns1517-'
+statisticsAllDriversTrip_ns2023_prefix = 'statisticsAllDriversTrip-ns2023-'
 statisticsAllDriversDay_ns2023_prefix = 'statisticsAllDriversDay-ns2023-'
 statisticsAllDriversMonth_ns2023_prefix = 'statisticsAllDriversMonth-ns2023-'
-statisticsAllDriversTrip_ns2023_prefix = 'statisticsAllDriversTrip-ns2023-'
+statisticsAllDriversYear_ns2023_prefix = 'statisticsAllDriversYear-ns2023-'
+
 
 statisticsSsDrivers_dpath = '%s/%s' % (statistics_dpath, 'statisticsSsDrivers')
 statisticsSsDrivers_ap_dpath = '%s/%s' % (statisticsSsDrivers_dpath, 'ap')

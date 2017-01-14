@@ -9,9 +9,9 @@ from information_boards import shiftProDur_dpath, shiftProDur_prefix
 from information_boards import economicProfit_ns_dpath, economicProfit_ns_prefix
 from information_boards import statisticsAllDrivers_ns_dpath
 from information_boards import statisticsAllDriversDay_ns1517_prefix, statisticsAllDriversMonth_ns1517_prefix, statisticsAllDriversTrip_ns1517_prefix
+from information_boards import statisticsAllDriversYear_ns1517_prefix
 from information_boards import statisticsAllDriversDay_ns2023_prefix, statisticsAllDriversMonth_ns2023_prefix, statisticsAllDriversTrip_ns2023_prefix
-
-
+from information_boards import statisticsAllDriversYear_ns2023_prefix
 from information_boards import DIn_PIn, DOut_PIn
 from information_boards import SEC3600, SEC600, SEC60, CENT
 from information_boards import HOLIDAYS2009, HOLIDAYS2010
@@ -46,9 +46,10 @@ def run():
     #     yyyy = '20%02d' % y
     #     aggregate_monthBased(yyyy)
     #
-    for y in range(9, 11):
-        yyyy = '20%02d' % y
-        process_tripbased(yyyy)
+    aggregate_yearBased()
+    # for y in range(9, 11):
+    #     yyyy = '20%02d' % y
+    #     process_tripbased(yyyy)
 
 
 def process_tripbased(yyyy):
@@ -111,6 +112,72 @@ def process_tripbased(yyyy):
                     writer.writerow(new_row)
 
 
+def aggregate_yearBased():
+    logger.info('handle year based')
+    WTN, WOH, WF, \
+    LTN, LIN, LON, \
+    LQ, LEP, \
+    LD, LF = range(10)
+    for y in range(9, 11):
+        yyyy = '20%02d' % y
+        statistics1517_fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ns_dpath, statisticsAllDriversYear_ns1517_prefix, yyyy)
+        statistics2023_fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ns_dpath, statisticsAllDriversYear_ns2023_prefix, yyyy)
+        for statisticsAllDriversMonth_ns_prefix, statistics_fpath in [
+            (statisticsAllDriversMonth_ns1517_prefix, statistics1517_fpath),
+            (statisticsAllDriversMonth_ns2023_prefix, statistics2023_fpath)]:
+            dateDid_statistics = {}
+            with open('%s/Filtered-%s%s.csv' % (statisticsAllDrivers_ns_dpath, statisticsAllDriversMonth_ns_prefix, yyyy), 'rt') as r_csvfile:
+                reader = csv.reader(r_csvfile)
+                headers = reader.next()
+                hid = {h: i for i, h in enumerate(headers)}
+                for row in reader:
+                    year, month = map(int, [row[hid[cn]] for cn in ['year', 'month']])
+                    did = int(row[hid['driverID']])
+                    k = (year, did)
+                    if not dateDid_statistics.has_key(k):
+                        dateDid_statistics[k] = [0.0 for _ in [WTN, WOH, WF, LTN, LIN, LON, LQ, LEP, LD, LF]]
+                    dateDid_statistics[k][WTN] += int(row[hid['wleTripNumber']])
+                    dateDid_statistics[k][WOH] += float(row[hid['wleOperatingHour']])
+                    dateDid_statistics[k][WF] += float(row[hid['wleFare']])
+                    dateDid_statistics[k][LTN] += int(row[hid['locTripNumber']])
+                    dateDid_statistics[k][LIN] += int(row[hid['locInNumber']])
+                    dateDid_statistics[k][LON] += int(row[hid['locOutNumber']])
+                    dateDid_statistics[k][LQ] += float(row[hid['locQTime']])
+                    dateDid_statistics[k][LEP] += float(row[hid['locEP']])
+                    dateDid_statistics[k][LD] += float(row[hid['locDuration']])
+                    dateDid_statistics[k][LF] += float(row[hid['locFare']])
+            with open(statistics_fpath, 'wb') as w_csvfile:
+                writer = csv.writer(w_csvfile, lineterminator='\n')
+                header = ['year', 'driverID',
+                          'wleTripNumber', 'wleOperatingHour', 'wleFare',
+                          'wleProductivity',
+                          'locTripNumber', 'locInNumber', 'locOutNumber',
+                          'locQTime', 'locEP', 'locDuration', 'locFare',
+                          'QTime/locTrip', 'EP/locTrip',
+                          'locProductivity',
+                          'locInRatio']
+                writer.writerow(header)
+                for (year, did), statistics in dateDid_statistics.iteritems():
+                    wleTripNumber, wleOperatingHour, wleFare = int(statistics[WTN]), statistics[WOH], statistics[WF],
+                    locTripNumber, locInNumber, locOutNumber = map(int, [statistics[LTN], statistics[LIN], statistics[LON]])
+                    locQTime, locEP, locDuration, locFare = statistics[LQ], statistics[LEP], statistics[LD], statistics[LF]
+                    #
+                    wleProductivity = wleFare / wleOperatingHour
+                    QTime_locTrip, EP_locTrip = locQTime / float(locTripNumber), locEP / float(locTripNumber)
+                    locProductivity = (locFare / (locQTime + locDuration)) * SEC60
+                    locInRatio = locInNumber / float(locTripNumber)
+                    new_row = [
+                        year, did,
+                        wleTripNumber, wleOperatingHour, wleFare,
+                        wleProductivity,
+                        locTripNumber, locInNumber, locOutNumber,
+                        locQTime, locEP, locDuration, locFare,
+                        QTime_locTrip, EP_locTrip,
+                        locProductivity,
+                        locInRatio]
+                    writer.writerow(new_row)
+
+
 def aggregate_monthBased(yyyy):
     logger.info('handle the file; %s' % yyyy)
     #
@@ -158,8 +225,7 @@ def aggregate_monthBased(yyyy):
                       'locQTime', 'locEP', 'locDuration', 'locFare',
                       'QTime/locTrip', 'EP/locTrip',
                       'locProductivity',
-                      'locInRatio',
-                      'timePassed', 'timePassed^2']
+                      'locInRatio']
             writer.writerow(header)
             for (year, month, did), statistics in dateDid_statistics.iteritems():
                 wleTripNumber, wleOperatingHour, wleFare = int(statistics[WTN]), statistics[WOH], statistics[WF],
@@ -170,8 +236,6 @@ def aggregate_monthBased(yyyy):
                 QTime_locTrip, EP_locTrip = locQTime / float(locTripNumber), locEP / float(locTripNumber)
                 locProductivity = (locFare / (locQTime + locDuration)) * SEC60
                 locInRatio = locInNumber / float(locTripNumber)
-                timePassed = (year - 2009) * 12 + max(0, (month - 1))
-                timePassed_2 = timePassed ** 2
                 new_row = [
                     year, month, did,
                     wleTripNumber, wleOperatingHour, wleFare,
@@ -180,8 +244,7 @@ def aggregate_monthBased(yyyy):
                     locQTime, locEP, locDuration, locFare,
                     QTime_locTrip, EP_locTrip,
                     locProductivity,
-                    locInRatio,
-                    timePassed, timePassed_2]
+                    locInRatio]
                 writer.writerow(new_row)
 
 
