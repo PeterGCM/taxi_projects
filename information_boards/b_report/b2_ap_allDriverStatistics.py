@@ -143,20 +143,21 @@ def process_dayBased():
             hid = {h: i for i, h in enumerate(headers)}
             for row in reader:
                 year, month, day = map(int, [row[hid[cn]] for cn in ['year', 'month', 'day']])
-                did = int(row[hid['did']])
+                did = int(row[hid['driverID']])
                 k = (year, month, day, did)
                 if not dateDid_statistics.has_key(k):
                     dateDid_statistics[k] = [0.0 for _ in [WTN, WOH, WF, LTN, LIN, LON, LQ, LEP, LD, LF]]
                 dateDid_statistics[k][LTN] += 1
-                if int(row[hid['tripMode']]) == DIn_PIn:
+                if int(row[hid['locIn']]) == 1:
                     dateDid_statistics[k][LIN] += 1
                 else:
-                    assert int(row[hid['tripMode']]) == DOut_PIn
+                    assert int(row[hid['locIn']]) == 0
                     dateDid_statistics[k][LON] += 1
-                dateDid_statistics[k][LQ] += float(row[hid['queueingTime']]) / SEC60
-                dateDid_statistics[k][LEP] += float(row[hid['economicProfit']]) / CENT
-                dateDid_statistics[k][LD] += float(row[hid['duration']]) / SEC60
-                dateDid_statistics[k][LF] += float(row[hid['fare']]) / CENT
+                dateDid_statistics[k][LQ] += float(row[hid['locQTime']])
+                dateDid_statistics[k][LEP] += float(row[hid['locEP']])
+                dateDid_statistics[k][LD] += float(row[hid['locDuration']])
+                dateDid_statistics[k][LF] += float(row[hid['locFare']])
+
         #
         yy = yyyy[2:]
         logger.info('process shift')
