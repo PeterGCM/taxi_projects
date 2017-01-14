@@ -149,8 +149,8 @@ def process_dayBased():
     for y in range(9, 11):
         yyyy = '20%02d' % y
         logger.info('handle the file; %s' % yyyy)
-        statistics1517_fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ns_dpath, statisticsAllDriversDay_ns1517_prefix, yymm)
-        statistics2023_fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ns_dpath, statisticsAllDriversDay_ns2023_prefix, yymm)
+        statistics1517_fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ns_dpath, statisticsAllDriversDay_ns1517_prefix, yyyy)
+        statistics2023_fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ns_dpath, statisticsAllDriversDay_ns2023_prefix, yyyy)
         #
         dateDid_statistics1517, dateDid_statistics2023 = {}, {}
         logger.info('process locTrip')
