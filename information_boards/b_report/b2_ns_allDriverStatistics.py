@@ -22,6 +22,8 @@ from taxi_common.multiprocess import init_multiprocessor, put_task, end_multipro
 from taxi_common.log_handling_functions import get_logger
 #
 import csv, datetime
+import numpy as np
+import pandas as pd
 
 logger = get_logger()
 
@@ -33,6 +35,7 @@ def run():
     check_dir_create(statisticsAllDrivers_ns_dpath)
     #
     process_tripbased()
+    filter_tripbased()
     #
     # init_multiprocessor(11)
     # count_num_jobs = 0
@@ -65,9 +68,7 @@ def process_tripbased():
         #
         statistics1517_fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ns_dpath, statisticsAllDriversTrip_ns1517_prefix, yyyy)
         statistics2023_fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ns_dpath, statisticsAllDriversTrip_ns2023_prefix, yyyy)
-        if check_path_exist(statistics1517_fpath):
-            logger.info('The file had already been processed; %s' % yyyy)
-            return
+        #
         yy = yyyy[2:]
         holidays = HOLIDAYS2009 if yyyy == '2009' else HOLIDAYS2010
         for statistics_fpath in [statistics1517_fpath, statistics2023_fpath]:
@@ -77,8 +78,7 @@ def process_tripbased():
                           'driverID',
                           'locQTime', 'locEP', 'locDuration', 'locFare',
                           'locProductivity',
-                          'locIn', 'weekEnd',
-                          'timePassed', 'timePassed^2']
+                          'locIn', 'weekEnd']
                 writer.writerow(header)
         for fn in get_all_files(economicProfit_ns_dpath, '%s%s*' % (economicProfit_ns_prefix, yy)):
             with open('%s/%s' % (economicProfit_ns_dpath, fn), 'rt') as r_csvfile:
@@ -114,6 +114,26 @@ def process_tripbased():
                             locProductivity,
                             locIn, weekEnd]
                         writer.writerow(new_row)
+
+
+def filter_tripbased():
+    for y in range(9, 11):
+        yyyy = '20%02d' % y
+        logger.info('handle the file; %s' % yyyy)
+        for statisticsAllDriversTrip_ns_prefix in [statisticsAllDriversTrip_ns1517_prefix, statisticsAllDriversTrip_ns2023_prefix]:
+            Ydf = pd.read_csv('%s/%s%s.csv' % (statisticsAllDrivers_ns_dpath, statisticsAllDriversTrip_ns_prefix, yyyy))
+            outlier_index = set()
+            for cn in Ydf.columns:
+                if cn in ['year', 'month', 'day', 'hour', 'driverID']:
+                    continue
+                if cn == 'locQTime':
+                    outlier_set = set(np.where(Ydf[cn] > 120)[0].tolist())
+                    outlier_index = outlier_index.union(set(outlier_set))
+                if cn in ['locEP', 'locProductivity']:
+                    outlier_set = np.where((np.abs(Ydf[cn] - Ydf[cn].mean()) > (3 * Ydf[cn].std())))[0]
+                    outlier_index = outlier_index.union(set(outlier_set))
+            Ydf = Ydf.drop(Ydf.index[list(outlier_index)])
+            Ydf.to_csv('%s/Filtered-%s%s.csv' % (statisticsAllDrivers_ns_dpath, statisticsAllDriversTrip_ns_prefix, yyyy), index=False)
 
 def aggregate_yearBased():
     logger.info('handle year based')
