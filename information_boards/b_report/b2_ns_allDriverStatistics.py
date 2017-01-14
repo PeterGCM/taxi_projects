@@ -281,7 +281,7 @@ def process_monthBased():
         for statisticsAllDriversDay_ns_prefix, statistics_fpath in [(statisticsAllDriversDay_ns1517_prefix, statistics1517_fpath),
                                                                     (statisticsAllDriversDay_ns2023_prefix, statistics2023_fpath)]:
             dateDid_statistics = {}
-            with open('%s/Filtered-%sall.csv' % (statisticsAllDrivers_ns_dpath, statisticsAllDriversDay_ns_prefix), 'rt') as r_csvfile:
+            with open('%s/Filtered-%s%s.csv' % (statisticsAllDrivers_ns_dpath, statisticsAllDriversDay_ns_prefix, yyyy), 'rt') as r_csvfile:
                 reader = csv.reader(r_csvfile)
                 headers = reader.next()
                 hid = {h: i for i, h in enumerate(headers)}
