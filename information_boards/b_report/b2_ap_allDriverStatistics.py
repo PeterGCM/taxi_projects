@@ -34,10 +34,11 @@ LD, LF = range(10)
 def run():
     check_dir_create(statisticsAllDrivers_ap_dpath)
     #
-    # process_tripbased()
-    # filter_tripbased()
+    # process_tripBased()
+    # filter_tripBased()
     #
-    process_dayBased()
+    # process_dayBased()
+    filter_dayBased()
     #
     # init_multiprocessor(11)
     # count_num_jobs = 0
@@ -58,8 +59,7 @@ def run():
     # aggregate_yearBased()
     #
 
-
-def process_tripbased():
+def process_tripBased():
     for y in range(9, 11):
         yyyy = '20%02d' % y
         logger.info('handle the file; %s' % yyyy)
@@ -107,7 +107,7 @@ def process_tripbased():
                         writer.writerow(new_row)
 
 
-def filter_tripbased():
+def filter_tripBased():
     for y in range(9, 11):
         yyyy = '20%02d' % y
         logger.info('handle the file; %s' % yyyy)
@@ -228,6 +228,22 @@ def process_dayBased():
                     QTime_locTrip, EP_locTrip,
                     locProductivity]
                 writer.writerow(new_row)
+
+
+def filter_dayBased():
+    for y in range(9, 11):
+        yyyy = '20%02d' % y
+        logger.info('handle the file; %s' % yyyy)
+        Ydf = pd.read_csv('%s/%s%s.csv' % (statisticsAllDrivers_ap_dpath, statisticsAllDriversDay_ap_prefix, yyyy))
+        outlier_index = set()
+        for cn in Ydf.columns:
+            if cn in ['year', 'month', 'day', 'hour', 'driverID']:
+                continue
+            if cn == 'wleProductivity':
+                outlier_set = set(np.where(Ydf[cn] > 80)[0].tolist())
+                outlier_index = outlier_index.union(set(outlier_set))
+        Ydf = Ydf.drop(Ydf.index[list(outlier_index)])
+        Ydf.to_csv('%s/Filtered-%s%s.csv' % (statisticsAllDrivers_ap_dpath, statisticsAllDriversDay_ap_prefix, yyyy), index=False)
 
 
 def aggregate_yearBased():
