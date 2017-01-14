@@ -20,6 +20,8 @@ from taxi_common.multiprocess import init_multiprocessor, put_task, end_multipro
 from taxi_common.log_handling_functions import get_logger
 #
 import csv, datetime
+import numpy as np
+import pandas as pd
 
 logger = get_logger()
 
@@ -27,7 +29,8 @@ logger = get_logger()
 def run():
     check_dir_create(statisticsAllDrivers_ap_dpath)
     #
-    process_tripbased()
+    # process_tripbased()
+    filter_tripbased()
     #
     # init_multiprocessor(11)
     # count_num_jobs = 0
@@ -95,6 +98,25 @@ def process_tripbased():
                             locIn, weekEnd,
                         ]
                         writer.writerow(new_row)
+
+
+def filter_tripbased():
+    for y in range(9, 11):
+        yyyy = '20%02d' % y
+        logger.info('handle the file; %s' % yyyy)
+        Ydf = pd.read_csv('%s/%s%s.csv' % (statisticsAllDrivers_ap_dpath, statisticsAllDriversTrip_ap_prefix, yyyy))
+        outlier_index = set()
+        for cn in Ydf.columns:
+            if cn in ['year', 'month', 'day', 'hour', 'driverID']:
+                continue
+            if cn == 'locQTime':
+                outlier_set = set(np.where(Ydf[cn] > 120)[0].tolist())
+                outlier_index = outlier_index.union(set(outlier_set))
+            if cn in ['locEP', 'locProductivity']:
+                outlier_set = np.where((np.abs(Ydf[cn] - Ydf[cn].mean()) > (3 * Ydf[cn].std())))[0]
+                outlier_index = outlier_index.union(set(outlier_set))
+        Ydf = Ydf.drop(Ydf.index[list(outlier_index)])
+        Ydf.to_csv('%s/Filtered-%s%s.csv' % (statisticsAllDrivers_ap_dpath, statisticsAllDriversTrip_ap_prefix, yyyy), index=False)
 
 
 def aggregate_yearBased():

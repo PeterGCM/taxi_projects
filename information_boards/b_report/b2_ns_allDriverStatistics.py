@@ -115,7 +115,6 @@ def process_tripbased():
                             locIn, weekEnd]
                         writer.writerow(new_row)
 
-
 def aggregate_yearBased():
     logger.info('handle year based')
     WTN, WOH, WF, \
