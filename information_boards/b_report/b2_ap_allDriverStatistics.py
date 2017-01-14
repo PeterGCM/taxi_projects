@@ -39,7 +39,8 @@ def run():
     # process_dayBased()
     # filter_dayBased()
     #
-    # aggregate_monthBased()
+    # process_monthBased()
+    filter_monthBased()
     #
     aggregate_yearBased()
 
@@ -229,7 +230,7 @@ def filter_dayBased():
         Ydf.to_csv('%s/Filtered-%s%s.csv' % (statisticsAllDrivers_ap_dpath, statisticsAllDriversDay_ap_prefix, yyyy), index=False)
 
 
-def aggregate_monthBased():
+def process_monthBased():
     logger.info('handle dayBased')
     #
     for y in range(9, 11):
@@ -294,6 +295,22 @@ def aggregate_monthBased():
                     locInRatio
                      ]
                 writer.writerow(new_row)
+
+
+def filter_monthBased():
+    for y in range(9, 11):
+        yyyy = '20%02d' % y
+        logger.info('handle the file; %s' % yyyy)
+        Ydf = pd.read_csv('%s/%s%s.csv' % (statisticsAllDrivers_ap_dpath, statisticsAllDriversMonth_ap_prefix, yyyy))
+        outlier_index = set()
+        for cn in Ydf.columns:
+            if cn in ['year', 'month', 'day', 'hour', 'driverID']:
+                continue
+            if cn == 'wleNumDriver':
+                outlier_set = set(np.where(Ydf[cn] < 4)[0].tolist())
+                outlier_index = outlier_index.union(set(outlier_set))
+        Ydf = Ydf.drop(Ydf.index[list(outlier_index)])
+        Ydf.to_csv('%s/Filtered-%s%s.csv' % (statisticsAllDrivers_ap_dpath, statisticsAllDriversMonth_ap_prefix, yyyy), index=False)
 
 
 def aggregate_yearBased():
