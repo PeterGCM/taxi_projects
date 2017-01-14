@@ -18,7 +18,6 @@ from information_boards import HOLIDAYS2009, HOLIDAYS2010
 from information_boards import WEEKENDS
 #
 from taxi_common.file_handling_functions import check_dir_create, check_path_exist, get_all_files
-from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 from taxi_common.log_handling_functions import get_logger
 #
 import csv, datetime
@@ -43,20 +42,9 @@ def run():
     # filter_tripBased()
     #
     # process_dayBased()
-    filter_dayBased()
+    # filter_dayBased()
     #
-    # init_multiprocessor(11)
-    # count_num_jobs = 0
-    # for y in xrange(9, 11):
-    #     for m in xrange(1, 13):`
-    #         yymm = '%02d%02d' % (y, m)
-    #         if yymm in ['0912', '1010']:
-    #             # both years data are corrupted
-    #             continue
-    #         # process_month(yymm)
-    #         put_task(aggregate_dayBased, [yymm])
-    #         count_num_jobs += 1
-    # end_multiprocessor(count_num_jobs)
+    process_monthBased()
     #
     # for y in range(9, 11):
     #     yyyy = '20%02d' % y
@@ -281,6 +269,72 @@ def filter_dayBased():
             Ydf.to_csv('%s/Filtered-%s%s.csv' % (statisticsAllDrivers_ns_dpath, statisticsAllDriversDay_ns_prefix , yyyy), index=False)
 
 
+def process_monthBased():
+    logger.info('handle dayBased')
+    #
+    for y in range(9, 11):
+        yyyy = '20%02d' % y
+        logger.info('handle the file; %s' % yyyy)
+        #
+        statistics1517_fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ns_dpath, statisticsAllDriversMonth_ns1517_prefix, yyyy)
+        statistics2023_fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ns_dpath, statisticsAllDriversMonth_ns2023_prefix, yyyy)
+        for statisticsAllDriversDay_ns_prefix, statistics_fpath in [(statisticsAllDriversDay_ns1517_prefix, statistics1517_fpath),
+                                                                    (statisticsAllDriversDay_ns2023_prefix, statistics2023_fpath)]:
+            dateDid_statistics = {}
+            with open('%s/Filtered-%sall.csv' % (statisticsAllDrivers_ns_dpath, statisticsAllDriversDay_ns_prefix), 'rt') as r_csvfile:
+                reader = csv.reader(r_csvfile)
+                headers = reader.next()
+                hid = {h: i for i, h in enumerate(headers)}
+                for row in reader:
+                    year, month = map(int, [row[hid[cn]] for cn in ['year', 'month']])
+                    if year != int(yyyy):
+                        continue
+                    did = int(row[hid['driverID']])
+                    k = (year, month, did)
+                    if not dateDid_statistics.has_key(k):
+                        dateDid_statistics[k] = [0.0 for _ in [WTN, WOH, WF, LTN, LIN, LON, LQ, LEP, LD, LF]]
+                    dateDid_statistics[k][WTN] += int(row[hid['wleTripNumber']])
+                    dateDid_statistics[k][WOH] += float(row[hid['wleOperatingHour']])
+                    dateDid_statistics[k][WF] += float(row[hid['wleFare']])
+                    dateDid_statistics[k][LTN] += int(row[hid['locTripNumber']])
+                    dateDid_statistics[k][LIN] += int(row[hid['locInNumber']])
+                    dateDid_statistics[k][LON] += int(row[hid['locOutNumber']])
+                    dateDid_statistics[k][LQ] += float(row[hid['locQTime']])
+                    dateDid_statistics[k][LEP] += float(row[hid['locEP']])
+                    dateDid_statistics[k][LD] += float(row[hid['locDuration']])
+                    dateDid_statistics[k][LF] += float(row[hid['locFare']])
+            #
+            with open(statistics_fpath, 'wb') as w_csvfile:
+                writer = csv.writer(w_csvfile, lineterminator='\n')
+                header = ['year', 'month', 'driverID',
+                          'wleTripNumber', 'wleOperatingHour', 'wleFare',
+                          'wleProductivity',
+                          'locTripNumber', 'locInNumber', 'locOutNumber',
+                          'locQTime', 'locEP', 'locDuration', 'locFare',
+                          'QTime/locTrip', 'EP/locTrip',
+                          'locProductivity',
+                          'locInRatio']
+                writer.writerow(header)
+                for (year, month, did), statistics in dateDid_statistics.iteritems():
+                    wleTripNumber, wleOperatingHour, wleFare = int(statistics[WTN]), statistics[WOH], statistics[WF],
+                    locTripNumber, locInNumber, locOutNumber = map(int, [statistics[LTN], statistics[LIN], statistics[LON]])
+                    locQTime, locEP, locDuration, locFare = statistics[LQ], statistics[LEP], statistics[LD], statistics[LF]
+                    #
+                    wleProductivity = wleFare / wleOperatingHour
+                    QTime_locTrip, EP_locTrip = locQTime / float(locTripNumber), locEP / float(locTripNumber)
+                    locProductivity = (locFare / (locQTime + locDuration)) * SEC60
+                    locInRatio = locInNumber / float(locTripNumber)
+                    new_row = [
+                        year, month, did,
+                        wleTripNumber, wleOperatingHour, wleFare,
+                        wleProductivity,
+                        locTripNumber, locInNumber, locOutNumber,
+                        locQTime, locEP, locDuration, locFare,
+                        QTime_locTrip, EP_locTrip,
+                        locProductivity,
+                        locInRatio]
+                    writer.writerow(new_row)
+
 def aggregate_yearBased():
     logger.info('handle year based')
     WTN, WOH, WF, \
@@ -347,74 +401,6 @@ def aggregate_yearBased():
                     writer.writerow(new_row)
 
 
-def aggregate_monthBased(yyyy):
-    logger.info('handle the file; %s' % yyyy)
-    #
-    statistics1517_fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ns_dpath, statisticsAllDriversMonth_ns1517_prefix, yyyy)
-    statistics2023_fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ns_dpath, statisticsAllDriversMonth_ns2023_prefix, yyyy)
-    if check_path_exist(statistics1517_fpath):
-        logger.info('The file had already been processed; %s' % yyyy)
-        return
-    WTN, WOH, WF, \
-    LTN, LIN, LON, \
-    LQ, LEP, \
-    LD, LF = range(10)
-    for statisticsAllDriversDay_ns_prefix, statistics_fpath in [(statisticsAllDriversDay_ns1517_prefix, statistics1517_fpath),
-                                                                (statisticsAllDriversDay_ns2023_prefix, statistics2023_fpath)]:
-        dateDid_statistics = {}
-        with open('%s/Filtered-%sall.csv' % (statisticsAllDrivers_ns_dpath, statisticsAllDriversDay_ns_prefix), 'rt') as r_csvfile:
-            reader = csv.reader(r_csvfile)
-            headers = reader.next()
-            hid = {h: i for i, h in enumerate(headers)}
-            for row in reader:
-                year, month = map(int, [row[hid[cn]] for cn in ['year', 'month']])
-                if year != int(yyyy):
-                    continue
-                did = int(row[hid['driverID']])
-                k = (year, month, did)
-                if not dateDid_statistics.has_key(k):
-                    dateDid_statistics[k] = [0.0 for _ in [WTN, WOH, WF, LTN, LIN, LON, LQ, LEP, LD, LF]]
-                dateDid_statistics[k][WTN] += int(row[hid['wleTripNumber']])
-                dateDid_statistics[k][WOH] += float(row[hid['wleOperatingHour']])
-                dateDid_statistics[k][WF] += float(row[hid['wleFare']])
-                dateDid_statistics[k][LTN] += int(row[hid['locTripNumber']])
-                dateDid_statistics[k][LIN] += int(row[hid['locInNumber']])
-                dateDid_statistics[k][LON] += int(row[hid['locOutNumber']])
-                dateDid_statistics[k][LQ] += float(row[hid['locQTime']])
-                dateDid_statistics[k][LEP] += float(row[hid['locEP']])
-                dateDid_statistics[k][LD] += float(row[hid['locDuration']])
-                dateDid_statistics[k][LF] += float(row[hid['locFare']])
-        #
-        with open(statistics_fpath, 'wb') as w_csvfile:
-            writer = csv.writer(w_csvfile, lineterminator='\n')
-            header = ['year', 'month', 'driverID',
-                      'wleTripNumber', 'wleOperatingHour', 'wleFare',
-                      'wleProductivity',
-                      'locTripNumber', 'locInNumber', 'locOutNumber',
-                      'locQTime', 'locEP', 'locDuration', 'locFare',
-                      'QTime/locTrip', 'EP/locTrip',
-                      'locProductivity',
-                      'locInRatio']
-            writer.writerow(header)
-            for (year, month, did), statistics in dateDid_statistics.iteritems():
-                wleTripNumber, wleOperatingHour, wleFare = int(statistics[WTN]), statistics[WOH], statistics[WF],
-                locTripNumber, locInNumber, locOutNumber = map(int, [statistics[LTN], statistics[LIN], statistics[LON]])
-                locQTime, locEP, locDuration, locFare = statistics[LQ], statistics[LEP], statistics[LD], statistics[LF]
-                #
-                wleProductivity = wleFare / wleOperatingHour
-                QTime_locTrip, EP_locTrip = locQTime / float(locTripNumber), locEP / float(locTripNumber)
-                locProductivity = (locFare / (locQTime + locDuration)) * SEC60
-                locInRatio = locInNumber / float(locTripNumber)
-                new_row = [
-                    year, month, did,
-                    wleTripNumber, wleOperatingHour, wleFare,
-                    wleProductivity,
-                    locTripNumber, locInNumber, locOutNumber,
-                    locQTime, locEP, locDuration, locFare,
-                    QTime_locTrip, EP_locTrip,
-                    locProductivity,
-                    locInRatio]
-                writer.writerow(new_row)
 
 
 
