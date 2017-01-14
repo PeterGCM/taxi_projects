@@ -162,6 +162,7 @@ def process_dayBased():
         yy = yyyy[2:]
         logger.info('process shift')
         for fn in get_all_files(shiftProDur_dpath, '%s%s*' % (shiftProDur_prefix, yy)):
+            logger.info('shift; %s' % fn)
             with open('%s/%s' % (shiftProDur_dpath, fn), 'rt') as r_csvfile:
                 reader = csv.reader(r_csvfile)
                 headers = reader.next()
@@ -176,6 +177,7 @@ def process_dayBased():
         #
         logger.info('process trip')
         for fn in get_all_files(trip_dpath, '%s%s*' % (trip_prefix, yy)):
+            logger.info('Trip; %s' % fn)
             _, yymm = fn[:-len('.csv')].split('-')
             yy, mm = yymm[:2], yymm[-2:]
             year, month = 2000 + int(yy), int(mm)
