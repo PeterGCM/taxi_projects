@@ -19,8 +19,9 @@ driversRelations2009_fpath = '%s/driversRelations2009.pkl' % prevDriversDefined_
 #
 X_PICKUP, O_PICKUP = range(2)
 tfZ_TP_dpath, tfZ_TP_prefix = '%s/%s' % (taxi_data, 'tfZ_TP'), 'tfZ_TP-'
-SP_graph_dpath, SP_graph_prefix = '%s/%s' % (taxi_data, 'SP_graph'), 'SP-graph-'
-RP_graph_dpath, RP_graph_prefix = '%s/%s' % (taxi_data, 'RP_graph'), 'RP-graph-'
+graph_dpath = '%s/%s' % (taxi_data, 'graph')
+SP_graph_dpath, SP_graph_prefix = '%s/%s' % (graph_dpath, 'SP_graph'), 'SP-graph-'
+RP_graph_dpath, RP_graph_prefix = '%s/%s' % (graph_dpath, 'RP_graph'), 'RP-graph-'
 
 
 
