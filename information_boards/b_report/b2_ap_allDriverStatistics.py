@@ -224,8 +224,7 @@ def filter_dayBased():
             if cn in ['year', 'month', 'day', 'hour', 'driverID']:
                 continue
             if cn == 'wleProductivity':
-                outlier_set = set(np.where(Ydf[cn] > 80)[0].tolist())
-                outlier_index = outlier_index.union(set(outlier_set))
+                outlier_index = outlier_index.union(set(np.where(Ydf[cn] > 80)[0].tolist()))
         Ydf = Ydf.drop(Ydf.index[list(outlier_index)])
         Ydf.to_csv('%s/Filtered-%s%s.csv' % (statisticsAllDrivers_ap_dpath, statisticsAllDriversDay_ap_prefix, yyyy), index=False)
 

@@ -44,9 +44,9 @@ def run():
     # process_dayBased()
     # filter_dayBased()
     #
-    # aggregate_monthBased()
+    aggregate_monthBased()
     #
-    aggregate_yearBased()
+    # aggregate_yearBased()
 
 
 def process_tripBased():
