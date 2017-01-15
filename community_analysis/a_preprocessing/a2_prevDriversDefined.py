@@ -153,8 +153,7 @@ def filtering():
         outlier_set = outlier_set.union(set(np.where(df[cn1] > df[cn2])[0].tolist()))
         #
         for cn in [cn1, cn2]:
-            outliers = np.where((np.abs(df[cn] - df[cn].mean()) > (3 * df[cn].std())))[0]
-            outlier_set = outlier_set.union(set(outliers))
+            outlier_set = outlier_set.union(set(np.where(df[cn] > df[cn].quantile(0.95))[0].tolist()))
 
         df = df.drop(df.index[list(outlier_set)])
         df.to_csv('%s/Filtered-%s' % (prevDriversDefined_dpath, fn), index=False)

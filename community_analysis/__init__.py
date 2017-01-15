@@ -16,9 +16,12 @@ MIN20 = 20 * 60.0
 ss_trips_dpath, ss_trips_prefix = '%s/%s' % (taxi_data, 'trips_ss_drivers'), 'trips-ss-drivers-'
 prevDriversDefined_dpath, prevDriversDefined_prefix =  '%s/%s' % (taxi_data, 'prevDriversDefined'), 'prevDriversDefined-'
 driversRelations2009_fpath = '%s/driversRelations2009.pkl' % prevDriversDefined_dpath
+#
+X_PICKUP, O_PICKUP = range(2)
 tfZ_TP_dpath, tfZ_TP_prefix = '%s/%s' % (taxi_data, 'tfZ_TP'), 'tfZ_TP-'
 SP_graph_dpath, SP_graph_prefix = '%s/%s' % (taxi_data, 'SP_graph'), 'SP-graph-'
 RP_graph_dpath, RP_graph_prefix = '%s/%s' % (taxi_data, 'RP_graph'), 'RP-graph-'
+
 
 
 SIGINIFICANCE_LEVEL = 0.01
@@ -85,7 +88,7 @@ SP_groupDefinedTrip_dpath, SP_groupDefinedTrip_prefix = '%s/%s' % (taxi_data, 'S
 # roamingTimeY2_dpath = '%s/%s' % (taxi_data, 'roamingTimeY2'); roamingTime_prepix = 'roamingTime-'
 #
 # regressionModel_dpath = '%s/%s' % (taxi_data, 'regressionModel'); regressionModel_prefix = 'regressionModel-'
-# X_PICKUP, O_PICKUP = range(2)
+
 # HOUR1 = 60 * 60
 # causalityGraph_dpath = '%s/%s' % (taxi_data, 'causalityGraph'); causalityGraph_prefix = 'causalityGraph-'
 #
