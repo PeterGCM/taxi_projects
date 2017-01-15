@@ -57,7 +57,7 @@ def process_files(yyyy, reducerID, driver_subset, pickUp_drivers):
                 header.append(did0)
             writer.writerow(header)
         yy = yyyy[2:]
-        for fn in get_all_files(prevDriversDefined_dpath, '%s%s*.csv' % (prevDriversDefined_prefix, yy)):
+        for fn in get_all_files(prevDriversDefined_dpath, 'Filtered-%s%s*.csv' % (prevDriversDefined_prefix, yy)):
             prevDriverDefined_fpath = '%s/%s' % (prevDriversDefined_dpath, fn)
             logger.info('Handling %s(%d); %s' % (yyyy, reducerID, fn))
             with open(prevDriverDefined_fpath, 'rb') as r_csvfile:
