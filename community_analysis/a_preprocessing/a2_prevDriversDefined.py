@@ -149,12 +149,10 @@ def filtering():
         df = pd.read_csv('%s/%s' % (prevDriversDefined_dpath, fn))
         outlier_set = set()
         cn1, cn2 = 'spendingTime', 'roamingTime'
-        #
         outlier_set = outlier_set.union(set(np.where(df[cn1] > df[cn2])[0].tolist()))
-        #
         for cn in [cn1, cn2]:
+            outlier_set = outlier_set.union(set(np.where(df[cn] < 0)[0].tolist()))
             outlier_set = outlier_set.union(set(np.where(df[cn] > df[cn].quantile(0.95))[0].tolist()))
-
         df = df.drop(df.index[list(outlier_set)])
         df.to_csv('%s/Filtered-%s' % (prevDriversDefined_dpath, fn), index=False)
 
