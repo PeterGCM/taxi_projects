@@ -16,6 +16,8 @@ from taxi_common.log_handling_functions import get_logger
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
 import csv, datetime
+import pandas as pd
+import numpy as np
 #
 logger = get_logger()
 
@@ -23,23 +25,25 @@ logger = get_logger()
 def run():
     check_dir_create(prevDriversDefined_dpath)
     #
-    init_multiprocessor(11)
-    count_num_jobs = 0
-    for y in range(9, 10):
-        for m in range(1, 13):
-            yymm = '%02d%02d' % (y, m)
-            if yymm in ['0912', '1010']:
-                continue
-            # process_month(yymm)
-            put_task(process_month, [yymm])
-            count_num_jobs += 1
-    end_multiprocessor(count_num_jobs)
-    # find_driversRelations()
+    # init_multiprocessor(11)
+    # count_num_jobs = 0
+    # for y in range(9, 10):
+    #     for m in range(1, 13):
+    #         yymm = '%02d%02d' % (y, m)
+    #         if yymm in ['0912', '1010']:
+    #             continue
+    #         # process_month(yymm)
+    #         put_task(process_month, [yymm])
+    #         count_num_jobs += 1
+    # end_multiprocessor(count_num_jobs)
+    filtering()
+    find_driversRelations()
+
 
 
 def find_driversRelations():
     driversRelations = {}
-    for fn in get_all_files(prevDriversDefined_dpath, '%s*' % prevDriversDefined_prefix):
+    for fn in get_all_files(prevDriversDefined_dpath, 'Filtered-%s*' % prevDriversDefined_prefix):
         logger.info('handle the file; %s' % fn)
         with open('%s/%s' % (prevDriversDefined_dpath, fn), 'rb') as r_csvfile:
             reader = csv.reader(r_csvfile)
@@ -138,6 +142,23 @@ def generate_zones():
     for k, z in basic_zones.iteritems():
         zones[k] = ca_zone(z.relation_with_poly, z.zi, z.zj, z.cCoor_gps, z.polyPoints_gps)
     return zones
+
+
+def filtering():
+    for fn in get_all_files(prevDriversDefined_dpath, '%s*' % prevDriversDefined_prefix):
+        df = pd.read_csv('%s/%s' % (prevDriversDefined_dpath, fn))
+        outlier_set = set()
+        cn1, cn2 = 'spendingTime', 'roamingTime'
+        #
+        outlier_set = outlier_set.union(set(np.where(df[cn1] > df[cn2])[0].tolist()))
+        #
+        for cn in [cn1, cn2]:
+            outliers = np.where((np.abs(df[cn] - df[cn].mean()) > (3 * df[cn].std())))[0]
+            outlier_set = outlier_set.union(set(outliers))
+
+        df = df.drop(df.index[list(outlier_set)])
+        df.to_csv('%s/Filtered-%s' % (prevDriversDefined_dpath, fn), index=False)
+
 
 if __name__ == '__main__':
     run()

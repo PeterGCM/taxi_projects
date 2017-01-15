@@ -33,10 +33,7 @@ def run():
             yymm = '%02d%02d' % (y, m)
             if yymm in ['0912', '1010']:
                 continue
-            # initial_processing(yymm)
             put_task(process_month, [yymm])
-            # group_defined_processing(yymm)
-            # put_task(group_defined_processing, [yymm])
             count_num_jobs += 1
     end_multiprocessor(count_num_jobs)
 
