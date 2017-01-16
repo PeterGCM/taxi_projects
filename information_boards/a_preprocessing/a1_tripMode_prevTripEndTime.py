@@ -8,7 +8,6 @@ from information_boards import taxi_home
 from information_boards import trip_dpath, trip_prefix
 from information_boards import DIn_PIn, DIn_POut, DOut_PIn, DOut_POut
 from information_boards import IN, OUT
-from information_boards import ap_poly_fn, ns_poly_fn
 from information_boards import AM2, AM5
 from information_boards import error_hours
 #
