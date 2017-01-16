@@ -52,7 +52,7 @@ def process_month(yymm):
         normal_file = taxi_home + '/%s/%s/trips/trips-%s-normal.csv' % (yyyy, mm, yymm)
         ext_file = taxi_home + '/%s/%s/trips/trips-%s-normal-ext.csv' % (yyyy, mm, yymm)
         #
-        ap_polygons, ns_polygon = get_ap_polygons, get_ns_polygon
+        ap_polygons, ns_polygon = get_ap_polygons(), get_ns_polygon()
         vehicle_prev_trip_position_time = {}
         with open(trip_fpath, 'wt') as w_csvfile:
             writer = csv.writer(w_csvfile, lineterminator='\n')
