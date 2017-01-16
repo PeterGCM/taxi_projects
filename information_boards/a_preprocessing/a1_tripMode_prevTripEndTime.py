@@ -106,10 +106,10 @@ def process_month(yymm):
                         c_sl_ter, c_el_ter = 'X', 'X'
                         for ap_polygon in ap_polygons:
                             if not c_sl_ap:
-                                ap_polygon.is_including((s_long, s_lat))
+                                c_sl_ap = ap_polygon.is_including((s_long, s_lat))
                                 c_sl_ter = ap_polygon.name
                             if not c_el_ap:
-                                ap_polygon.is_including((e_long, e_lat))
+                                c_el_ap = ap_polygon.is_including((e_long, e_lat))
                                 c_el_ter = ap_polygon.name
                         c_sl_ns, c_el_ns = ns_polygon.is_including((s_long, s_lat)), ns_polygon.is_including((e_long, e_lat))
                         did = row2[hid2['driver-id']]
