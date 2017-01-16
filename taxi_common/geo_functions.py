@@ -1,8 +1,9 @@
 import __init__
 #
+from taxi_common import sg_loc_polygons_fpath
 from _classes import zone
 #
-from math import ceil
+from pykml import parser
 from shapely.geometry import Polygon, Point
 from geopy.distance import vincenty, VincentyDistance
 #
@@ -85,3 +86,49 @@ def read_generate_polygon(fn):
         _long, _lat = l.split(',')
         points.append([eval(_long), eval(_lat)])
     return poly(points)
+
+
+def get_ap_polygons():
+    poly_names = ['T1', 'T2', 'T3', 'BudgetT']
+    kml_doc = None
+    with open(sg_loc_polygons_fpath) as f:
+        kml_doc = parser.parse(f).getroot().Document
+    ap_polygons = []
+    for pm in kml_doc.Placemark:
+        if pm.name in poly_names:
+            str_coords = str(pm.Polygon.outerBoundaryIs.LinearRing.coordinates)
+            points = []
+            for l in ''.join(str_coords.split()).split(',0')[:-1]:
+                _long, _lat = l.split(',')
+                points.append([eval(_long), eval(_lat)])
+            ap_poly = poly(points)
+            ap_poly.name = pm.name
+            ap_polygons.append(ap_poly)
+    return ap_polygons
+
+
+def get_ns_polygon():
+    kml_doc = None
+    with open(sg_loc_polygons_fpath) as f:
+        kml_doc = parser.parse(f).getroot().Document
+    for pm in kml_doc.Placemark:
+        if pm.name == 'Night Safari':
+            str_coords = str(pm.Polygon.outerBoundaryIs.LinearRing.coordinates)
+            points = []
+            for l in ''.join(str_coords.split()).split(',0')[:-1]:
+                _long, _lat = l.split(',')
+                points.append([eval(_long), eval(_lat)])
+            return poly(points)
+
+
+
+
+if __name__ == '__main__':
+    get_ns_polygon()
+    # ap_polygons = get_ap_polygons()
+    # target_gps = (103.984857,  1.342390)
+    # for ap_poly in ap_polygons:
+    #     if ap_poly.is_including(target_gps):
+    #         print ap_poly.name
+
+

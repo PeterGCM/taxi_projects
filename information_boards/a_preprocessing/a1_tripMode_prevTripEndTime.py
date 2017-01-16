@@ -12,7 +12,7 @@ from information_boards import ap_poly_fn, ns_poly_fn
 from information_boards import AM2, AM5
 from information_boards import error_hours
 #
-from taxi_common.geo_functions import read_generate_polygon
+from taxi_common.geo_functions import get_ap_polygons, get_ns_polygon
 from taxi_common.file_handling_functions import check_dir_create, check_path_exist
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 from taxi_common.log_handling_functions import get_logger
@@ -52,14 +52,15 @@ def process_month(yymm):
         normal_file = taxi_home + '/%s/%s/trips/trips-%s-normal.csv' % (yyyy, mm, yymm)
         ext_file = taxi_home + '/%s/%s/trips/trips-%s-normal-ext.csv' % (yyyy, mm, yymm)
         #
-        ap_poly, ns_poly = read_generate_polygon(ap_poly_fn), read_generate_polygon(ns_poly_fn)
+        ap_polygons, ns_polygon = get_ap_polygons, get_ns_polygon
         vehicle_prev_trip_position_time = {}
         with open(trip_fpath, 'wt') as w_csvfile:
             writer = csv.writer(w_csvfile, lineterminator='\n')
             new_headers = ['vid', 'did',
                            'startTime', 'endTime', 'duration', 'fare',
                            'tripModeAP', 'tripModeNS', 'prevTripEndTime',
-                           'day', 'hour']
+                           'day', 'hour',
+                           'pickUpTerminalAP', 'prevEndTerminalAP']
             writer.writerow(new_headers)
             #
             with open(normal_file, 'rb') as r_csvfile1:
@@ -100,8 +101,17 @@ def process_month(yymm):
                         day, hour = row1[hid1['start-day']], row1[hid1['start-hour']]
                         s_long, s_lat = eval(row1[hid1['start-long']]), eval(row1[hid1['start-lat']])
                         e_long, e_lat = eval(row1[hid1['end-long']]), eval(row1[hid1['end-lat']])
-                        c_sl_ap, c_el_ap = ap_poly.is_including((s_long, s_lat)), ap_poly.is_including((e_long, e_lat))
-                        c_sl_ns, c_el_ns = ns_poly.is_including((s_long, s_lat)), ns_poly.is_including((e_long, e_lat))
+
+                        c_sl_ap, c_el_ap = False, False
+                        c_sl_ter, c_el_ter = 'X', 'X'
+                        for ap_polygon in ap_polygons:
+                            if not c_sl_ap:
+                                ap_polygon.is_including((s_long, s_lat))
+                                c_sl_ter = ap_polygon.name
+                            if not c_el_ap:
+                                ap_polygon.is_including((e_long, e_lat))
+                                c_el_ter = ap_polygon.name
+                        c_sl_ns, c_el_ns = ns_polygon.is_including((s_long, s_lat)), ns_polygon.is_including((e_long, e_lat))
                         did = row2[hid2['driver-id']]
                         #
                         if not vehicle_prev_trip_position_time.has_key(vid):
@@ -110,8 +120,8 @@ def process_month(yymm):
                             # let's assume that the previous trip occurred at outside of the airport and Night safari
                             # and also assume that the previous trip's end time is the current trip's start time
                             # False means the trip occur at outside of the airport or Night safari
-                            vehicle_prev_trip_position_time[vid] = (OUT, OUT, st_ts)
-                        pt_el_ap, pt_el_ns, pt_time = vehicle_prev_trip_position_time[vid]
+                            vehicle_prev_trip_position_time[vid] = ('X', OUT, OUT, st_ts)
+                        pt_el_ter, pt_el_ap, pt_el_ns, pt_time = vehicle_prev_trip_position_time[vid]
                         ap_trip_mode, ns_trip_mode = None, None
                         #
                         if pt_el_ap == IN and c_sl_ap == IN: ap_trip_mode = DIn_PIn
@@ -126,12 +136,13 @@ def process_month(yymm):
                         elif pt_el_ns == OUT and c_sl_ns == OUT: ns_trip_mode = DOut_POut
                         else: assert False
                         #
-                        vehicle_prev_trip_position_time[vid] = (c_el_ap, c_el_ns, et_ts)
+                        vehicle_prev_trip_position_time[vid] = (c_el_ter, c_el_ap, c_el_ns, et_ts)
                         #
                         new_row = [vid, did,
                                    st_ts, et_ts, dur, fare,
                                    ap_trip_mode, ns_trip_mode, pt_time,
-                                   day, hour]
+                                   day, hour,
+                                   c_sl_ter, pt_el_ter]
                         writer.writerow(new_row)
     except Exception as _:
         import sys

@@ -41,7 +41,7 @@ full_time_driver_dir, ft_drivers_prefix = '%s/%s' % (tc_data, 'full_time_drivers
 dl_by_trip_dir, dl_by_trip_prefix = '%s/%s' % (tc_data, 'drivers_by_trips'), 'drivers-'
 ss_drivers_dpath, ss_drivers_prefix = '%s/%s' % (tc_data, 'ss_drivers_by_trip'), 'ss-drivers-'
 #
-
+sg_loc_polygons_fpath = '%s/%s' % (tc_data, 'queues.kml')
 
 def get_taxi_home_path():
     return taxi_home

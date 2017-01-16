@@ -60,8 +60,8 @@ def repeat():
 def init_process():
     for graph_dpath, graph_prefix, group_dpath, group_prefix, group_drivers_fapth, group_summary_fpath in \
         [
-         (SP_graph_dpath, SP_graph_prefix, SP_group_dpath, SP_group_prefix, SP_group_drivers_fpath, SP_group_summary_fpath),
-         # (RP_graph_dpath, RP_graph_prefix, RP_group_dpath, RP_group_prefix, RP_group_drivers_fpath, RP_group_summary_fpath)
+         # (SP_graph_dpath, SP_graph_prefix, SP_group_dpath, SP_group_prefix, SP_group_drivers_fpath, SP_group_summary_fpath),
+         (RP_graph_dpath, RP_graph_prefix, RP_group_dpath, RP_group_prefix, RP_group_drivers_fpath, RP_group_summary_fpath)
         ]:
         check_dir_create(group_dpath)
         with open(group_summary_fpath, 'wt') as w_csvfile:
@@ -89,6 +89,13 @@ def init_process():
                     did_igid[did1] = igid
                     igid += 1
                 igG.add_edge(did_igid[did0], did_igid[did1], weight=abs(w))
+        allDrivers_fpath = '%s/%sall.pkl' % (group_dpath, group_prefix)
+        allDrivers_graph = {}
+        for e in igG.es:
+            did0, did1 = [igG.vs[nIndex]['name'] for nIndex in e.tuple]
+            allDrivers_graph[did0, did1] = e['weight']
+        save_pickle_file(allDrivers_fpath, allDrivers_graph)
+        #
         logger.info('Partitioning')
         graphs = [igG]
         groups = []
@@ -97,10 +104,10 @@ def init_process():
             part = louvain.find_partition(G, method='Modularity', weight='weight')
             for sg in part.subgraphs():
                 num_drivers = len(sg.vs)
-                if num_drivers > 100:
-                    graphs.append(sg)
-                else:
-                    groups.append((num_drivers, sg))
+                # if num_drivers > 100:
+                #     graphs.append(sg)
+                # else:
+                groups.append((num_drivers, sg))
         #
         logger.info('Each group pickling and summary')
         group_drivers = {}

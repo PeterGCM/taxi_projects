@@ -29,10 +29,10 @@ SIGINIFICANCE_LEVEL = 0.01
 MIN_PICKUP_RATIO = 0.1
 
 group_dpath = '%s/%s' % (taxi_data, 'group')
-SP_group_dpath, SP_group_prefix = '%s/%s' % (taxi_data, 'SP_group'), 'SP-group-'
+SP_group_dpath, SP_group_prefix = '%s/%s' % (group_dpath, 'SP_group'), 'SP-group-'
 SP_group_drivers_fpath = '%s/%s' % (SP_group_dpath, 'SP-group-drivers.pkl')
 SP_group_summary_fpath = '%s/%s' % (SP_group_dpath, 'SP-group-summary.csv')
-RP_group_dpath, RP_group_prefix = '%s/%s' % (taxi_data, 'RP_group'), 'RP-group-'
+RP_group_dpath, RP_group_prefix = '%s/%s' % (group_dpath, 'RP_group'), 'RP-group-'
 RP_group_drivers_fpath = '%s/%s' % (RP_group_dpath, 'RP-group-drivers.pkl')
 RP_group_summary_fpath = '%s/%s' % (RP_group_dpath, 'RP-group-summary.csv')
 #
