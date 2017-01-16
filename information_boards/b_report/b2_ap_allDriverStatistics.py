@@ -36,13 +36,14 @@ def run():
     # process_tripBased()
     # filter_tripBased()
     #
-    # process_dayBased()
-    # filter_dayBased()
+    process_dayBased()
+    filter_dayBased()
     #
-    # process_monthBased()
+    process_monthBased()
     filter_monthBased()
     #
     aggregate_yearBased()
+
 
 def process_tripBased():
     for y in range(9, 11):
@@ -101,9 +102,9 @@ def filter_tripBased():
         for cn in Ydf.columns:
             if cn in ['year', 'month', 'day', 'hour', 'driverID']:
                 continue
-            if cn == 'locQTime':
-                outlier_set = set(np.where(Ydf[cn] > 120)[0].tolist())
-                outlier_index = outlier_index.union(set(outlier_set))
+            # if cn == 'locQTime':
+            #     outlier_set = set(np.where(Ydf[cn] > 120)[0].tolist())
+            #     outlier_index = outlier_index.union(set(outlier_set))
             if cn in ['locEP', 'locProductivity']:
                 outlier_set = np.where((np.abs(Ydf[cn] - Ydf[cn].mean()) > (3 * Ydf[cn].std())))[0]
                 outlier_index = outlier_index.union(set(outlier_set))
