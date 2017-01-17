@@ -38,6 +38,7 @@ RP_group_summary_fpath = '%s/%s' % (RP_group_dpath, 'RP-group-summary.csv')
 #
 
 SP_groupDefinedTrip_dpath, SP_groupDefinedTrip_prefix = '%s/%s' % (taxi_data, 'SP-groupDefinedTrip'), 'SP-groupDefinedTrip-'
+RP_groupDefinedTrip_dpath, RP_groupDefinedTrip_prefix = '%s/%s' % (taxi_data, 'RP-groupDefinedTrip'), 'RP-groupDefinedTrip-'
 
 
 

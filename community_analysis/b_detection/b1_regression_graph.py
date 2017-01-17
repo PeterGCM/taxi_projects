@@ -94,7 +94,7 @@ def process_file(fpath):
                     if cof > 0:
                         positive_ef_drivers.add(_did0)
                 for _did0 in significant_drivers.difference(positive_ef_drivers):
-                    RP_graph[int(_did0), did1] = SP_res.params[_did0]
+                    SP_graph[int(_did0), did1] = SP_res.params[_did0]
 
                 # negative_ef_drivers = set()
                 # for _did0, cof in SP_res.params.iteritems():
