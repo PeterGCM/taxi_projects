@@ -1,0 +1,52 @@
+<html>
+  <head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['sankey']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'From');
+        data.addColumn('string', 'To');
+        data.addColumn('number', 'NumberTrips');
+        data.addRows([
+  ['DropBudgetT', 'PickBudgetT', 56721],
+['DropBudgetT', 'PickT1', 20314],
+['DropBudgetT', 'PickT2', 17696],
+['DropBudgetT', 'PickT3', 13603],
+['DropBudgetT', 'PickX', 238938],
+['DropT1', 'PickBudgetT', 44310],
+['DropT1', 'PickT1', 143148],
+['DropT1', 'PickT2', 145580],
+['DropT1', 'PickT3', 50306],
+['DropT1', 'PickX', 766128],
+['DropT2', 'PickBudgetT', 48076],
+['DropT2', 'PickT1', 54530],
+['DropT2', 'PickT2', 195246],
+['DropT2', 'PickT3', 59151],
+['DropT2', 'PickX', 776591],
+['DropT3', 'PickBudgetT', 28963],
+['DropT3', 'PickT1', 88354],
+['DropT3', 'PickT2', 74787],
+['DropT3', 'PickT3', 117582],
+['DropT3', 'PickX', 571779],
+
+
+        ]);
+
+        // Sets chart options.
+        var options = {
+          width: 600,
+        };
+
+        // Instantiates and draws our chart, passing in some options.
+        var chart = new google.visualization.Sankey(document.getElementById('sankey_basic'));
+        chart.draw(data, options);
+      }
+    </script>
+  </head>
+  <body>
+    <div id="sankey_basic" style="width: 900px; height: 300px;"></div>
+  </body>
+</html>
