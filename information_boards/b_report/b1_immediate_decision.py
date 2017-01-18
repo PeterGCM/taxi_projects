@@ -63,11 +63,16 @@ def run():
         logger.info('end the file; %s' % yymm)
     #
     logger.info('Start')
-    for fn in [trip_ap_summary_fpath, trip_ns_summary_fpath]:
-        with open(fn, 'wb') as w_csvfile:
-            writer = csv.writer(w_csvfile, lineterminator='\n')
-            header = ['year', 'month', 'day', 'hour', 'dayOfWeek', 'totalNum', 'totalDur', 'totalFare', 'tripMode']
-            writer.writerow(header)
+    # for fn in [trip_ap_summary_fpath, trip_ns_summary_fpath]:
+    #     with open(fn, 'wb') as w_csvfile:
+    #         writer = csv.writer(w_csvfile, lineterminator='\n')
+    #         header = ['year', 'month', 'day', 'hour', 'dayOfWeek', 'totalNum', 'totalDur', 'totalFare', 'tripMode']
+    #         writer.writerow(header)
+
+    with open(trip_ap_summary_fpath, 'wb') as w_csvfile:
+        writer = csv.writer(w_csvfile, lineterminator='\n')
+        header = ['year', 'month', 'day', 'hour', 'dayOfWeek', 'totalNum', 'totalDur', 'totalFare', 'tripMode']
+        writer.writerow(header)
     #
     for y in xrange(9, 11):
         for m in xrange(1, 13):
