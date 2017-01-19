@@ -43,7 +43,7 @@ def process_file(yymm):
     try:
         logger.info('handle the file; %s' % yymm)
         trip_fpath = '%s/%s%s.csv' % (trip_dpath, trip_prefix, yymm)
-        trip_filtered_fpath = '%s/%s%s.csv' % (trip_dpath, trip_prefix, yymm)
+        trip_filtered_fpath = '%s/Filtered-%s%s.csv' % (trip_dpath, trip_prefix, yymm)
         if check_path_exist(trip_fpath):
             logger.info('The file had already been processed; %s' % trip_fpath)
             return
