@@ -85,7 +85,7 @@ def process_file(yymm):
                     vid = row1[hid1['vehicle-id']]
                     st_ts, et_ts = row1[hid1['start-time']], row1[hid1['end-time']]
                     dur, fare = row1[hid1['duration']], row1[hid1['fare']]
-                    day, hour = row1[hid1['start-day']], row1[hid1['start-hour']]
+                    day, hour = int(row1[hid1['start-day']]), int(row1[hid1['start-hour']])
                     s_long, s_lat = eval(row1[hid1['start-long']]), eval(row1[hid1['start-lat']])
                     e_long, e_lat = eval(row1[hid1['end-long']]), eval(row1[hid1['end-lat']])
 
