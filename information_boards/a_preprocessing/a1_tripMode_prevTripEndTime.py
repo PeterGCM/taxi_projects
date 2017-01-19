@@ -33,12 +33,12 @@ def run():
                 # both years data are corrupted
                 continue
             # process_month(yymm)
-            put_task(process_month, [yymm])
+            put_task(process_file, [yymm])
             count_num_jobs += 1
     end_multiprocessor(count_num_jobs)
 
 
-def process_month(yymm):
+def process_file(yymm):
     from traceback import format_exc
     try:
         logger.info('handle the file; %s' % yymm)
@@ -78,21 +78,6 @@ def process_month(yymm):
                     hid2 = {h : i for i, h in enumerate(headers2)}
                     for row1 in reader1:
                         row2 = reader2.next()
-                        #
-                        # Only consider trips whose start time is before 2 AM and after 6 AM
-                        #
-                        t = eval(row1[hid1['start-time']])
-                        cur_dt = datetime.datetime.fromtimestamp(t)
-                        if AM2 <= cur_dt.hour and cur_dt.hour <= AM5:
-                            continue
-                        need2skip = False
-                        for ys, ms, ds, hs in error_hours:
-                            yyyy0 = 2000 + int(ys)
-                            mm0, dd0, hh0 = map(int, [ms, ds, hs])
-                            if (cur_dt.year == yyyy0) and (cur_dt.month == mm0) and (cur_dt.day == dd0) and (
-                                        cur_dt.hour == hh0):
-                                need2skip = True
-                        if need2skip: continue
                         #
                         vid = row1[hid1['vehicle-id']]
                         st_ts, et_ts = row1[hid1['start-time']], row1[hid1['end-time']]
@@ -152,6 +137,26 @@ def process_month(yymm):
         with open('%s_%s.txt' % (sys.argv[0], yymm), 'w') as f:
             f.write(format_exc())
         raise
+
+
+
+
+#
+                        # Only consider trips whose start time is before 2 AM and after 6 AM
+                        #
+                        # t = eval(row1[hid1['start-time']])
+                        # cur_dt = datetime.datetime.fromtimestamp(t)
+                        # if AM2 <= cur_dt.hour and cur_dt.hour <= AM5:
+                        #     continue
+                        # need2skip = False
+                        # for ys, ms, ds, hs in error_hours:
+                        #     yyyy0 = 2000 + int(ys)
+                        #     mm0, dd0, hh0 = map(int, [ms, ds, hs])
+                        #     if (cur_dt.year == yyyy0) and (cur_dt.month == mm0) and (cur_dt.day == dd0) and (
+                        #                 cur_dt.hour == hh0):
+                        #         need2skip = True
+                        # if need2skip: continue
+
 
 
 if __name__ == '__main__':

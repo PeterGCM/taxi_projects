@@ -12,7 +12,7 @@ from information_boards import crossingTime_ns_dpath, crossingTime_ns_prefix
 from information_boards import ap_poly_fn, ns_poly_fn
 from information_boards import IN, OUT
 #
-from taxi_common.geo_functions import get_ap_polygons, get_ns_polygon
+from taxi_common.geo_functions import read_generate_polygon
 from taxi_common.file_handling_functions import check_path_exist, check_dir_create, get_all_files, save_pickle_file
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 from taxi_common.log_handling_functions import get_logger
@@ -122,7 +122,7 @@ def log_location_labeling(yymm):
             return
         yy, mm = yymm[:2], yymm[-2:]
         #
-        ap_polygons, ns_polygon = get_ap_polygons(), get_ns_polygon()
+        ap_poly, ns_poly = read_generate_polygon(ap_poly_fn), read_generate_polygon(ns_poly_fn)
         with open('%s/20%s/%s/logs/logs-%s-normal.csv' % (taxi_home, yy, mm, yymm), 'rb') as r_csvfile:
             reader = csv.reader(r_csvfile)
             headers = reader.next()
@@ -133,15 +133,8 @@ def log_location_labeling(yymm):
                 writer.writerow(new_headers)
                 #
                 for row in reader:
-                    _long, _lat = (eval(row[hid['longitude']]), eval(row[hid['latitude']]))
-                    ap_or_not = False
-                    for ap_polygon in ap_polygons:
-                        if not ap_or_not:
-                            res = ap_polygon.is_including((_long, _lat))
-                            if res:
-                                ap_or_not = res
-                                break
-                    np_or_not = ns_polygon.is_including((_long, _lat))
+                    ap_or_not = ap_poly.is_including((eval(row[hid['longitude']]), eval(row[hid['latitude']])))
+                    np_or_not = ns_poly.is_including((eval(row[hid['longitude']]), eval(row[hid['latitude']])))
                     new_row = [row[hid['time']], row[hid['vehicle-id']], row[hid['driver-id']], ap_or_not, np_or_not]
                     writer.writerow(new_row)
         logger.info('end the file; %s' % yymm)
