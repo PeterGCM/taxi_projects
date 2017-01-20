@@ -40,12 +40,12 @@ def run():
             if yymm in ['0912', '1010']:
                 continue
             # process_file(yymm)
-            put_task(productive_duration, [yymm])
-            # put_task(process_files, [yymm])
+            # put_task(productive_duration, [yymm])
+            put_task(process_files, [yymm])
             count_num_jobs += 1
     end_multiprocessor(count_num_jobs)
     #
-    summary()
+    # summary()
 
 
 def summary():
