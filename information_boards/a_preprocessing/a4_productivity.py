@@ -63,49 +63,49 @@ def summary():
         hp_summary, time_period_order = {}, []
         while cur_timestamp < last_timestamp:
             cur_timestamp += datetime.timedelta(hours=1)
-            yyyy, mm, dd, hh = cur_timestamp.year, cur_timestamp.month, cur_timestamp.day, cur_timestamp.hour
-            if yyyy == 2009 and mm == 12: continue
-            if yyyy == 2010 and mm == 10: continue
-            if yyyy == 2011: continue
-            if AM2 <= hh and hh <= AM5: continue
+            year, month, day, hour = cur_timestamp.year, cur_timestamp.month, cur_timestamp.day, cur_timestamp.hour
+            if year == 2009 and month == 12: continue
+            if year == 2010 and month == 10: continue
+            if year == 2011: continue
+            if AM2 <= hour and hour <= AM5: continue
             need2skip = False
             for ys, ms, ds, hs in error_hours:
-                yyyy0 = 2000 + int(ys)
-                mm0, dd0, hh0 = map(int, [ms, ds, hs])
-                if (yyyy == yyyy0) and (mm == mm0) and (dd == dd0) and (hh == hh0):
+                year0 = 2000 + int(ys)
+                month0, day0, hour0 = map(int, [ms, ds, hs])
+                if (year == year0) and (month == month0) and (day == day0) and (hour == hour0):
                     need2skip = True
             if need2skip: continue
             #
-            k = (str(yyyy - 2000), str(mm), str(dd), str(hh))
+            k = year, month, day, hour
             hp_summary[k] = [0 for _ in range(len([ALL_DUR, ALL_FARE, ALL_NUM, \
                                                    AP_DUR, AP_FARE, AP_QUEUE, AP_NUM, \
                                                    NS_DUR, NS_FARE, NS_QUEUE, NS_NUM]))]
             time_period_order.append(k)
             #
-        yy_l, mm_l, dd_l, hh_l = 'yy', 'mm', 'dd', 'hh'
+        year_l, month_l, day_l, hour_l = 'year', 'month', 'day', 'hour'
         for fn in get_all_files(productivity_dpath, '%s*.csv' % productivity_prefix):
             with open('%s/%s' % (productivity_dpath, fn), 'rb') as r_csvfile:
                 reader = csv.reader(r_csvfile)
                 headers = reader.next()
                 hid = {h: i for i, h in enumerate(headers)}
                 for row in reader:
-                    yy, mm, dd, hh = row[hid[yy_l]], row[hid[mm_l]], row[hid[dd_l]], row[hid[hh_l]]
-                    k = (yy, mm, dd, hh)
+                    year, month = int(row[hid[year_l]]), int(row[hid[month_l]])
+                    day, hour = int(row[hid[day_l]]), int(row[hid[hour_l]])
+                    k = (year, month, day, hour)
                     if not hp_summary.has_key(k): continue
                     hp_summary[k][ALL_DUR] += eval(row[hid['allDuration']])
                     hp_summary[k][ALL_FARE] += eval(row[hid['allFare']])
                     hp_summary[k][ALL_NUM] += eval(row[hid['allNum']])
-
+                    #
                     hp_summary[k][AP_DUR] += eval(row[hid['apDuration']])
                     hp_summary[k][AP_FARE] += eval(row[hid['apFare']])
                     hp_summary[k][AP_QUEUE] += eval(row[hid['apQueueingTime']])
                     hp_summary[k][AP_NUM] += eval(row[hid['apNum']])
-
+                    #
                     hp_summary[k][NS_DUR] += eval(row[hid['nsDuration']])
                     hp_summary[k][NS_FARE] += eval(row[hid['nsFare']])
                     hp_summary[k][NS_QUEUE] += eval(row[hid['nsQueueingTime']])
                     hp_summary[k][NS_NUM] += eval(row[hid['nsNum']])
-
         #
         with open(productivity_summary_fpath, 'wt') as w_csvfile:
             writer = csv.writer(w_csvfile)
@@ -138,6 +138,7 @@ def summary():
                 all_total_dur, all_total_fare, all_num, \
                 ap_total_dur, ap_total_fare, ap_total_queue, ap_num, \
                 ns_total_dur, ns_total_fare, ns_total_queue, ns_num = hp_summary[k]
+                year, month, day, hour = k
                 #
                 if all_num == 0:
                     all_avg_dur, all_avg_fare = -1, -1
@@ -148,8 +149,6 @@ def summary():
                         all_prod = -1
                     else:
                         all_prod = all_total_fare / float(all_total_dur)
-                #
-                yy, mm, dd, hh = k
                 if ap_num == 0:
                     ap_avg_dur, ap_avg_fare, ap_avg_queue = -1, -1, -1
                     ap_prod = -1
@@ -198,7 +197,7 @@ def summary():
                     else:
                         ns_gen_prod = ns_gen_total_fare / float(ns_gen_total_dur)
                 #
-                writer.writerow([yy, mm, dd, hh,
+                writer.writerow([year, month, day, hour,
                                  all_num,
                                  all_total_dur, all_avg_dur,
                                  all_total_fare, all_avg_fare,
@@ -222,8 +221,6 @@ def summary():
                                  ns_gen_total_fare, ns_gen_avg_fare,
                                  ns_gen_prod,
                                  k])
-
-
     except Exception as _:
         import sys
         with open('%s_%s.txt' % (sys.argv[0], 'summary'), 'w') as f:
@@ -243,8 +240,8 @@ def process_files(yymm):
         last_datetime = datetime.datetime(2011, 2, 1, 0)
         hourly_stats, time_period_order = {}, []
         while begin_datetime < last_datetime:
-            yyyy, mm, dd, hh = begin_datetime.year, begin_datetime.month, begin_datetime.day, begin_datetime.hour
-            k = (yyyy, mm, dd, hh)
+            year, month, day, hour = begin_datetime.year, begin_datetime.month, begin_datetime.day, begin_datetime.hour
+            k = (year, month, day, hour)
             hourly_stats[k] = [0 for _ in range(len([ALL_DUR, ALL_FARE, ALL_NUM,
                                                      AP_DUR, AP_FARE, AP_QUEUE, AP_NUM,
                                                      NS_DUR, NS_FARE, NS_QUEUE, NS_NUM]))]
@@ -254,14 +251,14 @@ def process_files(yymm):
         qt_label = 'queueingTime'
         #
         logger.info('Productive duration; %s' % yymm)
-        yyyy, mm = 2000 + int(yymm[:2]), int(yymm[2:])
         with open('%s/%s%s.csv' % (shiftProDur_dpath, shiftProDur_prefix, yymm), 'rb') as r_csvfile:
             reader = csv.reader(r_csvfile)
             headers = reader.next()
             hid = {h: i for i, h in enumerate(headers)}
             for row in reader:
-                dd, hh = eval(row[hid['dd']]), eval(row[hid['hh']])
-                hourly_stats[(yyyy, mm, dd, hh)][ALL_DUR] += eval(row[hid['pro-dur']]) * SEC60  # unit change; Minute -> Second
+                year, month = int(row[hid['year']]), int(row[hid['day']])
+                day, hour = int(row[hid['day']]), int(row[hid['hour']])
+                hourly_stats[(year, month, day, hour)][ALL_DUR] += eval(row[hid['pro-dur']]) * SEC60  # unit change; Minute -> Second
         #
         logger.info('Total fare; %s' % yymm)
         with open('%s/%s%s.csv' % (trip_dpath, trip_prefix, yymm), 'rb') as r_csvfile:
@@ -299,12 +296,12 @@ def process_files(yymm):
                       'apDuration', 'apFare', 'apQueueingTime', 'apNum',
                       'nsDuration', 'nsFare', 'nsQueueingTime', 'nsNum']
             writer.writerow(header)
-            for yyyy, mm, dd, hh in time_period_order:
+            for year, month, day, hour in time_period_order:
                 all_dur, all_fare, all_num, \
                 ap_dur, ap_fare, ap_qt, ap_num, \
-                ns_dur, ns_fare, ns_qt, ns_num = hourly_stats[(yyyy, mm, dd, hh)]
+                ns_dur, ns_fare, ns_qt, ns_num = hourly_stats[(year, month, day, hour)]
                 #
-                writer.writerow([yyyy - 2000, mm, dd, hh,
+                writer.writerow([year, month, day, hour,
                                  all_dur, all_fare, all_num,
                                  ap_dur, ap_fare, ap_qt, ap_num,
                                  ns_dur, ns_fare, ns_qt, ns_num
