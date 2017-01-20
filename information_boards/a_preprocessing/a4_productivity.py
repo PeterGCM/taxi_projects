@@ -256,7 +256,7 @@ def process_files(yymm):
             headers = reader.next()
             hid = {h: i for i, h in enumerate(headers)}
             for row in reader:
-                year, month = int(row[hid['year']]), int(row[hid['day']])
+                year, month = int(row[hid['year']]), int(row[hid['month']])
                 day, hour = int(row[hid['day']]), int(row[hid['hour']])
                 hourly_stats[(year, month, day, hour)][ALL_DUR] += eval(row[hid['pro-dur']]) * SEC60  # unit change; Minute -> Second
         #
