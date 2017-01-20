@@ -32,18 +32,18 @@ def run():
     for dpath in [productivity_dpath, shiftProDur_dpath]:
         check_dir_create(dpath)
     #
-    # init_multiprocessor(11)
-    # count_num_jobs = 0
-    # for y in xrange(9, 11):
-    #     for m in xrange(1, 13):
-    #         yymm = '%02d%02d' % (y, m)
-    #         if yymm in ['0912', '1010']:
-    #             continue
-    #         # process_file(yymm)
-    #         # put_task(productive_duration, [yymm])
-    #         put_task(process_files, [yymm])
-    #         count_num_jobs += 1
-    # end_multiprocessor(count_num_jobs)
+    init_multiprocessor(11)
+    count_num_jobs = 0
+    for y in xrange(9, 11):
+        for m in xrange(1, 13):
+            yymm = '%02d%02d' % (y, m)
+            if yymm in ['0912', '1010']:
+                continue
+            # process_file(yymm)
+            put_task(productive_duration, [yymm])
+            # put_task(process_files, [yymm])
+            count_num_jobs += 1
+    end_multiprocessor(count_num_jobs)
     #
     summary()
 
@@ -392,19 +392,19 @@ def productive_duration(yymm):
             hid = {h: i for i, h in enumerate(headers)}
             with open('%s/%s%s.csv' % (shiftProDur_dpath, shiftProDur_prefix, yymm), 'wb') as w_csvfile:
                 writer = csv.writer(w_csvfile, lineterminator='\n')
-                new_headers = ['yy', 'mm', 'dd', 'hh', 'vid', 'did', 'pro-dur']
+                new_headers = ['year', 'month', 'day', 'hour', 'vid', 'did', 'pro-dur']
                 writer.writerow(new_headers)
                 for row in reader:
                     vid, did = row[hid['vehicle-id']], row[hid['driver-id']]
                     #
                     # Only consider trips whose start time is before 2 AM and after 6 AM
                     #
-                    hh = eval(row[hid['hour']])
-                    if AM2 <= hh and hh <= AM5:
+                    hour = eval(row[hid['hour']])
+                    if AM2 <= hour and hour <= AM5:
                         continue
                     #
                     productive_duration = sum(int(row[hid[dur]]) for dur in productive_state)
-                    writer.writerow([row[hid['year']][-2:], row[hid['month']], row[hid['day']], row[hid['hour']],
+                    writer.writerow([row[hid['year']], row[hid['month']], row[hid['day']], row[hid['hour']],
                                      vid, did, productive_duration])
         logger.info('end the file; %s' % yymm)
     except Exception as _:
