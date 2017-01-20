@@ -261,7 +261,7 @@ def process_files(yymm):
                 hourly_stats[(year, month, day, hour)][ALL_DUR] += eval(row[hid['pro-dur']]) * SEC60  # unit change; Minute -> Second
         #
         logger.info('Total fare; %s' % yymm)
-        with open('%s/%s%s.csv' % (trip_dpath, trip_prefix, yymm), 'rb') as r_csvfile:
+        with open('%s/Filtered-%s%s.csv' % (trip_dpath, trip_prefix, yymm), 'rb') as r_csvfile:
             reader = csv.reader(r_csvfile)
             headers = reader.next()
             hid = {h: i for i, h in enumerate(headers)}
