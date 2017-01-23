@@ -29,6 +29,7 @@ LTN, LIN, LON, \
 LQ, LEP, \
 LD, LF = range(10)
 
+locations = ['BudgetT', 'T1', 'T2', 'T3', 'X']
 
 def run():
     check_dir_create(statisticsAllDrivers_ap_dpath)
@@ -36,13 +37,13 @@ def run():
     # process_tripBased()
     # filter_tripBased()
     #
-    process_dayBased()
-    filter_dayBased()
+    # process_dayBased()
+    # filter_dayBased()
     #
     process_monthBased()
-    filter_monthBased()
+    # filter_monthBased()
     #
-    aggregate_yearBased()
+    # aggregate_yearBased()
 
 
 def process_tripBased():
@@ -58,11 +59,17 @@ def process_tripBased():
         holidays = HOLIDAYS2009 if yyyy == '2009' else HOLIDAYS2010
         with open(statistics_fpath, 'wb') as w_csvfile:
             writer = csv.writer(w_csvfile, lineterminator='\n')
-            header = ['year', 'month', 'day', 'hour',
+            header = ['year', 'month', 'day', 'hour', 'weekEnd',
                       'driverID',
                       'locQTime', 'locEP', 'locDuration', 'locFare',
                       'locProductivity',
-                      'locIn', 'weekEnd']
+                      'locIn']
+            drop_pick_cns = []
+            for l0 in locations:
+                for l1 in locations:
+                    cn = 'D%s#P%s' % (l0, l1)
+                    drop_pick_cns.append(cn)
+                    header.append(cn)
             writer.writerow(header)
             for fn in get_all_files(economicProfit_ap_dpath, '%s%s*' % (economicProfit_ap_prefix, yy)):
                 with open('%s/%s' % (economicProfit_ap_dpath, fn), 'rt') as r_csvfile:
@@ -83,13 +90,20 @@ def process_tripBased():
                             weekEnd = 1
                         if datetime.datetime(year, month, day).weekday() in WEEKENDS:
                             weekEnd = 1
+                        l0, l1 = row[hid['prevEndTerminalAP']], row[hid['pickUpTerminalAP']]
+                        drop_pick = 'D%s#P%s' % (l0, l1)
                         new_row = [
-                            year, month, day, hour,
+                            year, month, day, hour, weekEnd,
                             did,
                             locQTime, locEP, locDuration, locFare,
                             locProductivity,
-                            locIn, weekEnd,
+                            locIn
                         ]
+                        for dp_candidate in drop_pick_cns:
+                            if dp_candidate == drop_pick:
+                                new_row.append(1)
+                            else:
+                                new_row.append(0)
                         writer.writerow(new_row)
 
 
@@ -101,6 +115,8 @@ def filter_tripBased():
         outlier_index = set()
         for cn in Ydf.columns:
             if cn in ['year', 'month', 'day', 'hour', 'driverID']:
+                continue
+            if cn.startswith('D'):
                 continue
             # if cn == 'locQTime':
             #     outlier_set = set(np.where(Ydf[cn] > 120)[0].tolist())
@@ -121,6 +137,13 @@ def process_dayBased():
         statistics_fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ap_dpath, statisticsAllDriversDay_ap_prefix, yyyy)
         #
         dateDid_statistics = {}
+        dateDid_DP = {}
+        dp_index, count = {}, 0
+        for l0 in locations:
+            for l1 in locations:
+                drop_pick = 'D%s#P%s' % (l0, l1)
+                dp_index[drop_pick] = count
+                count += 1
         tripBased_fpath = '%s/Filtered-%s%s.csv' % (statisticsAllDrivers_ap_dpath, statisticsAllDriversTrip_ap_prefix, yyyy)
         logger.info('process locTrip')
         with open(tripBased_fpath, 'rt') as r_csvfile:
@@ -133,6 +156,7 @@ def process_dayBased():
                 k = (year, month, day, did)
                 if not dateDid_statistics.has_key(k):
                     dateDid_statistics[k] = [0.0 for _ in [WTN, WOH, WF, LTN, LIN, LON, LQ, LEP, LD, LF]]
+                    dateDid_DP[k] = [0 for _ in range(len(dp_index))]
                 dateDid_statistics[k][LTN] += 1
                 if int(row[hid['locIn']]) == 1:
                     dateDid_statistics[k][LIN] += 1
@@ -143,6 +167,11 @@ def process_dayBased():
                 dateDid_statistics[k][LEP] += float(row[hid['locEP']])
                 dateDid_statistics[k][LD] += float(row[hid['locDuration']])
                 dateDid_statistics[k][LF] += float(row[hid['locFare']])
+                #
+                for l0 in locations:
+                    for l1 in locations:
+                        cn = 'D%s#P%s' % (l0, l1)
+                        dateDid_DP[k][dp_index[cn]] += int(row[hid[cn]])
         #
         yy = yyyy[2:]
         logger.info('process shift')
@@ -153,7 +182,7 @@ def process_dayBased():
                 headers = reader.next()
                 hid = {h: i for i, h in enumerate(headers)}
                 for row in reader:
-                    year, month, day = 2000 + int(row[hid['yy']]), int(row[hid['mm']]), int(row[hid['dd']])
+                    year, month, day = map(int, [row[hid[cn]] for cn in ['year', 'month', 'day']])
                     did = int(row[hid['did']])
                     k = (year, month, day, did)
                     if not dateDid_statistics.has_key(k):
@@ -163,15 +192,12 @@ def process_dayBased():
         logger.info('process trip')
         for fn in get_all_files(trip_dpath, '%s%s*' % (trip_prefix, yy)):
             logger.info('Trip; %s' % fn)
-            _, yymm = fn[:-len('.csv')].split('-')
-            yy, mm = yymm[:2], yymm[-2:]
-            year, month = 2000 + int(yy), int(mm)
             with open('%s/%s' % (trip_dpath, fn), 'rt') as r_csvfile:
                 reader = csv.reader(r_csvfile)
                 headers = reader.next()
                 hid = {h: i for i, h in enumerate(headers)}
                 for row in reader:
-                    day = int(row[hid['day']])
+                    year, month, day = map(int, [row[hid[cn]] for cn in ['year', 'month', 'day']])
                     did = int(row[hid['did']])
                     k = (year, month, day, did)
                     if not dateDid_statistics.has_key(k):
@@ -179,7 +205,7 @@ def process_dayBased():
                     dateDid_statistics[k][WTN] += 1
                     dateDid_statistics[k][WF] += float(row[hid['fare']]) / CENT
         #
-        logger.info('write statistics; %s' % yymm)
+        logger.info('write statistics; %s' % yyyy)
         with open(statistics_fpath, 'wb') as w_csvfile:
             writer = csv.writer(w_csvfile, lineterminator='\n')
             header = ['year', 'month', 'day', 'driverID',
@@ -189,6 +215,8 @@ def process_dayBased():
                       'locQTime', 'locEP', 'locDuration', 'locFare',
                       'QTime/locTrip', 'EP/locTrip',
                       'locProductivity']
+            for dp in dp_index.iterkeys():
+                header.append(dp)
             writer.writerow(header)
             for (year, month, day, did), statistics in dateDid_statistics.iteritems():
                 wleTripNumber, wleOperatingHour, wleFare = int(statistics[WTN]), statistics[WOH], statistics[WF],
@@ -212,6 +240,8 @@ def process_dayBased():
                     locQTime, locEP, locDuration, locFare,
                     QTime_locTrip, EP_locTrip,
                     locProductivity]
+                for dp in dp_index.iterkeys():
+                    new_row.append(dateDid_DP[(year, month, day, did)][dp_index[dp]])
                 writer.writerow(new_row)
 
 
@@ -223,6 +253,8 @@ def filter_dayBased():
         outlier_index = set()
         for cn in Ydf.columns:
             if cn in ['year', 'month', 'day', 'hour', 'driverID']:
+                continue
+            if cn.startswith('D'):
                 continue
             if cn == 'wleProductivity':
                 outlier_index = outlier_index.union(set(np.where(Ydf[cn] > 80)[0].tolist()))
@@ -239,6 +271,13 @@ def process_monthBased():
         statistics_fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ap_dpath, statisticsAllDriversMonth_ap_prefix, yyyy)
         #
         dateDid_statistics = {}
+        dateDid_DP = {}
+        dp_index, count = {}, 0
+        for l0 in locations:
+            for l1 in locations:
+                drop_pick = 'D%s#P%s' % (l0, l1)
+                dp_index[drop_pick] = count
+                count += 1
         dayBased_fpath = '%s/Filtered-%s%s.csv' % (statisticsAllDrivers_ap_dpath, statisticsAllDriversDay_ap_prefix, yyyy)
         logger.info('process locTrip')
         with open(dayBased_fpath, 'rt') as r_csvfile:
@@ -253,6 +292,7 @@ def process_monthBased():
                 k = (year, month, did)
                 if not dateDid_statistics.has_key(k):
                     dateDid_statistics[k] = [0.0 for _ in [WTN, WOH, WF, LTN, LIN, LON, LQ, LEP, LD, LF]]
+                    dateDid_DP[k] = [0 for _ in range(len(dp_index))]
                 dateDid_statistics[k][WTN] += int(row[hid['wleTripNumber']])
                 dateDid_statistics[k][WOH] += float(row[hid['wleOperatingHour']])
                 dateDid_statistics[k][WF] += float(row[hid['wleFare']])
@@ -263,6 +303,11 @@ def process_monthBased():
                 dateDid_statistics[k][LEP] += float(row[hid['locEP']])
                 dateDid_statistics[k][LD] += float(row[hid['locDuration']])
                 dateDid_statistics[k][LF] += float(row[hid['locFare']])
+                #
+                for l0 in locations:
+                    for l1 in locations:
+                        cn = 'D%s#P%s' % (l0, l1)
+                        dateDid_DP[k][dp_index[cn]] += int(row[hid[cn]])
         #
         with open(statistics_fpath, 'wb') as w_csvfile:
             writer = csv.writer(w_csvfile, lineterminator='\n')
@@ -274,6 +319,8 @@ def process_monthBased():
                       'QTime/locTrip', 'EP/locTrip',
                       'locProductivity',
                       'locInRatio']
+            for dp in dp_index.iterkeys():
+                header.append(dp)
             writer.writerow(header)
             for (year, month, did), statistics in dateDid_statistics.iteritems():
                 wleTripNumber, wleOperatingHour, wleFare = int(statistics[WTN]), statistics[WOH], statistics[WF],
@@ -294,6 +341,8 @@ def process_monthBased():
                     locProductivity,
                     locInRatio
                      ]
+                for dp in dp_index.iterkeys():
+                    new_row.append(dateDid_DP[(year, month, did)][dp_index[dp]])
                 writer.writerow(new_row)
 
 

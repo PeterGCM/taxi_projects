@@ -5,7 +5,7 @@ import __init__
 '''
 #
 from information_boards import trip_dpath, trip_prefix
-from information_boards import trip_ap_summary_fpath, trip_ns_summary_fpath
+from information_boards import trip_ap_dp_flow_fpath, trip_ns_summary_fpath
 from information_boards import NUM, DUR, FARE
 from information_boards import DIn_PIn, DIn_POut, DOut_PIn, DOut_POut
 #
@@ -39,7 +39,7 @@ def run():
             #
             filtered_trip = trip_df[(st_timestamp <= trip_df['startTime']) & (trip_df['startTime'] < et_timestamp)]
             if len(filtered_trip) != 0:
-                for fn, label in [(trip_ap_summary_fpath, 'tripModeAP'),
+                for fn, label in [(trip_ap_dp_flow_fpath, 'tripModeAP'),
                                   (trip_ns_summary_fpath, 'tripModeNS')]:
                     gp_f_trip = filtered_trip.groupby([label])
                     num_totalDuration_totalFare_tm = [[0, 0, 0, tm] for tm in [DIn_PIn, DIn_POut, DOut_PIn, DOut_POut]]
@@ -69,7 +69,7 @@ def run():
     #         header = ['year', 'month', 'day', 'hour', 'dayOfWeek', 'totalNum', 'totalDur', 'totalFare', 'tripMode']
     #         writer.writerow(header)
 
-    with open(trip_ap_summary_fpath, 'wb') as w_csvfile:
+    with open(trip_ap_dp_flow_fpath, 'wb') as w_csvfile:
         writer = csv.writer(w_csvfile, lineterminator='\n')
         header = ['year', 'month', 'day', 'hour', 'dayOfWeek', 'totalNum', 'totalDur', 'totalFare', 'tripMode']
         writer.writerow(header)

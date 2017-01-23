@@ -36,7 +36,6 @@ def run():
     end_multiprocessor(count_num_jobs)
 
 
-
 def process_files(yymm):
     from traceback import format_exc
     try:
@@ -48,37 +47,57 @@ def process_files(yymm):
             headers = reader.next()
             hid = {h: i for i, h in enumerate(headers)}
             for row in reader:
-                yyyy, mm, dd, hh = 2000 + eval(row[hid['year']]), eval(row[hid['month']]), eval(row[hid['day']]), eval(
-                    row[hid['hour']])
-                ap_gen_productivity[(yyyy, mm, dd, hh)] = eval(row[hid['apGenProductivity']])
-                ns_gen_productivity[(yyyy, mm, dd, hh)] = eval(row[hid['nsGenProductivity']])
+                year, month, day, hour = int(row[hid['year']]), int(row[hid['month']]), int(row[hid['day']]), int(row[hid['hour']])
+                ap_gen_productivity[(year, month, day, hour)] = eval(row[hid['apGenProductivity']])
+                ns_gen_productivity[(year, month, day, hour)] = eval(row[hid['nsGenProductivity']])
         #
-        yy, mm = yymm[:2], yymm[-2:]
-        year, month = 2000 + int(yy), int(mm)
-        for queueingTime_dpath, queueingTime_prefix, economicProfit_dpath, economicProfit_prefix, gen_productivity in [
-            (queueingTime_ap_dpath, queueingTime_ap_prefix, economicProfit_ap_dpath, economicProfit_ap_prefix, ap_gen_productivity),
-            (queueingTime_ns_dpath, queueingTime_ns_prefix, economicProfit_ns_dpath, economicProfit_ns_prefix, ns_gen_productivity)]:
-            with open('%s/%s%s.csv' % (queueingTime_dpath, queueingTime_prefix, yymm), 'rb') as r_csvfile:
-                reader = csv.reader(r_csvfile)
-                headers = reader.next()
-                hid = {h: i for i, h in enumerate(headers)}
-                with open('%s/%s%s.csv' % (economicProfit_dpath, economicProfit_prefix, yymm), 'wt') as w_csvfile:
-                    writer = csv.writer(w_csvfile)
-                    new_headers = ['startTime', 'did', 'duration', 'fare',
-                                   'tripMode', 'queueingTime', 'economicProfit',
-                                   'year', 'month', 'day', 'hour']
-                    writer.writerow(new_headers)
+        with open('%s/%s%s.csv' % (queueingTime_ap_dpath, queueingTime_ap_prefix, yymm), 'rb') as r_csvfile:
+            reader = csv.reader(r_csvfile)
+            headers = reader.next()
+            hid = {h: i for i, h in enumerate(headers)}
+            with open('%s/%s%s.csv' % (economicProfit_ap_dpath, economicProfit_ap_prefix, yymm), 'wt') as w_csvfile:
+                writer = csv.writer(w_csvfile)
+                new_headers = ['startTime', 'did', 'duration', 'fare',
+                               'tripMode', 'queueingTime', 'economicProfit',
+                               'year', 'month', 'day', 'hour',
+                               'pickUpTerminalAP', 'prevEndTerminalAP']
+                writer.writerow(new_headers)
+                #
+                for row in reader:
+                    year, month = int(row[hid['year']]), int(row[hid['month']])
+                    day, hour = int(row[hid['day']]), int(row[hid['hour']])
+                    k = (year, month, day, hour)
+                    qt = eval(row[hid['queueingTime']])
+                    dur, fare = eval(row[hid['duration']]), eval(row[hid['fare']])
+                    eco_profit = fare - ap_gen_productivity[k] * (qt + dur)
                     #
-                    for row in reader:
-                        day, hour = int(row[hid['day']]), int(row[hid['hour']])
-                        k = (year, month, day, hour)
-                        qt = eval(row[hid['queueingTime']])
-                        dur, fare = eval(row[hid['duration']]), eval(row[hid['fare']])
-                        eco_profit = fare - gen_productivity[k] * (qt + dur)
-                        #
-                        writer.writerow([row[hid['startTime']], row[hid['did']], dur, fare,
-                                         row[hid['tripMode']], qt, eco_profit,
-                                         year, month, day, hour])
+                    writer.writerow([row[hid['startTime']], row[hid['did']], dur, fare,
+                                     row[hid['tripMode']], qt, eco_profit,
+                                     year, month, day, hour,
+                                     row[hid['pickUpTerminalAP']], row[hid['prevEndTerminalAP']]])
+        #
+        with open('%s/%s%s.csv' % (queueingTime_ns_dpath, queueingTime_ns_prefix, yymm), 'rb') as r_csvfile:
+            reader = csv.reader(r_csvfile)
+            headers = reader.next()
+            hid = {h: i for i, h in enumerate(headers)}
+            with open('%s/%s%s.csv' % (economicProfit_ns_dpath, economicProfit_ns_prefix, yymm), 'wt') as w_csvfile:
+                writer = csv.writer(w_csvfile)
+                new_headers = ['startTime', 'did', 'duration', 'fare',
+                               'tripMode', 'queueingTime', 'economicProfit',
+                               'year', 'month', 'day', 'hour']
+                writer.writerow(new_headers)
+                #
+                for row in reader:
+                    year, month = int(row[hid['year']]), int(row[hid['month']])
+                    day, hour = int(row[hid['day']]), int(row[hid['hour']])
+                    k = (year, month, day, hour)
+                    qt = eval(row[hid['queueingTime']])
+                    dur, fare = eval(row[hid['duration']]), eval(row[hid['fare']])
+                    eco_profit = fare - ns_gen_productivity[k] * (qt + dur)
+                    #
+                    writer.writerow([row[hid['startTime']], row[hid['did']], dur, fare,
+                                     row[hid['tripMode']], qt, eco_profit,
+                                     year, month, day, hour])
         #
         logger.info('end the file; %s' % yymm)
     except Exception as _:

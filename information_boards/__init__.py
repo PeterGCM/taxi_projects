@@ -59,7 +59,7 @@ NS_DUR, NS_FARE, NS_QUEUE, NS_NUM = range(11)
 # directory path and file's prefix
 #
 trip_dpath, trip_prefix = '%s/%s' % (taxi_data, 'trip'), 'trip-'
-trip_ap_summary_fpath = '%s/trip-ap-summary.csv' % (trip_dpath)
+trip_ap_dp_flow_prefix = 'trip-dp-flow-'
 trip_ns_summary_fpath = '%s/trip-ns-summary.csv' % (trip_dpath)
 #
 crossingTime_dpath = '%s/%s' % (taxi_data, 'crossingTime')

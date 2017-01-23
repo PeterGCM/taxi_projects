@@ -291,7 +291,7 @@ def process_files(yymm):
         logger.info('Generate .csv file; %s' % yymm)
         with open(productivity_fpath, 'wb') as w_csvfile:
             writer = csv.writer(w_csvfile, lineterminator='\n')
-            header = ['yy', 'mm', 'dd', 'hh',
+            header = ['year', 'month', 'day', 'hour',
                       'allDuration', 'allFare', 'allNum',
                       'apDuration', 'apFare', 'apQueueingTime', 'apNum',
                       'nsDuration', 'nsFare', 'nsQueueingTime', 'nsNum']

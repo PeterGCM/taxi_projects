@@ -61,7 +61,7 @@ def process_file(yymm):
             new_headers = ['did',
                            'startTime', 'endTime', 'duration', 'fare',
                            'tripMode', 'queueJoinTime', 'queueingTime',
-                           'year', 'month' 'day', 'hour',
+                           'year', 'month', 'day', 'hour',
                            'pickUpTerminalAP', 'prevEndTerminalAP']
             writer.writerow(new_headers)
         with open(queueingTime_ns_fpath, 'wt') as w_csvfile:
@@ -69,7 +69,7 @@ def process_file(yymm):
             new_headers = ['did',
                            'startTime', 'endTime', 'duration', 'fare',
                            'tripMode', 'queueJoinTime', 'queueingTime',
-                           'year', 'month' 'day', 'hour']
+                           'year', 'month', 'day', 'hour']
             writer.writerow(new_headers)
         #
         logger.info('start recording; %s' % yymm)

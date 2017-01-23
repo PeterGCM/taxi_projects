@@ -66,7 +66,7 @@ def init_process():
         check_dir_create(group_dpath)
         with open(group_summary_fpath, 'wt') as w_csvfile:
             writer = csv.writer(w_csvfile, lineterminator='\n')
-            writer.writerow(['groupName', 'numDrivers', 'tieStrength'])
+            writer.writerow(['groupName', 'numDrivers', 'tieStrength', 'contribution'])
         #
         logger.info('Start handling SP_group_dpath')
         igid, did_igid = 0, {}
@@ -118,9 +118,11 @@ def init_process():
             #
             drivers = [v['name'] for v in sg.vs]
             weights = [e['weight'] for e in sg.es]
+            tie_strength = sum(weights) / float(len(drivers))
+            contribution = tie_strength / float(len(drivers))
             with open(group_summary_fpath, 'a') as w_csvfile:
                 writer = csv.writer(w_csvfile, lineterminator='\n')
-                writer.writerow([gn, len(drivers), sum(weights) / float(len(drivers))])
+                writer.writerow([gn, len(drivers), tie_strength, contribution])
             group_drivers[gn] = drivers
         save_pickle_file(group_drivers_fapth, group_drivers)
 
