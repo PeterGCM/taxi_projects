@@ -36,12 +36,14 @@ RP_group_dpath, RP_group_prefix = '%s/%s' % (group_dpath, 'RP_group'), 'RP-group
 RP_group_drivers_fpath = '%s/%s' % (RP_group_dpath, 'RP-group-drivers.pkl')
 RP_group_summary_fpath = '%s/%s' % (RP_group_dpath, 'RP-group-summary.csv')
 #
-
 SP_groupDefinedTrip_dpath, SP_groupDefinedTrip_prefix = '%s/%s' % (taxi_data, 'SP-groupDefinedTrip'), 'SP-groupDefinedTrip-'
 RP_groupDefinedTrip_dpath, RP_groupDefinedTrip_prefix = '%s/%s' % (taxi_data, 'RP-groupDefinedTrip'), 'RP-groupDefinedTrip-'
-
-
-
+#
+zone_dpath = '%s/%s' % (taxi_data, 'zone')
+SP_zone_dpath, SP_zone_prefix = '%s/%s' % (zone_dpath, 'SP_zone'), 'SP-zone-'
+RP_zone_dpath, RP_zone_prefix = '%s/%s' % (zone_dpath, 'RP_zone'), 'RP-zone-'
+SP_interesting_zone_fpath = '%s/SP-zone-summary.pkl' % SP_zone_dpath
+RP_interesting_zone_fpath = '%s/RP-zone-summary.pkl' % RP_zone_dpath
 #
 #
 # tfZ_pickUp_dpath, tfZ_pickUp_prepix = '%s/%s' % (taxi_data, 'tfZ_pickUp'), 'tfZ-pickUp-'
