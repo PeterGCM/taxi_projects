@@ -19,7 +19,7 @@ def run():
     for dpath in [SP_comZones_dpath, RP_comZones_dpath]:
         check_dir_create(dpath)
     #
-    for zone_dpath, zone_prefix, dv, interesting_zone_fpath, sig_level in [
+    for zone_dpath, zone_prefix, dv, sig_level in [
                                     (SP_comZones_dpath, SP_comZones_prefix, 'spendingTime', SP_interesting_zone_fpath, 0.10),
                                     (RP_comZones_dpath, RP_comZones_prefix, 'roamingTime', RP_interesting_zone_fpath, 0.50)]:
         gn_interesting_zizj = {}
@@ -34,7 +34,6 @@ def run():
             X = df[candi_dummies[:-1]]
             X = sm.add_constant(X)
             res = sm.OLS(y, X, missing='drop').fit()
-            # if res.f_pvalue < sig_level:
             significant_zizj = set()
             for _zizj, pv in res.pvalues.iteritems():
                 if _zizj == 'const':
@@ -50,6 +49,8 @@ def run():
             for _zizj in significant_zizj.difference(positive_ef_drivers):
                 zi, zj = map(int, _zizj.split('#'))
                 gn_interesting_zizj[gn][zi, zj] = res.params[_zizj]
+
+        fpath = '%s/%s.csv' % (zone_dpath, zone_prefix)
         save_pickle_file(interesting_zone_fpath, gn_interesting_zizj)
 
 

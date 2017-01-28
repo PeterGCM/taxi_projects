@@ -28,7 +28,7 @@ def run():
     #
     init_multiprocessor(11)
     count_num_jobs = 0
-    for y in range(10, 13):
+    for y in range(11, 13):
         for m in range(1, 13):
             yymm = '%02d%02d' % (y, m)
             if yymm in ['0912', '1010']:
