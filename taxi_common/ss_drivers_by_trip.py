@@ -21,7 +21,7 @@ def run():
     #
     init_multiprocessor(11)
     count_num_jobs = 0
-    for y in xrange(10, 11):
+    for y in xrange(11, 13):
         for m in xrange(1, 13):
             yymm = '%02d%02d' % (y, m)
             # process_file(yymm)

@@ -7,7 +7,7 @@ import __init__
 from community_analysis import prevDriversDefined_dpath, prevDriversDefined_prefix
 from community_analysis import driversRelations2009_fpath
 from community_analysis import tfZ_TP_dpath, tfZ_TP_prefix
-from community_analysis import X_PICKUP, O_PICKUP
+from community_analysis import X_PRESENCE, O_PRESENCE
 #
 from taxi_common.file_handling_functions import check_dir_create, load_pickle_file, get_all_files
 from taxi_common.log_handling_functions import get_logger
@@ -87,7 +87,7 @@ def process_files(yyyy, reducerID, driver_subset, pickUp_drivers):
                                    did1, row[hid['spendingTime']], row[hid['roamingTime']]
                         ]
                         for did0 in pickUp_drivers:
-                            new_row.append(O_PICKUP if did0 in prevDrivers else X_PICKUP)
+                            new_row.append(O_PRESENCE if did0 in prevDrivers else X_PRESENCE)
                         writer.writerow(new_row)
     except Exception as _:
         import sys

@@ -4,8 +4,8 @@ import __init__
 
 '''
 #
-from community_analysis import SP_zone_dpath, SP_zone_prefix
-from community_analysis import RP_zone_dpath, RP_zone_prefix
+from community_analysis import SP_comZones_dpath, SP_comZones_prefix
+from community_analysis import RP_comZones_dpath, RP_comZones_prefix
 from community_analysis import SP_interesting_zone_fpath, RP_interesting_zone_fpath
 from community_analysis import SIGINIFICANCE_LEVEL
 #
@@ -16,12 +16,12 @@ import statsmodels.api as sm
 
 
 def run():
-    for dpath in [SP_zone_dpath, RP_zone_dpath]:
+    for dpath in [SP_comZones_dpath, RP_comZones_dpath]:
         check_dir_create(dpath)
     #
     for zone_dpath, zone_prefix, dv, interesting_zone_fpath, sig_level in [
-                                    (SP_zone_dpath, SP_zone_prefix, 'spendingTime', SP_interesting_zone_fpath, 0.10),
-                                    (RP_zone_dpath, RP_zone_prefix, 'roamingTime', RP_interesting_zone_fpath, 0.50)]:
+                                    (SP_comZones_dpath, SP_comZones_prefix, 'spendingTime', SP_interesting_zone_fpath, 0.10),
+                                    (RP_comZones_dpath, RP_comZones_prefix, 'roamingTime', RP_interesting_zone_fpath, 0.50)]:
         gn_interesting_zizj = {}
         for fn in get_all_files(zone_dpath, '%s*.csv' % zone_prefix):
             _, _, gn, _did0, _did1 = fn[:-len('.csv')].split('-')

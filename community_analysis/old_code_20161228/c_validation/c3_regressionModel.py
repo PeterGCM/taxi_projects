@@ -8,7 +8,7 @@ from community_analysis import group_dpath, group_prepix
 from community_analysis import tfZ_pickUp_dpath, tfZ_pickUp_prepix
 from community_analysis import roamingTime_dpath, roamingTime_prepix
 from community_analysis import regressionModel_dpath, regressionModel_prefix
-from community_analysis import X_PICKUP, O_PICKUP
+from community_analysis import X_PRESENCE, O_PRESENCE
 from community_analysis import HOUR1
 #
 from taxi_common.file_handling_functions import check_dir_create, get_all_directories, check_path_exist, load_pickle_file, get_all_files
@@ -160,7 +160,7 @@ def process_file(period):
                                gn, did1, rt]
                     for did0 in group_drivers[gn]:
                         k = (did0, month, day, timeFrame, zi, zj)
-                        new_row.append(O_PICKUP if k in pickUp else X_PICKUP)
+                        new_row.append(O_PRESENCE if k in pickUp else X_PRESENCE)
                     writer.writerow(new_row)
                 #
                 with open(regressionModel_fpath, 'a') as w_csvfile:
@@ -169,7 +169,7 @@ def process_file(period):
                                gn, did1, rt]
                     for did0 in whole_drivers:
                         k = (did0, month, day, timeFrame, zi, zj)
-                        new_row.append(O_PICKUP if k in pickUp else X_PICKUP)
+                        new_row.append(O_PRESENCE if k in pickUp else X_PRESENCE)
                     writer.writerow(new_row)
                 cur_per = i / float(len(roamingTime)) * 100
                 if old_per + per_interval < cur_per:

@@ -6,8 +6,8 @@ import __init__
 #
 from community_analysis import SP_group_dpath, SP_group_prefix
 from community_analysis import RP_group_dpath, RP_group_prefix
-from community_analysis import SP_zone_dpath, SP_zone_prefix
-from community_analysis import RP_zone_dpath, RP_zone_prefix
+from community_analysis import SP_comZones_dpath, SP_comZones_prefix
+from community_analysis import RP_comZones_dpath, RP_comZones_prefix
 from community_analysis import SP_group_summary_fpath
 from community_analysis import RP_group_summary_fpath
 from community_analysis import driversRelations2009_fpath
@@ -25,7 +25,7 @@ logger = get_logger()
 
 
 def run():
-    check_dir_create(SP_zone_dpath)
+    check_dir_create(SP_comZones_dpath)
     # check_dir_create(RP_zone_dpath)
     #
     driversRelations = load_pickle_file(driversRelations2009_fpath)
@@ -67,7 +67,7 @@ def process_file(gn, did_reducerID):
             if not zizj_t.has_key(k):
                 zizj_t[k] = []
             zizj_t[k].append(t)
-        with open('%s/%s%s-%d-%d.csv' % (SP_zone_dpath, SP_zone_prefix, gn, did0, did1), 'wt') as w_csvfile:
+        with open('%s/%s%s-%d-%d.csv' % (SP_comZones_dpath, SP_comZones_prefix, gn, did0, did1), 'wt') as w_csvfile:
         # with open('%s/%s%s-%d-%d.csv' % (RP_zone_dpath, RP_zone_prefix, gn, did0, did1), 'wt') as w_csvfile:
             writer = csv.writer(w_csvfile, lineterminator='\n')
             header = ['spendingTime']

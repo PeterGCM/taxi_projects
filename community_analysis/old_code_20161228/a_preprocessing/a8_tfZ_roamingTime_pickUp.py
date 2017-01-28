@@ -7,7 +7,7 @@ import __init__
 from community_analysis import tfZ_RP_dpath, tfZ_RP_prepix
 from community_analysis import tfZ_roamingTime_dpath, tfZ_roamingTime_prefix
 from community_analysis import tfZ_pickUp_dpath, tfZ_pickUp_prepix
-from community_analysis import X_PICKUP, O_PICKUP
+from community_analysis import X_PRESENCE, O_PRESENCE
 from community_analysis import HOUR1
 #
 from taxi_common import ss_drivers_dpath, ss_drivers_prefix
@@ -98,7 +98,7 @@ def process_month(yymm):
                            tfZ, did1, rt]
                 for did0 in ss_drivers:
                     k = (did0, month, day, timeFrame, zi, zj)
-                    new_row.append(O_PICKUP if k in pickUp else X_PICKUP)
+                    new_row.append(O_PRESENCE if k in pickUp else X_PRESENCE)
                 writer.writerow(new_row)
             cur_per = i / float(len(tfZ_roamingTime)) * 100
             if old_per + per_interval < cur_per:

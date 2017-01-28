@@ -17,7 +17,7 @@ ss_trips_dpath, ss_trips_prefix = '%s/%s' % (taxi_data, 'trips_ss_drivers'), 'tr
 prevDriversDefined_dpath, prevDriversDefined_prefix =  '%s/%s' % (taxi_data, 'prevDriversDefined'), 'prevDriversDefined-'
 driversRelations2009_fpath = '%s/driversRelations2009.pkl' % prevDriversDefined_dpath
 #
-X_PICKUP, O_PICKUP = range(2)
+X_PRESENCE, O_PRESENCE = range(2)
 tfZ_TP_dpath, tfZ_TP_prefix = '%s/%s' % (taxi_data, 'tfZ_TP'), 'tfZ_TP-'
 graph_dpath = '%s/%s' % (taxi_data, 'graph')
 SP_graph_dpath, SP_graph_prefix = '%s/%s' % (graph_dpath, 'SP_graph'), 'SP-graph-'
@@ -39,11 +39,11 @@ RP_group_summary_fpath = '%s/%s' % (RP_group_dpath, 'RP-group-summary.csv')
 SP_groupDefinedTrip_dpath, SP_groupDefinedTrip_prefix = '%s/%s' % (taxi_data, 'SP-groupDefinedTrip'), 'SP-groupDefinedTrip-'
 RP_groupDefinedTrip_dpath, RP_groupDefinedTrip_prefix = '%s/%s' % (taxi_data, 'RP-groupDefinedTrip'), 'RP-groupDefinedTrip-'
 #
-zone_dpath = '%s/%s' % (taxi_data, 'zone')
-SP_zone_dpath, SP_zone_prefix = '%s/%s' % (zone_dpath, 'SP_zone'), 'SP-zone-'
-RP_zone_dpath, RP_zone_prefix = '%s/%s' % (zone_dpath, 'RP_zone'), 'RP-zone-'
-SP_interesting_zone_fpath = '%s/SP-zone-summary.pkl' % SP_zone_dpath
-RP_interesting_zone_fpath = '%s/RP-zone-summary.pkl' % RP_zone_dpath
+comZones_dpath = '%s/%s' % (taxi_data, 'comZones')
+SP_comZones_dpath, SP_comZones_prefix = '%s/%s' % (comZones_dpath, 'SP_comZones'), 'SP-comZones-'
+RP_comZones_dpath, RP_comZones_prefix = '%s/%s' % (comZones_dpath, 'RP_comZones'), 'RP-comZones-'
+SP_interesting_zone_fpath = '%s/SP-zone-summary.pkl' % SP_comZones_dpath
+RP_interesting_zone_fpath = '%s/RP-zone-summary.pkl' % RP_comZones_dpath
 #
 #
 # tfZ_pickUp_dpath, tfZ_pickUp_prepix = '%s/%s' % (taxi_data, 'tfZ_pickUp'), 'tfZ-pickUp-'
