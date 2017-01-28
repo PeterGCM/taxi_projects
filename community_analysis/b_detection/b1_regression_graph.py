@@ -5,7 +5,7 @@ import __init__
 '''
 #
 from community_analysis import tfZ_TP_dpath, tfZ_TP_prefix
-from community_analysis import SP_graph_dpath, SP_graph_prefix
+from community_analysis import st_graph_dpath, st_graph_prefix
 from community_analysis import RP_graph_dpath, RP_graph_prefix
 from community_analysis import SIGINIFICANCE_LEVEL, MIN_PICKUP_RATIO
 #
@@ -22,7 +22,7 @@ logger = get_logger()
 
 
 def run():
-    for graph_dpath in [RP_graph_dpath, SP_graph_dpath]:
+    for graph_dpath in [RP_graph_dpath, st_graph_dpath]:
         check_dir_create(graph_dpath)
     #
     init_multiprocessor(3)
@@ -62,7 +62,7 @@ def process_file(fpath):
     logger.info('Start handling; %s' % fpath)
     _, yyyy, reducerID = get_fn_only(fpath)[:-len('.csv')].split('-')
     try:
-        SP_graph_fpath = '%s/%s%s-%s.pkl' % (SP_graph_dpath, SP_graph_prefix, yyyy, reducerID)
+        SP_graph_fpath = '%s/%s%s-%s.pkl' % (st_graph_dpath, st_graph_prefix, yyyy, reducerID)
         RP_graph_fpath = '%s/%s%s-%s.pkl' % (RP_graph_dpath, RP_graph_prefix, yyyy, reducerID)
         if check_path_exist(SP_graph_fpath):
             return None

@@ -12,21 +12,38 @@ PM2, PM11 = 14, 23
 THRESHOLD_VALUE = 30 * 60
 FREE, POB = 0, 5
 MIN20 = 20 * 60.0
+X_PRESENCE, O_PRESENCE = range(2)
+#
+SIGINIFICANCE_LEVEL = 0.01
+MIN_PICKUP_RATIO = 0.1
+#
+years = ['20%02d' % y for y in range(9, 13)]
 #
 ss_trips_dpath, ss_trips_prefix = '%s/%s' % (taxi_data, 'trips_ss_drivers'), 'trips-ss-drivers-'
 prevDriversDefined_dpath, prevDriversDefined_prefix =  '%s/%s' % (taxi_data, 'prevDriversDefined'), 'prevDriversDefined-'
-driversRelations2009_fpath = '%s/driversRelations2009.pkl' % prevDriversDefined_dpath
-#
-X_PRESENCE, O_PRESENCE = range(2)
 tfZ_TP_dpath, tfZ_TP_prefix = '%s/%s' % (taxi_data, 'tfZ_TP'), 'tfZ_TP-'
+driversRelations_fpaths = {year: '%s/driversRelations%s.pkl' % (prevDriversDefined_dpath, year) for year in years}
+#
+timeMeasures = ['spendingTime', 'roamingTime']
+interResults = ['influenceGraph', 'groupPartition', 'groupZones', 'groupTrips']
+dpaths, prefixs = {}, {}
+for tm in timeMeasures:
+    for year in years:
+        for ir in interResults:
+            dpaths[tm, year, ir] = '%s/%s/%s/%s' % (taxi_data, tm, year, ir)
+            prefixs[tm, year, ir] = '%s-%s-%s-' % (tm, year, ir)
+
+
 graph_dpath = '%s/%s' % (taxi_data, 'graph')
-SP_graph_dpath, SP_graph_prefix = '%s/%s' % (graph_dpath, 'SP_graph'), 'SP-graph-'
+st_graph_dpath, st_graph_prefix = '%s/%s' % (graph_dpath, 'st-graph'), 'st-graph-'
 RP_graph_dpath, RP_graph_prefix = '%s/%s' % (graph_dpath, 'RP_graph'), 'RP-graph-'
 
 
 
-SIGINIFICANCE_LEVEL = 0.01
-MIN_PICKUP_RATIO = 0.1
+
+
+
+
 
 group_dpath = '%s/%s' % (taxi_data, 'group')
 SP_group_dpath, SP_group_prefix = '%s/%s' % (group_dpath, 'SP_group'), 'SP-group-'

@@ -6,7 +6,8 @@ import __init__
 #
 from community_analysis import ss_trips_dpath, ss_trips_prefix
 from community_analysis import prevDriversDefined_dpath, prevDriversDefined_prefix
-from community_analysis import driversRelations2009_fpath
+from community_analysis import driversRelations_fpaths
+# from community_analysis import driversRelations2009_fpath
 from community_analysis import THRESHOLD_VALUE
 #
 from taxi_common._classes import zone, driver
@@ -25,23 +26,23 @@ logger = get_logger()
 def run():
     check_dir_create(prevDriversDefined_dpath)
     #
-    # init_multiprocessor(11)
-    # count_num_jobs = 0
-    # for y in range(9, 10):
-    #     for m in range(1, 13):
-    #         yymm = '%02d%02d' % (y, m)
-    #         if yymm in ['0912', '1010']:
-    #             continue
-    #         # process_month(yymm)
-    #         put_task(process_month, [yymm])
-    #         count_num_jobs += 1
-    # end_multiprocessor(count_num_jobs)
-    filtering()
-    find_driversRelations()
+    init_multiprocessor(6)
+    count_num_jobs = 0
+    for y in range(10, 11):
+        for m in range(1, 13):
+            yymm = '%02d%02d' % (y, m)
+            if yymm in ['0912', '1010']:
+                continue
+            # process_month(yymm)
+            put_task(process_month, [yymm])
+            count_num_jobs += 1
+    end_multiprocessor(count_num_jobs)
+    # filtering()
+    # find_driversRelations()
 
 
 
-def find_driversRelations():
+def find_driversRelations(year):
     driversRelations = {}
     for fn in get_all_files(prevDriversDefined_dpath, 'Filtered-%s*' % prevDriversDefined_prefix):
         logger.info('handle the file; %s' % fn)
@@ -58,7 +59,7 @@ def find_driversRelations():
                     driversRelations[did1] = set()
                 for did0 in map(int, prevDrivers):
                     driversRelations[did1].add(did0)
-    save_pickle_file(driversRelations2009_fpath, driversRelations)
+    save_pickle_file(driversRelations_fpaths[year], driversRelations)
 
 
 def process_month(yymm):

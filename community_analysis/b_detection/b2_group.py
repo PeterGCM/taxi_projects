@@ -4,7 +4,7 @@ import __init__
 
 '''
 #
-from community_analysis import SP_graph_dpath, SP_graph_prefix
+from community_analysis import st_graph_dpath, st_graph_prefix
 from community_analysis import RP_graph_dpath, RP_graph_prefix
 from community_analysis import SP_group_dpath, SP_group_prefix
 from community_analysis import SP_group_drivers_fpath

@@ -36,7 +36,8 @@ def run():
                      ('roamingTime', RP_comZones_dpath, RP_comZones_prefix, RP_group_dpath, RP_group_prefix, RP_group_summary_fpath)]:
         group_df = pd.read_csv(gsFath)
         group_df = group_df.sort_values(by='contribution', ascending=False)
-        for gn in group_df.head(10)['groupName'].values:
+        # for gn in group_df.head(10)['groupName'].values:
+        for gn in group_df['groupName'].values:
             igG = ig.Graph.Read_Pickle('%s/%s%s.pkl' % (gDpath, gPrefix, gn))
             group_drivers = set()
             for e in igG.es:

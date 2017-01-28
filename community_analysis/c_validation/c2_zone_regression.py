@@ -13,45 +13,46 @@ from taxi_common.file_handling_functions import get_all_files, check_dir_create,
 #
 import pandas as pd
 import statsmodels.api as sm
+import csv
+
+sig_level = 0.10
 
 
 def run():
     for dpath in [SP_comZones_dpath, RP_comZones_dpath]:
         check_dir_create(dpath)
     #
-    for zone_dpath, zone_prefix, dv, sig_level in [
-                                    (SP_comZones_dpath, SP_comZones_prefix, 'spendingTime', SP_interesting_zone_fpath, 0.10),
-                                    (RP_comZones_dpath, RP_comZones_prefix, 'roamingTime', RP_interesting_zone_fpath, 0.50)]:
-        gn_interesting_zizj = {}
+    for zone_dpath, zone_prefix in [(SP_comZones_dpath, SP_comZones_prefix),
+                                    (RP_comZones_dpath, RP_comZones_prefix)]:
         for fn in get_all_files(zone_dpath, '%s*.csv' % zone_prefix):
-            _, _, gn, _did0, _did1 = fn[:-len('.csv')].split('-')
-            if not gn_interesting_zizj.has_key(gn):
-                gn_interesting_zizj[gn] = {}
-            fpath = '%s/%s' % (zone_dpath, fn)
-            df = pd.read_csv(fpath)
-            candi_dummies = [cn for cn in df.columns if dv != cn]
-            y = df[dv]
-            X = df[candi_dummies[:-1]]
-            X = sm.add_constant(X)
-            res = sm.OLS(y, X, missing='drop').fit()
-            significant_zizj = set()
-            for _zizj, pv in res.pvalues.iteritems():
-                if _zizj == 'const':
+            _, _, gn = fn[:-len('.csv')].split('-')
+            reg_fpath = '%s/%s%s.pkl' % (zone_dpath, zone_prefix, gn)
+            zizj_priorPresence = {}
+            with open('%s/%s' % (zone_dpath, fn), 'rb') as r_csvfile:
+                reader = csv.reader(r_csvfile)
+                header = reader.next()
+                hid = {h: i for i, h in enumerate(header)}
+                for row in reader:
+                    zizj, priorPresence = row[hid['zizj']], int(row[hid['priorPresence']])
+                    if not zizj_priorPresence.has_key(zizj):
+                        zizj_priorPresence[zizj] = 0
+                    zizj_priorPresence[zizj] += priorPresence
+            print gn, [(k, v)for k, v in zizj_priorPresence.iteritems() if v > 0]
+            zizj_weight = {}
+            df = pd.read_csv('%s/%s' % (zone_dpath, fn))
+            for zizj, sumPriorPresence in zizj_priorPresence.iteritems():
+                if sumPriorPresence < 2:
                     continue
-                if pv < sig_level:
-                    significant_zizj.add(_zizj)
-            positive_ef_drivers = set()
-            for _zizj, cof in res.params.iteritems():
-                if _zizj == 'const':
-                    continue
-                if cof > 0:
-                    positive_ef_drivers.add(_zizj)
-            for _zizj in significant_zizj.difference(positive_ef_drivers):
-                zi, zj = map(int, _zizj.split('#'))
-                gn_interesting_zizj[gn][zi, zj] = res.params[_zizj]
+                zizj_df = df[(df['zizj'] == zizj)]
+                y = zizj_df['timeMeasure']
+                X = zizj_df['priorPresence']
+                X = sm.add_constant(X)
+                res = sm.OLS(y, X, missing='drop').fit()
+                if res.params['priorPresence'] < 0 and res.pvalues['priorPresence'] < sig_level:
+                    zizj_weight[zizj] = res.params['priorPresence']
 
-        fpath = '%s/%s.csv' % (zone_dpath, zone_prefix)
-        save_pickle_file(interesting_zone_fpath, gn_interesting_zizj)
+                    # write a csv file again!!
+            save_pickle_file(reg_fpath, zizj_weight)
 
 
 if __name__ == '__main__':
