@@ -7,7 +7,6 @@ import __init__
 from community_analysis import ss_trips_dpath, ss_trips_prefix
 from community_analysis import prevDriversDefined_dpath, prevDriversDefined_prefix
 from community_analysis import driversRelations_fpaths
-# from community_analysis import driversRelations2009_fpath
 from community_analysis import THRESHOLD_VALUE
 #
 from taxi_common._classes import zone, driver
@@ -26,19 +25,19 @@ logger = get_logger()
 def run():
     check_dir_create(prevDriversDefined_dpath)
     #
-    # init_multiprocessor(6)
-    # count_num_jobs = 0
-    # for y in range(11, 12):
-    #     for m in range(1, 13):
-    #         yymm = '%02d%02d' % (y, m)
-    #         if yymm in ['0912', '1010']:
-    #             continue
-    #         # process_month(yymm)
-    #         put_task(process_month, [yymm])
-    #         count_num_jobs += 1
-    # end_multiprocessor(count_num_jobs)
-    filtering('2011')
-    find_driversRelations('2011')
+    init_multiprocessor(11)
+    count_num_jobs = 0
+    for y in range(12, 13):
+        for m in range(1, 13):
+            yymm = '%02d%02d' % (y, m)
+            if yymm in ['0912', '1010']:
+                continue
+            # process_month(yymm)
+            put_task(process_month, [yymm])
+            count_num_jobs += 1
+    end_multiprocessor(count_num_jobs)
+    # filtering('2011')
+    # find_driversRelations('2011')
 
 
 def find_driversRelations(year):
