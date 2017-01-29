@@ -6,13 +6,10 @@ import __init__
 #
 from community_analysis import tfZ_TP_dpath, tfZ_TP_prefix
 from community_analysis import dpaths, prefixs
-# from community_analysis import st_graph_dpath, st_graph_prefix
-# from community_analysis import RP_graph_dpath, RP_graph_prefix
 from community_analysis import SIGINIFICANCE_LEVEL, MIN_PICKUP_RATIO
 #
 from taxi_common.file_handling_functions import check_dir_create, get_all_files, get_fn_only, check_path_exist, save_pickle_file
 from taxi_common.log_handling_functions import get_logger
-from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
 import pandas as pd
 import numpy as np
@@ -28,16 +25,15 @@ def run():
         for year in ['2010', '2011']:
             check_dir_create(dpaths[tm, year, ir])
     #
-    init_multiprocessor(3)
-    count_num_jobs = 0
-    for y in range(10, 12):
-        yyyy = '20%02d' % y
-        for tfZ_TP_fn in get_all_files(tfZ_TP_dpath, '%s%s*.csv' % (tfZ_TP_prefix, yyyy)):
-            tfZ_TP_fpath = '%s/%s' % (tfZ_TP_dpath, tfZ_TP_fn)
-            # process_file(tfZ_TP_fpath)
-            put_task(process_file, [tfZ_TP_fpath])
-        count_num_jobs += 1
-    end_multiprocessor(count_num_jobs)
+    yyyy = '20%02d' % 10
+    for tfZ_TP_fn in get_all_files(tfZ_TP_dpath, '%s%s*.csv' % (tfZ_TP_prefix, yyyy)):
+        tfZ_TP_fpath = '%s/%s' % (tfZ_TP_dpath, tfZ_TP_fn)
+        process_file(tfZ_TP_fpath)
+
+    # yyyy = '20%02d' % 11
+    # for tfZ_TP_fn in get_all_files(tfZ_TP_dpath, '%s%s*.csv' % (tfZ_TP_prefix, yyyy)):
+    #     tfZ_TP_fpath = '%s/%s' % (tfZ_TP_dpath, tfZ_TP_fn)
+    #     process_file(tfZ_TP_fpath)
 
 
 def process_file(fpath):
