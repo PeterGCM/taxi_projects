@@ -5,8 +5,9 @@ import __init__
 '''
 #
 from community_analysis import tfZ_TP_dpath, tfZ_TP_prefix
-from community_analysis import st_graph_dpath, st_graph_prefix
-from community_analysis import RP_graph_dpath, RP_graph_prefix
+from community_analysis import dpaths, prefixs
+# from community_analysis import st_graph_dpath, st_graph_prefix
+# from community_analysis import RP_graph_dpath, RP_graph_prefix
 from community_analysis import SIGINIFICANCE_LEVEL, MIN_PICKUP_RATIO
 #
 from taxi_common.file_handling_functions import check_dir_create, get_all_files, get_fn_only, check_path_exist, save_pickle_file
@@ -22,12 +23,14 @@ logger = get_logger()
 
 
 def run():
-    for graph_dpath in [RP_graph_dpath, st_graph_dpath]:
-        check_dir_create(graph_dpath)
+    ir = 'influenceGraph'
+    for tm in ['spendingTime', 'roamingTime']:
+        for year in ['2010', '2011']:
+            check_dir_create(dpaths[tm, year, ir])
     #
     init_multiprocessor(3)
     count_num_jobs = 0
-    for y in range(9, 10):
+    for y in range(10, 12):
         yyyy = '20%02d' % y
         for tfZ_TP_fn in get_all_files(tfZ_TP_dpath, '%s%s*.csv' % (tfZ_TP_prefix, yyyy)):
             tfZ_TP_fpath = '%s/%s' % (tfZ_TP_dpath, tfZ_TP_fn)
@@ -60,20 +63,24 @@ def process_file(fpath):
         X = sm.add_constant(X)
         return sm.OLS(y, X, missing='drop').fit()
     logger.info('Start handling; %s' % fpath)
-    _, yyyy, reducerID = get_fn_only(fpath)[:-len('.csv')].split('-')
+    _, year, reducerID = get_fn_only(fpath)[:-len('.csv')].split('-')
     try:
-        SP_graph_fpath = '%s/%s%s-%s.pkl' % (st_graph_dpath, st_graph_prefix, yyyy, reducerID)
-        RP_graph_fpath = '%s/%s%s-%s.pkl' % (RP_graph_dpath, RP_graph_prefix, yyyy, reducerID)
+        st_graph_dpath = dpaths['spendingTime', year, 'influenceGraph']
+        st_graph_prefix = prefixs['spendingTime', year, 'influenceGraph']
+        SP_graph_fpath = '%s/%s%s.pkl' % (st_graph_dpath, st_graph_prefix, reducerID)
+        rt_graph_dpath = dpaths['roamingTime', year, 'influenceGraph']
+        rt_graph_prefix = prefixs['roamingTime', year, 'influenceGraph']
+        RP_graph_fpath = '%s/%s%s.pkl' % (rt_graph_dpath, rt_graph_prefix, reducerID)
         if check_path_exist(SP_graph_fpath):
             return None
         #
-        logger.info('Start loading; %s-%s' % (yyyy, reducerID))
+        logger.info('Start loading; %s-%s' % (year, reducerID))
         df = pd.read_csv(fpath)
         SP_graph, RP_graph = {}, {}
         num_drivers = len(set(df['did']))
         for i, did1 in enumerate(set(df['did'])):
             if i % 10 == 0:
-                logger.info('Doing regression %.2f; %s-%s' % (i / float(num_drivers), yyyy, reducerID))
+                logger.info('Doing regression %.2f; %s-%s' % (i / float(num_drivers), year, reducerID))
             did1_df = df[(df['did'] == did1)].copy(deep=True)
             did1_df = did1_df.drop(['month', 'day', 'timeFrame', 'zi', 'zj', 'tfZ', 'did'], axis=1)
             if '%d' % did1 in did1_df.columns:
@@ -95,15 +102,6 @@ def process_file(fpath):
                         positive_ef_drivers.add(_did0)
                 for _did0 in significant_drivers.difference(positive_ef_drivers):
                     SP_graph[int(_did0), did1] = SP_res.params[_did0]
-
-                # negative_ef_drivers = set()
-                # for _did0, cof in SP_res.params.iteritems():
-                #     if _did0 == 'const':
-                #         continue
-                #     if cof < 0:
-                #         negative_ef_drivers.add(_did0)
-                # for _did0 in significant_drivers.difference(negative_ef_drivers):
-                #     SP_graph[int(_did0), did1] = SP_res.params[_did0]
             #
             RP_res = regression('roamingTime', did1_df)
             if RP_res.f_pvalue < SIGINIFICANCE_LEVEL:
@@ -121,12 +119,12 @@ def process_file(fpath):
                         positive_ef_drivers.add(_did0)
                 for _did0 in significant_drivers.difference(positive_ef_drivers):
                     RP_graph[int(_did0), did1] = RP_res.params[_did0]
-        logger.info('Start pickling; %s-%s' % (yyyy, reducerID))
+        logger.info('Start pickling; %s-%s' % (year, reducerID))
         save_pickle_file(SP_graph_fpath, SP_graph)
         save_pickle_file(RP_graph_fpath, RP_graph)
     except Exception as _:
         import sys
-        with open('%s_%s.txt' % (sys.argv[0], '%s-%s' % (yyyy, reducerID)), 'w') as f:
+        with open('%s_%s.txt' % (sys.argv[0], '%s-%s' % (year, reducerID)), 'w') as f:
             f.write(format_exc())
         raise
 
