@@ -5,7 +5,8 @@ import __init__
 '''
 #
 from community_analysis import prevDriversDefined_dpath, prevDriversDefined_prefix
-from community_analysis import driversRelations2009_fpath
+# from community_analysis import driversRelations2009_fpath
+from community_analysis import driversRelations_fpaths
 from community_analysis import tfZ_TP_dpath, tfZ_TP_prefix
 from community_analysis import X_PRESENCE, O_PRESENCE
 #
@@ -25,9 +26,9 @@ def run():
     count_num_jobs = 0
     numReducers = numWorker * 10
     #
-    yyyy = '20%02d' % (9)
+    yyyy = '20%02d' % 10
     logger.info('loading driversRelations %s' % yyyy)
-    driversRelations = load_pickle_file(driversRelations2009_fpath)
+    driversRelations = load_pickle_file(driversRelations_fpaths[yyyy])
     whole_drivers = driversRelations.keys()
     driver_subsets = [[] for _ in range(numReducers)]
     for i, did in enumerate(whole_drivers):

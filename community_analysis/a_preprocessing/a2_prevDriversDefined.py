@@ -26,25 +26,25 @@ logger = get_logger()
 def run():
     check_dir_create(prevDriversDefined_dpath)
     #
-    init_multiprocessor(6)
-    count_num_jobs = 0
-    for y in range(10, 11):
-        for m in range(1, 13):
-            yymm = '%02d%02d' % (y, m)
-            if yymm in ['0912', '1010']:
-                continue
-            # process_month(yymm)
-            put_task(process_month, [yymm])
-            count_num_jobs += 1
-    end_multiprocessor(count_num_jobs)
-    # filtering()
-    # find_driversRelations()
-
+    # init_multiprocessor(6)
+    # count_num_jobs = 0
+    # for y in range(11, 12):
+    #     for m in range(1, 13):
+    #         yymm = '%02d%02d' % (y, m)
+    #         if yymm in ['0912', '1010']:
+    #             continue
+    #         # process_month(yymm)
+    #         put_task(process_month, [yymm])
+    #         count_num_jobs += 1
+    # end_multiprocessor(count_num_jobs)
+    filtering('2011')
+    find_driversRelations('2011')
 
 
 def find_driversRelations(year):
+    yy = year[2:]
     driversRelations = {}
-    for fn in get_all_files(prevDriversDefined_dpath, 'Filtered-%s*' % prevDriversDefined_prefix):
+    for fn in get_all_files(prevDriversDefined_dpath, 'Filtered-%s%s*' % (prevDriversDefined_prefix, yy)):
         logger.info('handle the file; %s' % fn)
         with open('%s/%s' % (prevDriversDefined_dpath, fn), 'rb') as r_csvfile:
             reader = csv.reader(r_csvfile)
@@ -66,6 +66,10 @@ def process_month(yymm):
     from traceback import format_exc
     try:
         logger.info('handle the file; %s' % yymm)
+        ss_trips_fpath = '%s/%s%s.csv' % (ss_trips_dpath, ss_trips_prefix, yymm)
+        if not check_path_exist(ss_trips_fpath):
+            logger.info('The file X exists; %s' % yymm)
+            return None
         prevDriversDefined_fpath = '%s/%s%s.csv' % (prevDriversDefined_dpath, prevDriversDefined_prefix, yymm)
         if check_path_exist(prevDriversDefined_fpath):
             logger.info('The processed; %s' % yymm)
@@ -81,7 +85,7 @@ def process_month(yymm):
                              'start-long', 'start-lat',
                              'distance', 'duration', 'fare',
                              'spendingTime', 'roamingTime', 'prevDrivers'])
-            with open('%s/%s%s.csv' % (ss_trips_dpath, ss_trips_prefix, yymm), 'rb') as r_csvfile:
+            with open(ss_trips_fpath, 'rb') as r_csvfile:
                 reader = csv.reader(r_csvfile)
                 headers = reader.next()
                 hid = {h: i for i, h in enumerate(headers)}
@@ -145,8 +149,9 @@ def generate_zones():
     return zones
 
 
-def filtering():
-    for fn in get_all_files(prevDriversDefined_dpath, '%s*' % prevDriversDefined_prefix):
+def filtering(year):
+    yy = year[2:]
+    for fn in get_all_files(prevDriversDefined_dpath, '%s%s*' % (prevDriversDefined_prefix, yy)):
         df = pd.read_csv('%s/%s' % (prevDriversDefined_dpath, fn))
         outlier_set = set()
         cn1, cn2 = 'spendingTime', 'roamingTime'
