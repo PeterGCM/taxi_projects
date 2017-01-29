@@ -26,7 +26,7 @@ def run():
     count_num_jobs = 0
     numReducers = numWorker * 10
     #
-    yyyy = '20%02d' % 11
+    yyyy = '20%02d' % 12
     logger.info('loading driversRelations %s' % yyyy)
     driversRelations = load_pickle_file(driversRelations_fpaths[yyyy])
     whole_drivers = driversRelations.keys()
