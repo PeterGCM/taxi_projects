@@ -60,7 +60,7 @@ def process_file(tm, year, gn, groupDrivers):
                   'start-long', 'start-lat',
                   'distance', 'duration', 'fare']
         writer.writerow(header)
-        for fn in get_all_files(prevDriversDefined_dpath, 'Filtered-%s%s*' % prevDriversDefined_prefix, yy):
+        for fn in get_all_files(prevDriversDefined_dpath, 'Filtered-%s%s*' % (prevDriversDefined_prefix, yy)):
             fpath = '%s/%s' % (prevDriversDefined_dpath, fn)
             logger.info('handle the file %s; %s-%s-%s' % (fn, tm, year, gn))
             with open(fpath, 'rb') as r_csvfile:
