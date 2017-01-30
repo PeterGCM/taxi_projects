@@ -53,8 +53,8 @@ def process_file(tm, year, gn, groupDrivers):
     yy = year[2:]
     with open(gt_fpath, 'wt') as w_csvfile:
         writer = csv.writer(w_csvfile, lineterminator='\n')
-        header = ['time', 'year', 'month', 'day', 'hour'
-                  'did', 'groupName'
+        header = ['time', 'year', 'month', 'day', 'hour',
+                  'did', 'groupName',
                   'zi', 'zj', 'zizj',
                   tm, 'priorPresence',
                   'start-long', 'start-lat',
