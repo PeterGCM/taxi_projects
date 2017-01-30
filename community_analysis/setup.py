@@ -3,7 +3,7 @@ from distutils.extension import Extension
 from Cython.Distutils import build_ext
 
 ext_modules = [
-    Extension("b_detection._cy_b1_influenceGraph", ["b_detection/_cy_b1_influenceGraph.pyx"], include_dirs=['.']),
+    Extension("b_group._cy_b1_influenceGraph", ["b_group/_cy_b1_influenceGraph.pyx"], include_dirs=['.']),
 ]
 
 setup(

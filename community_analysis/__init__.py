@@ -25,7 +25,7 @@ tfZ_TP_dpath, tfZ_TP_prefix = '%s/%s' % (taxi_data, 'tfZ_TP'), 'tfZ_TP-'
 driversRelations_fpaths = {year: '%s/driversRelations%s.pkl' % (prevDriversDefined_dpath, year) for year in years}
 #
 timeMeasures = ['spendingTime', 'roamingTime']
-interResults = ['influenceGraph', 'groupPartition', 'groupZones', 'groupTrips']
+interResults = ['influenceGraph', 'groupPartition', 'groupTrips', 'groupZones']
 dpaths, prefixs = {}, {}
 for tm in timeMeasures:
     for year in years:
@@ -33,13 +33,14 @@ for tm in timeMeasures:
             dpaths[tm, year, ir] = '%s/%s/%s/%s' % (taxi_data, tm, year, ir)
             prefixs[tm, year, ir] = '%s-%s-%s-' % (tm, year, ir)
 
+groupPartitionSummaries, groupPartitionDrivers = {}, {}
+for tm in timeMeasures:
+    for year in years:
+        groupPartition_dpath = dpaths[tm, year, 'groupPartition']
+        groupPartition_prefix = prefixs[tm, year, 'groupPartition']
 
-graph_dpath = '%s/%s' % (taxi_data, 'graph')
-st_graph_dpath, st_graph_prefix = '%s/%s' % (graph_dpath, 'st-graph'), 'st-graph-'
-RP_graph_dpath, RP_graph_prefix = '%s/%s' % (graph_dpath, 'RP_graph'), 'RP-graph-'
-
-
-
+        groupPartitionSummaries[tm, year] = '%s/%s' % (groupPartition_dpath, groupPartition_prefix)
+        groupPartitionDrivers
 
 
 

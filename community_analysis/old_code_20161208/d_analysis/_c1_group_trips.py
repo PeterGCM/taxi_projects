@@ -8,7 +8,7 @@ from community_analysis import ss_trips_dpath, ss_trips_prefix
 from community_analysis import group_dpath, group_prepix
 from community_analysis import group_trips_dir
 from community_analysis._classes import ca_driver_with_com_prevD
-from community_analysis.b_detection.b1_dw_graph_generation import generate_zones
+from community_analysis.b_group.b1_dw_graph_generation import generate_zones
 #
 from taxi_common.file_handling_functions import check_dir_create, get_all_files, check_path_exist, load_pickle_file
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
