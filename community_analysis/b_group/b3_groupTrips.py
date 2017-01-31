@@ -8,7 +8,7 @@ from community_analysis import prevDriversDefined_dpath, prevDriversDefined_pref
 from community_analysis import dpaths, prefixs
 from community_analysis import X_PRESENCE, O_PRESENCE
 #
-from taxi_common.file_handling_functions import check_dir_create, check_path_exist, load_pickle_file, get_all_files
+from taxi_common.file_handling_functions import check_dir_create, get_all_files
 from taxi_common.log_handling_functions import get_logger
 from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
