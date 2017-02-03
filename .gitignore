@@ -70,3 +70,4 @@ taxi_common/.DS_Store
 taxi_common/data/.DS_Store
 /community_analysis/setup.py
 /community_analysis/documents/paper_ijcal/.texpadtmp/
+/community_analysis/b_group/_cy_b1_influenceGraph.pyx
