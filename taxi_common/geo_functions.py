@@ -51,7 +51,7 @@ def generate_zones(poly_points, xaxis_unit, yaxis_unit, x_points, y_points):
                 boundary_relation = zone.OUT
             zones[(i, j)] = zone(boundary_relation, i, j, cCoor_gps, polyPoints_gps)
             feature = {"type":"Feature",
-                       "id": 'z%03d%03d' % (i,j),
+                       "id": '%d#%d' % (i,j),
                        "properties": {"cCoor_gps": cCoor_gps},
                        "geometry":
                            {"type": "Polygon",
