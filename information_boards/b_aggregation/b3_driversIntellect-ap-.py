@@ -17,7 +17,7 @@ import csv
 
 logger = get_logger()
 
-sig_level = 0.01
+sig_level = 0.05
 
 
 def run():
@@ -37,8 +37,8 @@ def gen_summary():
     driverSetBoth = driverSet2009.intersection(driverSet2010)
     onlySet2009 = driverSet2009.difference(driverSetBoth)
     onlySet2010 = driverSet2010.difference(driverSetBoth)
-    fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ap_dpath, statisticsAllDriversIntellect_ap_prefix, 'all')
-    # fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ap_dpath, statisticsAllDriversIntellect_ap_prefix, 'all-negativeOnly')
+    # fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ap_dpath, statisticsAllDriversIntellect_ap_prefix, 'all')
+    fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ap_dpath, statisticsAllDriversIntellect_ap_prefix, 'all-negativeOnly')
     with open(fpath, 'wt') as w_csvfile:
         writer = csv.writer(w_csvfile, lineterminator='\n')
         header = ['did', 'numY2009', 'numY2010', 'coefY2009', 'coefY2010', 'coefDiff']
@@ -46,15 +46,20 @@ def gen_summary():
         for did in driverSetBoth:
             num2009, coef2009 = driverIntellect2009[did]
             num2010, coef2010 = driverIntellect2010[did]
-            writer.writerow([did, num2009, num2010, coef2009, coef2010, coef2009 - coef2010])
-            # if coef2009 < 0 and coef2010 < 0:
+            # if coef2009 == 'X' or coef2010 == 'X':
+            #     writer.writerow([did, num2009, num2010, coef2009, coef2010, 'X'])
+            # else:
             #     writer.writerow([did, num2009, num2010, coef2009, coef2010, coef2009 - coef2010])
-        for did in onlySet2009:
-            num2009, coef2009 = driverIntellect2009[did]
-            writer.writerow([did, num2009, 0, coef2009, 0, 'X'])
-        for did in onlySet2010:
-            num2010, coef2010 = driverIntellect2010[did]
-            writer.writerow([did, 0, num2010, 0, coef2010, 'X'])
+            if coef2009 == 'X' or coef2010 == 'X':
+                continue
+            if coef2009 < 0 and coef2010 < 0:
+                writer.writerow([did, num2009, num2010, coef2009, coef2010, coef2009 - coef2010])
+        # for did in onlySet2009:
+        #     num2009, coef2009 = driverIntellect2009[did]
+        #     writer.writerow([did, num2009, 0, coef2009, 0, 'X'])
+        # for did in onlySet2010:
+        #     num2010, coef2010 = driverIntellect2010[did]
+        #     writer.writerow([did, 0, num2010, 0, coef2010, 'X'])
 
 
 def find_intelligentDrivers():
@@ -73,12 +78,17 @@ def find_intelligentDrivers():
                 month_str = 'M%02d' % m
                 did_df[month_str] = np.where(did_df['month'] == m, 1, 0)
                 dummies.append(month_str)
+            if len(did_df) < len(months) + 1:
+                intelDrivers[did] = (len(did_df), 'X')
+                continue
             y = did_df['locQTime']
             X = did_df[dummies[:-1] + ['locIn']]
             X = sm.add_constant(X)
             res = sm.OLS(y, X, missing='drop').fit()
             if res.pvalues['locIn'] < sig_level:
                 intelDrivers[did] = (len(did_df), res.params['locIn'])
+            else:
+                intelDrivers[did] = (len(did_df), 'X')
         save_pickle_file(dc_fpath, intelDrivers)
 
 
