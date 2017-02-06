@@ -6,6 +6,8 @@ import __init__
 #
 from information_boards import statisticsAllDrivers_ap_dpath, statisticsAllDriversTrip_ap_prefix
 from information_boards import statisticsAllDriversIntellect_ap_prefix
+from information_boards import statisticsAllDriversDay_ap_prefix
+from information_boards import SEC60
 #
 from taxi_common.file_handling_functions import check_dir_create, save_pickle_file, load_pickle_file
 from taxi_common.log_handling_functions import get_logger
@@ -25,7 +27,51 @@ def run():
     #
     # find_intelligentDrivers()
     #
-    gen_summary()
+    # gen_summary()
+    #
+    gen_summary2010()
+
+
+def gen_summary2010():
+    intellect2010_fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ap_dpath, statisticsAllDriversIntellect_ap_prefix, '2010')
+    with open(intellect2010_fpath, 'wt') as w_csvfile:
+        writer = csv.writer(w_csvfile, lineterminator='\n')
+        header = ['driverID', 'locInCoef',
+                  'wleTripNumber', 'wleOperatingHour', 'wleFare', 
+                  'locTripNumber', 'locInNumber', 'locOutNumber', 'locQTime', 'locEP', 'locDuration', 'locFare',
+                  'wleProductivity', 'QTime/locTrip', 'EP/locTrip', 'locProductivity', 'locInRatio']
+        writer.writerow(header)
+    #
+    driverIntellect2010 = load_pickle_file('%s/%s%s.pkl' % (statisticsAllDrivers_ap_dpath, statisticsAllDriversIntellect_ap_prefix, '2010'))
+    df = pd.read_csv('%s/Filtered-%s%s.csv' % (statisticsAllDrivers_ap_dpath, statisticsAllDriversDay_ap_prefix, '2010'))
+    agg_df = df.groupby(['driverID']).sum().reset_index()
+    candi_drop_cn = []
+    for cn in agg_df.columns:
+        if cn not in ['driverID', 'wleTripNumber', 'wleOperatingHour', 'wleFare', 
+                      'locTripNumber', 'locInNumber', 'locOutNumber', 'locQTime', 'locEP', 'locDuration', 'locFare']:
+            candi_drop_cn.append(cn)
+    agg_df = agg_df.drop(candi_drop_cn, axis=1)
+    #
+    agg_df['wleProductivity'] = agg_df['wleFare'] / agg_df['wleOperatingHour']
+    agg_df['QTime/locTrip'] = agg_df['locQTime'] / agg_df['locTripNumber']
+    agg_df['EP/locTrip'] = agg_df['locEP'] / agg_df['locTripNumber']
+    agg_df['locProductivity'] = agg_df['locFare'] / (agg_df['locQTime'] + agg_df['locDuration']) * SEC60
+    agg_df['locInRatio'] = agg_df['locInNumber'] / agg_df['locTripNumber']
+    allDrivers = set(agg_df['driverID'])
+    for did, (_, coef) in driverIntellect2010.iteritems():
+        if coef == 'X':
+            continue
+        if did not in allDrivers:
+            continue
+        with open(intellect2010_fpath, 'a') as w_csvfile:
+            writer = csv.writer(w_csvfile, lineterminator='\n')
+            new_row = [did, coef]
+
+            for cn in ['wleTripNumber', 'wleOperatingHour', 'wleFare', 
+                          'locTripNumber', 'locInNumber', 'locOutNumber', 'locQTime', 'locEP', 'locDuration', 'locFare',
+                          'wleProductivity', 'QTime/locTrip', 'EP/locTrip', 'locProductivity', 'locInRatio']:
+                new_row += agg_df.loc[agg_df['driverID'] == did][cn].tolist()
+            writer.writerow(new_row)
 
 
 def gen_summary():
