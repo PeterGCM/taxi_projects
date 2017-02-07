@@ -36,6 +36,15 @@
 % page charge instructions.
 % Put where the files are available in the appropriate places.
 
+
+% added pakages
+\usepackage{epsfig} %% for loading postscript figures
+\usepackage{subcaption}
+
+
+
+
+
 \title{Community detection and analysis with trajectory history of taxi drivers}
 \author{Carles Sierra\\ 
 Artificial Intelligence Research Institute, IIIA-CSIC, Bellaterra, Catalonia  \\
@@ -64,7 +73,40 @@ Some researches have more interests in influence between people. Shimizu~\shortc
 
 Many community detection researches mainly focus on how to partition a given graph into subgraphs. Planti{\'e} and Crampes~\shortcite{Plantie2013} introduces many community detection algorithm and says that modularity has been used by many researchers to measure the performance of a community detection algorithm. This is because high values in modularity means there are many intra-community edges but few edges between different communities. Blondel et al.~\shortcite{Blondel2008} directly uses modularity with a heuristic approach, which iteratively merges communities if the mergence gives a better modularity value. Steinhaeuser and Chawla~\shortcite{Steinhaeuser2008} and Expert et al.~\shortcite{Expert2011} also use modularity in algorithms, but they modifies it depending on problems they focuses. Chen et al.~\shortcite{Chen2011} models a community detection problem using game theory. In this research, agents can choose communities, a gain function is modularity and Nash equilibriums represents community structures.
 
-In this research, we quantify drivers' influence to other drivers with a linear regression model, build weighted directed graphs and applies the well-known partition algorithm to detect communities. Furthermore, we compare some statistics of communities and validate our framework by another regression model that estimates locations where members in the same community share. A challenge in this work is that we do not have prior information about drivers' contact list. Also, to find active communities, we need to exclude homophily effect in a systematic way. The remainder of this research is organized as follows. In Section 2, we introduce background about taxi industry and dataset. In Section 3, our framework is explained in detail. In Section 4, we show our results and validate them in another perspective. Lastly, we summarize our research and conclude with discussions.
+In this research, we quantify drivers' influence to other drivers with a linear regression model, build weighted directed graphs and applies the well-known partition algorithm to detect communities. Furthermore, we compare some statistics of communities and validate our framework by another regression model that estimates locations where members in the same community share. A challenge in this work is that we do not have prior information about drivers' contact list. Also, to find active communities, we need to exclude homophily effect in a systematic way. The remainder of this research is organized as follows. In Section~\ref{sec:background}, we introduce background about taxi industry and dataset. In Section~\ref{sec:comDectectionFramework}, our framework is explained in detail. In Section 4, we show our results and validate them in another perspective. Lastly, we summarize our research and conclude with discussions.
+
+
+\section{Background} \label{sec:background}
+
+In big data era, collecting data is common to analyze and to utilize it in the future. The taxi industry has also been trying to get knowledge from data. The dataset we use in this research is provided by a taxi company in Singapore. Every 45$\sim$50 seconds, equipment in a vehicle logs taxi's GPS coordinates, speed and state such as free and passenger on board. When a driver picks up and drops off a passenger, additional information such as fare and trip duration is also recorded. The number of taxi drivers considered in this research is more 34 thousand, they work 7.7 hours and earn S\$ 194.5 in a day on average.
+
+We split Singapore in a grid form, like Figure~\ref{fig:gridSingapore}, to manage trajectory history efficiently and define each cell as zones. The size of a cell is 0.5km by 0.5km. We consider that this size is enough to capture queueing time. Queueing time is defined roaming time for finding a passenger or waiting at a taxi stand. More details about quantifying queueing time are mentioned in Section 3. Figure~\ref{fig:locationHeatMap} shows general locations where taxi drivers pick up passengers often. Most of the trips occurred at city areas such as Orchard and Raffles Place. Removing homophily effect is a big issue in detecting active community. For example, many last mile trips, from a transportation hub to a final destination, occurs in a few locations such as Yishun and Tampines. Some drivers usually return the same location where they pick up passengers after they finish services. They show same trajectory patterns, but it is hard to define them as the same community because they just follow their preference without interaction with other drivers. Therefore, we need a systematic approach to detect real and active communities.
+
+\begin{figure*} 
+\centering
+\begin{subfigure}{.5\linewidth}
+  \centering
+  \includegraphics[width=0.9\linewidth]{figs/gridSingapore}
+  \caption{Grid form}
+  \label{fig:gridSingapore}
+\end{subfigure}%
+\begin{subfigure}{.5\linewidth}
+  \centering
+  \includegraphics[width=0.9\linewidth]{figs/locationHeatMap}
+  \caption{Pick-up location heat map}
+  \label{fig:locationHeatMap}
+\end{subfigure}
+\vspace{-0.3 cm}
+\caption{Map of Singapore}
+\label{fig:mapSingapore}
+\vspace{-0.5 cm}
+\end{figure*}
+
+
+\section{Community detection framework} \label{sec:comDectectionFramework}
+
+
+
 
 \subsection{Length of Papers}
 
