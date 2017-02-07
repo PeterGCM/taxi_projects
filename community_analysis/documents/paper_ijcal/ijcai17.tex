@@ -80,31 +80,44 @@ In this research, we quantify drivers' influence to other drivers with a linear 
 
 In big data era, collecting data is common to analyze and to utilize it in the future. The taxi industry has also been trying to get knowledge from data. The dataset we use in this research is provided by a taxi company in Singapore. Every 45$\sim$50 seconds, equipment in a vehicle logs taxi's GPS coordinates, speed and state such as free and passenger on board. When a driver picks up and drops off a passenger, additional information such as fare and trip duration is also recorded. The number of taxi drivers considered in this research is more 34 thousand, they work 7.7 hours and earn S\$ 194.5 in a day on average.
 
-We split Singapore in a grid form, like Figure~\ref{fig:gridSingapore}, to manage trajectory history efficiently and define each cell as zones. The size of a cell is 0.5km by 0.5km. We consider that this size is enough to capture queueing time. Queueing time is defined roaming time for finding a passenger or waiting at a taxi stand. More details about quantifying queueing time are mentioned in Section 3. Figure~\ref{fig:locationHeatMap} shows general locations where taxi drivers pick up passengers often. Most of the trips occurred at city areas such as Orchard and Raffles Place. Removing homophily effect is a big issue in detecting active community. For example, many last mile trips, from a transportation hub to a final destination, occurs in a few locations such as Yishun and Tampines. Some drivers usually return the same location where they pick up passengers after they finish services. They show same trajectory patterns, but it is hard to define them as the same community because they just follow their preference without interaction with other drivers. Therefore, we need a systematic approach to detect real and active communities.
 
-\begin{figure*} 
+\begin{figure} [h] 
+
 \centering
-\begin{subfigure}{.5\linewidth}
+\begin{subfigure}{\linewidth}
   \centering
-  \includegraphics[width=0.9\linewidth]{figs/gridSingapore}
+  \includegraphics[width=0.95\linewidth]{figs/gridSingapore}
   \caption{Grid form}
   \label{fig:gridSingapore}
-\end{subfigure}%
-\begin{subfigure}{.5\linewidth}
+\end{subfigure}
+
+\begin{subfigure}{\linewidth}
   \centering
-  \includegraphics[width=0.9\linewidth]{figs/locationHeatMap}
+  \includegraphics[width=0.95\linewidth]{figs/locationHeatMap}
   \caption{Pick-up location heat map}
   \label{fig:locationHeatMap}
 \end{subfigure}
-\vspace{-0.3 cm}
+
+%\vspace{-0.3 cm}
 \caption{Map of Singapore}
 \label{fig:mapSingapore}
-\vspace{-0.5 cm}
-\end{figure*}
+%\vspace{-0.5 cm}
+\end{figure}
+
+
+We split Singapore in a grid form, like Figure~\ref{fig:gridSingapore}, to manage trajectory history efficiently and define each cell as zones. The size of a cell is 0.5km by 0.5km. We consider that this size is enough to capture queueing time. Queueing time is defined roaming time for finding a passenger or waiting at a taxi stand. More details about quantifying queueing time are mentioned in Section 3. Figure~\ref{fig:locationHeatMap} shows general locations where taxi drivers pick up passengers often. Most of the trips occurred at city areas such as Orchard and Raffles Place. Removing homophily effect is a big issue in detecting active community. For example, many last mile trips, from a transportation hub to a final destination, occurs in a few locations such as Yishun and Tampines. Some drivers usually return the same location where they pick up passengers after they finish services. They show same trajectory patterns, but it is hard to define them as the same community because they just follow their preference without interaction with other drivers. Therefore, we need a systematic approach to detect real and active communities.
+
 
 
 \section{Community detection framework} \label{sec:comDectectionFramework}
 
+
+\begin{figure} [h]
+  \centering
+  \includegraphics[width=0.8\linewidth]{figs/driverInfluence}
+  \caption{Influence between drivers}
+  \label{fig:driverInfluence}
+\end{figure}
 
 
 
