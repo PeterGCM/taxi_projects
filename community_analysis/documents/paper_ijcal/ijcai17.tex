@@ -61,7 +61,7 @@ pcchair@ijcai-17.org}
   provides the style instructions.
 \end{abstract}
 
-\section{Introduction}
+\section{Introduction} \label{sec:introduction}
 
 It is natural that people find and form a community to share information. They get benefits from others, and they also contribute to the community. Active communities communicate with members often and achieve their goals. However, some others consist of people who have the similar preference but just flock together. This results from homophily, love of the same. In this research, we aim to quantify interaction in a community and to detect active communities.In taxi industry, drivers share information such as locations where they can easily pick up passengers without long queueing time. It means that there is community structure in taxi driver's network. However, it is difficult to find communities without drivers' contact list, and the list does not necessarily mean real communities.
 
@@ -78,7 +78,7 @@ In this research, we quantify drivers' influence to other drivers with a linear 
 
 \section{Background} \label{sec:background}
 
-In big data era, collecting data is common to analyze and to utilize it in the future. The taxi industry has also been trying to get knowledge from data. The dataset we use in this research is provided by a taxi company in Singapore. Every 45$\sim$50 seconds, equipment in a vehicle logs taxi's GPS coordinates, speed and state such as free and passenger on board. When a driver picks up and drops off a passenger, additional information such as fare and trip duration is also recorded. The number of taxi drivers considered in this research is more 34 thousand, they work 7.7 hours and earn S\$ 194.5 in a day on average.
+In big data era, collecting data is common to analyze and to utilize it in the future. The taxi industry has also been trying to get knowledge from data. The dataset we use in this research is provided by a taxi company in Singapore. Every 45$\sim$50 seconds, equipment in a vehicle logs taxi's GPS coordinates, speed and state such as free and passenger on board. These logs are saved in a file and the size of the file about a month is around 15$\sim$20 GB. When a driver picks up and drops off a passenger, additional information such as fare and trip duration is also recorded. We name a file which includes these information as trip dataset. Basically, each file has records about a month and the number of trip instances in a month is around 11$\sim$12 millions. The number of all taxi drivers considered is more 34 thousand, they work 7.7 hours and earn S\$ 194.5 in a day on average.
 
 
 \begin{figure} [h] 
@@ -105,260 +105,118 @@ In big data era, collecting data is common to analyze and to utilize it in the f
 \end{figure}
 
 
-We split Singapore in a grid form, like Figure~\ref{fig:gridSingapore}, to manage trajectory history efficiently and define each cell as zones. The size of a cell is 0.5km by 0.5km. We consider that this size is enough to capture queueing time. Queueing time is defined roaming time for finding a passenger or waiting at a taxi stand. More details about quantifying queueing time are mentioned in Section 3. Figure~\ref{fig:locationHeatMap} shows general locations where taxi drivers pick up passengers often. Most of the trips occurred at city areas such as Orchard and Raffles Place. Removing homophily effect is a big issue in detecting active community. For example, many last mile trips, from a transportation hub to a final destination, occurs in a few locations such as Yishun and Tampines. Some drivers usually return the same location where they pick up passengers after they finish services. They show same trajectory patterns, but it is hard to define them as the same community because they just follow their preference without interaction with other drivers. Therefore, we need a systematic approach to detect real and active communities.
+We split Singapore in a grid form, like Figure~\ref{fig:gridSingapore}, to manage trajectory history efficiently and define each cell as zones. The size of a cell is 0.5km by 0.5km. We consider that this size is enough to capture queueing time. Queueing time is defined roaming time for finding a passenger or waiting at a taxi stand. More details about quantifying queueing time are mentioned in Section~\ref{sec:comDectectionFramework}. Figure~\ref{fig:locationHeatMap} shows general locations where taxi drivers pick up passengers often. Most of the trips occurred at city areas such as Orchard and Raffles Place. Removing homophily effect is a big issue in detecting active community. For example, many last mile trips, from a transportation hub to a final destination, occurs in a few locations such as Yishun and Tampines. Some drivers usually return the same location where they pick up passengers after they finish services. They show same trajectory patterns, but it is hard to define them as the same community because they just follow their preference without interaction with other drivers. Therefore, we need a systematic approach to detect real and active communities.
 
 
 
 \section{Community detection framework} \label{sec:comDectectionFramework}
 
+The keys of our community detection framework are to handle drivers’ trajectory history, to quantify the relationships between drivers and to define communities that there are active communications between inner members. Figure~\ref{fig:frameworkOutline} shows our framework conceptually. Firstly, we define queueing time and find drivers who may have the relationship with a driver with trajectory history. In the second phrase, we construct a directed and weighted graph that represents driver's influence network by quantifying the relationships with a linear regression model with multiple variables. In the third phrase, we partition the graph and define communities. Lastly, we apply another regression model to discover zones where members of a community have interests.
+
 
 \begin{figure} [h]
   \centering
-  \includegraphics[width=0.8\linewidth]{figs/driverInfluence}
-  \caption{Influence between drivers}
-  \label{fig:driverInfluence}
+  \includegraphics[width=.8\linewidth]{figs/frameworkOutline}
+  \caption{Queueing time and previous drivers}
+  \label{fig:frameworkOutline}
+\end{figure}
+
+We control taxi drivers and trip dataset to get reliable results. In Singapore, many drivers share vehicles with others and we regard that their relationship is not strong as that of single shift drivers who does not share the vehicle with others. There are 65$\sim$70 thousand drivers single shift drivers among the whole drivers. We only consider single shift drivers in this research because we have interests in active communities.  Another control attribute is about time and day of the week. During the rush hour, it is not like for drivers to communicate each other because they can easily find passengers. Even they get information from others, the drivers cannot go the location soon because of congestion. Few passengers wait for taxis and many drivers do not operate taxis in the middle of the night. Therefore, we ignore trip instances occurred from 0 AM ~ 2 PM. Also, because driving patterns on weekdays and weekends are very different, we focus on weekday's trips except for Friday whose trip pattern is different with that of other weekdays.
+
+
+\subsection{Trajectory processing} \label{sec:traProcessing}
+
+We consider queueing time as the measure that shows the influence of other drivers. Let's imagine a situation that a driver picks up a passenger at a zone where other passengers also wait for taxicabs. It is highly recommended for the driver to call other drivers if he has the close friendship with them. As a result, by going to the same zone, the driver who gets information from the previous driver can save time for finding a new passenger. For example in Figure~\ref{fig:QtimePrevDrivers}, the reason why driver $D_i$ go to the taxi stand is that driver $D_1$ give the information. Formally, we define queueing time as the interval between the time when a driver enter the zone where he picks up a passenger ($t_e$) and passenger pick-up time ($t_p$).
+
+\begin{figure} [h]
+  \centering
+  \includegraphics[width=1.0\linewidth]{figs/QtimePrevDrivers}
+  \caption{Queueing time and previous drivers}
+  \label{fig:QtimePrevDrivers}
+\end{figure}
+
+Because there are some errors in the empirical dataset, some outliers in terms of queueing time need to be discarded. It is general to use the mean and three standard deviation values for filtering outlier. However, this criteria cannot handle extremely skewed dataset like ours. Therefore we use 95 percentile value for filtering. Figure~\ref{fig:queueTimeDist} shows queueing time's distribution of sampled data, January 2009. 50 percent of queueing time is less than six minutes.
+
+\begin{figure} [h]
+  \centering
+  \includegraphics[width=.9\linewidth]{figs/queueTimeDist}
+  \caption{Queueing time distribution}
+  \label{fig:queueTimeDist}
 \end{figure}
 
 
+The next thing to do is to find a driver who gives the information. There can be multiple drivers who pick up passengers at the same zone. Someones did it the long time ago, like $D_0$, others started services just ago. Here, we assume that if a driver received the information, he would appear in the zone within a certain time, $L$. We define drivers whose passenger pick-up time belong to $[t_{p}-L,t_{p}]$ as previous drivers, \emph{prevDrivers}. These drivers are highly likely to have the relationship with the driver who is picking up passenger now. However, it might be wrong that all previous drivers communicate with the driver. For example, if some popular sights are in the zone, many taxi driver will join the taxi stand, not because of communication. Therefore, in the next section, we suggest a regression model that removes the homophily effect and quantifies the influence of drivers, $I(D_i,D_j)$.
 
-\subsection{Length of Papers}
+\subsection{Graph construction} \label{sec:graphConstruction}
 
-Each accepted full paper is allocated six pages in the conference 
-proceedings, excluded references. References can take up to one page.
-Up to two additional pages may be purchased at a price 
-to be announced per page for any accepted paper. However, all 
-{\em submissions} must 
-be a maximum of six pages, plus at most one for references, in length.
+Linear regression is a powerful tool in data analysis. We use this tool to quantify the influence of drivers by utilizing the meaning of coefficient. A coefficient has a meaning that the increment of dependent variable's one unit changes dependent variable as much as the coefficient. Especially, if a dependent variable is a binary value, the interpretation is more intuitive. We model our problem as a linear regression with multiple binary variables. A dependent variable is queuing time of a driver and independent variables prior presence of the previous drivers. Equation~\ref{eq:influenceRegression} shows driver $i$ 's regression model;
+
+\begin{equation} \label{eq:influenceRegression}
+	q_{i}=\alpha + \sum_{j \in prevDrivers} \beta_{j,i}X_{j,i} + \epsilon
+\end{equation}
+
+\noindent where $X_{j}=1$ if driver $j$ picked up a passenger in the same zone within a certain interval and \emph{prevDrivers} is the superset of previous drivers for every trip of driver $i$. For example, in Table~\ref{tab:exampleInfluenceRegression}, driver $i$ has three trip records and \emph{prevDrivers} does not includes driver 3.
+
+\begin{table}[h]
+	\caption{An example of regression model's dataset}
+	\vspace{-0.3 cm}
+	\begin{center}
+		\begin{tabular}{r|ccccc}
+		  Queueing time 	& $D_0$	& $D_1$	& $D_2$	& $D_3$	& $D_4$ \\
+		  \hline
+		  5					& 0		& 1		& 1		& 0	 & 1\\
+		  7					& 0		& 1		& 0		& 0	 & 0\\
+		  1					& 1		& 0		& 0		& 0	 & 0\\
+		  2					& 1		& 0		& 1		& 0	 & 0
+		\end{tabular}
+	\label{tab:exampleInfluenceRegression}
+	\end{center}
+	\vspace{-0.3 cm}
+\end{table}
+
+There are several issues in linear regression model implementations. The first is about the number of instances and the number of independent variables. To use linear regression models, the number of independent variables should be less than the number of instances. For example, if we want to set $D_0$, $D_1$, $D_2$ and $D_4$ as independent variables in Table~\ref{tab:exampleInfluenceRegression}, more than four instances are needed for the regression. Because it is impossible to generate more instances, we exclude some drives whose number of prior presence is less than a threshold value from \emph{prevDrivers}. A threshold is decided by the number of instances and the original \emph{prevDrivers}.
+
+The second issue about linear regression is a significance level and p-value. F-statistic about a linear regression model and t-statistics about coefficients are included in regression's result. Most commercial softwares or open source libraries about statistic also provide p-values of them. Depending on the significance level defined by a user, the statistical meanings of the model and coefficients are decided. In our research, we use 1\% significance level to remove weak relationships. 
+
+We consider that driver's prior presence decrease another driver's queueing time if they are well connected. Therefore, we regard the driver have relationships with drivers whose $\beta_j$ is negative. The results from the regression model are represented in a directed and weighted graph. Each node represents drivers and a influence relationship and a coefficient value are regarded as a directed and weighted edge. Figure~\ref{fig:graphConPartition} shows an example of a graph construction.
 
 
-\subsection{Word Processing Software}
+\begin{figure} [h]
+  \centering
+  \includegraphics[width=.9\linewidth]{figs/graphConPartition}
+  \caption{Graph construction and partition}
+  \label{fig:graphConPartition}
+\end{figure}
 
-As detailed below, IJCAI has prepared and made available a set of
-\LaTeX{} macros and a Microsoft Word template for use in formatting
-your paper. If you are using some other word processing software (such
-as WordPerfect, etc.), please follow the format instructions given
-below and ensure that your final paper looks as much like this sample
-as possible.
 
-\section{Style and Format}
+\subsection{Graph partition} \label{sec:graphPartition}
 
-\LaTeX{} and Word style files that implement these instructions
-can be retrieved electronically. (See Appendix~\ref{stylefiles} for
-instructions on how to obtain these files.)
+As mention in Section~\ref{sec:introduction}, many researcher use modularity for showing algorithm's performance or suggest heuristics that maximize modularity. The following equation is a formal mathematical representation of modularity;
 
-\subsection{Layout}
 
-Print manuscripts two columns to a page, in the manner in which these
-instructions are printed. The exact dimensions for pages are:
-\begin{itemize}
-\item left and right margins: .75$''$
-\item column width: 3.375$''$
-\item gap between columns: .25$''$
-\item top margin---first page: 1.375$''$
-\item top margin---other pages: .75$''$
-\item bottom margin: 1.25$''$
-\item column height---first page: 6.625$''$
-\item column height---other pages: 9$''$
-\end{itemize}
+\begin{equation} \label{eq:modularity}
+	Q= \frac{1}{2m} \sum_{i,j} \Big[A_{ij} - \frac{k_{i}k_{j}}{2m}\Big] \delta(c_{i},c_{j})
+\end{equation}
 
-All measurements assume an 8-1/2$''$ $\times$ 11$''$ page size. For
-A4-size paper, use the given top and left margins, column width,
-height, and gap, and modify the bottom and right margins as necessary.
+\noindent where $A_ij$ is the weight of the the edge $i$-$j$, $m=\frac{1}{2} \sum_{ij}A_{ij}$, $k_{i}=\sum_{j}A_{ij}$, $c_i$ is the community which node $i$ belong to, the $\delta$-function $\delta(u,v)$ is 1 if $u=v$ and 0 otherwise. The high modularity value means that the sum of the weight of intra-edge (edges within the community) is high but the sum of the weight of inter-edges (edges between communities) is low.
 
-\subsection{Format of Electronic Manuscript}
+We regard that this community detection algorithm part is not our interest because well-known and well-performing algorithm already exist. Therefore, we use a library which is based on  Blondel et al.~\shortcite{Blondel2008} and can also directed and weighted graphs.
 
-For the production of the electronic manuscript, you must use Adobe's
-{\em Portable Document Format} (PDF). A PDF file can be generated, for
-instance, on Unix systems using {\tt ps2pdf} or on Windows systems
-using Adobe's Distiller. There is also a website with free software
-and conversion services: {\tt http://www.ps2pdf.com/}. For reasons of
-uniformity, use of Adobe's {\em Times Roman} font is strongly suggested. In
-\LaTeX2e{}, this is accomplished by putting
-\begin{quote} 
-\mbox{\tt $\backslash$usepackage\{times\}}
-\end{quote}
-in the preamble.\footnote{You may want also to use the package {\tt
-latexsym}, which defines all symbols known from the old \LaTeX{}
-version.}
-  
-Additionally, it is of utmost importance to specify the American {\bf
-letter} format (corresponding to 8-1/2$''$ $\times$ 11$''$) when
-formatting the paper. When working with {\tt dvips}, for instance, one
-should specify {\tt -t letter}.
 
-\subsection{Title and Author Information}
+\subsection{Zone discovery} \label{sec:zoneDiscovery}
 
-Center the title on the entire width of the page in a 14-point bold
-font. Below it, center the author name(s) in a 12-point bold font, and
-then center the address(es) in a 12-point regular font. Credit to a
-sponsoring agency can appear on the first page as a footnote.
 
-\subsubsection{Blind Review}
 
-In order to make blind reviewing possible, authors must omit their
-names and affiliations when submitting the paper for review. In place
-of names and affiliations, provide a list of content areas. When
-referring to one's own work, use the third person rather than the
-first person. For example, say, ``Previously,
-Gottlob~\shortcite{gottlob:nonmon} has shown that\ldots'', rather
-than, ``In our previous work~\cite{gottlob:nonmon}, we have shown
-that\ldots'' Try to avoid including any information in the body of the
-paper or references that would identify the authors or their
-institutions. Such information can be added to the final camera-ready
-version for publication.
 
-\subsection{Abstract}
 
-Place the abstract at the beginning of the first column 3$''$ from the
-top of the page, unless that does not leave enough room for the title
-and author information. Use a slightly smaller width than in the body
-of the paper. Head the abstract with ``Abstract'' centered above the
-body of the abstract in a 12-point bold font. The body of the abstract
-should be in the same font as the body of the paper.
 
-The abstract should be a concise, one-paragraph summary describing the
-general thesis and conclusion of your paper. A reader should be able
-to learn the purpose of the paper and the reason for its importance
-from the abstract. The abstract should be no more than 200 words long.
 
-\subsection{Text}
 
-The main body of the text immediately follows the abstract. Use
-10-point type in a clear, readable font with 1-point leading (10 on
-11).
+\section{Experiments} \label{sec:experiments}
 
-Indent when starting a new paragraph, except after major headings.
 
-\subsection{Headings and Sections}
+\section{Discussions and Conclusions} \label{sec:experiments}
 
-When necessary, headings should be used to separate major sections of
-your paper. (These instructions use many headings to demonstrate their
-appearance; your paper should have fewer headings.)
-
-\subsubsection{Section Headings}
-
-Print section headings in 12-point bold type in the style shown in
-these instructions. Leave a blank space of approximately 10 points
-above and 4 points below section headings.  Number sections with
-arabic numerals.
-
-\subsubsection{Subsection Headings}
-
-Print subsection headings in 11-point bold type. Leave a blank space
-of approximately 8 points above and 3 points below subsection
-headings. Number subsections with the section number and the
-subsection number (in arabic numerals) separated by a
-period.
-
-\subsubsection{Subsubsection Headings}
-
-Print subsubsection headings in 10-point bold type. Leave a blank
-space of approximately 6 points above subsubsection headings. Do not
-number subsubsections.
-
-\subsubsection{Special Sections}
-
-You may include an unnumbered acknowledgments section, including
-acknowledgments of help from colleagues, financial support, and
-permission to publish.
-
-Any appendices directly follow the text and look like sections, except
-that they are numbered with capital letters instead of arabic
-numerals.
-
-The references section is headed ``References,'' printed in the same
-style as a section heading but without a number. A sample list of
-references is given at the end of these instructions. Use a consistent
-format for references, such as that provided by Bib\TeX{}. The reference
-list should not include unpublished work.
-
-\subsection{Citations}
-
-Citations within the text should include the author's last name and
-the year of publication, for example~\cite{gottlob:nonmon}.  Append
-lowercase letters to the year in cases of ambiguity.  Treat multiple
-authors as in the following examples:~\cite{abelson-et-al:scheme}
-or~\cite{bgf:Lixto} (for more than two authors) and
-\cite{brachman-schmolze:kl-one} (for two authors).  If the author
-portion of a citation is obvious, omit it, e.g.,
-Nebel~\shortcite{nebel:jair-2000}.  Collapse multiple citations as
-follows:~\cite{gls:hypertrees,levesque:functional-foundations}.
-\nocite{abelson-et-al:scheme}
-\nocite{bgf:Lixto}
-\nocite{brachman-schmolze:kl-one}
-\nocite{gottlob:nonmon}
-\nocite{gls:hypertrees}
-\nocite{levesque:functional-foundations}
-\nocite{levesque:belief}
-\nocite{nebel:jair-2000}
-
-\subsection{Footnotes}
-
-Place footnotes at the bottom of the page in a 9-point font.  Refer to
-them with superscript numbers.\footnote{This is how your footnotes
-should appear.} Separate them from the text by a short
-line.\footnote{Note the line separating these footnotes from the
-text.} Avoid footnotes as much as possible; they interrupt the flow of
-the text.
-
-\section{Illustrations}
-
-Place all illustrations (figures, drawings, tables, and photographs)
-throughout the paper at the places where they are first discussed,
-rather than at the end of the paper. If placed at the bottom or top of
-a page, illustrations may run across both columns.
-
-Illustrations must be rendered electronically or scanned and placed
-directly in your document. All illustrations should be in black and
-white, as color illustrations may cause problems. Line weights should
-be 1/2-point or thicker. Avoid screens and superimposing type on
-patterns as these effects may not reproduce well.
-
-Number illustrations sequentially. Use references of the following
-form: Figure 1, Table 2, etc. Place illustration numbers and captions
-under illustrations. Leave a margin of 1/4-inch around the area
-covered by the illustration and caption.  Use 9-point type for
-captions, labels, and other text in illustrations.
-
-\section*{Acknowledgments}
-
-The preparation of these instructions and the \LaTeX{} and Bib\TeX{}
-files that implement them was supported by Schlumberger Palo Alto
-Research, AT\&T Bell Laboratories, and Morgan Kaufmann Publishers.
-Preparation of the Microsoft Word file was supported by IJCAI.  An
-early version of this document was created by Shirley Jowell and Peter
-F. Patel-Schneider.  It was subsequently modified by Jennifer
-Ballentine and Thomas Dean, Bernhard Nebel, and Daniel Pagenstecher.
-These instructions are the same as the ones for IJCAI--05, prepared by
-Kurt Steinkraus, Massachusetts Institute of Technology, Computer
-Science and Artificial Intelligence Lab.
-
-\appendix
-
-\section{\LaTeX{} and Word Style Files}\label{stylefiles}
-
-The \LaTeX{} and Word style files are available on the IJCAI--17
-website, {\tt http://www.ijcai-17.org/}.
-These style files implement the formatting instructions in this
-document.
-
-The \LaTeX{} files are {\tt ijcai17.sty} and {\tt ijcai17.tex}, and
-the Bib\TeX{} files are {\tt named.bst} and {\tt ijcai17.bib}. The
-\LaTeX{} style file is for version 2e of \LaTeX{}, and the Bib\TeX{}
-style file is for version 0.99c of Bib\TeX{} ({\em not} version
-0.98i). The {\tt ijcai17.sty} file is the same as the {\tt
-ijcai07.sty} file used for IJCAI--07.
-
-The Microsoft Word style file consists of a single file, {\tt
-ijcai17.doc}. This template is the same as the one used for
-IJCAI--07.
-
-These Microsoft Word and \LaTeX{} files contain the source of the
-present document and may serve as a formatting sample.  
-
-Further information on using these styles for the preparation of
-papers for IJCAI--17 can be obtained by contacting {\tt
-pcchair@ijcai-17.org}.
 
 %% The file named.bst is a bibliography style file for BibTeX 0.99c
 \bibliographystyle{named}

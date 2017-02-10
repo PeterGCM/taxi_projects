@@ -6,6 +6,7 @@ taxi_home = get_taxi_home_path()
 #
 from taxi_common.file_handling_functions import check_dir_create
 taxi_data = os.path.dirname(os.path.realpath(__file__)) + '/data'; check_dir_create(taxi_data)
+chart_dpath = os.path.dirname(os.path.realpath(__file__)) + '/chart'; check_dir_create(chart_dpath)
 #
 MON, TUE, WED, THR, FRI, SAT, SUN = range(7)
 PM2, PM11 = 14, 23
