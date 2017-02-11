@@ -22,13 +22,16 @@ logger = get_logger()
 
 def run():
     ir = 'influenceGraph'
-    for tm in ['spendingTime', 'roamingTime']:
-        for year in ['2010', '2011']:
+    # for tm in ['spendingTime', 'roamingTime']:
+    for tm in ['spendingTime']:
+        # for year in ['2010', '2011']:
+        for year in ['2012']:
+
             check_dir_create(dpaths[tm, year, ir])
     #
     init_multiprocessor(3)
     count_num_jobs = 0
-    for y in range(10, 12):
+    for y in range(12, 13):
         yyyy = '20%02d' % y
         for tfZ_TP_fn in get_all_files(tfZ_TP_dpath, '%s%s*.csv' % (tfZ_TP_prefix, yyyy)):
             tfZ_TP_fpath = '%s/%s' % (tfZ_TP_dpath, tfZ_TP_fn)
