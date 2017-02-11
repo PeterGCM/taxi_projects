@@ -138,7 +138,9 @@ def process_file(tm, year, gn, groupDrivers):
                     continue
                 did = row[hid['driver-id']]
                 productive_duration = sum(int(row[hid[dur]]) for dur in productive_state)
-                writer.writerow([row[hid['year']], row[hid['month']], row[hid['day']], hour,
+                with open(gs_fpath, 'a') as w_csvfile:
+                    writer = csv.writer(w_csvfile, lineterminator='\n')
+                    writer.writerow([row[hid['year']], row[hid['month']], row[hid['day']], hour,
                                  did, productive_duration])
 
 if __name__ == '__main__':
