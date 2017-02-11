@@ -11,7 +11,27 @@ import matplotlib.pyplot as plt
 #
 from taxi_common.file_handling_functions import load_pickle_file
 hour_tripNum = load_pickle_file('_hour_tripNum.pkl')
-
+#
+_figsize = (8, 6)
+_fontsize = 14
+_data = hour_tripNum.values()
+xTickMarks = hour_tripNum.keys()
+_xlabel = 'Hour'
+_ylabel = 'The number of trips'
+#
+fig = plt.figure(figsize=_figsize)
+ax = fig.add_subplot(111)
+ind = np.arange(len(_data))
+width = 0.5  # the width of the bars
+#
+ax.bar(ind, _data, color='blue')
+# axes and labels
+ax.set_xlim(-width, len(ind)-width)
+ax.set_ylabel(_xlabel)
+ax.set_ylabel(_ylabel)
+ax.set_xticks(ind)
+xtickNames = ax.set_xticklabels(xTickMarks)
+plt.setp(xtickNames, fontsize=_fontsize)
 
 #
 # Queueing time distribution
@@ -30,7 +50,7 @@ _fontsize = 14
 x_label, y_label = 'Queueing time (minute)', 'Percent'
 num_bin = 10
 #
-plt.figure(figsize = _figsize)
+plt.figure(figsize=_figsize)
 _, bins, _ = plt.hist(data, num_bin, normed=1, histtype='bar', facecolor='green', alpha=0.75, edgecolor='black')
 plt.xlabel(x_label, fontsize=_fontsize); plt.ylabel(y_label, fontsize=_fontsize)
 plt.xlim(xmin=0, xmax=data.max())

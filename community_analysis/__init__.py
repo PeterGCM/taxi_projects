@@ -7,6 +7,7 @@ taxi_home = get_taxi_home_path()
 from taxi_common.file_handling_functions import check_dir_create
 taxi_data = os.path.dirname(os.path.realpath(__file__)) + '/data'; check_dir_create(taxi_data)
 chart_dpath = os.path.dirname(os.path.realpath(__file__)) + '/chart'; check_dir_create(chart_dpath)
+shift_dpath, shift_prefix = '/home/sfcheng/toolbox/results', 'shift-hour-state-'
 #
 MON, TUE, WED, THR, FRI, SAT, SUN = range(7)
 PM2, PM11 = 14, 23
@@ -26,7 +27,7 @@ tfZ_TP_dpath, tfZ_TP_prefix = '%s/%s' % (taxi_data, 'tfZ_TP'), 'tfZ_TP-'
 driversRelations_fpaths = {year: '%s/driversRelations%s.pkl' % (prevDriversDefined_dpath, year) for year in years}
 #
 timeMeasures = ['spendingTime', 'roamingTime']
-interResults = ['influenceGraph', 'groupPartition', 'groupTrips', 'groupZones']
+interResults = ['influenceGraph', 'groupPartition', 'groupTrips', 'groupShifts','groupZones']
 dpaths, prefixs = {}, {}
 for tm in timeMeasures:
     for year in years:
@@ -39,9 +40,8 @@ for tm in timeMeasures:
     for year in years:
         groupPartition_dpath = dpaths[tm, year, 'groupPartition']
         groupPartition_prefix = prefixs[tm, year, 'groupPartition']
-
         groupPartitionSummaries[tm, year] = '%s/%s' % (groupPartition_dpath, groupPartition_prefix)
-        groupPartitionDrivers
+
 
 
 

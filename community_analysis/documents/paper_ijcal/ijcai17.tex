@@ -78,7 +78,7 @@ In this research, we quantify drivers' influence to other drivers with a linear 
 
 \section{Background} \label{sec:background}
 
-In big data era, collecting data is common to analyze and to utilize it in the future. The taxi industry has also been trying to get knowledge from data. The dataset we use in this research is provided by a taxi company in Singapore. Every 45$\sim$50 seconds, equipment in a vehicle logs taxi's GPS coordinates, speed and state such as free and passenger on board. These logs are saved in a file and the size of the file about a month is around 15$\sim$20 GB. When a driver picks up and drops off a passenger, additional information such as fare and trip duration is also recorded. We name a file which includes these information as trip dataset. Basically, each file has records about a month and the number of trip instances in a month is around 11$\sim$12 millions. The number of all taxi drivers considered is more 34 thousand, they work 7.7 hours and earn S\$ 194.5 in a day on average.
+In big data era, collecting data is common to analyze and to utilize it in the future. The taxi industry has also been trying to get knowledge from data. The dataset we use in this research is provided by a taxi company in Singapore from 2009 to 2012. Every 45$\sim$50 seconds, equipment in a vehicle logs taxi's GPS coordinates, speed and state such as free and passenger on board. These logs are saved in a file and the size of the file about a month is around 15$\sim$20 GB. When a driver picks up and drops off a passenger, additional information such as fare and trip duration is also recorded. We name a file which includes these information as trip dataset. Basically, each file has records about a month and the number of trip instances in a month is around 11$\sim$12 millions. The number of all taxi drivers considered is more 34 thousand, they work 7.7 hours and earn S\$ 194.5 in a day on average.
 
 
 \begin{figure} [h] 
@@ -135,15 +135,7 @@ We consider queueing time as the measure that shows the influence of other drive
   \label{fig:QtimePrevDrivers}
 \end{figure}
 
-Because there are some errors in the empirical dataset, some outliers in terms of queueing time need to be discarded. It is general to use the mean and three standard deviation values for filtering outlier. However, this criteria cannot handle extremely skewed dataset like ours. Therefore we use 95 percentile value for filtering. Figure~\ref{fig:queueTimeDist} shows queueing time's distribution of sampled data, January 2009. 50 percent of queueing time is less than six minutes.
-
-\begin{figure} [h]
-  \centering
-  \includegraphics[width=.9\linewidth]{figs/queueTimeDist}
-  \caption{Queueing time distribution}
-  \label{fig:queueTimeDist}
-\end{figure}
-
+Because there are some errors in the empirical dataset, some outliers in terms of queueing time need to be discarded. It is general to use the mean and three standard deviation values for filtering outlier. However, this criteria cannot handle extremely skewed dataset like ours. Therefore we use 95 percentile value for filtering. 
 
 The next thing to do is to find a driver who gives the information. There can be multiple drivers who pick up passengers at the same zone. Someones did it the long time ago, like $D_0$, others started services just ago. Here, we assume that if a driver received the information, he would appear in the zone within a certain time, $L$. We define drivers whose passenger pick-up time belong to $[t_{p}-L,t_{p}]$ as previous drivers, \emph{prevDrivers}. These drivers are highly likely to have the relationship with the driver who is picking up passenger now. However, it might be wrong that all previous drivers communicate with the driver. For example, if some popular sights are in the zone, many taxi driver will join the taxi stand, not because of communication. Therefore, in the next section, we suggest a regression model that removes the homophily effect and quantifies the influence of drivers, $I(D_i,D_j)$.
 
@@ -178,7 +170,7 @@ There are several issues in linear regression model implementations. The first i
 
 The second issue about linear regression is a significance level and p-value. F-statistic about a linear regression model and t-statistics about coefficients are included in regression's result. Most commercial softwares or open source libraries about statistic also provide p-values of them. Depending on the significance level defined by a user, the statistical meanings of the model and coefficients are decided. In our research, we use 1\% significance level to remove weak relationships. 
 
-We consider that driver's prior presence decrease another driver's queueing time if they are well connected. Therefore, we regard the driver have relationships with drivers whose $\beta_j$ is negative. The results from the regression model are represented in a directed and weighted graph. Each node represents drivers and a influence relationship and a coefficient value are regarded as a directed and weighted edge. Figure~\ref{fig:graphConPartition} shows an example of a graph construction.
+We consider that driver's prior presence decrease another driver's queueing time if they are well connected. Therefore, we regard the driver have relationships with drivers whose $\beta_j$ is negative. The results from the regression model are represented in a directed and weighted graph. Each node represents drivers and influence relationships construct directed edges. The weight of the edge is the absolute value of the coefficient. Figure~\ref{fig:graphConPartition} shows an example of a graph construction. Following the graph, $D_1$'s prior presence decrease $D_5$'s queue time as much as $\beta_{1,5}$.
 
 
 \begin{figure} [h]
@@ -205,40 +197,52 @@ We regard that this community detection algorithm part is not our interest becau
 
 \subsection{Zone discovery} \label{sec:zoneDiscovery}
 
-% where the community got benefit from other community members
-% zone regression model
+Our final interest is zones where members in the same community influence each other. We consider that there are specific zones where members share information about. For example, if a location is a popular place, a driver already know the information about that place before other members let the driver know it. On the contrary to this, there can be a location where a driver know well and the driver contribute his community's productivity.
 
-
-
+To discover these zones, we suggest another regression model. For a community, we apply the following equation;
 
 \begin{equation} \label{eq:zoneRegression}
-	q_{i}=\alpha + \sum_{j \in prevDrivers} \beta_{j,i}X_{j,i} + \epsilon
+	q_{z}= \alpha + \beta_{z}X_{z} + \epsilon
 \end{equation}
 
-
-
+\noindent where $q_{z}$ is queueing time at zone $z$ and $X_{z}$is a binary variable about any member's prior presence at zone $z$. As Section~\ref{sec:graphConstruction}, we use 1\% significance level and find zones whose $\beta_{z}$ is a negative value.
 
 \section{Experiments} \label{sec:experiments}
-% 2009~2012 dataset
 
+
+
+Figure~\ref{fig:queueTimeDist} shows queueing time's distribution of sampled data, January 2009. 50 percent of queueing time is less than six minutes.
+
+\begin{figure} [h]
+  \centering
+  \includegraphics[width=.9\linewidth]{figs/queueTimeDist}
+  \caption{Queueing time distribution}
+  \label{fig:queueTimeDist}
+\end{figure}
+
+% regression result example
+
+The number represent order
+C(0), C(1)
 % Partition result
 % tie strength, contribution and other statistics in 2012
-
 % zone discovery 
 % Original and zoom in
 
+
+% 2009~2012 dataset
 % Changes in contribution
 %		before smart phone (2009) bigger community
-
-
 
 
 \section{Discussions and Conclusions} \label{sec:experiments}
 
 % evolutions
-% marginal distribution
+% marginal influence
 % parameters
 
+% summary this research
+%		contribution
 
 % Future works
 % non-single shift drivers
