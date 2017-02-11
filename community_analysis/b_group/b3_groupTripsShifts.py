@@ -131,17 +131,19 @@ def process_file(tm, year, gn, groupDrivers):
             headers = reader.next()
             hid = {h: i for i, h in enumerate(headers)}
             for row in reader:
+                did1 = int(row[hid['driver-id']])
+                if did1 not in groupDrivers:
+                    continue
                 hour = int(row[hid['hour']])
                 if hour < PM2:
                     continue
                 if PM11 < hour:
                     continue
-                did = row[hid['driver-id']]
                 productive_duration = sum(int(row[hid[dur]]) for dur in productive_state)
                 with open(gs_fpath, 'a') as w_csvfile:
                     writer = csv.writer(w_csvfile, lineterminator='\n')
                     writer.writerow([row[hid['year']], row[hid['month']], row[hid['day']], hour,
-                                 did, productive_duration])
+                                 did1, productive_duration])
 
 if __name__ == '__main__':
     run()
