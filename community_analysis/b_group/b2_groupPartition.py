@@ -8,6 +8,7 @@ from community_analysis import dpaths, prefixs
 #
 from taxi_common.file_handling_functions import check_dir_create, get_all_files, load_pickle_file, save_pickle_file
 from taxi_common.log_handling_functions import get_logger
+from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
 import csv
 import louvain
@@ -18,9 +19,15 @@ logger = get_logger()
 
 def run():
     # for tm in ['spendingTime', 'roamingTime']:
+
+    init_multiprocessor(4)
+    count_num_jobs = 0
     for tm in ['spendingTime']:
         for year in ['2009', '2010', '2011', '2012']:
-            process_file(tm, year)
+            # process_file(tm, year)
+            put_task(process_file, [tm, year])
+            count_num_jobs += 1
+    end_multiprocessor(count_num_jobs)
 
 
 def process_file(tm, year):
