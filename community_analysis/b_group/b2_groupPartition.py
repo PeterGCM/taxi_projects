@@ -17,8 +17,9 @@ logger = get_logger()
 
 
 def run():
-    for tm in ['spendingTime', 'roamingTime']:
-        for year in ['2010', '2011', '2012']:
+    # for tm in ['spendingTime', 'roamingTime']:
+    for tm in ['spendingTime']:
+        for year in ['2009', '2010', '2011', '2012']:
             process_file(tm, year)
 
 

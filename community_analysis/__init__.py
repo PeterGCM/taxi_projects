@@ -27,7 +27,7 @@ tfZ_TP_dpath, tfZ_TP_prefix = '%s/%s' % (taxi_data, 'tfZ_TP'), 'tfZ_TP-'
 driversRelations_fpaths = {year: '%s/driversRelations%s.pkl' % (prevDriversDefined_dpath, year) for year in years}
 #
 timeMeasures = ['spendingTime', 'roamingTime']
-interResults = ['influenceGraph', 'groupPartition', 'groupTrips', 'groupShifts','groupZones']
+interResults = ['influenceGraph', 'groupPartition', 'groupTrips', 'groupShifts','groupZones', 'groupMarginal']
 dpaths, prefixs = {}, {}
 for tm in timeMeasures:
     for year in years:
