@@ -50,32 +50,35 @@ def process_file(fpath):
             if i % 10 == 0:
                 logger.info('Doing regression %.2f; %s-%s' % (i / float(num_drivers), year, reducerID))
             did1_df = df[(df['did'] == did1)].copy(deep=True)
+            numMonthes = len(set(did1_df['month']))
+            minDFResiduals = numMonthes * MIN_NUM_TRIPS_MONTH
+            numObservations = len(did1_df)
+            if numObservations <= minDFResiduals:
+                continue
             did1_df = did1_df.drop(['month', 'day', 'timeFrame', 'zi', 'zj', 'tfZ', 'did', 'roamingTime'], axis=1)
             if '%d' % did1 in did1_df.columns:
                 did1_df = did1_df.drop(['%d' % did1], axis=1)
             #
-            rdf = df.copy(deep=True)
-            numMonthes = len(rdf['month'])
-            minDFResiduals = numMonthes * MIN_NUM_TRIPS_MONTH
-            numObservations = len(rdf)
-            if numObservations < minDFResiduals:
-                continue
             candi_dummies = []
             num_iter = 1
             while True:
-                for i, vs in enumerate(zip(*rdf.values)):
-                    if rdf.columns[i] == tm:
+                for i, vs in enumerate(zip(*did1_df.values)):
+                    if did1_df.columns[i] == tm:
                         continue
-                    if sum(vs) > len(rdf) * MIN_PICKUP_RATIO * num_iter:
-                        candi_dummies.append(rdf.columns[i])
+                    if sum(vs) > numObservations * MIN_PICKUP_RATIO * num_iter:
+                        candi_dummies.append(did1_df.columns[i])
                 numIndepVariables = len(candi_dummies)
-                if numObservations <= numIndepVariables + minDFResiduals:
+                if numIndepVariables == 0:
+                    break
+                if numObservations < numIndepVariables + minDFResiduals:
                     candi_dummies = []
                     num_iter += 1
                 else:
                     break
-            y = rdf[tm]
-            X = rdf[candi_dummies]
+            if not candi_dummies:
+                continue
+            y = did1_df[tm]
+            X = did1_df[candi_dummies]
             X = sm.add_constant(X)
             SP_res = sm.OLS(y, X, missing='drop').fit()
             if SP_res.f_pvalue < SIGINIFICANCE_LEVEL:
