@@ -52,7 +52,7 @@ taxi_common/multiprocess.pyc
 taxi_common/sg_grid_zone.pyc
 /community_analysis/documents/Draft_CommunityAnalysis.manuscript/
 /community_analysis/documents/Outline_CommunityAnalysis.scap
-community_analysis/b_group/___log_.log
+community_analysis/b_group/__hist_log_.log
 community_analysis/b_group/___log_b2_groupPartition.log
 community_analysis/b_group/___log_b4_groupZones.log
 community_analysis/build/
@@ -71,3 +71,5 @@ taxi_common/data/.DS_Store
 /community_analysis/setup.py
 /community_analysis/documents/paper_ijcal/.texpadtmp/
 /community_analysis/b_group/_cy_b1_influenceGraph.pyx
+/community_analysis/b_group/_cy_b1_influenceGraph.c
+/community_analysis/b_group/_cy_b1_influenceGraph.so
