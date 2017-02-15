@@ -18,7 +18,7 @@ logger = get_logger()
 
 
 def run():
-    init_multiprocessor(6)
+    init_multiprocessor(11)
     count_num_jobs = 0
     for tm in ['spendingTime']:
         for year in ['2009', '2010', '2011', '2012']:
