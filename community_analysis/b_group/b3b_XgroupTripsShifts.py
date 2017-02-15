@@ -22,11 +22,12 @@ logger = get_logger()
 
 
 def run():
-    init_multiprocessor(6)
-    count_num_jobs = 0
+    # init_multiprocessor(4)
+    # count_num_jobs = 0
     # for tm in ['spendingTime', 'roamingTime']:
     for tm in ['spendingTime']:
-        for year in ['2009', '2010', '2011', '2012']:
+        # for year in ['2009', '2010', '2011', '2012']:
+        for year in ['2012']:
             gt_dpath = dpaths[tm, year, 'groupTrips']
             gt_prefix = prefixs[tm, year, 'groupTrips']
             check_dir_create(gt_dpath)
@@ -43,10 +44,10 @@ def run():
                     did0, did1 = [igG.vs[nIndex]['name'] for nIndex in e.tuple]
                     groupDrivers.add(did0)
                     groupDrivers.add(did1)
-                # process_file(tm, year, gn, groupDrivers)
-            put_task(process_file, [tm, year, 'X', groupDrivers])
-            count_num_jobs += 1
-    end_multiprocessor(count_num_jobs)
+            process_file(tm, year, 'X', groupDrivers)
+            # put_task(process_file, [tm, year, 'X', groupDrivers])
+    #         count_num_jobs += 1
+    # end_multiprocessor(count_num_jobs)
 
 
 def process_file(tm, year, gn, groupDrivers):
@@ -59,7 +60,7 @@ def process_file(tm, year, gn, groupDrivers):
     # gs_prefix = prefixs[tm, year, 'groupShifts']
     # gs_fpath = '%s/%s%s.csv' % (gs_dpath, gs_prefix, gn)
     xgt_fpath = '%s/%s%s.csv' % (gt_dpath, gt_prefix, 'X')
-    assert xgt_fpath == gt_fpath
+    assert xgt_fpath == gt_fpath, (gt_fpath)
     with open(xgt_fpath, 'wt') as w_csvfile:
         writer = csv.writer(w_csvfile, lineterminator='\n')
         header = ['time', 'year', 'month', 'day', 'hour',
@@ -82,7 +83,8 @@ def process_file(tm, year, gn, groupDrivers):
                 if did1 not in groupDrivers:
                     with open(xgt_fpath, 'a') as w_csvfile:
                         writer = csv.writer(w_csvfile, lineterminator='\n')
-                        new_row = [row[hid[cn]] for cn in ['time', 'month', 'day', 'timeFrame']]
+                        new_row = [row[hid['time']], year]
+                        new_row += [row[hid[cn]] for cn in ['month', 'day', 'timeFrame']]
                         new_row += [did1, 'X']
                         zi, zj = row[hid['zi']], row[hid['zj']]
                         zizj = '%s#%s' % (zi, zj)
