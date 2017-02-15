@@ -22,7 +22,7 @@ logger = get_logger()
 
 
 def run():
-    init_multiprocessor(6)
+    init_multiprocessor(11)
     count_num_jobs = 0
     # for tm in ['spendingTime', 'roamingTime']:
     for tm in ['spendingTime']:
