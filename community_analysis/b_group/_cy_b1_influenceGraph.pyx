@@ -6,7 +6,7 @@ import __init__
 #
 from community_analysis import tfZ_TP_dpath, tfZ_TP_prefix
 from community_analysis import dpaths, prefixs
-from community_analysis import SIGINIFICANCE_LEVEL, MIN_PICKUP_RATIO, MIN_NUM_TRIPS_MONTH
+from community_analysis import SIGINIFICANCE_LEVEL, MIN_PICKUP_RATIO, MIN_RATIO_RESIDUAL
 #
 from taxi_common.file_handling_functions import check_dir_create, get_all_files, get_fn_only, check_path_exist, save_pickle_file
 from taxi_common.log_handling_functions import get_logger
@@ -50,11 +50,8 @@ def process_file(fpath):
             if i % 10 == 0:
                 logger.info('Doing regression %.2f; %s-%s' % (i / float(num_drivers), year, reducerID))
             did1_df = df[(df['did'] == did1)].copy(deep=True)
-            numMonthes = len(set(did1_df['month']))
-            minDFResiduals = numMonthes * MIN_NUM_TRIPS_MONTH
             numObservations = len(did1_df)
-            if numObservations <= minDFResiduals:
-                continue
+            minDFResiduals = numObservations * MIN_RATIO_RESIDUAL
             did1_df = did1_df.drop(['month', 'day', 'timeFrame', 'zi', 'zj', 'tfZ', 'did', 'roamingTime'], axis=1)
             if '%d' % did1 in did1_df.columns:
                 did1_df = did1_df.drop(['%d' % did1], axis=1)
@@ -81,21 +78,21 @@ def process_file(fpath):
             X = did1_df[candi_dummies]
             X = sm.add_constant(X)
             SP_res = sm.OLS(y, X, missing='drop').fit()
-            if SP_res.f_pvalue < SIGINIFICANCE_LEVEL:
-                significant_drivers = set()
-                for _did0, pv in SP_res.pvalues.iteritems():
-                    if _did0 == 'const':
-                        continue
-                    if pv < SIGINIFICANCE_LEVEL:
-                        significant_drivers.add(_did0)
-                positive_ef_drivers = set()
-                for _did0, cof in SP_res.params.iteritems():
-                    if _did0 == 'const':
-                        continue
-                    if cof > 0:
-                        positive_ef_drivers.add(_did0)
-                for _did0 in significant_drivers.difference(positive_ef_drivers):
-                    SP_graph[int(_did0), did1] = SP_res.params[_did0]
+            # if SP_res.f_pvalue < SIGINIFICANCE_LEVEL:
+            significant_drivers = set()
+            for _did0, pv in SP_res.pvalues.iteritems():
+                if _did0 == 'const':
+                    continue
+                if pv < SIGINIFICANCE_LEVEL:
+                    significant_drivers.add(_did0)
+            positive_ef_drivers = set()
+            for _did0, cof in SP_res.params.iteritems():
+                if _did0 == 'const':
+                    continue
+                if cof > 0:
+                    positive_ef_drivers.add(_did0)
+            for _did0 in significant_drivers.difference(positive_ef_drivers):
+                SP_graph[int(_did0), did1] = SP_res.params[_did0]
         #
         logger.info('Start pickling; %s-%s' % (year, reducerID))
         save_pickle_file(SP_graph_fpath, SP_graph)

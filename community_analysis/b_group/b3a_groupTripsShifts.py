@@ -22,15 +22,17 @@ logger = get_logger()
 
 
 def run():
-    init_multiprocessor(11)
+    init_multiprocessor(6)
     count_num_jobs = 0
     # for tm in ['spendingTime', 'roamingTime']:
     for tm in ['spendingTime']:
         for year in ['2009', '2010', '2011', '2012']:
             gt_dpath = dpaths[tm, year, 'groupTrips']
-            gs_dpath = dpaths[tm, year, 'groupShifts']
-            for dpath in [gt_dpath, gs_dpath]:
-                check_dir_create(dpath)
+            gt_prefix = prefixs[tm, year, 'groupTrips']
+            check_dir_create(gt_dpath)
+            # gs_dpath = dpaths[tm, year, 'groupShifts']
+            # for dpath in [gt_dpath, gs_dpath]:
+            #     check_dir_create(dpath)
             #
             gp_dpath = dpaths[tm, year, 'groupPartition']
             gp_prefix = prefixs[tm, year, 'groupPartition']
@@ -56,9 +58,9 @@ def process_file(tm, year, gn, groupDrivers):
     gt_prefix = prefixs[tm, year, 'groupTrips']
     gt_fpath = '%s/%s%s.csv' % (gt_dpath, gt_prefix, gn)
     #
-    gs_dpath = dpaths[tm, year, 'groupShifts']
-    gs_prefix = prefixs[tm, year, 'groupShifts']
-    gs_fpath = '%s/%s%s.csv' % (gs_dpath, gs_prefix, gn)
+    # gs_dpath = dpaths[tm, year, 'groupShifts']
+    # gs_prefix = prefixs[tm, year, 'groupShifts']
+    # gs_fpath = '%s/%s%s.csv' % (gs_dpath, gs_prefix, gn)
     with open(gt_fpath, 'wt') as w_csvfile:
         writer = csv.writer(w_csvfile, lineterminator='\n')
         header = ['time', 'year', 'month', 'day', 'hour',
@@ -75,10 +77,10 @@ def process_file(tm, year, gn, groupDrivers):
                   'zi', 'zj', 'zizj',
                   'time', 'year', 'month', 'day', 'hour']
         writer.writerow(header)
-    with open(gs_fpath, 'wb') as w_csvfile:
-        writer = csv.writer(w_csvfile, lineterminator='\n')
-        new_headers = ['year', 'month', 'day', 'hour', 'did', 'pro-dur']
-        writer.writerow(new_headers)
+    # with open(gs_fpath, 'wb') as w_csvfile:
+    #     writer = csv.writer(w_csvfile, lineterminator='\n')
+    #     new_headers = ['year', 'month', 'day', 'hour', 'did', 'pro-dur']
+    #     writer.writerow(new_headers)
     yy = year[2:]
     for fn in get_all_files(prevDriversDefined_dpath, 'Filtered-%s%s*' % (prevDriversDefined_prefix, yy)):
         fpath = '%s/%s' % (prevDriversDefined_dpath, fn)
@@ -119,31 +121,31 @@ def process_file(tm, year, gn, groupDrivers):
                 with open(gt_fpath, 'a') as w_csvfile:
                     writer = csv.writer(w_csvfile, lineterminator='\n')
                     writer.writerow(new_row)
-
-    productive_state = ['dur%d' % x for x in [0, 3, 4, 5, 6, 7, 8, 9, 10]]
-    for fn in get_all_files(shift_dpath, '%s%s*' % (shift_prefix, yy)):
-        _, _, _, yymm = fn[:-len('.csv.gz')].split('-')
-        if yymm == '1010':
-            continue
-        fpath = '%s/%s' % (shift_dpath, fn)
-        with gzip.open(fpath, 'rt') as r_csvfile:
-            reader = csv.reader(r_csvfile)
-            headers = reader.next()
-            hid = {h: i for i, h in enumerate(headers)}
-            for row in reader:
-                did1 = int(row[hid['driver-id']])
-                if did1 not in groupDrivers:
-                    continue
-                hour = int(row[hid['hour']])
-                if hour < PM2:
-                    continue
-                if PM11 < hour:
-                    continue
-                productive_duration = sum(int(row[hid[dur]]) for dur in productive_state)
-                with open(gs_fpath, 'a') as w_csvfile:
-                    writer = csv.writer(w_csvfile, lineterminator='\n')
-                    writer.writerow([row[hid['year']], row[hid['month']], row[hid['day']], hour,
-                                 did1, productive_duration])
+    #
+    # productive_state = ['dur%d' % x for x in [0, 3, 4, 5, 6, 7, 8, 9, 10]]
+    # for fn in get_all_files(shift_dpath, '%s%s*' % (shift_prefix, yy)):
+    #     _, _, _, yymm = fn[:-len('.csv.gz')].split('-')
+    #     if yymm == '1010':
+    #         continue
+    #     fpath = '%s/%s' % (shift_dpath, fn)
+    #     with gzip.open(fpath, 'rt') as r_csvfile:
+    #         reader = csv.reader(r_csvfile)
+    #         headers = reader.next()
+    #         hid = {h: i for i, h in enumerate(headers)}
+    #         for row in reader:
+    #             did1 = int(row[hid['driver-id']])
+    #             if did1 not in groupDrivers:
+    #                 continue
+    #             hour = int(row[hid['hour']])
+    #             if hour < PM2:
+    #                 continue
+    #             if PM11 < hour:
+    #                 continue
+    #             productive_duration = sum(int(row[hid[dur]]) for dur in productive_state)
+    #             with open(gs_fpath, 'a') as w_csvfile:
+    #                 writer = csv.writer(w_csvfile, lineterminator='\n')
+    #                 writer.writerow([row[hid['year']], row[hid['month']], row[hid['day']], hour,
+    #                              did1, productive_duration])
 
 if __name__ == '__main__':
     run()
