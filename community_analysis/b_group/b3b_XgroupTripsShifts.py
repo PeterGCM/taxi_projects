@@ -22,12 +22,12 @@ logger = get_logger()
 
 
 def run():
-    # init_multiprocessor(4)
-    # count_num_jobs = 0
+    init_multiprocessor(4)
+    count_num_jobs = 0
     # for tm in ['spendingTime', 'roamingTime']:
     for tm in ['spendingTime']:
-        # for year in ['2009', '2010', '2011', '2012']:
-        for year in ['2012']:
+        for year in ['2009', '2010', '2011', '2012']:
+        # for year in ['2012']:
             gt_dpath = dpaths[tm, year, 'groupTrips']
             gt_prefix = prefixs[tm, year, 'groupTrips']
             check_dir_create(gt_dpath)
@@ -44,10 +44,10 @@ def run():
                     did0, did1 = [igG.vs[nIndex]['name'] for nIndex in e.tuple]
                     groupDrivers.add(did0)
                     groupDrivers.add(did1)
-            process_file(tm, year, 'X', groupDrivers)
-            # put_task(process_file, [tm, year, 'X', groupDrivers])
-    #         count_num_jobs += 1
-    # end_multiprocessor(count_num_jobs)
+            # process_file(tm, year, 'X', groupDrivers)
+            put_task(process_file, [tm, year, 'X', groupDrivers])
+            count_num_jobs += 1
+    end_multiprocessor(count_num_jobs)
 
 
 def process_file(tm, year, gn, groupDrivers):
