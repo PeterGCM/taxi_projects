@@ -5,8 +5,7 @@ import __init__
 '''
 #
 from community_analysis import FRI, SAT, SUN
-# from community_analysis import PM2, PM11
-from community_analysis import AM10, PM8
+from community_analysis import PM2, PM11
 from community_analysis import taxi_home
 from community_analysis import ss_trips_dpath, ss_trips_prefix
 from community_analysis import FREE
@@ -29,13 +28,13 @@ def run():
     #
     init_multiprocessor(11)
     count_num_jobs = 0
-    y = 9
-    for m in range(1, 13):
-        yymm = '%02d%02d' % (y, m)
-        if yymm in ['0912', '1010']:
-            continue
-        put_task(process_month, [yymm])
-        count_num_jobs += 1
+    for y in range(11, 13):
+        for m in range(1, 13):
+            yymm = '%02d%02d' % (y, m)
+            if yymm in ['0912', '1010']:
+                continue
+            put_task(process_month, [yymm])
+            count_num_jobs += 1
     end_multiprocessor(count_num_jobs)
 
 
@@ -68,7 +67,7 @@ def process_month(yymm):
                              'time', 'day', 'month',
                              'start-long', 'start-lat',
                              'distance', 'duration', 'fare',
-                             'queueingTime'])
+                             'spendingTime', 'roamingTime'])
         with open(trip_normal_fpath, 'rb') as tripFileN:
             tripReaderN = csv.reader(tripFileN)
             tripHeaderN = tripReaderN.next()
@@ -103,9 +102,9 @@ def process_month(yymm):
                             logger.info('Processing %s %dth day' % (yymm, cur_dtT.day))
                         if cur_dtT.weekday() in [FRI, SAT, SUN]:
                             continue
-                        if cur_dtT.hour < AM10:
+                        if cur_dtT.hour < PM2:
                             continue
-                        if PM8 <= cur_dtT.hour:
+                        if PM11 < cur_dtT.hour:
                             continue
                         while True:
                             rowL = logReader.next()
@@ -117,9 +116,9 @@ def process_month(yymm):
                             cur_dtL = datetime.datetime.fromtimestamp(t)
                             if cur_dtL.weekday() in [FRI, SAT, SUN]:
                                 continue
-                            if cur_dtL.hour < AM10:
+                            if cur_dtL.hour < PM2:
                                 continue
-                            if PM8 <= cur_dtL.hour:
+                            if PM11 < cur_dtL.hour:
                                 continue
                             longitude, latitude = eval(rowL[hidL['longitude']]), eval(rowL[hidL['latitude']])
                             zi, zj = bisect(x_points, longitude) - 1, bisect(y_points, latitude) - 1
@@ -145,9 +144,10 @@ def process_month(yymm):
                             continue
                         if drivers[didT].firstFreeStateTime == -1:
                             continue
-                        queueingTime = tripTime - drivers[didT].zoneEnteredTime
-                        if queueingTime < 0:
+                        spendingTime = tripTime - drivers[didT].zoneEnteredTime
+                        if spendingTime < 0:
                             continue
+                        roamingTime = tripTime - drivers[didT].firstFreeStateTime
                         with open(ss_trips_fpath, 'a') as w_csvfile:
                             writer = csv.writer(w_csvfile, lineterminator='\n')
                             writer.writerow([didT,
@@ -155,7 +155,7 @@ def process_month(yymm):
                                              tripTime, cur_dtT.day, cur_dtT.month,
                                              s_long, s_lat,
                                              rowN[hidN['distance']], rowN[hidN['duration']], rowN[hidN['fare']],
-                                             queueingTime])
+                                             spendingTime, roamingTime])
     except Exception as _:
         import sys
         with open('%s_%s.txt' % (sys.argv[0], yymm), 'w') as f:
