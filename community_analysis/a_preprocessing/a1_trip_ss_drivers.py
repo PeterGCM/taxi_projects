@@ -64,7 +64,7 @@ def process_month(yymm):
         with open(ss_trips_fpath, 'wt') as w_csvfile:
             writer = csv.writer(w_csvfile, lineterminator='\n')
             writer.writerow(['did',
-                             'timeFrame', 'zi', 'zj',
+                             'hour', 'zi', 'zj',
                              'time', 'day', 'month',
                              'start-long', 'start-lat',
                              'distance', 'duration', 'fare',
