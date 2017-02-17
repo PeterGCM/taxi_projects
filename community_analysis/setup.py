@@ -3,7 +3,7 @@ from distutils.extension import Extension
 from Cython.Distutils import build_ext
 
 ext_modules = [
-    Extension("b_group._cy_b3b_XgroupTripsShifts", ["b_group/_cy_b3b_XgroupTripsShifts.pyx"], include_dirs=['.']),
+    Extension("b_group._cy_b3a_groupTripsShifts", ["b_group/_cy_b3a_groupTripsShifts.pyx"], include_dirs=['.']),
     # Extension("a_preprocessing._cy_a3_time_pickUp", ["a_preprocessing/_cy_a3_time_pickUp.pyx"], include_dirs=['.']),
 ]
 
