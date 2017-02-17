@@ -73,3 +73,9 @@ taxi_common/data/.DS_Store
 /community_analysis/b_group/_cy_b1_influenceGraph.pyx
 /community_analysis/b_group/_cy_b1_influenceGraph.c
 /community_analysis/b_group/_cy_b1_influenceGraph.so
+/community_analysis/b_group/_cy_b2_groupPartition.c
+/community_analysis/b_group/_cy_b3b_XgroupTripsShifts.c
+/community_analysis/b_group/_cy_b3a_groupTripsShifts.so
+/community_analysis/b_group/_cy_b3a_groupTripsShifts.c
+/community_analysis/b_group/_cy_b3b_XgroupTripsShifts.so
+/community_analysis/b_group/_cy_b2_groupPartition.so
