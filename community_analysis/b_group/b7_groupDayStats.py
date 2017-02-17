@@ -15,17 +15,18 @@ logger = get_logger()
 
 
 def run():
-    init_multiprocessor(4)
-    count_num_jobs = 0
+    # init_multiprocessor(4)
+    # count_num_jobs = 0
     tm = 'spendingTime'
-    for year in ['2009', '2010', '2011', '2012']:
+    # for year in ['2009', '2010', '2011', '2012']:
+    for year in ['2009']:
         gds_dpath = dpaths[tm, year, 'groupDayStats']
         check_dir_create(gds_dpath)
         #
-        # process_file(tm, year)
-        put_task(process_file, [tm, year])
-        count_num_jobs += 1
-    end_multiprocessor(count_num_jobs)
+        process_file(tm, year)
+    #     put_task(process_file, [tm, year])
+    #     count_num_jobs += 1
+    # end_multiprocessor(count_num_jobs)
 
 
 def process_file(tm, year):

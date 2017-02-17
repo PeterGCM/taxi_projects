@@ -22,18 +22,25 @@ sig_level = 0.10
 def run():
     init_multiprocessor(6)
     count_num_jobs = 0
-    for tm in ['spendingTime', 'roamingTime']:
-        for year in ['2009', '2010', '2011', '2012']:
-            gz_dpath = dpaths[tm, year, 'groupZones']
-            check_dir_create(gz_dpath)
-            #
-            gt_dpath = dpaths[tm, year, 'groupTrips']
-            gt_prefix = prefixs[tm, year, 'groupTrips']
-            for fn in get_all_files(gt_dpath, '%s*' % gt_prefix):
-                gt_fpath = '%s/%s' % (gt_dpath, fn)
-                # process_file(tm, year, gt_fpath)
-                put_task(process_file, [tm, year, gt_fpath])
-                count_num_jobs += 1
+    tm = 'spendingTime'
+    # for tm in ['spendingTime', 'roamingTime']:
+        # for year in ['2009', '2010', '2011', '2012']:
+    for year in ['2009']:
+        gz_dpath = dpaths[tm, year, 'groupZones']
+        check_dir_create(gz_dpath)
+        #
+        gt_dpath = dpaths[tm, year, 'groupTrips']
+        gt_prefix = prefixs[tm, year, 'groupTrips']
+        for fn in get_all_files(gt_dpath, '%s*' % gt_prefix):
+            if len(fn[:-len('.csv')].split('-')) != 4:
+                continue
+            _, _, _, gn = fn[:-len('.csv')].split('-')
+            if gn == 'X':
+                continue
+            gt_fpath = '%s/%s' % (gt_dpath, fn)
+            # process_file(tm, year, gt_fpath)
+            put_task(process_file, [tm, year, gt_fpath])
+            count_num_jobs += 1
     end_multiprocessor(count_num_jobs)
 
 

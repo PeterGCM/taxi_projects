@@ -7,7 +7,7 @@ import __init__
 from community_analysis import ss_trips_dpath, ss_trips_prefix
 from community_analysis import prevDriversDefined_dpath, prevDriversDefined_prefix
 from community_analysis import driversRelations_fpaths
-from community_analysis import THRESHOLD_VALUE
+from community_analysis import HISTORY_LOOKUP_LENGTH
 #
 from taxi_common._classes import zone, driver
 from taxi_common.sg_grid_zone import get_sg_zones
@@ -119,7 +119,7 @@ class ca_zone(zone):
         self.logQ.append([t, d])
 
     def update_logQ(self, t):
-        while self.logQ and self.logQ[0] < t - THRESHOLD_VALUE:
+        while self.logQ and self.logQ[0] < t - HISTORY_LOOKUP_LENGTH:
             self.logQ.pop(0)
 
     def init_logQ(self):

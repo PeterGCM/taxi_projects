@@ -14,11 +14,13 @@ import pandas as pd
 
 logger = get_logger()
 
+
 def run():
     init_multiprocessor(6)
     count_num_jobs = 0
     tm = 'spendingTime'
-    for year in ['2009', '2010', '2011', '2012']:
+    # for year in ['2009', '2010', '2011', '2012']:
+    for year in ['2009']:
         gds_dpath = dpaths[tm, year, 'groupDriverStats']
         check_dir_create(gds_dpath)
         #

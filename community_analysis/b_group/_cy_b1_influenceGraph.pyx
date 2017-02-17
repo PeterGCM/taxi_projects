@@ -18,15 +18,16 @@ from traceback import format_exc
 logger = get_logger()
 
 
-def run():
+def run(processorNum):
     ir = 'influenceGraph'
     #
     tm = 'spendingTime'
-    for year in ['2009', '2010', '2011', '2012']:
-        check_dir_create(dpaths[tm, year, ir])
+    year = '2009'
+    check_dir_create(dpaths[tm, year, ir])
     #
-    yyyy = '20%02d' % 12
-    for tfZ_TP_fn in get_all_files(tfZ_TP_dpath, '%s%s*.csv' % (tfZ_TP_prefix, yyyy)):
+    for i, tfZ_TP_fn in enumerate(get_all_files(tfZ_TP_dpath, '%s%s*.csv' % (tfZ_TP_prefix, year))):
+        if i % 3 != processorNum:
+            continue
         tfZ_TP_fpath = '%s/%s' % (tfZ_TP_dpath, tfZ_TP_fn)
         process_file(tfZ_TP_fpath)
 
@@ -52,7 +53,7 @@ def process_file(fpath):
             did1_df = df[(df['did'] == did1)].copy(deep=True)
             numObservations = len(did1_df)
             minDFResiduals = numObservations * MIN_RATIO_RESIDUAL
-            did1_df = did1_df.drop(['month', 'day', 'timeFrame', 'zi', 'zj', 'tfZ', 'did', 'roamingTime'], axis=1)
+            did1_df = did1_df.drop(['month', 'day', 'timeFrame', 'zi', 'zj', 'tfZ', 'did'], axis=1)
             if '%d' % did1 in did1_df.columns:
                 did1_df = did1_df.drop(['%d' % did1], axis=1)
             #
@@ -92,7 +93,7 @@ def process_file(fpath):
                 if cof > 0:
                     positive_ef_drivers.add(_did0)
             for _did0 in significant_drivers.difference(positive_ef_drivers):
-                SP_graph[int(_did0), did1] = SP_res.params[_did0]
+                SP_graph[int(_did0), did1] = (SP_res.f_pvalue, SP_res.pvalues[_did0], SP_res.params[_did0])
         #
         logger.info('Start pickling; %s-%s' % (year, reducerID))
         save_pickle_file(SP_graph_fpath, SP_graph)

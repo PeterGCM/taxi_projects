@@ -24,7 +24,7 @@ logger = get_logger()
 
 def run(yymm):
     check_dir_create(prevDriversDefined_dpath)
-    process_month(yymm)
+    # process_month(yymm)
     #
     # init_multiprocessor(11)
     # count_num_jobs = 0
@@ -37,8 +37,8 @@ def run(yymm):
     #         put_task(process_month, [yymm])
     #         count_num_jobs += 1
     # end_multiprocessor(count_num_jobs)
-    # filtering('2012')
-    # find_driversRelations('2012')
+    filtering('2009')
+    find_driversRelations('2009')
 
 
 def find_driversRelations(year):

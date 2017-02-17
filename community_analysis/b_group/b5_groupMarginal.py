@@ -21,7 +21,8 @@ def run():
     init_multiprocessor(6)
     count_num_jobs = 0
     for tm in ['spendingTime']:
-        for year in ['2009', '2010', '2011', '2012']:
+        # for year in ['2009', '2010', '2011', '2012']:
+        for year in ['2009']:
             gm_dpath = dpaths[tm, year, 'groupMarginal']
             check_dir_create(gm_dpath)
             #

@@ -3,7 +3,7 @@ import community_analysis.a_detection
 from taxi_common._classes import zone
 from taxi_common._classes import driver
 #
-from community_analysis import THRESHOLD_VALUE, BY_COM_O, BY_COM_X
+from community_analysis import HISTORY_LOOKUP_LENGTH, BY_COM_O, BY_COM_X
 
 
 class ca_zone(zone):
@@ -15,7 +15,7 @@ class ca_zone(zone):
         self.logQ.append([t, d])
 
     def update_logQ(self, t):
-        while self.logQ and self.logQ[0] < t - THRESHOLD_VALUE:
+        while self.logQ and self.logQ[0] < t - HISTORY_LOOKUP_LENGTH:
             self.logQ.pop(0)
 
     def init_logQ(self):
