@@ -25,6 +25,8 @@ def run():
     gt_dpath = dpaths[tm, year, 'groupTrips']
     gt_prefix = prefixs[tm, year, 'groupTrips']
     check_dir_create(gt_dpath)
+    gs_dpath = dpaths[tm, year, 'groupShifts']
+    check_dir_create(gs_dpath)
     #
     gp_dpath = dpaths[tm, year, 'groupPartition']
     gp_prefix = prefixs[tm, year, 'groupPartition']
