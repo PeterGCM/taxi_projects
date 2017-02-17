@@ -50,6 +50,12 @@ def process_file(tm, year, gn, groupDrivers):
     gs_dpath = dpaths[tm, year, 'groupShifts']
     gs_prefix = prefixs[tm, year, 'groupShifts']
     gs_fpath = '%s/%s%s.csv' % (gs_dpath, gs_prefix, gn)
+    with open(gs_fpath, 'wb') as w_csvfile:
+        writer = csv.writer(w_csvfile, lineterminator='\n')
+        new_headers = ['year', 'month', 'day', 'hour', 'did', 'pro-dur']
+        writer.writerow(new_headers)
+
+
     # xgt_fpath = '%s/%s%s.csv' % (gt_dpath, gt_prefix, 'X')
     # assert xgt_fpath == gt_fpath, (gt_fpath)
     # with open(xgt_fpath, 'wt') as w_csvfile:

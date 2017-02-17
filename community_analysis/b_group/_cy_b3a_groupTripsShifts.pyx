@@ -69,10 +69,10 @@ def process_file(tm, year, gn, groupDrivers):
     #               'zi', 'zj', 'zizj',
     #               'time', 'year', 'month', 'day', 'hour']
     #     writer.writerow(header)
-    # with open(gs_fpath, 'wb') as w_csvfile:
-    #     writer = csv.writer(w_csvfile, lineterminator='\n')
-    #     new_headers = ['year', 'month', 'day', 'hour', 'did', 'pro-dur']
-    #     writer.writerow(new_headers)
+    with open(gs_fpath, 'wb') as w_csvfile:
+        writer = csv.writer(w_csvfile, lineterminator='\n')
+        new_headers = ['year', 'month', 'day', 'hour', 'did', 'pro-dur']
+        writer.writerow(new_headers)
     # yy = year[2:]
     # for fn in get_all_files(prevDriversDefined_dpath, 'Filtered-%s%s*' % (prevDriversDefined_prefix, yy)):
     #     fpath = '%s/%s' % (prevDriversDefined_dpath, fn)
