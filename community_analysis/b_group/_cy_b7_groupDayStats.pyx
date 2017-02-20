@@ -6,7 +6,6 @@ from community_analysis import dpaths, prefixs
 #
 from taxi_common.file_handling_functions import check_dir_create, get_all_files
 from taxi_common.log_handling_functions import get_logger
-from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
 import csv
 import pandas as pd
@@ -15,8 +14,6 @@ logger = get_logger()
 
 
 def run():
-    # init_multiprocessor(4)
-    # count_num_jobs = 0
     tm = 'spendingTime'
     # for year in ['2009', '2010', '2011', '2012']:
     for year in ['2009']:
@@ -24,9 +21,6 @@ def run():
         check_dir_create(gds_dpath)
         #
         process_file(tm, year)
-    #     put_task(process_file, [tm, year])
-    #     count_num_jobs += 1
-    # end_multiprocessor(count_num_jobs)
 
 
 def process_file(tm, year):
@@ -37,7 +31,8 @@ def process_file(tm, year):
     with open(gds_fpath, 'wt') as w_csvfile:
         writer = csv.writer(w_csvfile, lineterminator='\n')
         header = ['groupName', 'numDrivers',
-                  'numTrips', 'proDur','fare', 'fare/Trip', 'distance/Trip', 'duration/Trip', 'spendingTime', 'spendingTime/Trip']
+                  'numTrips', 'proDur', 'fare', 'fare/Trip', 'distance/Trip', 'duration/Trip', 'spendingTime',
+                  'spendingTime/Trip']
         writer.writerow(header)
     gt_dpath = dpaths[tm, year, 'groupTrips']
     gt_prefix = prefixs[tm, year, 'groupTrips']
@@ -66,7 +61,7 @@ def process_file(tm, year):
         with open(gds_fpath, 'a') as w_csvfile:
             writer = csv.writer(w_csvfile, lineterminator='\n')
             new_row = [gn, numDrivers,
-                      numTrips, proDur, fare, fare_trip, distance_trip, duration_trip, spendingTime, spendingTime_trip]
+                       numTrips, proDur, fare, fare_trip, distance_trip, duration_trip, spendingTime, spendingTime_trip]
             writer.writerow(new_row)
 
 
