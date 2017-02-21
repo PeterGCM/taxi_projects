@@ -15,17 +15,11 @@ logger = get_logger()
 
 
 def run():
-    tm = 'spendingTime'
-    # for year in ['2009', '2010', '2011', '2012']:
-    for year in ['2009']:
-        gds_dpath = dpaths[tm, year, 'groupDayStats']
-        check_dir_create(gds_dpath)
-        #
-        process_file(tm, year)
-    #     put_task(process_file, [tm, year])
-    #     count_num_jobs += 1
-    # end_multiprocessor(count_num_jobs)
-
+    tm, year = 'baseline', '2009'
+    gds_dpath = dpaths[tm, year, 'groupDayStats']
+    check_dir_create(gds_dpath)
+    #
+    process_file(tm, year)
 
 def process_file(tm, year):
     logger.info('handle the file; %s-%s' % (tm, year))
@@ -35,15 +29,13 @@ def process_file(tm, year):
     with open(gds_fpath, 'wt') as w_csvfile:
         writer = csv.writer(w_csvfile, lineterminator='\n')
         header = ['groupName', 'numDrivers',
-                  'numTrips', 'proDur','fare', 'fare/Trip', 'distance/Trip', 'duration/Trip', 'spendingTime', 'spendingTime/Trip',
-                  'priorOnumTrips', 'priorO_ST', 'priorO_ST/Trip',
-                  'priorXnumTrips', 'priorX_ST', 'priorX_ST/Trip']
+                  'numTrips', 'proDur','fare', 'fare/Trip', 'distance/Trip', 'duration/Trip', 'spendingTime', 'spendingTime/Trip']
         writer.writerow(header)
     gt_dpath = dpaths[tm, year, 'groupTrips']
     gt_prefix = prefixs[tm, year, 'groupTrips']
     gs_dpath = dpaths[tm, year, 'groupShifts']
     gs_prefix = prefixs[tm, year, 'groupShifts']
-
+    #
     for fn in get_all_files(gt_dpath, '%s*.csv' % gt_prefix):
         if len(fn[:-len('.csv')].split('-')) != 4:
             continue
@@ -63,24 +55,10 @@ def process_file(tm, year):
         fare_trip = fare / float(numTrips)
         spendingTime = gt_df.groupby(['year', 'month', 'day', 'did']).sum().reset_index()['spendingTime'].mean()
         spendingTime_trip = spendingTime / float(numTrips)
-        #
-        priorO_gt_df = gt_df[(gt_df['priorPresence'] == 1)]
-        priorOnumTrips = priorO_gt_df.groupby(['year', 'month', 'day', 'did']).count().reset_index()['groupName'].mean()
-        priorO_ST = priorO_gt_df.groupby(['year', 'month', 'day', 'did']).sum().reset_index()['spendingTime'].mean()
-        priorO_ST_trip = priorO_ST / float(priorOnumTrips)
-        #
-        priorX_gt_df = gt_df[(gt_df['priorPresence'] == 0)]
-        priorXnumTrips = priorX_gt_df.groupby(['year', 'month', 'day', 'did']).count().reset_index()['groupName'].mean()
-        priorX_ST = priorX_gt_df.groupby(['year', 'month', 'day', 'did']).sum().reset_index()['spendingTime'].mean()
-        priorX_ST_trip = priorX_ST / float(priorXnumTrips)
-
-
         with open(gds_fpath, 'a') as w_csvfile:
             writer = csv.writer(w_csvfile, lineterminator='\n')
             new_row = [gn, numDrivers,
-                      numTrips, proDur, fare, fare_trip, distance_trip, duration_trip, spendingTime, spendingTime_trip,
-                       priorOnumTrips, priorO_ST, priorO_ST_trip,
-                       priorXnumTrips, priorX_ST, priorX_ST_trip]
+                      numTrips, proDur, fare, fare_trip, distance_trip, duration_trip, spendingTime, spendingTime_trip]
             writer.writerow(new_row)
 
 

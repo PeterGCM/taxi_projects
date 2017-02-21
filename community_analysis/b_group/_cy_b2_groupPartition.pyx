@@ -12,6 +12,7 @@ from taxi_common.multiprocess import init_multiprocessor, put_task, end_multipro
 #
 import csv
 import louvain
+import numpy as np
 import igraph as ig
 
 logger = get_logger()
@@ -38,7 +39,11 @@ def process_file(tm, year):
     #
     with open(gp_summary_fpath, 'wt') as w_csvfile:
         writer = csv.writer(w_csvfile, lineterminator='\n')
-        writer.writerow(['groupName', 'numDrivers', 'numRelations', 'graphComplexity', 'tieStrength', 'contribution', 'benCon'])
+        writer.writerow(
+            ['groupName',
+             'numDrivers', 'numRelations', 'graphComplexity',
+             'weightMedian', 'weightMean', 'weightStd',
+             'tieStrength', 'contribution', 'benCon'])
     #
     logger.info('Start handling SP_group_dpath')
     orignal_graph = {}
@@ -73,22 +78,34 @@ def process_file(tm, year):
         group_fpath = '%s/%s%s.pkl' % (gp_dpath, gp_prefix, gn)
         sg.write_pickle(group_fpath)
         #
-        drivers = [v['name'] for v in sg.vs]
+        nodes = [v['name'] for v in sg.vs]
         weights = [e['weight'] for e in sg.es]
-        graphComplexity = len(weights) / float(len(drivers))
-        tie_strength = sum(weights) / float(len(drivers))
-        contribution = sum(weights) / float(len(weights))
-        benCon = tie_strength / float(len(drivers))
+        numDrivers = len(nodes)
+        numRelations = len(weights)
+        graphComplexity = numRelations / float(numDrivers)
+        weights_np = np.asarray(weights)
+        weightMedian = np.median(weights_np)
+        weightMean = np.mean(weights_np)
+        weightStd = np.std(weights_np)
+        tieStrength = weights_np.sum() / float(numDrivers)
+        contribution = weights_np.sum() / float(numRelations)
+        benCon = tieStrength / float(numDrivers)
         with open(gp_summary_fpath, 'a') as w_csvfile:
             writer = csv.writer(w_csvfile, lineterminator='\n')
-            writer.writerow([gn, len(drivers), len(weights), graphComplexity, tie_strength, contribution, benCon])
+            new_row = [
+                gn,
+                numDrivers, numRelations, graphComplexity,
+                weightMedian, weightMean, weightStd,
+                tieStrength, contribution, benCon
+            ]
+            writer.writerow(new_row)
         gl_img_fpath = '%s/%simg-%s.pdf' % (gp_dpath, gp_prefix, gn)
         layout = sg.layout("kk")
-        if len(drivers) < 100:
-            ig.plot(sg, gl_img_fpath, layout=layout, vertex_label=drivers)
+        if len(nodes) < 100:
+            ig.plot(sg, gl_img_fpath, layout=layout, vertex_label=nodes, vertex_color='white')
         else:
-            ig.plot(sg, gl_img_fpath, layout=layout)
-        gn_drivers[gn] = drivers
+            ig.plot(sg, gl_img_fpath, layout=layout, vertex_color='white')
+        gn_drivers[gn] = nodes
         gc_fpath = '%s/%scoef-%s.csv' % (gp_dpath, gp_prefix, gn)
         with open(gc_fpath, 'wt') as w_csvfile:
             writer = csv.writer(w_csvfile, lineterminator='\n')

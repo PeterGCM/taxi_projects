@@ -55,7 +55,7 @@ def run():
         originalFiltered_graph = {}
         #
         weights_np = np.asarray(weights)
-        th = 95
+        th = 99
         thValue = np.percentile(weights_np, th)
         logger.info('------------------------------------------')
         logger.info('# of edges: %d' % len(weights))
@@ -118,9 +118,9 @@ def run():
         gl_img_fpath = '%s/%simg-%s.pdf' % (gp_dpath, gp_prefix, gn)
         layout = sg.layout("kk")
         if len(drivers) < 100:
-            ig.plot(sg, gl_img_fpath, layout=layout, vertex_label=drivers)
+            ig.plot(sg, gl_img_fpath, layout=layout, vertex_label=drivers, vertex_color='white')
         else:
-            ig.plot(sg, gl_img_fpath, layout=layout)
+            ig.plot(sg, gl_img_fpath, layout=layout, vertex_color='white')
         gn_drivers[gn] = drivers
         # gc_fpath = '%s/%scoef-%s.csv' % (gp_dpath, gp_prefix, gn)
         # with open(gc_fpath, 'wt') as w_csvfile:

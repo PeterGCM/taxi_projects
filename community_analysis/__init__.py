@@ -26,6 +26,8 @@ MIN_RATIO_RESIDUAL = 0.2
 years = ['20%02d' % y for y in range(9, 13)]
 #
 ss_trips_dpath, ss_trips_prefix = '%s/%s' % (taxi_data, 'trips_ss_drivers'), 'trips-ss-drivers-'
+shiftProDur_dpath, shiftProDur_prefix = '%s/%s' % (taxi_data, 'shiftProDur'), 'shiftProDur-'
+
 prevDriversDefined_dpath, prevDriversDefined_prefix =  '%s/%s' % (taxi_data, 'prevDriversDefined'), 'prevDriversDefined-'
 tfZ_TP_dpath, tfZ_TP_prefix = '%s/%s' % (taxi_data, 'tfZ_TP'), 'tfZ_TP-'
 driversRelations_fpaths = {year: '%s/driversRelations%s.pkl' % (prevDriversDefined_dpath, year) for year in years}

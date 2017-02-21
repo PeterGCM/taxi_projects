@@ -5,7 +5,6 @@ import __init__
 '''
 #
 from community_analysis import FRI, SAT, SUN
-# from community_analysis import PM2, PM11
 from community_analysis import AM10, PM8
 from community_analysis import taxi_home
 from community_analysis import ss_trips_dpath, ss_trips_prefix
