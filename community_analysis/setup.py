@@ -3,8 +3,8 @@ from distutils.extension import Extension
 from Cython.Distutils import build_ext
 
 ext_modules = [
-    Extension("b_group._cy_b7_groupDayStats", ["b_group/_cy_b7_groupDayStats.pyx"], include_dirs=['.']),
-    # Extension("a_preprocessing._cy_a3_time_pickUp", ["a_preprocessing/_cy_a3_time_pickUp.pyx"], include_dirs=['.']),
+    Extension("a_TrajectoryAnalytics.a1_trip_ss_drivers",
+              ["a_TrajectoryAnalytics/a1_trip_ss_drivers.pyx"], include_dirs=['.']),
 ]
 
 setup(

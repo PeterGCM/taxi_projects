@@ -7,13 +7,12 @@ import __init__
 from community_analysis import ss_trips_dpath, ss_trips_prefix
 from community_analysis import prevDriversDefined_dpath, prevDriversDefined_prefix
 from community_analysis import driversRelations_fpaths
-from community_analysis import HISTORY_LOOKUP_LENGTH
+from community_analysis import HISTORY_LOOKUP_LENGTH, MINUTES40
 #
 from taxi_common._classes import zone, driver
 from taxi_common.sg_grid_zone import get_sg_zones
 from taxi_common.file_handling_functions import check_dir_create, check_path_exist, get_all_files, save_pickle_file
 from taxi_common.log_handling_functions import get_logger
-from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
 import csv, datetime
 import pandas as pd
@@ -22,22 +21,11 @@ import numpy as np
 logger = get_logger()
 
 
-def run():
+def run(yymm):
     check_dir_create(prevDriversDefined_dpath)
-    #
-    # init_multiprocessor(11)
-    # count_num_jobs = 0
-    # for y in range(12, 13):
-    #     for m in range(1, 13):
-    #         yymm = '%02d%02d' % (y, m)
-    #         if yymm in ['0912', '1010']:
-    #             continue
-    #         # process_month(yymm)
-    #         put_task(process_month, [yymm])
-    #         count_num_jobs += 1
-    # end_multiprocessor(count_num_jobs)
-    filtering('2012')
-    find_driversRelations('2012')
+    process_month(yymm)
+    # filtering('2012')
+    # find_driversRelations('2012')
 
 
 def find_driversRelations(year):
@@ -83,7 +71,7 @@ def process_month(yymm):
                              'time', 'day', 'month',
                              'start-long', 'start-lat',
                              'distance', 'duration', 'fare',
-                             'spendingTime', 'roamingTime', 'prevDrivers'])
+                             'roamingTime', 'prevDrivers'])
             with open(ss_trips_fpath, 'rb') as r_csvfile:
                 reader = csv.reader(r_csvfile)
                 headers = reader.next()
@@ -152,12 +140,8 @@ def filtering(year):
     yy = year[2:]
     for fn in get_all_files(prevDriversDefined_dpath, '%s%s*' % (prevDriversDefined_prefix, yy)):
         df = pd.read_csv('%s/%s' % (prevDriversDefined_dpath, fn))
-        outlier_set = set()
-        cn1, cn2 = 'spendingTime', 'roamingTime'
-        outlier_set = outlier_set.union(set(np.where(df[cn1] > df[cn2])[0].tolist()))
-        for cn in [cn1, cn2]:
-            outlier_set = outlier_set.union(set(np.where(df[cn] < 0)[0].tolist()))
-            outlier_set = outlier_set.union(set(np.where(df[cn] > df[cn].quantile(0.95))[0].tolist()))
+        cn = 'roamingTime'
+        outlier_set = set(np.where(df[cn] > MINUTES40)[0].tolist())
         df = df.drop(df.index[list(outlier_set)])
         df.to_csv('%s/Filtered-%s' % (prevDriversDefined_dpath, fn), index=False)
 

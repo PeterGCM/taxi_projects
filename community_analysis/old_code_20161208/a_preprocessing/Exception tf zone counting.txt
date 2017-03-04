@@ -1,8 +1,0 @@
-Traceback (most recent call last):
-  File "/Users/JerryHan88/PycharmProjects/taxi_projects/community_analysis/a_preprocessing/a2_tfZ_counting.py", line 52, in process_month
-    check_dir_create(tfZ_counting_wc_dpath)
-  File "/Users/JerryHan88/PycharmProjects/taxi_projects/taxi_common/file_handling_functions.py", line 59, in check_dir_create
-    os.makedirs(path)
-  File "/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/os.py", line 157, in makedirs
-    mkdir(name, mode)
-OSError: [Errno 17] File exists: '/Users/JerryHan88/PycharmProjects/taxi_projects/community_analysis/data/tf_zone_counting/fb'

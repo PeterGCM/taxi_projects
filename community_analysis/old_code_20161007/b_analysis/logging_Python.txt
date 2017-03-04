@@ -1,6 +1,0 @@
-Traceback (most recent call last):
-  File "b1_com_trip.py", line 78, in <module>
-    run()
-  File "b1_com_trip.py", line 31, in run
-    if len(top_five_com) < 5:
-UnboundLocalError: local variable 'top_five_com' referenced before assignment
