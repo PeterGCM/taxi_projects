@@ -78,7 +78,6 @@ taxi_common/data/.DS_Store
 /community_analysis/b_group/_cy_b3a_groupTripsShifts.c
 /community_analysis/b_group/_cy_b3b_XgroupTripsShifts.so
 /community_analysis/b_group/_cy_b2_groupPartition.so
-/community_analysis/a_TrajectoryAnalytics/multiProcessoerRun.sh
 community_analysis/_hour_tripNum.pkl
 community_analysis/b_group/___log_.log
 community_analysis/chart/
