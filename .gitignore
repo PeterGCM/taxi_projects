@@ -50,8 +50,8 @@ taxi_common/data/ss_drivers_by_trip/
 taxi_common/log_handling_functions.pyc
 taxi_common/multiprocess.pyc
 taxi_common/sg_grid_zone.pyc
-/community_analysis/documents/Draft_CommunityAnalysis.manuscript/
-/community_analysis/documents/Outline_CommunityAnalysis.scap
+/community_analysis/z_documents/Draft_CommunityAnalysis.manuscript/
+/community_analysis/z_documents/Outline_CommunityAnalysis.scap
 community_analysis/b_group/__hist_log_.log
 community_analysis/b_group/___log_b2_groupPartition.log
 community_analysis/b_group/___log_b4_groupZones.log
@@ -68,7 +68,7 @@ information_boards/z_notebooks/.ipynb_checkpoints/AllDriversMonthBasedTtest-ap-c
 information_boards/z_notebooks/AllDriversMonthBasedTtest-ap.ipynb
 taxi_common/.DS_Store
 taxi_common/data/.DS_Store
-/community_analysis/documents/paper_ijcal/.texpadtmp/
+/community_analysis/z_documents/paper_ijcal/.texpadtmp/
 /community_analysis/b_group/_cy_b1_influenceGraph.pyx
 /community_analysis/b_group/_cy_b1_influenceGraph.c
 /community_analysis/b_group/_cy_b1_influenceGraph.so
@@ -81,10 +81,10 @@ taxi_common/data/.DS_Store
 community_analysis/_hour_tripNum.pkl
 community_analysis/b_group/___log_.log
 community_analysis/chart/
-community_analysis/documents/.DS_Store
-community_analysis/documents/literature_review_communityAnalysis.xlsx
-community_analysis/documents/paper_ijcal/.DS_Store
-community_analysis/documents/paper_ijcal/figs/.DS_Store
+community_analysis/z_documents/.DS_Store
+community_analysis/z_documents/literature_review_communityAnalysis.xlsx
+community_analysis/z_documents/paper_ijcal/.DS_Store
+community_analysis/z_documents/paper_ijcal/figs/.DS_Store
 community_analysis/z_notebooks/Presentation.slides.html
 information_boards/temp.py
 information_boards/z_notebooks/.ipynb_checkpoints/driverClassification_t_test-checkpoint.ipynb

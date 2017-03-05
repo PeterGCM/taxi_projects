@@ -1,0 +1,280 @@
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2017.1.4)  13 FEB 2017 15:54
+entering extended mode
+ restricted \write18 enabled.
+ file:line:error style messages enabled.
+ %&-line parsing enabled.
+**ijcai17.tex
+(./ijcai17.tex
+LaTeX2e <2016/03/31>
+Babel <3.9r> and hyphenation patterns for 83 language(s) loaded.
+IJCAI-17 Instructions for Authors
+(/usr/local/texlive/2016/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
+(/usr/local/texlive/2016/texmf-dist/tex/latex/base/size10.clo
+File: size10.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
+)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+) (./ijcai17.sty
+Conference Style, version of 6 September 1995 (revised Nov 2010)
+\titlebox=\skip43
+Named Citation Style, version of 30 November 1994
+) (/usr/local/texlive/2016/texmf-dist/tex/latex/psnfss/times.sty
+Package: times 2005/04/12 PSNFSS-v9.2a (SPQR) 
+) (/usr/local/texlive/2016/texmf-dist/tex/latex/graphics/epsfig.sty
+Package: epsfig 1999/02/16 v1.7a (e)psfig emulation (SPQR)
+ (/usr/local/texlive/2016/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 2014/10/28 v1.0g Enhanced LaTeX Graphics (DPC,SPQR)
+ (/usr/local/texlive/2016/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
+\KV@toks@=\toks14
+) (/usr/local/texlive/2016/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2016/05/09 v1.0r Standard LaTeX Graphics (DPC,SPQR)
+ (/usr/local/texlive/2016/texmf-dist/tex/latex/graphics/trig.sty
+Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
+) (/usr/local/texlive/2016/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+File: graphics.cfg 2016/01/02 v1.10 sample graphics configuration
+)
+Package graphics Info: Driver file: pdftex.def on input line 96.
+ (/usr/local/texlive/2016/texmf-dist/tex/latex/pdftex-def/pdftex.def
+File: pdftex.def 2011/05/27 v0.06d Graphics/color for pdfTeX
+ (/usr/local/texlive/2016/texmf-dist/tex/generic/oberdiek/infwarerr.sty
+Package: infwarerr 2016/05/16 v1.4 Providing info/warning/error messages (HO)
+) (/usr/local/texlive/2016/texmf-dist/tex/generic/oberdiek/ltxcmds.sty
+Package: ltxcmds 2016/05/16 v1.23 LaTeX kernel commands for general use (HO)
+)
+\Gread@gobject=\count87
+))
+\Gin@req@height=\dimen103
+\Gin@req@width=\dimen104
+)
+\epsfxsize=\dimen105
+\epsfysize=\dimen106
+) (/usr/local/texlive/2016/texmf-dist/tex/latex/caption/subcaption.sty
+Package: subcaption 2016/02/20 v1.1-142 Sub-captions (AR)
+ (/usr/local/texlive/2016/texmf-dist/tex/latex/caption/caption.sty
+Package: caption 2016/02/21 v3.3-144 Customizing captions (AR)
+ (/usr/local/texlive/2016/texmf-dist/tex/latex/caption/caption3.sty
+Package: caption3 2016/02/04 v1.7-139 caption3 kernel (AR)
+Package caption3 Info: TeX engine: e-TeX on input line 67.
+\captionmargin=\dimen107
+\captionmargin@=\dimen108
+\captionwidth=\dimen109
+\caption@tempdima=\dimen110
+\caption@indent=\dimen111
+\caption@parindent=\dimen112
+\caption@hangindent=\dimen113
+)
+\c@ContinuedFloat=\count88
+)
+\c@subfigure=\count89
+\c@subtable=\count90
+) (/Users/JerryHan88/PycharmProjects/taxi_projects/community_analysis/documents/paper_ijcal/.texpadtmp/ijcai17.aux)
+\openout1 = `ijcai17.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 53.
+LaTeX Font Info:    ... okay on input line 53.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 53.
+LaTeX Font Info:    ... okay on input line 53.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 53.
+LaTeX Font Info:    ... okay on input line 53.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 53.
+LaTeX Font Info:    ... okay on input line 53.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 53.
+LaTeX Font Info:    ... okay on input line 53.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 53.
+LaTeX Font Info:    ... okay on input line 53.
+LaTeX Font Info:    Try loading font information for OT1+ptm on input line 53.
+ (/usr/local/texlive/2016/texmf-dist/tex/latex/psnfss/ot1ptm.fd
+File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
+) (/usr/local/texlive/2016/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count91
+\scratchdimen=\dimen114
+\scratchbox=\box26
+\nofMPsegments=\count92
+\nofMParguments=\count93
+\everyMPshowfont=\toks15
+\MPscratchCnt=\count94
+\MPscratchDim=\dimen115
+\MPnumerator=\count95
+\makeMPintoPDFobject=\count96
+\everyMPtoPDFconversion=\toks16
+) (/usr/local/texlive/2016/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
+Package: pdftexcmds 2016/05/10 v0.21 Utility functions of pdfTeX for LuaTeX (HO)
+ (/usr/local/texlive/2016/texmf-dist/tex/generic/oberdiek/ifluatex.sty
+Package: ifluatex 2016/05/16 v1.4 Provides the ifluatex switch (HO)
+Package ifluatex Info: LuaTeX not detected.
+) (/usr/local/texlive/2016/texmf-dist/tex/generic/oberdiek/ifpdf.sty
+Package: ifpdf 2016/05/14 v3.1 Provides the ifpdf switch
+)
+Package pdftexcmds Info: LuaTeX not detected.
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode found.
+) (/usr/local/texlive/2016/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
+Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
+ (/usr/local/texlive/2016/texmf-dist/tex/latex/oberdiek/grfext.sty
+Package: grfext 2016/05/16 v1.2 Manage graphics extensions (HO)
+ (/usr/local/texlive/2016/texmf-dist/tex/generic/oberdiek/kvdefinekeys.sty
+Package: kvdefinekeys 2016/05/16 v1.4 Define keys (HO)
+)) (/usr/local/texlive/2016/texmf-dist/tex/latex/oberdiek/kvoptions.sty
+Package: kvoptions 2016/05/16 v3.12 Key value format for package options (HO)
+ (/usr/local/texlive/2016/texmf-dist/tex/generic/oberdiek/kvsetkeys.sty
+Package: kvsetkeys 2016/05/16 v1.17 Key value parser (HO)
+ (/usr/local/texlive/2016/texmf-dist/tex/generic/oberdiek/etexcmds.sty
+Package: etexcmds 2016/05/16 v1.6 Avoid name clashes with e-TeX commands (HO)
+Package etexcmds Info: Could not find \expanded.
+(etexcmds)             That can mean that you are not using pdfTeX 1.50 or
+(etexcmds)             that some package has redefined \expanded.
+(etexcmds)             In the latter case, load this package earlier.
+)))
+Package grfext Info: Graphics extension search list:
+(grfext)             [.png,.pdf,.jpg,.mps,.jpeg,.jbig2,.jb2,.PNG,.PDF,.JPG,.JPEG,.JBIG2,.JB2,.eps]
+(grfext)             \AppendGraphicsExtensions on input line 456.
+ (/usr/local/texlive/2016/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
+))
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: End \AtBeginDocument code.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <14.4> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 55.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <12> on input line 55.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 55.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 55.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 55.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 74.
+
+
+LaTeX Warning: Citation `Chen2011' on page 1 undefined on input line 74.
+
+[1{/usr/local/texlive/2016/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
+
+
+
+]
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 81.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 81.
+ <figs/gridSingapore.pdf, id=9, 722.7pt x 432.61626pt>
+File: figs/gridSingapore.pdf Graphic file (type pdf)
+ <use figs/gridSingapore.pdf>
+Package pdftex.def Info: figs/gridSingapore.pdf used on input line 89.
+(pdftex.def)             Requested size: 231.71494pt x 138.70407pt.
+ <figs/locationHeatMap.pdf, id=10, 722.7pt x 435.6275pt>
+File: figs/locationHeatMap.pdf Graphic file (type pdf)
+ <use figs/locationHeatMap.pdf>
+Package pdftex.def Info: figs/locationHeatMap.pdf used on input line 96.
+(pdftex.def)             Requested size: 231.71494pt x 139.66953pt.
+Missing character: There is no â in font ptmr7t!
+Missing character: There is no € in font ptmr7t!
+Missing character: There is no ™ in font ptmr7t!
+ <figs/frameworkOutline.pdf, id=11, 577.23393pt x 652.91628pt>
+File: figs/frameworkOutline.pdf Graphic file (type pdf)
+ <use figs/frameworkOutline.pdf>
+Package pdftex.def Info: figs/frameworkOutline.pdf used on input line 118.
+(pdftex.def)             Requested size: 195.12975pt x 220.71336pt.
+ [2 <./figs/gridSingapore.pdf> <./figs/locationHeatMap.pdf> <./figs/frameworkOutline.pdf>]
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10.95> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 126.
+ <figs/QtimePrevDrivers.pdf, id=186, 1088.065pt x 485.815pt>
+File: figs/QtimePrevDrivers.pdf Graphic file (type pdf)
+ <use figs/QtimePrevDrivers.pdf>
+Package pdftex.def Info: figs/QtimePrevDrivers.pdf used on input line 132.
+(pdftex.def)             Requested size: 243.91125pt x 108.90335pt.
+ [3 <./figs/QtimePrevDrivers.pdf>] <figs/graphConPartition.pdf, id=283, 381.72272pt x 356.02762pt>
+File: figs/graphConPartition.pdf Graphic file (type pdf)
+ <use figs/graphConPartition.pdf>
+Package pdftex.def Info: figs/graphConPartition.pdf used on input line 178.
+(pdftex.def)             Requested size: 219.51863pt x 204.74146pt.
+ <figs/queueTimeDist.pdf, id=284, 507.51482pt x 369.13283pt>
+File: figs/queueTimeDist.pdf Graphic file (type pdf)
+ <use figs/queueTimeDist.pdf>
+Package pdftex.def Info: figs/queueTimeDist.pdf used on input line 216.
+(pdftex.def)             Requested size: 219.51863pt x 159.66464pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+LaTeX Font Info:    Try loading font information for OMS+ptm on input line 249.
+(/usr/local/texlive/2016/texmf-dist/tex/latex/psnfss/omsptm.fd
+File: omsptm.fd 
+)
+LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 249.
+ [4 <./figs/graphConPartition.pdf> <./figs/queueTimeDist.pdf>] <figs/yearContribution.pdf, id=992, 498.57516pt x 369.58766pt>
+File: figs/yearContribution.pdf Graphic file (type pdf)
+ <use figs/yearContribution.pdf>
+Package pdftex.def Info: figs/yearContribution.pdf used on input line 282.
+(pdftex.def)             Requested size: 219.51863pt x 162.72623pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<figs/zoneDiscovery.pdf, id=993, 1166.76196pt x 1101.98701pt>
+File: figs/zoneDiscovery.pdf Graphic file (type pdf)
+ <use figs/zoneDiscovery.pdf>
+Package pdftex.def Info: figs/zoneDiscovery.pdf used on input line 292.
+(pdftex.def)             Requested size: 219.51863pt x 207.32828pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+(/Users/JerryHan88/PycharmProjects/taxi_projects/community_analysis/documents/paper_ijcal/.texpadtmp/ijcai17.bbl
+Missing character: There is no â in font ptmr7t!
+Missing character: There is no € in font ptmr7t!
+Missing character: There is no “ in font ptmr7t!
+
+Underfull \hbox (badness 6493) in paragraph at lines 33--36
+[]\OT1/ptm/m/n/10 Michel Planti[]e and Michel
+ []
+
+
+Underfull \hbox (badness 2409) in paragraph at lines 33--36
+\OT1/ptm/m/n/10 Cram-pes.  \OT1/ptm/m/it/10 Sur-vey on So-cial Com-mu-nity De-tec-tion\OT1/ptm/m/n/10 .
+ []
+
+[5 <./figs/yearContribution.pdf> <./figs/zoneDiscovery.pdf>]
+Underfull \hbox (badness 2088) in paragraph at lines 38--42
+\OT1/ptm/m/n/10 y-sis for min-ing so-cial net-work of com-mu-nity.  In
+ []
+
+
+Underfull \hbox (badness 1057) in paragraph at lines 66--69
+[]\OT1/ptm/m/n/10 Yu Zheng.  Tra-jec-tory data min-ing: An
+ []
+
+) [6
+
+] (/Users/JerryHan88/PycharmProjects/taxi_projects/community_analysis/documents/paper_ijcal/.texpadtmp/ijcai17.aux) ) 
+Here is how much of TeX's memory you used:
+ 2830 strings out of 493014
+ 46228 string characters out of 6133352
+ 116077 words of memory out of 5000000
+ 6338 multiletter control sequences out of 15000+600000
+ 20333 words of font info for 41 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 42i,10n,40p,1298b,418s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/local/texlive/2016/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on /Users/JerryHan88/PycharmProjects/taxi_projects/community_analysis/documents/paper_ijcal/.texpadtmp/ijcai17.pdf (6 pages, 18950253 bytes).
+PDF statistics:
+ 1110 PDF objects out of 1200 (max. 8388607)
+ 727 compressed objects within 8 object streams
+ 0 named destinations out of 1000 (max. 500000)
+ 41 words of extra memory for PDF output out of 10000 (max. 10000000)
+

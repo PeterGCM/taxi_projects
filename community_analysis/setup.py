@@ -3,8 +3,8 @@ from distutils.extension import Extension
 from Cython.Distutils import build_ext
 
 ext_modules = [
-    Extension("b_group._cy_b1_influenceGraph",
-              ["b_group/_cy_b1_influenceGraph.pyx"], include_dirs=['.']),
+    Extension("a_TrajectoryAnalytics.a2_prevDriversDefined",
+              ["a_TrajectoryAnalytics/a2_prevDriversDefined.pyx"], include_dirs=['.']),
 ]
 
 setup(

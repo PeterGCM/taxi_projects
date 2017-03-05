@@ -1,0 +1,70 @@
+\begin{thebibliography}{}
+
+\bibitem[\protect\citeauthoryear{Aral \bgroup \em et al.\egroup
+  }{2009}]{Aral2009}
+Sinan Aral, Lev Muchnik, and Arun Sundararajan.
+\newblock Distinguishing influence-based contagion from homophily-driven
+  diffusion in dynamic networks.
+\newblock In {\em Proceedings of the National Academy of Sciences}, pages
+  21544--21549, December 2009.
+
+\bibitem[\protect\citeauthoryear{Blondel \bgroup \em et al.\egroup
+  }{2008}]{Blondel2008}
+Vincent~D Blondel, Jean-Loup Guillaume, Renaud Lambiotte, and Etienne Lefebvre.
+\newblock Fast unfolding of communities in large networks.
+\newblock {\em Journal of Statistical Mechanics: Theory and Experiment},
+  2008:P10008, 2008.
+
+\bibitem[\protect\citeauthoryear{Expert \bgroup \em et al.\egroup
+  }{2011}]{Expert2011}
+Paul Expert, Tim~S. Evans, Vincent~D. Blondel, and Renaud Lambiotte.
+\newblock Uncovering space-independent communities in spatial networks.
+\newblock In {\em Proceedings of the National Academy of Sciences}, pages
+  7663–--7668, January 2011.
+
+\bibitem[\protect\citeauthoryear{Liu and Wang}{2016}]{Liu2016}
+Siyuan Liu and Shuhui Wang.
+\newblock Trajectory community discovery and recommendation by multi-source
+  diffusion modeling.
+\newblock {\em IEEE Transactions on Knowledge and Data Engineering},
+  PP(99):1--1, 2016.
+
+\bibitem[\protect\citeauthoryear{Planti{\'e} and Crampes}{2013}]{Plantie2013}
+Michel Planti{\'e} and Michel Crampes.
+\newblock {\em Survey on Social Community Detection}.
+\newblock Springer, London, 2013.
+
+\bibitem[\protect\citeauthoryear{Shimizu}{2008}]{Shimizu2008}
+Hiroyuki Shimizu.
+\newblock Implicit relation analysis for mining social network of community.
+\newblock In {\em Proceedings of the IADIS International Conference on
+  WWW/Interne}, Freiburg, Germany, October 2008.
+
+\bibitem[\protect\citeauthoryear{Song \bgroup \em et al.\egroup
+  }{2010}]{Song2010}
+Meesun Song, Wonkyu Lee, and Junghwan Kim.
+\newblock Extraction and visualization of implicit social relations on social
+  networking services.
+\newblock In {\em Proceedings of the Twenty-Fourth AAAI Conference on
+  Artificial Intelligence}, pages 1425--1430, Atlanta, Georgia, 2010. AAAI
+  Press.
+
+\bibitem[\protect\citeauthoryear{Steinhaeuser and
+  Chawla}{2008}]{Steinhaeuser2008}
+Karsten Steinhaeuser and Nitesh~V. Chawla.
+\newblock {\em Community Detection in a Large Real-World Social Network}.
+\newblock Springer, Boston, MA, 2008.
+
+\bibitem[\protect\citeauthoryear{Xiao \bgroup \em et al.\egroup
+  }{2014}]{Xiao2014}
+Xiangye Xiao, Yu~Zheng, Qiong Luo, and Xing Xie.
+\newblock Inferring social ties between users with human location history.
+\newblock {\em Journal of Ambient Intelligence and Humanized Computing},
+  5(1):3--19, 2014.
+
+\bibitem[\protect\citeauthoryear{Zheng}{2015}]{Zheng2015}
+Yu~Zheng.
+\newblock Trajectory data mining: An overview.
+\newblock {\em ACM Trans. Intell. Syst. Technol.}, 6(3):29:1--29:41, May 2015.
+
+\end{thebibliography}
