@@ -115,11 +115,14 @@ def process_file(tm, year, gn, groupDrivers):
                            tm_value, priorPresence]
                 for cn in ['start-long', 'start-lat', 'distance', 'duration', 'fare']:
                     new_row.append(row[hid[cn]])
-                for did0 in groupDrivers:
-                    if did0 in priorComDrivers:
-                        new_row += [1]
-                    else:
-                        new_row += [0]
+                if priorPresence == X_PRESENCE:
+                    new_row += [0 for _ in xrange(len(groupDrivers))]
+                else:
+                    for did0 in groupDrivers:
+                        if did0 in priorComDrivers:
+                            new_row += [1]
+                        else:
+                            new_row += [0]
                 with open(gt_fpath, 'a') as w_csvfile:
                     writer = csv.writer(w_csvfile, lineterminator='\n')
                     writer.writerow(new_row)
