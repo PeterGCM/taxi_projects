@@ -35,7 +35,7 @@ driversRelations_fpaths = {year: '%s/driversRelations%s.pkl' % (prevDriversDefin
 timeMeasures = ['spendingTime', 'roamingTime']
 interResults = ['influenceGraph',
                 'groupPartition', 'groupTrips', 'groupShifts','groupZones', 'groupMarginal',
-                'groupDriverStats','groupDayStats']
+                'groupDriverStats','groupDayStats', 'groupEvolution']
 dpaths, prefixs = {}, {}
 for tm in timeMeasures:
     for year in years:

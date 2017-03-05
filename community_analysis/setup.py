@@ -3,8 +3,8 @@ from distutils.extension import Extension
 from Cython.Distutils import build_ext
 
 ext_modules = [
-    Extension("a_TrajectoryAnalytics.a2_prevDriversDefined",
-              ["a_TrajectoryAnalytics/a2_prevDriversDefined.pyx"], include_dirs=['.']),
+    Extension("f_Evolution.f1_communityTrips",
+              ["f_Evolution/f1_communityTrips.pyx"], include_dirs=['.']),
 ]
 
 setup(

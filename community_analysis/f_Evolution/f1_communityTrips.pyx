@@ -48,7 +48,7 @@ def run(processorID):
 
 def process_file(tm, year, gn, groupDrivers):
     logger.info('handle the file; %s-%s-%s' % (tm, year, gn))
-    year = '2010'
+    year = '2011'
     gt_dpath = dpaths[tm, year, 'groupTrips']
     check_dir_create(gt_dpath)
     gt_prefix = prefixs[tm, year, 'groupTrips']
