@@ -48,7 +48,9 @@ def run(processorID):
 
 def process_file(tm, year, gn, groupDrivers):
     logger.info('handle the file; %s-%s-%s' % (tm, year, gn))
+    year = '2010'
     gt_dpath = dpaths[tm, year, 'groupTrips']
+    check_dir_create(gt_dpath)
     gt_prefix = prefixs[tm, year, 'groupTrips']
     gt_fpath = '%s/%s%s.csv' % (gt_dpath, gt_prefix, gn)
     #
