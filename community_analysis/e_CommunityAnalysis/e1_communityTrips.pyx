@@ -57,6 +57,7 @@ def process_file(tm, year, gn, groupDrivers):
     # gs_dpath = dpaths[tm, year, 'groupShifts']
     # gs_prefix = prefixs[tm, year, 'groupShifts']
     # gs_fpath = '%s/%s%s.csv' % (gs_dpath, gs_prefix, gn)
+    tm = 'roamingTime'
     with open(gt_fpath, 'wt') as w_csvfile:
         writer = csv.writer(w_csvfile, lineterminator='\n')
         header = ['time', 'year', 'month', 'day', 'hour',
