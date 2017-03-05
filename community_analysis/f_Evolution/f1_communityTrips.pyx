@@ -1,4 +1,4 @@
-import community_analysis.e_CommunityAnalysis
+import __init__
 #
 '''
 
