@@ -40,12 +40,14 @@ def process_file(fpath):
         st_graph_dpath = dpaths[tm, year, 'influenceGraph']
         st_graph_prefix = prefixs[tm, year, 'influenceGraph']
         SP_graph_fpath = '%s/%s%s.pkl' % (st_graph_dpath, st_graph_prefix, reducerID)
+        count_fpath = '%s/%scount-%s.pkl' % (st_graph_dpath, st_graph_prefix, reducerID)
         if check_path_exist(SP_graph_fpath):
             return None
         #
         logger.info('Start loading; %s-%s' % (year, reducerID))
         df = pd.read_csv(fpath)
-        SP_graph, RP_graph = {}, {}
+        SP_graph = {}
+        SPALL_graph = {k: 0 for k in ['sigPos', 'sigNeg', 'XsigPos', 'XsigNeg']}
         num_drivers = len(set(df['did']))
         for i, did1 in enumerate(set(df['did'])):
             if i % 10 == 0:
@@ -79,24 +81,25 @@ def process_file(fpath):
             X = did1_df[candi_dummies]
             X = sm.add_constant(X)
             SP_res = sm.OLS(y, X, missing='drop').fit()
-            # if SP_res.f_pvalue < SIGINIFICANCE_LEVEL:
-            significant_drivers = set()
             for _did0, pv in SP_res.pvalues.iteritems():
                 if _did0 == 'const':
                     continue
+                coef = SP_res.params[_did0]
                 if pv < SIGINIFICANCE_LEVEL:
-                    significant_drivers.add(_did0)
-            positive_ef_drivers = set()
-            for _did0, cof in SP_res.params.iteritems():
-                if _did0 == 'const':
-                    continue
-                if cof > 0:
-                    positive_ef_drivers.add(_did0)
-            for _did0 in significant_drivers.difference(positive_ef_drivers):
-                SP_graph[int(_did0), did1] = (SP_res.f_pvalue, SP_res.pvalues[_did0], SP_res.params[_did0])
+                    if coef < 0:
+                        SPALL_graph['sigNeg'] += 1
+                        SP_graph[int(_did0), did1] = (SP_res.f_pvalue, pv, coef)
+                    elif coef > 0:
+                        SPALL_graph['sigPos'] += 1
+                else:
+                    if coef < 0:
+                        SPALL_graph['XsigNeg'] += 1
+                    elif coef > 0:
+                        SPALL_graph['XsigPos'] += 1
         #
         logger.info('Start pickling; %s-%s' % (year, reducerID))
         save_pickle_file(SP_graph_fpath, SP_graph)
+        save_pickle_file(count_fpath, SPALL_graph)
     except Exception as _:
         import sys
         with open('%s_%s.txt' % (sys.argv[0], '%s-%s' % (year, reducerID)), 'w') as f:
