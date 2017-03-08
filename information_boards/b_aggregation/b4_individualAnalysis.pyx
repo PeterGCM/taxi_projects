@@ -9,7 +9,7 @@ from information_boards import dpaths, prefixs
 from information_boards import statisticsAllDriversDay_ap_prefix
 from information_boards import SEC60
 #
-from taxi_common.file_handling_functions import check_dir_create, save_pickle_file, load_pickle_file
+from taxi_common.file_handling_functions import check_dir_create, get_all_files
 from taxi_common.log_handling_functions import get_logger
 #
 import pandas as pd
@@ -33,7 +33,8 @@ header_base = ['driverID', 'numObs', 'dfResidual',
 
 
 def run():
-    locIn_Reg()
+    #
+    # locIn_Reg()
     # locIn_F_W_Reg()
     # locIn_F_H_Reg()
     # locIn_F_M_Reg()
@@ -41,6 +42,27 @@ def run():
     # locIn_F_WM_Reg()
     # locIn_F_HM_Reg()
     # locIn_F_WHM_Reg()
+    #
+    filtering()
+
+
+def filtering():
+    for fn in get_all_files(of_dpath, '%s*' % of_prefix):
+        fpath = '%s/%s' % (of_dpath, fn)
+        new_fpath = '%s/F%s' % (of_dpath, fn)
+        with open(fpath, 'rb') as r_csvfile:
+            reader = csv.reader(r_csvfile)
+            header = reader.next()
+            hid = {h : i for i, h in enumerate(header)}
+            with open(new_fpath, 'wt') as w_csvfile:
+                writer = csv.writer(w_csvfile, lineterminator='\n')
+                writer.writerow(header)
+                for row in reader:
+                    for cn in header_base:
+                        if row[hid[cn]] == 'X':
+                            break
+                    else:
+                        writer.writerow(row)
 
 
 def locIn_F_WHM_Reg():
