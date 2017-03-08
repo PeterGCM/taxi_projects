@@ -49,16 +49,20 @@ def run():
 def filtering():
     for fn in get_all_files(of_dpath, '%s*' % of_prefix):
         fpath = '%s/%s' % (of_dpath, fn)
-        new_fpath = '%s/F%s' % (of_dpath, fn)
+        new_fpath = '%s/F-%s' % (of_dpath, fn)
         with open(fpath, 'rb') as r_csvfile:
             reader = csv.reader(r_csvfile)
             header = reader.next()
-            hid = {h : i for i, h in enumerate(header)}
+            hid = {h: i for i, h in enumerate(header)}
+            print header
+            print hid
             with open(new_fpath, 'wt') as w_csvfile:
                 writer = csv.writer(w_csvfile, lineterminator='\n')
                 writer.writerow(header)
                 for row in reader:
+                    print row
                     for cn in header_base:
+                        print '\t', cn, hid[cn]
                         if row[hid[cn]] == 'X':
                             break
                     else:
@@ -138,6 +142,8 @@ def locIn_F_WHM_Reg():
                             new_row += [res.params[month_str], res.pvalues[month_str]]
                     else:
                         new_row += ['X', 'X']
+            if len(new_row) != len(header):
+                continue
             writer.writerow(new_row)
 
 
@@ -212,6 +218,8 @@ def locIn_F_HM_Reg():
                             new_row += [res.params[month_str], res.pvalues[month_str]]
                     else:
                         new_row += ['X', 'X']
+            if len(new_row) != len(header):
+                continue
             writer.writerow(new_row)
 
 
@@ -269,8 +277,9 @@ def locIn_F_WM_Reg():
                             new_row += [res.params[month_str], res.pvalues[month_str]]
                     else:
                         new_row += ['X', 'X']
+            if len(new_row) != len(header):
+                continue
             writer.writerow(new_row)
-
 
 
 def locIn_F_WH_Reg():
@@ -327,6 +336,8 @@ def locIn_F_WH_Reg():
                             new_row += [res.params[hour_str], res.pvalues[hour_str]]
                     else:
                         new_row += ['X', 'X']
+            if len(new_row) != len(header):
+                continue
             writer.writerow(new_row)
 
 
@@ -382,6 +393,8 @@ def locIn_F_M_Reg():
                             new_row += [res.params[month_str], res.pvalues[month_str]]
                     else:
                         new_row += ['X', 'X']
+            if len(new_row) != len(header):
+                continue
             writer.writerow(new_row)
 
 
@@ -437,6 +450,8 @@ def locIn_F_H_Reg():
                             new_row += [res.params[hour_str], res.pvalues[hour_str]]
                     else:
                         new_row += ['X', 'X']
+            if len(new_row) != len(header):
+                continue
             writer.writerow(new_row)
 
 
@@ -475,6 +490,8 @@ def locIn_F_W_Reg():
                 for cn in ['wleProductivity', 'QTime/locTrip', 'EP/locTrip', 'locProductivity']:
                     new_row += yearDF.loc[yearDF['driverID'] == did][cn].tolist()
                 new_row += [res.params['weekEnd'], res.pvalues['weekEnd']]
+            if len(new_row) != len(header):
+                continue
             writer.writerow(new_row)
 
 
@@ -511,6 +528,8 @@ def locIn_Reg():
                 new_row += [res.params['locIn'], res.pvalues['locIn']]
                 for cn in ['wleProductivity', 'QTime/locTrip', 'EP/locTrip', 'locProductivity']:
                     new_row += yearDF.loc[yearDF['driverID'] == did][cn].tolist()
+            if len(new_row) != len(header):
+                continue
             writer.writerow(new_row)
 
 
