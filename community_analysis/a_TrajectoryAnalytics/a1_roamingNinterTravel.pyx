@@ -7,7 +7,7 @@ import __init__
 from community_analysis import FRI, SAT, SUN
 from community_analysis import AM10, PM8
 from community_analysis import taxi_home
-from community_analysis import ss_trips_dpath, ss_trips_prefix
+from community_analysis import dpaths, prefixs
 from community_analysis import FREE
 from community_analysis import MIN20
 #
@@ -21,7 +21,10 @@ from bisect import bisect
 import csv, datetime
 #
 logger = get_logger()
-check_dir_create(ss_trips_dpath)
+
+of_dpath = dpaths['roamingNinterTravel']
+of_prefixs = prefixs['roamingNinterTravel']
+check_dir_create(of_dpath)
 
 
 def run():
@@ -55,18 +58,18 @@ def process_month(yymm):
         ss_drivers = load_pickle_file(ss_drivers_fpath)
         x_points, y_points = get_sg_grid_xy_points()
         #
-        ss_trips_fpath = '%s/%s%s.csv' % (ss_trips_dpath, ss_trips_prefix, yymm)
-        if check_path_exist(ss_trips_fpath):
+        ofpath = '%s/%s%s.csv' % (of_dpath, of_prefixs, yymm)
+        if check_path_exist(ofpath):
             logger.info('The file had already been processed; %s' % yymm)
             return None
-        with open(ss_trips_fpath, 'wt') as w_csvfile:
+        with open(ofpath, 'wt') as w_csvfile:
             writer = csv.writer(w_csvfile, lineterminator='\n')
             writer.writerow(['did',
                              'hour', 'zi', 'zj',
                              'time', 'day', 'month',
                              'start-long', 'start-lat',
                              'distance', 'duration', 'fare',
-                             'roamingTime'])
+                             'roamingTime', 'interTravelTime'])
         with open(trip_normal_fpath, 'rb') as tripFileN:
             tripReaderN = csv.reader(tripFileN)
             tripHeaderN = tripReaderN.next()
@@ -143,17 +146,16 @@ def process_month(yymm):
                             continue
                         if drivers[didT].firstFreeStateTime == -1:
                             continue
-                        queueingTime = tripTime - drivers[didT].zoneEnteredTime
-                        if queueingTime < 0:
-                            continue
-                        with open(ss_trips_fpath, 'a') as w_csvfile:
+                        roamingTime = tripTime - drivers[didT].zoneEnteredTime
+                        interTravelTime = tripTime - drivers[didT].firstFreeStateTime
+                        with open(ofpath, 'a') as w_csvfile:
                             writer = csv.writer(w_csvfile, lineterminator='\n')
                             writer.writerow([didT,
                                              cur_dtT.hour, zi, zj,
                                              tripTime, cur_dtT.day, cur_dtT.month,
                                              s_long, s_lat,
                                              rowN[hidN['distance']], rowN[hidN['duration']], rowN[hidN['fare']],
-                                             queueingTime])
+                                             roamingTime, interTravelTime])
     except Exception as _:
         import sys
         with open('%s_%s.txt' % (sys.argv[0], yymm), 'w') as f:

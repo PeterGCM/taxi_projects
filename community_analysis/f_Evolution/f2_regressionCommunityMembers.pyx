@@ -4,7 +4,6 @@ import __init__
 
 '''
 #
-from community_analysis import tfZ_TP_dpath, tfZ_TP_prefix
 from community_analysis import dpaths, prefixs
 from community_analysis import SIGINIFICANCE_LEVEL, MIN_PICKUP_RATIO, MIN_RATIO_RESIDUAL
 #
@@ -13,6 +12,7 @@ from taxi_common.log_handling_functions import get_logger
 #
 import csv
 import pandas as pd
+import numpy as np
 import statsmodels.api as sm
 from traceback import format_exc
 
@@ -44,7 +44,7 @@ def process_file(fpath):
     _, _, _, gn = fn[:-len('.csv')].split('-')
     try:
         tm = 'spendingTime'
-        year = '2009'
+        year = '2010'
         ge_dpath = dpaths[tm, year, 'groupEvolution']
         ge_prefix = prefixs[tm, year, 'groupEvolution']
         ge_fpath = '%s/%s%s.csv' % (ge_dpath, ge_prefix, gn)
@@ -63,31 +63,61 @@ def process_file(fpath):
             if i % 10 == 0:
                 logger.info('Doing regression %.2f; %s' % (i / float(num_drivers), fn))
             did1_df = df[(df['did'] == did1)].copy(deep=True)
-            did1_df = did1_df.drop(['time','year','month','day','hour',
-                                    'did','groupName','zi','zj','zizj','priorPresence',
+
+            hours = set(did1_df['hour'])
+            dummiesH = []
+            for h in hours:
+                hour_str = 'H%02d' % h
+                did1_df[hour_str] = np.where(did1_df['hour'] == h, 1, 0)
+                dummiesH.append(hour_str)
+            did1_df = did1_df.drop(['hour'], axis=1)
+            ZIZJs = set(did1_df['zizj'])
+            dummiesZIZJ = []
+            for zizj in ZIZJs:
+                did1_df[zizj] = np.where(did1_df['zizj'] == zizj, 1, 0)
+                dummiesZIZJ.append(zizj)
+            did1_df = did1_df.drop(['zizj'], axis=1)
+            did1_df = did1_df.drop(['time','year','month','day',
+                                    'did','groupName','zi','zj',
+                                    'priorPresence',
                                     'start-long','start-lat','distance','duration','fare'], axis=1)
             if '%d' % did1 in did1_df.columns:
                 did1_df = did1_df.drop(['%d' % did1], axis=1)
             #
-            candi_dummies = []
-            for i, vs in enumerate(zip(*did1_df.values)):
-                if did1_df.columns[i] == tm:
+            dummiesD = []
+            for cn in did1_df.columns:
+                if cn == tm:
                     continue
-                candi_dummies.append(did1_df.columns[i])
+                if cn in dummiesH:
+                    continue
+                if cn in dummiesZIZJ:
+                    continue
+                dummiesD.append(cn)
+            #
+            if len(did1_df) < len(dummiesD) + len(dummiesH[:-1]) + len(dummiesZIZJ[:-1]) + 1:
+                continue
             y = did1_df[tm]
-            X = did1_df[candi_dummies]
+            X = did1_df[dummiesD + dummiesH[:-1] + dummiesZIZJ[:-1]]
             X = sm.add_constant(X)
-            SP_res = sm.OLS(y, X, missing='drop').fit()
-            for _did0, pv in SP_res.pvalues.iteritems():
-                if _did0 == 'const':
-                    continue
-                coef = SP_res.params[_did0]
-                with open(ge_fpath, 'a') as w_csvfile:
-                    writer = csv.writer(w_csvfile, lineterminator='\n')
-                    new_row = [gn,
-                              int(_did0), did1,
-                              pv, coef]
-                    writer.writerow(new_row)
+            try:
+                res = sm.OLS(y, X, missing='drop').fit()
+                for _did0, pv in res.pvalues.iteritems():
+                    if _did0 == 'const':
+                        continue
+                    if _did0 in dummiesH:
+                        continue
+                    if _did0 in dummiesZIZJ:
+                        continue
+                    coef = res.params[_did0]
+                    with open(ge_fpath, 'a') as w_csvfile:
+                        writer = csv.writer(w_csvfile, lineterminator='\n')
+                        new_row = [gn,
+                                   int(_did0), did1,
+                                   pv, coef]
+                        writer.writerow(new_row)
+            except np.linalg.linalg.LinAlgError:
+                continue
+
     except Exception as _:
         import sys
         with open('%s_%s.txt' % (sys.argv[0], '%s' % (fn)), 'w') as f:
