@@ -17,8 +17,8 @@ analysis_information_board_around_airport/.settings/org.eclipse.core.resources.p
 /information_boards/b_aggregation/chart_hour_numTrip_QTime_EP.ipynb
 /information_boards/b_aggregation/.ipynb_checkpoints/
 .idea/
-community_analysis/b_group/.ipynb_checkpoints/
-community_analysis/b_group/regression_test.ipynb
+community_analysis/_b_group/.ipynb_checkpoints/
+community_analysis/_b_group/regression_test.ipynb
 community_analysis/data/
 information_boards/b_aggregation/.ipynb_checkpoints/Untitled-checkpoint.ipynb
 information_boards/build/
@@ -39,7 +39,7 @@ community_analysis/c_validation/zone_regression_map.ipynb
 information_boards/z_notebooks/.ipynb_checkpoints/AllDriversMonthBasedTtest-ap-checkpoint.ipynb
 information_boards/z_notebooks/AllDriversMonthBasedTtest-ap.ipynb
 /community_analysis/z_documents/paper_ijcal/.texpadtmp/
-/community_analysis/b_group/_cy_b1_influenceGraph.pyx
+/community_analysis/_b_group/_cy_b1_influenceGraph.pyx
 community_analysis/_hour_tripNum.pkl
 community_analysis/chart/
 community_analysis/z_documents/literature_review_communityAnalysis.xlsx
