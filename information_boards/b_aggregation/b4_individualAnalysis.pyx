@@ -395,14 +395,16 @@ def locIn_F_H_Reg():
             writer.writerow(new_row)
 
 
-def locIn_F_D_Reg():
+def locIn_F_W_Reg():
     tripDF, yearDF = data_load()
     drivers = set(tripDF['driverID'])
     #
-    ofPath = '%s/%s%s-locIn-F(D).csv' % (of_dpath, of_prefix, '2010')
+    ofPath = '%s/%s%s-locIn-F(W).csv' % (of_dpath, of_prefix, '2010')
     with open(ofPath, 'wt') as w_csvfile:
         writer = csv.writer(w_csvfile, lineterminator='\n')
-        header = ['driverID', 'numObs', 'dfResidual', 'locInCoef', 'locInPV',
+        header = ['driverID', 'numObs', 'dfResidual',
+                  'constCoef', 'constPV',
+                  'locInCoef', 'locInPV',
                   'wleProductivity', 'QTime/locTrip', 'EP/locTrip', 'locProductivity']
         header += ['weekEndCoef', 'weekEndPV']
         writer.writerow(header)
@@ -413,7 +415,9 @@ def locIn_F_D_Reg():
             dfResidual = numObs - (len(idvs) + 1)
             new_row = [did, numObs, dfResidual]
             if dfResidual <= 0:
-                for _ in ['locInCoef', 'locInPV', 'wleProductivity', 'QTime/locTrip', 'EP/locTrip', 'locProductivity']:
+                for _ in ['constCoef', 'constPV',
+                          'locInCoef', 'locInPV',
+                          'wleProductivity', 'QTime/locTrip', 'EP/locTrip', 'locProductivity']:
                     new_row += ['X']
                 new_row += ['X', 'X']  # 'weekEndCoef', 'weekEndPV'
             else:
@@ -421,6 +425,8 @@ def locIn_F_D_Reg():
                 X = didTripDF[idvs]
                 X = sm.add_constant(X)
                 res = sm.OLS(y, X, missing='drop').fit()
+                #
+                new_row += [res.params['const'], res.pvalues['const']]
                 new_row += [res.params['locIn'], res.pvalues['locIn']]
                 for cn in ['wleProductivity', 'QTime/locTrip', 'EP/locTrip', 'locProductivity']:
                     new_row += yearDF.loc[yearDF['driverID'] == did][cn].tolist()
@@ -435,7 +441,9 @@ def locIn_Reg():
     ofPath = '%s/%s%s-locIn.csv' % (of_dpath, of_prefix, '2010')
     with open(ofPath, 'wt') as w_csvfile:
         writer = csv.writer(w_csvfile, lineterminator='\n')
-        header = ['driverID', 'numObs', 'dfResidual', 'locInCoef', 'locInPV',
+        header = ['driverID', 'numObs', 'dfResidual',
+                  'constCoef', 'constPV',
+                  'locInCoef', 'locInPV',
                   'wleProductivity', 'QTime/locTrip', 'EP/locTrip', 'locProductivity',
                   ]
         writer.writerow(header)
@@ -446,13 +454,17 @@ def locIn_Reg():
             dfResidual = numObs - (len(idvs) + 1)
             new_row = [did, numObs, dfResidual]
             if dfResidual <= 0:
-                for _ in ['locInCoef', 'locInPV', 'wleProductivity', 'QTime/locTrip', 'EP/locTrip', 'locProductivity']:
+                for _ in ['constCoef', 'constPV',
+                          'locInCoef', 'locInPV',
+                          'wleProductivity', 'QTime/locTrip', 'EP/locTrip', 'locProductivity']:
                     new_row += ['X']
             else:
                 y = didTripDF['locQTime']
                 X = didTripDF[idvs]
                 X = sm.add_constant(X)
                 res = sm.OLS(y, X, missing='drop').fit()
+                #
+                new_row += [res.params['const'], res.pvalues['const']]
                 new_row += [res.params['locIn'], res.pvalues['locIn']]
                 for cn in ['wleProductivity', 'QTime/locTrip', 'EP/locTrip', 'locProductivity']:
                     new_row += yearDF.loc[yearDF['driverID'] == did][cn].tolist()
