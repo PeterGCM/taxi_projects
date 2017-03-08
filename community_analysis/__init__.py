@@ -5,9 +5,15 @@ from taxi_common.__init__ import get_taxi_home_path
 taxi_home = get_taxi_home_path()
 #
 from taxi_common.file_handling_functions import check_dir_create
-taxi_data = os.path.dirname(os.path.realpath(__file__)) + '/data'; check_dir_create(taxi_data)
-chart_dpath = os.path.dirname(os.path.realpath(__file__)) + '/chart'; check_dir_create(chart_dpath)
+taxi_data = os.path.dirname(os.path.realpath(__file__)) + '/data';
+try:
+    check_dir_create(taxi_data)
+except OSError:
+    pass
 shift_dpath, shift_prefix = '/home/sfcheng/toolbox/results', 'shift-hour-state-'
+dpaths, prefixs = {}, {}
+dpaths['roamingNinterTravel'] = '%s/%s' % (taxi_data, 'roamingNinterTravel')
+prefixs['roamingNinterTravel'] = 'roamingNinterTravel-'
 #
 MON, TUE, WED, THR, FRI, SAT, SUN = range(7)
 AM10, PM8 = 10, 20
@@ -22,16 +28,14 @@ SIGINIFICANCE_LEVEL = 0.05
 MIN_PICKUP_RATIO = 0.1
 MIN_RATIO_RESIDUAL = 0.2
 #
-dpaths, prefixs = {}, {}
-dpaths['roamingNinterTravel'] = '%s/%s' % (taxi_data, 'roamingNinterTravel')
-prefixs['roamingNinterTravel'] = 'roamingNinterTravel-'
 
 
 
 
 
 
-years = ['20%02d' % y for y in range(9, 13)]
+# chart_dpath = os.path.dirname(os.path.realpath(__file__)) + '/chart'; check_dir_create(chart_dpath)
+# years = ['20%02d' % y for y in range(9, 13)]
 # ss_trips_dpath, ss_trips_prefix = '%s/%s' % (taxi_data, 'trips_ss_drivers'), 'trips-ss-drivers-'
 # shiftProDur_dpath, shiftProDur_prefix = '%s/%s' % (taxi_data, 'shiftProDur'), 'shiftProDur-'
 #
