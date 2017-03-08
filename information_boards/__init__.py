@@ -6,7 +6,10 @@ taxi_home = get_taxi_home_path()
 #
 from taxi_common.file_handling_functions import check_dir_create
 taxi_data = os.path.dirname(os.path.realpath(__file__)) + '/data'
-check_dir_create(taxi_data)
+try:
+    check_dir_create(taxi_data)
+except OSError:
+    pass
 #
 # Trip mode define
 #
@@ -90,6 +93,9 @@ statisticsAllDriversYear_ap_prefix = 'statisticsAllDriversYear-ap-'
 statisticsAllDriversTrip_ap_prefix = 'statisticsAllDriversTrip-ap-'
 statisticsAllDriversIntellect_ap_prefix = 'statisticsAllDriversIntellect-ap-'
 
+dpaths, prefixs = {}, {}
+dpaths['individualAnalysis'] = '%s/%s' % (statisticsAllDrivers_ap_dpath, 'individualAnalysis')
+prefixs['individualAnalysis'] = 'individualAnalysis-'
 
 
 

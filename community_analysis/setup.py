@@ -33,7 +33,6 @@ if plf.startswith('Linux'):
 elif plf.startswith('Darwin'):
     # Mac
     packageName, fileName = 'a_TrajectoryAnalytics', 'a1_roamingNinterTravel'
-
     cythonize(packageName, fileName)
 else:
     # Window ?
