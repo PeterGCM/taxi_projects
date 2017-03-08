@@ -24,7 +24,11 @@ logger = get_logger()
 
 of_dpath = dpaths['roamingNinterTravel']
 of_prefixs = prefixs['roamingNinterTravel']
-check_dir_create(of_dpath)
+
+try:
+    check_dir_create(of_dpath)
+except OSError:
+    pass
 
 
 def run():
