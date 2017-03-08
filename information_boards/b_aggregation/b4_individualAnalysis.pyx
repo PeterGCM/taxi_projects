@@ -34,13 +34,13 @@ header_base = ['driverID', 'numObs', 'dfResidual',
 
 def run():
     locIn_Reg()
-    locIn_F_W_Reg()
-    locIn_F_H_Reg()
-    locIn_F_M_Reg()
-    locIn_F_WH_Reg()
-    locIn_F_WM_Reg()
-    locIn_F_HM_Reg()
-    locIn_F_WHM_Reg()
+    # locIn_F_W_Reg()
+    # locIn_F_H_Reg()
+    # locIn_F_M_Reg()
+    # locIn_F_WH_Reg()
+    # locIn_F_WM_Reg()
+    # locIn_F_HM_Reg()
+    # locIn_F_WHM_Reg()
 
 
 def locIn_F_WHM_Reg():
@@ -90,7 +90,10 @@ def locIn_F_WHM_Reg():
                 X = sm.add_constant(X)
                 res = sm.OLS(y, X, missing='drop').fit()
                 #
-                new_row += [res.params['const'], res.pvalues['const']]
+                try:
+                    new_row += [res.params['const'], res.pvalues['const']]
+                except KeyError:
+                    new_row += ['X', 'X']
                 new_row += [res.params['locIn'], res.pvalues['locIn']]
                 for cn in ['wleProductivity', 'QTime/locTrip', 'EP/locTrip', 'locProductivity']:
                     new_row += yearDF.loc[yearDF['driverID'] == did][cn].tolist()
@@ -162,7 +165,10 @@ def locIn_F_HM_Reg():
                 X = sm.add_constant(X)
                 res = sm.OLS(y, X, missing='drop').fit()
                 #
-                new_row += [res.params['const'], res.pvalues['const']]
+                try:
+                    new_row += [res.params['const'], res.pvalues['const']]
+                except KeyError:
+                    new_row += ['X', 'X']
                 new_row += [res.params['locIn'], res.pvalues['locIn']]
                 for cn in ['wleProductivity', 'QTime/locTrip', 'EP/locTrip', 'locProductivity']:
                     new_row += yearDF.loc[yearDF['driverID'] == did][cn].tolist()
@@ -224,7 +230,10 @@ def locIn_F_WM_Reg():
                 X = sm.add_constant(X)
                 res = sm.OLS(y, X, missing='drop').fit()
                 #
-                new_row += [res.params['const'], res.pvalues['const']]
+                try:
+                    new_row += [res.params['const'], res.pvalues['const']]
+                except KeyError:
+                    new_row += ['X', 'X']
                 new_row += [res.params['locIn'], res.pvalues['locIn']]
                 for cn in ['wleProductivity', 'QTime/locTrip', 'EP/locTrip', 'locProductivity']:
                     new_row += yearDF.loc[yearDF['driverID'] == did][cn].tolist()
@@ -279,7 +288,10 @@ def locIn_F_WH_Reg():
                 X = sm.add_constant(X)
                 res = sm.OLS(y, X, missing='drop').fit()
                 #
-                new_row += [res.params['const'], res.pvalues['const']]
+                try:
+                    new_row += [res.params['const'], res.pvalues['const']]
+                except KeyError:
+                    new_row += ['X', 'X']
                 new_row += [res.params['locIn'], res.pvalues['locIn']]
                 for cn in ['wleProductivity', 'QTime/locTrip', 'EP/locTrip', 'locProductivity']:
                     new_row += yearDF.loc[yearDF['driverID'] == did][cn].tolist()
@@ -332,7 +344,10 @@ def locIn_F_M_Reg():
                 X = sm.add_constant(X)
                 res = sm.OLS(y, X, missing='drop').fit()
                 #
-                new_row += [res.params['const'], res.pvalues['const']]
+                try:
+                    new_row += [res.params['const'], res.pvalues['const']]
+                except KeyError:
+                    new_row += ['X', 'X']
                 new_row += [res.params['locIn'], res.pvalues['locIn']]
                 for cn in ['wleProductivity', 'QTime/locTrip', 'EP/locTrip', 'locProductivity']:
                     new_row += yearDF.loc[yearDF['driverID'] == did][cn].tolist()
@@ -384,7 +399,10 @@ def locIn_F_H_Reg():
                 X = sm.add_constant(X)
                 res = sm.OLS(y, X, missing='drop').fit()
                 #
-                new_row += [res.params['const'], res.pvalues['const']]
+                try:
+                    new_row += [res.params['const'], res.pvalues['const']]
+                except KeyError:
+                    new_row += ['X', 'X']
                 new_row += [res.params['locIn'], res.pvalues['locIn']]
                 for cn in ['wleProductivity', 'QTime/locTrip', 'EP/locTrip', 'locProductivity']:
                     new_row += yearDF.loc[yearDF['driverID'] == did][cn].tolist()
@@ -427,7 +445,10 @@ def locIn_F_W_Reg():
                 X = sm.add_constant(X)
                 res = sm.OLS(y, X, missing='drop').fit()
                 #
-                new_row += [res.params['const'], res.pvalues['const']]
+                try:
+                    new_row += [res.params['const'], res.pvalues['const']]
+                except KeyError:
+                    new_row += ['X', 'X']
                 new_row += [res.params['locIn'], res.pvalues['locIn']]
                 for cn in ['wleProductivity', 'QTime/locTrip', 'EP/locTrip', 'locProductivity']:
                     new_row += yearDF.loc[yearDF['driverID'] == did][cn].tolist()
@@ -461,7 +482,10 @@ def locIn_Reg():
                 X = sm.add_constant(X)
                 res = sm.OLS(y, X, missing='drop').fit()
                 #
-                new_row += [res.params['const'], res.pvalues['const']]
+                try:
+                    new_row += [res.params['const'], res.pvalues['const']]
+                except KeyError:
+                    new_row += ['X', 'X']
                 new_row += [res.params['locIn'], res.pvalues['locIn']]
                 for cn in ['wleProductivity', 'QTime/locTrip', 'EP/locTrip', 'locProductivity']:
                     new_row += yearDF.loc[yearDF['driverID'] == did][cn].tolist()
@@ -489,6 +513,7 @@ def data_load():
                             'locTripNumber', 'locInNumber', 'locOutNumber',
                           'locQTime', 'locEP', 'locDuration', 'locFare'], axis=1)
     return tripDF, yearDF
+
 
 if __name__ == '__main__':
     run()
