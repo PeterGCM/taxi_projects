@@ -4,9 +4,8 @@ import __init__
 
 '''
 #
-from community_analysis import ss_trips_dpath, ss_trips_prefix
-from community_analysis import prevDriversDefined_dpath, prevDriversDefined_prefix
-from community_analysis import driversRelations_fpaths
+from community_analysis import dpaths, prefixs
+# from community_analysis import driversRelations_fpaths
 from community_analysis import HISTORY_LOOKUP_LENGTH, MINUTES40
 #
 from taxi_common._classes import zone, driver
@@ -20,62 +19,48 @@ import numpy as np
 #
 logger = get_logger()
 
+if_dpath = dpaths['roamingNinterTravel']
+if_prefixs = prefixs['roamingNinterTravel']
+#
+of_dpath = dpaths['prevDrivers']
+of_prefixs = prefixs['prevDrivers']
+
+try:
+    check_dir_create(of_dpath)
+except OSError:
+    pass
+
 
 def run(yymm):
-    check_dir_create(prevDriversDefined_dpath)
     process_month(yymm)
     # filtering('2012')
     # find_driversRelations('2012')
 
-
-def find_driversRelations(year):
-    yy = year[2:]
-    driversRelations = {}
-    for fn in get_all_files(prevDriversDefined_dpath, 'Filtered-%s%s*' % (prevDriversDefined_prefix, yy)):
-        logger.info('handle the file; %s' % fn)
-        with open('%s/%s' % (prevDriversDefined_dpath, fn), 'rb') as r_csvfile:
-            reader = csv.reader(r_csvfile)
-            headers = reader.next()
-            hid = {h: i for i, h in enumerate(headers)}
-            for row in reader:
-                did1 = int(row[hid['did']])
-                prevDrivers = row[hid['prevDrivers']].split('&')
-                if len(prevDrivers) == 1 and prevDrivers[0] == '':
-                    continue
-                if not driversRelations.has_key(did1):
-                    driversRelations[did1] = set()
-                for did0 in map(int, prevDrivers):
-                    driversRelations[did1].add(did0)
-    save_pickle_file(driversRelations_fpaths[year], driversRelations)
 
 
 def process_month(yymm):
     from traceback import format_exc
     try:
         logger.info('handle the file; %s' % yymm)
-        ss_trips_fpath = '%s/%s%s.csv' % (ss_trips_dpath, ss_trips_prefix, yymm)
-        if not check_path_exist(ss_trips_fpath):
+        ifpath = '%s/%s%s.csv' % (if_dpath, if_prefixs, yymm)
+        if not check_path_exist(ifpath):
             logger.info('The file X exists; %s' % yymm)
             return None
-        prevDriversDefined_fpath = '%s/%s%s.csv' % (prevDriversDefined_dpath, prevDriversDefined_prefix, yymm)
-        if check_path_exist(prevDriversDefined_fpath):
+        ofpath = '%s/%s%s.csv' % (of_dpath, of_prefixs, yymm)
+        if check_path_exist(ofpath):
             logger.info('The processed; %s' % yymm)
             return None
         drivers = {}
         zones = generate_zones()
         handling_day = 0
-        with open(prevDriversDefined_fpath, 'wt') as w_csvfile:
-            writer = csv.writer(w_csvfile, lineterminator='\n')
-            writer.writerow(['did',
-                             'timeFrame', 'zi', 'zj',
-                             'time', 'day', 'month',
-                             'start-long', 'start-lat',
-                             'distance', 'duration', 'fare',
-                             'roamingTime', 'prevDrivers'])
-            with open(ss_trips_fpath, 'rb') as r_csvfile:
-                reader = csv.reader(r_csvfile)
-                headers = reader.next()
-                hid = {h: i for i, h in enumerate(headers)}
+        with open(ifpath, 'rb') as r_csvfile:
+            reader = csv.reader(r_csvfile)
+            header = reader.next()
+            hid = {h: i for i, h in enumerate(header)}
+            with open(ofpath, 'wt') as w_csvfile:
+                writer = csv.writer(w_csvfile, lineterminator='\n')
+                new_header = header + ['prevDrivers']
+                writer.writerow(new_header)
                 for row in reader:
                     t = eval(row[hid['time']])
                     cur_dt = datetime.datetime.fromtimestamp(t)
@@ -135,16 +120,36 @@ def generate_zones():
         zones[k] = ca_zone(z.relation_with_poly, z.zi, z.zj, z.cCoor_gps, z.polyPoints_gps)
     return zones
 
-
-def filtering(year):
-    yy = year[2:]
-    for fn in get_all_files(prevDriversDefined_dpath, '%s%s*' % (prevDriversDefined_prefix, yy)):
-        df = pd.read_csv('%s/%s' % (prevDriversDefined_dpath, fn))
-        cn = 'roamingTime'
-        outlier_set = set(np.where(df[cn] > MINUTES40)[0].tolist())
-        df = df.drop(df.index[list(outlier_set)])
-        df.to_csv('%s/Filtered-%s' % (prevDriversDefined_dpath, fn), index=False)
-
+# 
+# def filtering(year):
+#     yy = year[2:]
+#     for fn in get_all_files(prevDriversDefined_dpath, '%s%s*' % (prevDriversDefined_prefix, yy)):
+#         df = pd.read_csv('%s/%s' % (prevDriversDefined_dpath, fn))
+#         cn = 'roamingTime'
+#         outlier_set = set(np.where(df[cn] > MINUTES40)[0].tolist())
+#         df = df.drop(df.index[list(outlier_set)])
+#         df.to_csv('%s/Filtered-%s' % (prevDriversDefined_dpath, fn), index=False)
+# 
+# 
+# def find_driversRelations(year):
+#     yy = year[2:]
+#     driversRelations = {}
+#     for fn in get_all_files(prevDriversDefined_dpath, 'Filtered-%s%s*' % (prevDriversDefined_prefix, yy)):
+#         logger.info('handle the file; %s' % fn)
+#         with open('%s/%s' % (prevDriversDefined_dpath, fn), 'rb') as r_csvfile:
+#             reader = csv.reader(r_csvfile)
+#             headers = reader.next()
+#             hid = {h: i for i, h in enumerate(headers)}
+#             for row in reader:
+#                 did1 = int(row[hid['did']])
+#                 prevDrivers = row[hid['prevDrivers']].split('&')
+#                 if len(prevDrivers) == 1 and prevDrivers[0] == '':
+#                     continue
+#                 if not driversRelations.has_key(did1):
+#                     driversRelations[did1] = set()
+#                 for did0 in map(int, prevDrivers):
+#                     driversRelations[did1].add(did0)
+#     save_pickle_file(driversRelations_fpaths[year], driversRelations)
 
 if __name__ == '__main__':
     run()

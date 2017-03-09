@@ -12,8 +12,9 @@ except OSError:
     pass
 shift_dpath, shift_prefix = '/home/sfcheng/toolbox/results', 'shift-hour-state-'
 dpaths, prefixs = {}, {}
-dpaths['roamingNinterTravel'] = '%s/%s' % (taxi_data, 'roamingNinterTravel')
-prefixs['roamingNinterTravel'] = 'roamingNinterTravel-'
+for irName in ['roamingNinterTravel', 'prevDrivers']:
+    dpaths[irName] = '%s/%s' % (taxi_data, irName)
+    prefixs[irName] = '%s-' % irName
 #
 MON, TUE, WED, THR, FRI, SAT, SUN = range(7)
 AM10, PM8 = 10, 20
