@@ -7,6 +7,6 @@
 #    python -c "from a2_prevDrivers import process_month; process_month('09$i')" &
 #done
 
-python -c "from a2_prevDrivers import roamingTimeFiltering; roamingTimeFiltering('2009')"
+python -c "from a2_prevDrivers import roamingTimeFiltering; roamingTimeFiltering('2009')" &
 
 
