@@ -26,7 +26,7 @@ except OSError:
     pass
 
 
-header_base = ['driverID', 'numObs', 'dfResidual',
+header_base = ['driverID', 'numObs', 'dfResidual', 'locInRatio',
                'constCoef', 'constPV',
                'locInCoef', 'locInPV',
                'wleProductivity', 'QTime/locTrip', 'EP/locTrip', 'locProductivity']
@@ -54,15 +54,11 @@ def filtering():
             reader = csv.reader(r_csvfile)
             header = reader.next()
             hid = {h: i for i, h in enumerate(header)}
-            print header
-            print hid
             with open(new_fpath, 'wt') as w_csvfile:
                 writer = csv.writer(w_csvfile, lineterminator='\n')
                 writer.writerow(header)
                 for row in reader:
-                    print row
                     for cn in header_base:
-                        print '\t', cn, hid[cn]
                         if row[hid[cn]] == 'X':
                             break
                     else:
@@ -87,6 +83,9 @@ def locIn_F_WHM_Reg():
         writer.writerow(header)
         for did in drivers:
             didTripDF = tripDF[(tripDF['driverID'] == did)].copy(deep=True)
+            didYearDF = yearDF.loc[yearDF['driverID'] == did]
+            if len(didYearDF) == 0:
+                continue
             didTripHours = set(didTripDF['hour'])
             dummiesH = []
             for h in didTripHours:
@@ -104,10 +103,10 @@ def locIn_F_WHM_Reg():
             numObs = len(didTripDF)
             idvs = ['locIn'] + ['weekEnd'] + dummiesH[:-1] + dummiesM[:-1]
             dfResidual = numObs - (len(idvs) + 1)
-            new_row = [did, numObs, dfResidual]
+            new_row = [did, numObs, dfResidual] + didYearDF['locInRatio'].tolist()
             if dfResidual <= 0:
                 for cn in header:
-                    if cn in ['driverID', 'numObs', 'dfResidual']:
+                    if cn in ['driverID', 'numObs', 'dfResidual', 'locInRatio']:
                         continue
                     new_row += ['X']
             else:
@@ -122,7 +121,7 @@ def locIn_F_WHM_Reg():
                     new_row += ['X', 'X']
                 new_row += [res.params['locIn'], res.pvalues['locIn']]
                 for cn in ['wleProductivity', 'QTime/locTrip', 'EP/locTrip', 'locProductivity']:
-                    new_row += yearDF.loc[yearDF['driverID'] == did][cn].tolist()
+                    new_row += didYearDF[cn].tolist()
                 new_row += [res.params['weekEnd'], res.pvalues['weekEnd']]
                 for h in wholeHours:
                     hour_str = 'H%02d' % h
@@ -164,6 +163,9 @@ def locIn_F_HM_Reg():
         writer.writerow(header)
         for did in drivers:
             didTripDF = tripDF[(tripDF['driverID'] == did)].copy(deep=True)
+            didYearDF = yearDF.loc[yearDF['driverID'] == did]
+            if len(didYearDF) == 0:
+                continue
             didTripHours = set(didTripDF['hour'])
             dummiesH = []
             for h in didTripHours:
@@ -181,10 +183,10 @@ def locIn_F_HM_Reg():
             numObs = len(didTripDF)
             idvs = ['locIn'] + dummiesH[:-1] + dummiesM[:-1]
             dfResidual = numObs - (len(idvs) + 1)
-            new_row = [did, numObs, dfResidual]
+            new_row = [did, numObs, dfResidual] + didYearDF['locInRatio'].tolist()
             if dfResidual <= 0:
                 for cn in header:
-                    if cn in ['driverID', 'numObs', 'dfResidual']:
+                    if cn in ['driverID', 'numObs', 'dfResidual', 'locInRatio']:
                         continue
                     new_row += ['X']
             else:
@@ -199,7 +201,7 @@ def locIn_F_HM_Reg():
                     new_row += ['X', 'X']
                 new_row += [res.params['locIn'], res.pvalues['locIn']]
                 for cn in ['wleProductivity', 'QTime/locTrip', 'EP/locTrip', 'locProductivity']:
-                    new_row += yearDF.loc[yearDF['driverID'] == did][cn].tolist()
+                    new_row += didYearDF[cn].tolist()
                 for h in wholeHours:
                     hour_str = 'H%02d' % h
                     if hour_str in dummiesH:
@@ -238,6 +240,9 @@ def locIn_F_WM_Reg():
         writer.writerow(header)
         for did in drivers:
             didTripDF = tripDF[(tripDF['driverID'] == did)].copy(deep=True)
+            didYearDF = yearDF.loc[yearDF['driverID'] == did]
+            if len(didYearDF) == 0:
+                continue
             didTripMonths = set(didTripDF['month'])
             dummiesM = []
             for m in didTripMonths:
@@ -248,10 +253,10 @@ def locIn_F_WM_Reg():
             numObs = len(didTripDF)
             idvs = ['locIn'] + ['weekEnd'] + dummiesM[:-1]
             dfResidual = numObs - (len(idvs) + 1)
-            new_row = [did, numObs, dfResidual]
+            new_row = [did, numObs, dfResidual] + didYearDF['locInRatio'].tolist()
             if dfResidual <= 0:
                 for cn in header:
-                    if cn in ['driverID', 'numObs', 'dfResidual']:
+                    if cn in ['driverID', 'numObs', 'dfResidual', 'locInRatio']:
                         continue
                     new_row += ['X']
             else:
@@ -266,7 +271,7 @@ def locIn_F_WM_Reg():
                     new_row += ['X', 'X']
                 new_row += [res.params['locIn'], res.pvalues['locIn']]
                 for cn in ['wleProductivity', 'QTime/locTrip', 'EP/locTrip', 'locProductivity']:
-                    new_row += yearDF.loc[yearDF['driverID'] == did][cn].tolist()
+                    new_row += didYearDF[cn].tolist()
                 new_row += [res.params['weekEnd'], res.pvalues['weekEnd']]
                 for m in wholeMonths:
                     month_str = 'M%02d' % m
@@ -297,6 +302,9 @@ def locIn_F_WH_Reg():
         writer.writerow(header)
         for did in drivers:
             didTripDF = tripDF[(tripDF['driverID'] == did)].copy(deep=True)
+            didYearDF = yearDF.loc[yearDF['driverID'] == did]
+            if len(didYearDF) == 0:
+                continue
             didTripHours = set(didTripDF['hour'])
             dummiesH = []
             for h in didTripHours:
@@ -307,10 +315,10 @@ def locIn_F_WH_Reg():
             numObs = len(didTripDF)
             idvs = ['locIn'] + ['weekEnd'] + dummiesH[:-1]
             dfResidual = numObs - (len(idvs) + 1)
-            new_row = [did, numObs, dfResidual]
+            new_row = [did, numObs, dfResidual] + didYearDF['locInRatio'].tolist()
             if dfResidual <= 0:
                 for cn in header:
-                    if cn in ['driverID', 'numObs', 'dfResidual']:
+                    if cn in ['driverID', 'numObs', 'dfResidual', 'locInRatio']:
                         continue
                     new_row += ['X']
             else:
@@ -325,7 +333,7 @@ def locIn_F_WH_Reg():
                     new_row += ['X', 'X']
                 new_row += [res.params['locIn'], res.pvalues['locIn']]
                 for cn in ['wleProductivity', 'QTime/locTrip', 'EP/locTrip', 'locProductivity']:
-                    new_row += yearDF.loc[yearDF['driverID'] == did][cn].tolist()
+                    new_row += didYearDF[cn].tolist()
                 new_row += [res.params['weekEnd'], res.pvalues['weekEnd']]
                 for h in wholeHours:
                     hour_str = 'H%02d' % h
@@ -355,6 +363,9 @@ def locIn_F_M_Reg():
         writer.writerow(header)
         for did in drivers:
             didTripDF = tripDF[(tripDF['driverID'] == did)].copy(deep=True)
+            didYearDF = yearDF.loc[yearDF['driverID'] == did]
+            if len(didYearDF) == 0:
+                continue
             didTripMonths = set(didTripDF['month'])
             dummiesM = []
             for m in didTripMonths:
@@ -365,10 +376,10 @@ def locIn_F_M_Reg():
             numObs = len(didTripDF)
             idvs = ['locIn'] + dummiesM[:-1]
             dfResidual = numObs - (len(idvs) + 1)
-            new_row = [did, numObs, dfResidual]
+            new_row = [did, numObs, dfResidual] + didYearDF['locInRatio'].tolist()
             if dfResidual <= 0:
                 for cn in header:
-                    if cn in ['driverID', 'numObs', 'dfResidual']:
+                    if cn in ['driverID', 'numObs', 'dfResidual', 'locInRatio']:
                         continue
                     new_row += ['X']
             else:
@@ -383,7 +394,7 @@ def locIn_F_M_Reg():
                     new_row += ['X', 'X']
                 new_row += [res.params['locIn'], res.pvalues['locIn']]
                 for cn in ['wleProductivity', 'QTime/locTrip', 'EP/locTrip', 'locProductivity']:
-                    new_row += yearDF.loc[yearDF['driverID'] == did][cn].tolist()
+                    new_row += didYearDF[cn].tolist()
                 for m in wholeMonths:
                     month_str = 'M%02d' % m
                     if month_str in dummiesM:
@@ -412,6 +423,9 @@ def locIn_F_H_Reg():
         writer.writerow(header)
         for did in drivers:
             didTripDF = tripDF[(tripDF['driverID'] == did)].copy(deep=True)
+            didYearDF = yearDF.loc[yearDF['driverID'] == did]
+            if len(didYearDF) == 0:
+                continue
             didTripHours = set(didTripDF['hour'])
             dummiesH = []
             for h in didTripHours:
@@ -422,10 +436,10 @@ def locIn_F_H_Reg():
             numObs = len(didTripDF)
             idvs = ['locIn'] + dummiesH[:-1]
             dfResidual = numObs - (len(idvs) + 1)
-            new_row = [did, numObs, dfResidual]
+            new_row = [did, numObs, dfResidual] + didYearDF['locInRatio'].tolist()
             if dfResidual <= 0:
                 for cn in header:
-                    if cn in ['driverID', 'numObs', 'dfResidual']:
+                    if cn in ['driverID', 'numObs', 'dfResidual', 'locInRatio']:
                         continue
                     new_row += ['X']
             else:
@@ -440,7 +454,7 @@ def locIn_F_H_Reg():
                     new_row += ['X', 'X']
                 new_row += [res.params['locIn'], res.pvalues['locIn']]
                 for cn in ['wleProductivity', 'QTime/locTrip', 'EP/locTrip', 'locProductivity']:
-                    new_row += yearDF.loc[yearDF['driverID'] == did][cn].tolist()
+                    new_row += didYearDF[cn].tolist()
                 for h in wholeHours:
                     hour_str = 'H%02d' % h
                     if hour_str in dummiesH:
@@ -467,13 +481,16 @@ def locIn_F_W_Reg():
         writer.writerow(header)
         for did in drivers:
             didTripDF = tripDF[(tripDF['driverID'] == did)].copy(deep=True)
+            didYearDF = yearDF.loc[yearDF['driverID'] == did]
+            if len(didYearDF) == 0:
+                continue
             numObs = len(didTripDF)
             idvs = ['locIn'] + ['weekEnd']
             dfResidual = numObs - (len(idvs) + 1)
-            new_row = [did, numObs, dfResidual]
+            new_row = [did, numObs, dfResidual] + didYearDF['locInRatio'].tolist()
             if dfResidual <= 0:
                 for cn in header:
-                    if cn in ['driverID', 'numObs', 'dfResidual']:
+                    if cn in ['driverID', 'numObs', 'dfResidual', 'locInRatio']:
                         continue
                     new_row += ['X']
             else:
@@ -488,7 +505,7 @@ def locIn_F_W_Reg():
                     new_row += ['X', 'X']
                 new_row += [res.params['locIn'], res.pvalues['locIn']]
                 for cn in ['wleProductivity', 'QTime/locTrip', 'EP/locTrip', 'locProductivity']:
-                    new_row += yearDF.loc[yearDF['driverID'] == did][cn].tolist()
+                    new_row += didYearDF[cn].tolist()
                 new_row += [res.params['weekEnd'], res.pvalues['weekEnd']]
             if len(new_row) != len(header):
                 continue
@@ -506,13 +523,16 @@ def locIn_Reg():
         writer.writerow(header)
         for did in drivers:
             didTripDF = tripDF[(tripDF['driverID'] == did)].copy(deep=True)
+            didYearDF = yearDF.loc[yearDF['driverID'] == did]
+            if len(didYearDF) == 0:
+                continue
             numObs = len(didTripDF)
             idvs = ['locIn']
             dfResidual = numObs - (len(idvs) + 1)
-            new_row = [did, numObs, dfResidual]
+            new_row = [did, numObs, dfResidual] + didYearDF['locInRatio'].tolist()
             if dfResidual <= 0:
                 for cn in header:
-                    if cn in ['driverID', 'numObs', 'dfResidual']:
+                    if cn in ['driverID', 'numObs', 'dfResidual', 'locInRatio']:
                         continue
                     new_row += ['X']
             else:
@@ -527,7 +547,7 @@ def locIn_Reg():
                     new_row += ['X', 'X']
                 new_row += [res.params['locIn'], res.pvalues['locIn']]
                 for cn in ['wleProductivity', 'QTime/locTrip', 'EP/locTrip', 'locProductivity']:
-                    new_row += yearDF.loc[yearDF['driverID'] == did][cn].tolist()
+                    new_row += didYearDF[cn].tolist()
             if len(new_row) != len(header):
                 continue
             writer.writerow(new_row)
@@ -550,6 +570,7 @@ def data_load():
     yearDF['QTime/locTrip'] = yearDF['locQTime'] / yearDF['locTripNumber']
     yearDF['EP/locTrip'] = yearDF['locEP'] / yearDF['locTripNumber']
     yearDF['locProductivity'] = yearDF['locFare'] / (yearDF['locQTime'] + yearDF['locDuration']) * SEC60
+    yearDF['locInRatio'] = yearDF['locInNumber'] / yearDF['locTripNumber']
     yearDF = yearDF.drop(['wleTripNumber', 'wleOperatingHour', 'wleFare',
                             'locTripNumber', 'locInNumber', 'locOutNumber',
                           'locQTime', 'locEP', 'locDuration', 'locFare'], axis=1)
