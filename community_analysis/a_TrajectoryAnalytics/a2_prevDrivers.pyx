@@ -37,7 +37,6 @@ def run(yymm):
     # find_driversRelations('2012')
 
 
-
 def process_month(yymm):
     from traceback import format_exc
     try:
