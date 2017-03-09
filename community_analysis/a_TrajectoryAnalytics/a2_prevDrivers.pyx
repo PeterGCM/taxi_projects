@@ -37,6 +37,35 @@ def run(yymm):
     # find_driversRelations('2012')
 
 
+def roamingTimeFiltering(year):
+    yy = year[2:]
+    for fn in get_all_files(of_dpath, '%s%s*' % (of_prefixs, yy)):
+        df = pd.read_csv('%s/%s' % (of_dpath, fn))
+        cn = 'roamingTime'
+        outlier_set = set(np.where(df[cn] > MINUTES40)[0].tolist())
+        df = df.drop(df.index[list(outlier_set)])
+        df = df.drop(['interTravelTime'], axis=1)
+        df.to_csv('%s/roamingTimeFiltered-%s' % (of_dpath, fn), index=False)
+    driversRelations = {}
+    superSet_fpath = '%s/roamingTimeFiltered-superSet-%s.pkl' % (of_prefixs, year)
+    for fn in get_all_files(of_dpath, 'roamingTimeFiltered-%s%s*' % (of_prefixs, yy)):
+        logger.info('handle the file; %s' % fn)
+        with open('%s/%s' % (of_dpath, fn), 'rb') as r_csvfile:
+            reader = csv.reader(r_csvfile)
+            headers = reader.next()
+            hid = {h: i for i, h in enumerate(headers)}
+            for row in reader:
+                did1 = int(row[hid['did']])
+                prevDrivers = row[hid['prevDrivers']].split('&')
+                if len(prevDrivers) == 1 and prevDrivers[0] == '':
+                    continue
+                if not driversRelations.has_key(did1):
+                    driversRelations[did1] = set()
+                for did0 in map(int, prevDrivers):
+                    driversRelations[did1].add(did0)
+    save_pickle_file(superSet_fpath, driversRelations)
+
+
 def process_month(yymm):
     from traceback import format_exc
     try:
