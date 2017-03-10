@@ -4,10 +4,7 @@ import __init__
 
 '''
 #
-from community_analysis import prevDriversDefined_dpath, prevDriversDefined_prefix
-# from community_analysis import driversRelations2009_fpath
-from community_analysis import driversRelations_fpaths
-from community_analysis import tfZ_TP_dpath, tfZ_TP_prefix
+from community_analysis import dpaths, prefixs
 from community_analysis import X_PRESENCE, O_PRESENCE
 #
 from taxi_common.file_handling_functions import check_dir_create, load_pickle_file, get_all_files
@@ -17,46 +14,66 @@ import csv, datetime
 
 logger = get_logger()
 
+if_dpath = dpaths['prevDrivers']
+if_prefixs = prefixs['prevDrivers']
+#
+rt_of_dpath = dpaths['roamingTime', 'priorPresence']
+rt_of_prefixs = prefixs['roamingTime', 'priorPresence']
+try:
+    check_dir_create(rt_of_dpath)
+except OSError:
+    pass
+itt_of_dpath = dpaths['interTravelTime', 'priorPresence']
+itt_of_prefixs = prefixs['interTravelTime', 'priorPresence']
+try:
+    check_dir_create(itt_of_dpath)
+except OSError:
+    pass
+
+numWorker = 6
+numReducers = numWorker * 10
+year = '20%02d' % 9
+#
+depVar = 'roamingTime'
+of_dpath, of_prefixs = rt_of_dpath, rt_of_prefixs
+# depVar = 'interTravelTime'
+# of_dpath, of_prefixs = itt_of_dpath, itt_of_prefixs
 
 def run(moduloIndex):
-    check_dir_create(tfZ_TP_dpath)
-    numWorker = 6
-    numReducers = numWorker * 10
-    #
-    yyyy = '20%02d' % 9
-    logger.info('loading driversRelations %s' % yyyy)
-    driversRelations = load_pickle_file(driversRelations_fpaths[yyyy])
+    logger.info('loading driversRelations %s; %s' % (year, depVar))
+    superSet_fpath = '%s/%sFiltered-superSet-%s%s.pkl' % (if_dpath, depVar, if_prefixs, year)
+    driversRelations = load_pickle_file(superSet_fpath)
     whole_drivers = driversRelations.keys()
     driver_subsets = [[] for _ in range(numReducers)]
     for i, did in enumerate(whole_drivers):
         driver_subsets[i % numReducers].append(did)
     for i, driver_subset in enumerate(driver_subsets):
-        if i % 6 != moduloIndex:
+        if i % numWorker != moduloIndex:
             continue
         pickUp_drivers = set()
         for did1 in driver_subset:
             pickUp_drivers = pickUp_drivers.union(driversRelations[did1])
-        process_files(yyyy, i, driver_subset, pickUp_drivers)
+        process_files(i, driver_subset, pickUp_drivers)
 
 
-def process_files(yyyy, reducerID, driver_subset, pickUp_drivers):
+def process_files(reducerID, driver_subset, pickUp_drivers):
     from traceback import format_exc
     #
     try:
-        logger.info('Handle arrange %s(%d)' % (yyyy, reducerID))
-        tfZ_TP_fpath = '%s/%s%s-%d.csv' % (tfZ_TP_dpath, tfZ_TP_prefix, yyyy, reducerID)
+        logger.info('Handle arrange %s(%d)' % (year, reducerID))
+        tfZ_TP_fpath = '%s/%s%s-%d.csv' % (of_dpath, of_prefixs, year, reducerID)
         with open(tfZ_TP_fpath, 'wt') as w_csvfile:
             writer = csv.writer(w_csvfile, lineterminator='\n')
             header = ['month', 'day',
                       'timeFrame', 'zi', 'zj', 'tfZ',
-                      'did', 'roamingTime']
+                      'did', depVar]
             for did0 in pickUp_drivers:
                 header.append(did0)
             writer.writerow(header)
-        yy = yyyy[2:]
-        for fn in get_all_files(prevDriversDefined_dpath, 'Filtered-%s%s*.csv' % (prevDriversDefined_prefix, yy)):
-            prevDriverDefined_fpath = '%s/%s' % (prevDriversDefined_dpath, fn)
-            logger.info('Handling %s(%d); %s' % (yyyy, reducerID, fn))
+        yy = year[2:]
+        for fn in get_all_files(if_dpath, '%sFiltered-%s%s*.csv' % (depVar, if_prefixs, yy)):
+            prevDriverDefined_fpath = '%s/%s' % (if_dpath, fn)
+            logger.info('Handling %s(%d); %s' % (year, reducerID, fn))
             with open(prevDriverDefined_fpath, 'rb') as r_csvfile:
                 reader = csv.reader(r_csvfile)
                 header = reader.next()
@@ -81,13 +98,13 @@ def process_files(yyyy, reducerID, driver_subset, pickUp_drivers):
                         writer = csv.writer(w_csvfile, lineterminator='\n')
                         new_row = [row[hid['month']], row[hid['day']],
                                    tf, zi, zj, tfZ,
-                                   did1, row[hid['roamingTime']]]
+                                   did1, row[hid[depVar]]]
                         for did0 in pickUp_drivers:
                             new_row.append(O_PRESENCE if did0 in prevDrivers else X_PRESENCE)
                         writer.writerow(new_row)
     except Exception as _:
         import sys
-        with open('%s_%s.txt' % (sys.argv[0], yyyy), 'w') as f:
+        with open('%s_%s.txt' % (sys.argv[0], year), 'w') as f:
             f.write(format_exc())
         raise
 

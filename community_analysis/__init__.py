@@ -15,6 +15,12 @@ dpaths, prefixs = {}, {}
 for irName in ['roamingNinterTravel', 'prevDrivers']:
     dpaths[irName] = '%s/%s' % (taxi_data, irName)
     prefixs[irName] = '%s-' % irName
+for depVar in ['roamingTime', 'interTravelTime']:
+    for irName in ['priorPresence']:
+        dpaths[depVar, irName] = '%s/%s/%s' % (taxi_data, depVar, irName)
+        prefixs[depVar, irName] = '%s-%s-' % (depVar, irName)
+
+
 #
 MON, TUE, WED, THR, FRI, SAT, SUN = range(7)
 AM10, PM8 = 10, 20
