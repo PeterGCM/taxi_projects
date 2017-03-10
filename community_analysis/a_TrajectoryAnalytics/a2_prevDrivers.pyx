@@ -38,36 +38,43 @@ def run(yymm):
 
 
 def roamingTimeFiltering(year):
-    yy = year[2:]
-    for fn in get_all_files(of_dpath, '%s%s*' % (of_prefixs, yy)):
-        new_fpath = '%s/roamingTimeFiltered-%s' % (of_dpath, fn)
-        if check_path_exist(new_fpath):
-            continue
-        df = pd.read_csv('%s/%s' % (of_dpath, fn))
-        cn = 'roamingTime'
-        outlier_set = set(np.where(df[cn] > MINUTES40)[0].tolist())
-        df = df.drop(df.index[list(outlier_set)])
-        df = df.drop(['interTravelTime'], axis=1)
-        df.to_csv(new_fpath, index=False)
-    driversRelations = {}
-    superSet_fpath = '%s/roamingTimeFiltered-superSet-%s.pkl' % (of_prefixs, year)
-    logger.info('handle the file; %s' % superSet_fpath)
-    for fn in get_all_files(of_dpath, 'roamingTimeFiltered-%s%s*' % (of_prefixs, yy)):
-        logger.info('handle the file; %s' % fn)
-        with open('%s/%s' % (of_dpath, fn), 'rb') as r_csvfile:
-            reader = csv.reader(r_csvfile)
-            headers = reader.next()
-            hid = {h: i for i, h in enumerate(headers)}
-            for row in reader:
-                did1 = int(row[hid['did']])
-                prevDrivers = row[hid['prevDrivers']].split('&')
-                if len(prevDrivers) == 1 and prevDrivers[0] == '':
-                    continue
-                if not driversRelations.has_key(did1):
-                    driversRelations[did1] = set()
-                for did0 in map(int, prevDrivers):
-                    driversRelations[did1].add(did0)
-    save_pickle_file(superSet_fpath, driversRelations)
+    from traceback import format_exc
+    try:
+        logger.info('start filtering')
+        yy = year[2:]
+        for fn in get_all_files(of_dpath, '%s%s*' % (of_prefixs, yy)):
+            new_fpath = '%s/roamingTimeFiltered-%s' % (of_dpath, fn)
+            if check_path_exist(new_fpath):
+                continue
+            df = pd.read_csv('%s/%s' % (of_dpath, fn))
+            cn = 'roamingTime'
+            outlier_set = set(np.where(df[cn] > MINUTES40)[0].tolist())
+            df = df.drop(df.index[list(outlier_set)])
+            df = df.drop(['interTravelTime'], axis=1)
+            df.to_csv(new_fpath, index=False)
+        driversRelations = {}
+        superSet_fpath = '%s/roamingTimeFiltered-superSet-%s.pkl' % (of_prefixs, year)
+        logger.info('handle the file; %s' % superSet_fpath)
+        for fn in get_all_files(of_dpath, 'roamingTimeFiltered-%s%s*' % (of_prefixs, yy)):
+            logger.info('handle the file; %s' % fn)
+            with open('%s/%s' % (of_dpath, fn), 'rb') as r_csvfile:
+                reader = csv.reader(r_csvfile)
+                headers = reader.next()
+                hid = {h: i for i, h in enumerate(headers)}
+                for row in reader:
+                    did1 = int(row[hid['did']])
+                    prevDrivers = row[hid['prevDrivers']].split('&')
+                    if len(prevDrivers) == 1 and prevDrivers[0] == '':
+                        continue
+                    if not driversRelations.has_key(did1):
+                        driversRelations[did1] = set()
+                    for did0 in map(int, prevDrivers):
+                        driversRelations[did1].add(did0)
+        save_pickle_file(superSet_fpath, driversRelations)
+    except Exception as _:
+        import sys
+        with open('%s_%s.txt' % (sys.argv[0], year), 'w') as f:
+            f.write(format_exc())
 
 
 def process_month(yymm):
