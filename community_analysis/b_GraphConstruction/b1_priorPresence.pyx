@@ -65,7 +65,7 @@ def process_files(reducerID, driver_subset, pickUp_drivers):
         with open(tfZ_TP_fpath, 'wt') as w_csvfile:
             writer = csv.writer(w_csvfile, lineterminator='\n')
             header = ['month', 'day',
-                      'timeFrame', 'zi', 'zj', 'tfZ',
+                      'hour', 'zi', 'zj',
                       'did', depVar]
             for did0 in pickUp_drivers:
                 header.append(did0)
@@ -91,13 +91,12 @@ def process_files(reducerID, driver_subset, pickUp_drivers):
                     if len(_prevDrivers) == 1 and _prevDrivers[0] == '':
                         continue
                     prevDrivers = map(int, _prevDrivers)
-                    tf = row[hid['timeFrame']]
+                    hour = row[hid['hour']]
                     zi, zj = row[hid['zi']], row[hid['zj']]
-                    tfZ = '(%s,%s,%s)' % (tf, zi, zj)
                     with open(tfZ_TP_fpath, 'a') as w_csvfile:
                         writer = csv.writer(w_csvfile, lineterminator='\n')
                         new_row = [row[hid['month']], row[hid['day']],
-                                   tf, zi, zj, tfZ,
+                                   hour, zi, zj,
                                    did1, row[hid[depVar]]]
                         for did0 in pickUp_drivers:
                             new_row.append(O_PRESENCE if did0 in prevDrivers else X_PRESENCE)
