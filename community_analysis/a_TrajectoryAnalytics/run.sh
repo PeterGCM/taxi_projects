@@ -8,5 +8,4 @@
 #done
 
 python -c "from a2_prevDrivers import roamingTimeFiltering; roamingTimeFiltering('2009')" &
-
-
+python -c "from a2_prevDrivers import interTravelTimeFiltering; interTravelTimeFiltering('2009')" &

@@ -5,7 +5,6 @@ import __init__
 '''
 #
 from community_analysis import dpaths, prefixs
-# from community_analysis import driversRelations_fpaths
 from community_analysis import HISTORY_LOOKUP_LENGTH, MINUTES40
 #
 from taxi_common._classes import zone, driver
@@ -41,17 +40,32 @@ def roamingTimeFiltering(year):
     from traceback import format_exc
     try:
         logger.info('start filtering')
+        fs_fpath = '%s/roamingTimeFiltered-summary-%s%s.csv' % (of_dpath, of_prefixs, year)
+        with open(fs_fpath, 'wt') as w_csvfile:
+            writer = csv.writer(w_csvfile, lineterminator='\n')
+            header = ['yymm', 'numTrips', 'numLessThanZero', 'numMoreThan40MIN', 'numFilteredTrips']
+            writer.writerow(header)
         yy = year[2:]
         for fn in get_all_files(of_dpath, '%s%s*' % (of_prefixs, yy)):
             new_fpath = '%s/roamingTimeFiltered-%s' % (of_dpath, fn)
             if check_path_exist(new_fpath):
                 continue
+            _, yymm = fn[:-len('.csv')].split('-')
             df = pd.read_csv('%s/%s' % (of_dpath, fn))
+            numTrips = len(df)
             cn = 'roamingTime'
-            outlier_set = set(np.where(df[cn] > MINUTES40)[0].tolist())
+            outlier_set = set(np.where(df[cn] < 0)[0].tolist())
+            numLessThanZero = len(outlier_set)
+            outlier_set = outlier_set.union(set(np.where(df[cn] > MINUTES40)[0].tolist()))
+            numMoreThan40MIN = len(outlier_set) - numLessThanZero
+            numFilteredTrips = numLessThanZero + numMoreThan40MIN
             df = df.drop(df.index[list(outlier_set)])
             df = df.drop(['interTravelTime'], axis=1)
             df.to_csv(new_fpath, index=False)
+            with open(fs_fpath, 'a') as w_csvfile:
+                writer = csv.writer(w_csvfile, lineterminator='\n')
+                new_row = [yymm, numTrips, numLessThanZero, numMoreThan40MIN, numFilteredTrips]
+                writer.writerow(new_row)
         driversRelations = {}
         superSet_fpath = '%s/roamingTimeFiltered-superSet-%s%s.pkl' % (of_dpath, of_prefixs, year)
         logger.info('handle the file; %s' % superSet_fpath)
@@ -81,21 +95,37 @@ def interTravelTimeFiltering(year):
     from traceback import format_exc
     try:
         logger.info('start filtering')
+        fs_fpath = '%s/interTravelTimeFiltered-summary-%s%s.csv' % (of_dpath, of_prefixs, year)
+        with open(fs_fpath, 'wt') as w_csvfile:
+            writer = csv.writer(w_csvfile, lineterminator='\n')
+            header = ['yymm', 'numTrips', 'numLessThanZero', 'Per95Value', 'numMoreThanPer95Value', 'numFilteredTrips']
+            writer.writerow(header)
         yy = year[2:]
         for fn in get_all_files(of_dpath, '%s%s*' % (of_prefixs, yy)):
-            new_fpath = '%s/roamingTimeFiltered-%s' % (of_dpath, fn)
+            new_fpath = '%s/interTravelTimeFiltered-%s' % (of_dpath, fn)
             if check_path_exist(new_fpath):
                 continue
+            _, yymm = fn[:-len('.csv')].split('-')
             df = pd.read_csv('%s/%s' % (of_dpath, fn))
-            cn = 'roamingTime'
-            outlier_set = set(np.where(df[cn] > MINUTES40)[0].tolist())
+            numTrips = len(df)
+            cn = 'interTravelTime'
+            outlier_set = set(np.where(df[cn] < 0)[0].tolist())
+            numLessThanZero = len(outlier_set)
+            per95Value = df[cn].quantile(0.95)
+            outlier_set = outlier_set.union(set(np.where(df[cn] > per95Value)[0].tolist()))
+            numMoreThanPer95Value = len(outlier_set) - numLessThanZero
+            numFilteredTrips = numLessThanZero + numMoreThanPer95Value
             df = df.drop(df.index[list(outlier_set)])
-            df = df.drop(['interTravelTime'], axis=1)
+            df = df.drop(['roamingTime'], axis=1)
             df.to_csv(new_fpath, index=False)
+            with open(fs_fpath, 'a') as w_csvfile:
+                writer = csv.writer(w_csvfile, lineterminator='\n')
+                new_row = [yymm, numTrips, numLessThanZero, per95Value, numMoreThanPer95Value, numFilteredTrips]
+                writer.writerow(new_row)
         driversRelations = {}
-        superSet_fpath = '%s/roamingTimeFiltered-superSet-%s%s.pkl' % (of_dpath, of_prefixs, year)
+        superSet_fpath = '%s/interTravelTimeFiltered-superSet-%s%s.pkl' % (of_dpath, of_prefixs, year)
         logger.info('handle the file; %s' % superSet_fpath)
-        for fn in get_all_files(of_dpath, 'roamingTimeFiltered-%s%s*' % (of_prefixs, yy)):
+        for fn in get_all_files(of_dpath, 'interTravelTimeFiltered-%s%s*' % (of_prefixs, yy)):
             logger.info('handle the file; %s' % fn)
             with open('%s/%s' % (of_dpath, fn), 'rb') as r_csvfile:
                 reader = csv.reader(r_csvfile)
