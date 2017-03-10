@@ -40,14 +40,18 @@ def run(yymm):
 def roamingTimeFiltering(year):
     yy = year[2:]
     for fn in get_all_files(of_dpath, '%s%s*' % (of_prefixs, yy)):
+        new_fpath = '%s/roamingTimeFiltered-%s' % (of_dpath, fn)
+        if check_path_exist(new_fpath):
+            continue
         df = pd.read_csv('%s/%s' % (of_dpath, fn))
         cn = 'roamingTime'
         outlier_set = set(np.where(df[cn] > MINUTES40)[0].tolist())
         df = df.drop(df.index[list(outlier_set)])
         df = df.drop(['interTravelTime'], axis=1)
-        df.to_csv('%s/roamingTimeFiltered-%s' % (of_dpath, fn), index=False)
+        df.to_csv(new_fpath, index=False)
     driversRelations = {}
     superSet_fpath = '%s/roamingTimeFiltered-superSet-%s.pkl' % (of_prefixs, year)
+    logger.info('handle the file; %s' % superSet_fpath)
     for fn in get_all_files(of_dpath, 'roamingTimeFiltered-%s%s*' % (of_prefixs, yy)):
         logger.info('handle the file; %s' % fn)
         with open('%s/%s' % (of_dpath, fn), 'rb') as r_csvfile:
