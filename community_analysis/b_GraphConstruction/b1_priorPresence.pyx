@@ -34,10 +34,10 @@ numWorker = 6
 numReducers = numWorker * 10
 year = '20%02d' % 9
 #
-depVar = 'roamingTime'
-of_dpath, of_prefixs = rt_of_dpath, rt_of_prefixs
-# depVar = 'interTravelTime'
-# of_dpath, of_prefixs = itt_of_dpath, itt_of_prefixs
+# depVar = 'roamingTime'
+# of_dpath, of_prefixs = rt_of_dpath, rt_of_prefixs
+depVar = 'interTravelTime'
+of_dpath, of_prefixs = itt_of_dpath, itt_of_prefixs
 
 def run(moduloIndex):
     logger.info('loading driversRelations %s; %s' % (year, depVar))
