@@ -18,8 +18,8 @@ logger = get_logger()
 numWorker = 4
 #
 year = '20%02d' % 9
-depVar = 'roamingTime'
-# depVar = 'interTravelTime'
+# depVar = 'roamingTime'
+depVar = 'interTravelTime'
 #
 #
 if_dpath = dpaths[depVar, 'priorPresence']
