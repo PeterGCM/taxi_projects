@@ -60,7 +60,7 @@ def process_file(fpath):
             did1_df = df[(df['did'] == did1)].copy(deep=True)
             numObservations = len(did1_df)
             minDFResiduals = numObservations * MIN_RATIO_RESIDUAL
-            did1_df = did1_df.drop(['month', 'day', 'hour', 'zi', 'zj', 'tfZ', 'did'], axis=1)
+            did1_df = did1_df.drop(['month', 'day', 'hour', 'zi', 'zj', 'did'], axis=1)
             if '%d' % did1 in did1_df.columns:
                 did1_df = did1_df.drop(['%d' % did1], axis=1)
             #
