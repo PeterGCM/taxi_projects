@@ -6,6 +6,3 @@
 for i in {0..2}; do
     python -c "from b2_influenceGraph import run; run($i)" &
 done
-
-
-#python -c "from b3_graphPartition import run; run()" &
