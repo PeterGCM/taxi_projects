@@ -1,4 +1,4 @@
-import community_analysis.b_GraphConstruction
+import __init__
 #
 '''
 
