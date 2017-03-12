@@ -44,8 +44,8 @@ def process_file(fpath):
     logger.info('Start handling; %s' % fpath)
     _, _, _, reducerID = get_fn_only(fpath)[:-len('.csv')].split('-')
     try:
-        ig_fpath = '%s/%s%s.pkl' % (of_dpath, of_prefixs, reducerID)
-        count_fpath = '%s/%scount-%s.pkl' % (of_dpath, of_prefixs, reducerID)
+        ig_fpath = '%s/%s%s-%s.pkl' % (of_dpath, of_prefixs, year, reducerID)
+        count_fpath = '%s/%scount-%s-%s.pkl' % (of_dpath, of_prefixs, year, reducerID)
         if check_path_exist(ig_fpath):
             return None
         #
