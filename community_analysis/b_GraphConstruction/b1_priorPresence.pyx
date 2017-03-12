@@ -13,31 +13,22 @@ from taxi_common.log_handling_functions import get_logger
 import csv, datetime
 
 logger = get_logger()
-
-if_dpath = dpaths['prevDrivers']
-if_prefixs = prefixs['prevDrivers']
-#
-rt_of_dpath = dpaths['roamingTime', 'priorPresence']
-rt_of_prefixs = prefixs['roamingTime', 'priorPresence']
-try:
-    check_dir_create(rt_of_dpath)
-except OSError:
-    pass
-itt_of_dpath = dpaths['interTravelTime', 'priorPresence']
-itt_of_prefixs = prefixs['interTravelTime', 'priorPresence']
-try:
-    check_dir_create(itt_of_dpath)
-except OSError:
-    pass
-
 numWorker = 6
 numReducers = numWorker * 10
-year = '20%02d' % 9
 #
-# depVar = 'roamingTime'
-# of_dpath, of_prefixs = rt_of_dpath, rt_of_prefixs
-depVar = 'interTravelTime'
-of_dpath, of_prefixs = itt_of_dpath, itt_of_prefixs
+year = '20%02d' % 9
+depVar = 'roamingTime'
+# depVar = 'interTravelTime'
+#
+if_dpath = dpaths['prevDrivers']
+if_prefixs = prefixs['prevDrivers']
+of_dpath = dpaths[depVar, 'priorPresence']
+of_prefixs = prefixs[depVar, 'priorPresence']
+try:
+    check_dir_create(of_dpath)
+except OSError:
+    pass
+
 
 def run(moduloIndex):
     logger.info('loading driversRelations %s; %s' % (year, depVar))
