@@ -32,7 +32,7 @@ if plf.startswith('Linux'):
         print '******** Type packageName and fileName ******'
 elif plf.startswith('Darwin'):
     # Mac
-    packageName, fileName = 'c_CommunityDetection', 'c2_comTrips'
+    packageName, fileName = 'e_CommunityEvolution', 'e1_regressionComMembers'
     cythonize(packageName, fileName)
 else:
     # Window ?
