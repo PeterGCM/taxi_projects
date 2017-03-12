@@ -81,7 +81,7 @@ def process_file(fpath):
             #
             dummiesD = []
             for cn in did1_df.columns:
-                if cn == tm:
+                if cn == depVar:
                     continue
                 if cn in dummiesH:
                     continue
