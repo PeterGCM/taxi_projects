@@ -6,7 +6,6 @@ import __init__
 #
 from community_analysis import dpaths, prefixs
 from community_analysis import X_PRESENCE, O_PRESENCE
-from community_analysis import AM10, PM8
 #
 from taxi_common.file_handling_functions import check_dir_create, get_all_files
 from taxi_common.log_handling_functions import get_logger
@@ -24,7 +23,7 @@ depVar = 'roamingTime'
 #
 #
 if_dpath1 = dpaths['prevDrivers']
-if_prefixs1 = dpaths['prevDrivers']
+if_prefixs1 = prefixs['prevDrivers']
 if_dpath2 = dpaths[depVar, 'graphPartition']
 if_prefixs2 = prefixs[depVar, 'graphPartition']
 of_dpath = dpaths[depVar, 'comTrips']
@@ -77,7 +76,7 @@ def process_file(comName, comDrivers):
                 if did1 not in comDrivers:
                     continue
                 tm_value = row[hid[depVar]]
-                t, month, day, hour = [row[hid[colName]] for colName in ['time', 'month', 'day', 'timeFrame']]
+                t, month, day, hour = [row[hid[colName]] for colName in ['time', 'month', 'day', 'hour']]
                 zi, zj = row[hid['zi']], row[hid['zj']]
                 zizj = '%s#%s' % (zi, zj)
                 _prevDrivers = row[hid['prevDrivers']].split('&')
@@ -111,4 +110,4 @@ def process_file(comName, comDrivers):
 
 
 if __name__ == '__main__':
-    run()
+    run(0)
