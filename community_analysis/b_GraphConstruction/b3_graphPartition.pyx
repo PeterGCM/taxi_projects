@@ -46,7 +46,7 @@ def run():
              'weightMedian', 'weightMean', 'weightStd',
              'tieStrength', 'contribution', 'benCon'])
     #
-    logger.info('Start handling SP_group_dpath')
+    logger.info('Start handling %s' % depVar)
     orignal_graph = {}
     for fn in get_all_files(if_dpath, '%s%s*' % (if_prefixs, year)):
         regression_graph = load_pickle_file('%s/%s' % (if_dpath, fn))
