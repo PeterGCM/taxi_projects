@@ -1,4 +1,4 @@
-import __init__
+import community_analysis
 #
 from community_analysis import chart_dpath
 #
