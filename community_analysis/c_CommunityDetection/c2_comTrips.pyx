@@ -76,7 +76,7 @@ def process_file(comName, comDrivers):
                 if did1 not in comDrivers:
                     continue
                 tm_value = row[hid[depVar]]
-                t, month, day, hour = [row[hid[colName]] for colName in ['time', 'month', 'day', 'timeFrame']]
+                t, month, day, hour = [row[hid[colName]] for colName in ['time', 'month', 'day', 'hour']]
                 zi, zj = row[hid['zi']], row[hid['zj']]
                 zizj = '%s#%s' % (zi, zj)
                 _prevDrivers = row[hid['prevDrivers']].split('&')
