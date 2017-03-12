@@ -52,7 +52,7 @@ def run(processorID):
 
 
 def process_file(comName, comDrivers):
-    logger.info('handle the file; %s-%s-%s' % (year, comName))
+    logger.info('handle the file; %s-%s' % (year, comName))
     ct_fpath = '%s/%s%s-%s.csv' % (of_dpath, of_prefixs, year, comName)
     with open(ct_fpath, 'wt') as w_csvfile:
         writer = csv.writer(w_csvfile, lineterminator='\n')
