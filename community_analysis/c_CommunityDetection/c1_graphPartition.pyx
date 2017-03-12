@@ -1,4 +1,4 @@
-import __init__
+import community_analysis.b_GraphConstruction
 #
 '''
 
@@ -34,14 +34,14 @@ except OSError:
 
 
 def run():
-    gp_summary_fpath = '%s/%s%s-summary.csv' % (of_dpath, of_prefixs, year)
-    gp_original_fpath = '%s/%s%s-original.pkl' % (of_dpath, of_prefixs, year)
-    gp_drivers_fpath = '%s/%s%s-drivers.pkl' % (of_dpath, of_prefixs, year)
+    comSummary_fpath = '%s/%s%s-summary.csv' % (of_dpath, of_prefixs, year)
+    originalGraph_fpath = '%s/%s%s-original.pkl' % (of_dpath, of_prefixs, year)
+    comDrivers_fpath = '%s/%s%s-drivers.pkl' % (of_dpath, of_prefixs, year)
     #
-    with open(gp_summary_fpath, 'wt') as w_csvfile:
+    with open(comSummary_fpath, 'wt') as w_csvfile:
         writer = csv.writer(w_csvfile, lineterminator='\n')
         writer.writerow(
-            ['groupName',
+            ['comName',
              'numDrivers', 'numRelations', 'graphComplexity',
              'weightMedian', 'weightMean', 'weightStd',
              'tieStrength', 'contribution', 'benCon'])
@@ -54,7 +54,7 @@ def run():
             if pv > sig_level:
                 continue
             orignal_graph[did0, did1] = w
-    save_pickle_file(gp_original_fpath, orignal_graph)
+    save_pickle_file(originalGraph_fpath, orignal_graph)
     #
     igid, did_igid = 0, {}
     igG = ig.Graph(directed=True)
@@ -71,12 +71,12 @@ def run():
     #
     logger.info('Partitioning')
     part = louvain.find_partition(igG, method='Modularity', weight='weight')
-    logger.info('Each group pickling and summary')
-    gn_drivers = {}
+    logger.info('Each community graph pickling and summary')
+    comDrivers = {}
     for i, sg in enumerate(part.subgraphs()):
-        gn = 'G(%d)' % i
-        group_fpath = '%s/%s%s-%s.pkl' % (of_dpath, of_prefixs, year, gn)
-        sg.write_pickle(group_fpath)
+        cn = 'C(%d)' % i
+        comGraph_fpath = '%s/%s%s-%s.pkl' % (of_dpath, of_prefixs, year, cn)
+        sg.write_pickle(comGraph_fpath)
         #
         nodes = [v['name'] for v in sg.vs]
         weights = [e['weight'] for e in sg.es]
@@ -90,31 +90,31 @@ def run():
         tieStrength = weights_np.sum() / float(numDrivers)
         contribution = weights_np.sum() / float(numRelations)
         benCon = tieStrength / float(numDrivers)
-        with open(gp_summary_fpath, 'a') as w_csvfile:
+        with open(comSummary_fpath, 'a') as w_csvfile:
             writer = csv.writer(w_csvfile, lineterminator='\n')
             new_row = [
-                gn,
+                cn,
                 numDrivers, numRelations, graphComplexity,
                 weightMedian, weightMean, weightStd,
                 tieStrength, contribution, benCon
             ]
             writer.writerow(new_row)
-        gl_img_fpath = '%s/%simg-%s-%s.pdf' % (of_dpath, of_prefixs, year, gn)
+        img_fpath = '%s/%simg-%s-%s.pdf' % (of_dpath, of_prefixs, year, cn)
         layout = sg.layout("kk")
         if len(nodes) < 100:
-            ig.plot(sg, gl_img_fpath, layout=layout, vertex_label=nodes, vertex_color='white')
+            ig.plot(sg, img_fpath, layout=layout, vertex_label=nodes, vertex_color='white')
         else:
-            ig.plot(sg, gl_img_fpath, layout=layout, vertex_color='white')
-        gn_drivers[gn] = nodes
-        gc_fpath = '%s/%scoef-%s-%s.csv' % (of_dpath, of_prefixs, year, gn)
-        with open(gc_fpath, 'wt') as w_csvfile:
+            ig.plot(sg, img_fpath, layout=layout, vertex_color='white')
+        comDrivers[cn] = nodes
+        coef_fpath = '%s/%scoef-%s-%s.csv' % (of_dpath, of_prefixs, year, cn)
+        with open(coef_fpath, 'wt') as w_csvfile:
             writer = csv.writer(w_csvfile, lineterminator='\n')
             writer.writerow(['groupName', 'did0', 'did1', 'coef'])
             for e in sg.es:
                 did0, did1 = [sg.vs[nIndex]['name'] for nIndex in e.tuple]
                 coef = e['weight']
-                writer.writerow([gn, did0, did1, coef])
-    save_pickle_file(gp_drivers_fpath, gn_drivers)
+                writer.writerow([cn, did0, did1, coef])
+    save_pickle_file(comDrivers_fpath, comDrivers)
 
 
 if __name__ == '__main__':

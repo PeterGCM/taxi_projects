@@ -16,7 +16,8 @@ for irName in ['roamingNinterTravel', 'prevDrivers']:
     dpaths[irName] = '%s/%s' % (taxi_data, irName)
     prefixs[irName] = '%s-' % irName
 for depVar in ['roamingTime', 'interTravelTime']:
-    for irName in ['priorPresence', 'influenceGraph', 'graphPartition']:
+    for irName in ['priorPresence', 'influenceGraph', 'graphPartition',
+                   'comTrips']:
         dpaths[depVar, irName] = '%s/%s/%s' % (taxi_data, depVar, irName)
         prefixs[depVar, irName] = '%s-%s-' % (depVar, irName)
 
