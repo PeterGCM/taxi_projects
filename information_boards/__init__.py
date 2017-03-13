@@ -5,7 +5,7 @@ from taxi_common.__init__ import get_taxi_home_path
 taxi_home = get_taxi_home_path()
 #
 from taxi_common.file_handling_functions import check_dir_create
-taxi_data = os.path.dirname(os.path.realpath(__file__)) + '/data'
+taxi_data = os.path.dirname(os.path.realpath(__file__)) + '/z_data'
 try:
     check_dir_create(taxi_data)
 except OSError:
