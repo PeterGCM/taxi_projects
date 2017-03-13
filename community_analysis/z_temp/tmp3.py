@@ -14,7 +14,6 @@ depVar = 'interTravelTime'
 of_dpath = dpaths[depVar, 'influenceGraph']
 of_prefixs = prefixs[depVar, 'influenceGraph']
 
-count_fpath = '%s/%scount-%s-%s.pkl' % (of_dpath, of_prefixs, year, reducerID)
 
 countRelationWhole = {k: 0 for k in ['sigPos', 'sigNeg', 'XsigPos', 'XsigNeg']}
 
