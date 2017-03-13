@@ -27,7 +27,7 @@ if_prefixs1 = prefixs['prevDrivers']
 if_dpath2 = dpaths[depVar, 'graphPartition']
 if_prefixs2 = prefixs[depVar, 'graphPartition']
 of_dpath = dpaths[depVar, 'comTrips']
-of_prefixs = prefixs[depVar, 'comTrips']
+of_prefix = prefixs[depVar, 'comTrips']
 try:
     check_dir_create(of_dpath)
 except OSError:
@@ -52,7 +52,7 @@ def run(processorID):
 
 def process_file(comName, comDrivers):
     logger.info('handle the file; %s-%s' % (year, comName))
-    ct_fpath = '%s/%s%s-%s.csv' % (of_dpath, of_prefixs, year, comName)
+    ct_fpath = '%s/%s%s-%s.csv' % (of_dpath, of_prefix, year, comName)
     with open(ct_fpath, 'wt') as w_csvfile:
         writer = csv.writer(w_csvfile, lineterminator='\n')
         header = ['time', 'year', 'month', 'day', 'hour',
