@@ -29,7 +29,7 @@ def process_file(yymm):
     from traceback import format_exc
     try:
         logger.info('handle the file; %s' % yymm)
-        ifpath = '%s/%s%s.csv' % (if_dpath, if_prefix, yymm)
+        ifpath = '%s/Filtered-%s%s.csv' % (if_dpath, if_prefix, yymm)
         if not check_path_exist(ifpath):
             logger.info('The file X exists; %s' % yymm)
             return None
