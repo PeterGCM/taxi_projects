@@ -161,7 +161,7 @@ def gen_summary():
     driverSetBoth = driverSet2009.intersection(driverSet2010)
     onlySet2009 = driverSet2009.difference(driverSetBoth)
     onlySet2010 = driverSet2010.difference(driverSetBoth)
-    # fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ap_dpath, statisticsAllDriversIntellect_ap_prefix, 'all')
+    # ofpath = '%s/%s%s.csv' % (statisticsAllDrivers_ap_dpath, statisticsAllDriversIntellect_ap_prefix, 'all')
     fpath = '%s/%s%s.csv' % (statisticsAllDrivers_ap_dpath, statisticsAllDriversIntellect_ap_prefix, 'all-negativeOnly')
     with open(fpath, 'wt') as w_csvfile:
         writer = csv.writer(w_csvfile, lineterminator='\n')

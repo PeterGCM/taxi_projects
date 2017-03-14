@@ -36,8 +36,8 @@ import csv
 
 
 def run():
-    # for fpath in [ssDriversStatistics_ns1519_fpath, ssDriversStatistics_ns2000_fpath]:
-    #     with open(fpath, 'wb') as w_csvfile:
+    # for ofpath in [ssDriversStatistics_ns1519_fpath, ssDriversStatistics_ns2000_fpath]:
+    #     with open(ofpath, 'wb') as w_csvfile:
     #         writer = csv.writer(w_csvfile, lineterminator='\n')
     #         headers = ['year', 'month', 'day',
     #                    'did',

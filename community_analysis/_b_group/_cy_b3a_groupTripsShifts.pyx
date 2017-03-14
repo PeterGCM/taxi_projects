@@ -77,9 +77,9 @@ def process_file(tm, year, gn, groupDrivers):
         writer.writerow(new_headers)
     # yy = year[2:]
     # for fn in get_all_files(prevDriversDefined_dpath, 'Filtered-%s%s*' % (prevDriversDefined_prefix, yy)):
-    #     fpath = '%s/%s' % (prevDriversDefined_dpath, fn)
+    #     ofpath = '%s/%s' % (prevDriversDefined_dpath, fn)
     #     logger.info('handle the file %s; %s-%s-%s' % (fn, tm, year, gn))
-    #     with open(fpath, 'rb') as r_csvfile:
+    #     with open(ofpath, 'rb') as r_csvfile:
     #         reader = csv.reader(r_csvfile)
     #         header = reader.next()
     #         hid = {h: i for i, h in enumerate(header)}

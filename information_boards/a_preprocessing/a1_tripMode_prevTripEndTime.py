@@ -166,12 +166,5 @@ def process_file(yymm):
         raise
 
 
-
-
-#
-
-
-
-
 if __name__ == '__main__':
     run()
