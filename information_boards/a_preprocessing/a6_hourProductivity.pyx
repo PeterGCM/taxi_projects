@@ -17,8 +17,8 @@ logger = get_logger()
 
 if_dpath = trip_dpath
 if_prefix = trip_prefix
-of_dpath = dpaths['tempProductivity']
-of_prefix = prefixs['tempProductivity']
+of_dpath = dpaths['hourProductivity']
+of_prefix = prefixs['hourProductivity']
 try:
     check_dir_create(of_dpath)
 except OSError:

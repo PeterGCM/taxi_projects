@@ -63,8 +63,8 @@ NS_DUR, NS_FARE, NS_QUEUE, NS_NUM = range(11)
 # directory path and file's prefix
 #
 dpaths, prefixs = {}, {}
-dpaths['tempProductivity'] = '%s/%s' % (taxi_data, 'tempProductivity')
-prefixs['tempProductivity'] = 'tempProductivity-'
+dpaths['hourProductivity'] = '%s/%s' % (taxi_data, 'hourProductivity')
+prefixs['hourProductivity'] = 'hourProductivity-'
 
 
 trip_dpath, trip_prefix = '%s/%s' % (taxi_data, 'trip'), 'trip-'
