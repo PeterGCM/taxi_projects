@@ -85,8 +85,10 @@ class driver(object):
                     if prevEndTime1 - prevEndTime0 < HOUR1:
                         hourProductivity += int(prevTripInfo1[self.hid['fare']])
                     else:
-                        timeOver = (prevEndTime0 + HOUR1) - prevEndTime1
-                        hourProductivity += int(prevTripInfo1[self.hid['fare']]) * (timeOver / float(prevTripInfo1[self.hid['duration']]))
+                        if int(prevTripInfo1[self.hid['startTime']]) < (prevEndTime0 + HOUR1):
+                            timeOver = (prevEndTime0 + HOUR1) - prevEndTime1
+                            hourProductivity += int(prevTripInfo1[self.hid['fare']]) * (
+                            timeOver / float(prevTripInfo1[self.hid['duration']]))
                         break
                 with open(self.ofpath, 'a') as w_csvfile:
                     writer = csv.writer(w_csvfile, lineterminator='\n')
