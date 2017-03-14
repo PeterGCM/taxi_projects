@@ -86,7 +86,7 @@ class driver(object):
                         hourProductivity += int(prevTripInfo1[self.hid['fare']])
                     else:
                         if int(prevTripInfo1[self.hid['startTime']]) < (prevEndTime0 + HOUR1):
-                            timeOver = (prevEndTime0 + HOUR1) - prevEndTime1
+                            timeOver = prevEndTime1 - (prevEndTime0 + HOUR1)
                             hourProductivity += int(prevTripInfo1[self.hid['fare']]) * (
                             timeOver / float(prevTripInfo1[self.hid['duration']]))
                         break
