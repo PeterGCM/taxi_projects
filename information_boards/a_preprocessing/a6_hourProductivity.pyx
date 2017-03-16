@@ -7,11 +7,13 @@ import __init__
 from information_boards import trip_dpath, trip_prefix
 from information_boards import dpaths, prefixs
 from information_boards import HOUR1, AM6
+from information_boards import HOLIDAYS2009, HOLIDAYS2010
+from information_boards import WEEKENDS
 #
 from taxi_common.file_handling_functions import check_dir_create, check_path_exist
 from taxi_common.log_handling_functions import get_logger
 #
-import csv
+import csv, datetime
 
 logger = get_logger()
 
@@ -42,7 +44,7 @@ def process_file(yymm):
             hid = {h: i for i, h in enumerate(header)}
             with open(ofpath, 'wt') as w_csvfile:
                 writer = csv.writer(w_csvfile, lineterminator='\n')
-                new_header = header + ['hourProductivity']
+                new_header = header + ['weekEnd', 'hourProductivity']
                 writer.writerow(new_header)
             for row in reader:
                 did = int(row[hid['did']])
@@ -90,9 +92,16 @@ class driver(object):
                             hourProductivity += int(prevTripInfo1[self.hid['fare']]) * (
                             timeOver / float(prevTripInfo1[self.hid['duration']]))
                         break
+                year, month, day, hour = map(int, [prevTripInfo0[self.hid[cn]] for cn in ['year', 'month', 'day', 'hour']])
+                holidays = HOLIDAYS2009 if year == 2009 else HOLIDAYS2010
+                weekEnd = 0
+                if (year, month, day) in holidays:
+                    weekEnd = 1
+                if datetime.datetime(year, month, day).weekday() in WEEKENDS:
+                    weekEnd = 1
                 with open(self.ofpath, 'a') as w_csvfile:
                     writer = csv.writer(w_csvfile, lineterminator='\n')
-                    writer.writerow(prevTripInfo0 + [hourProductivity])
+                    writer.writerow(prevTripInfo0 + [weekEnd, hourProductivity])
             else:
                 break
         # update list
