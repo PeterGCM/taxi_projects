@@ -10,6 +10,22 @@ try:
     check_dir_create(taxi_data)
 except OSError:
     pass
+
+dpaths, prefixs = {}, {}
+for irName in ['log']:
+    dpaths[irName] = '%s/%s' % (taxi_data, irName)
+    prefixs[irName] = '%s-' % irName
+
+
+
+
+
+
+
+
+
+
+
 #
 # Trip mode define
 #

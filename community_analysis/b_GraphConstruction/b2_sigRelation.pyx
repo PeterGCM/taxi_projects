@@ -7,7 +7,7 @@ import __init__
 from community_analysis import dpaths, prefixs
 from community_analysis import SIGINIFICANCE_LEVEL, MIN_PICKUP_RATIO, MIN_RATIO_RESIDUAL
 #
-from taxi_common.file_handling_functions import check_dir_create, get_all_files, get_fn_only, check_path_exist, save_pickle_file
+from taxi_common.file_handling_functions import check_dir_create, get_all_files, get_fn_only
 from taxi_common.log_handling_functions import get_logger
 #
 import pandas as pd
