@@ -16,7 +16,7 @@ import statsmodels.api as sm
 from traceback import format_exc
 
 logger = get_logger()
-numWorker = 6
+numWorker = 4
 #
 year = '20%02d' % 9
 depVar = 'roamingTime'
