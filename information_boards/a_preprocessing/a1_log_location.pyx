@@ -1,7 +1,5 @@
 import __init__
-
 #
-
 from information_boards import dpaths, prefixs
 from information_boards import taxi_home
 #
