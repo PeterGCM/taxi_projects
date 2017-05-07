@@ -52,8 +52,8 @@ def process_files(reducerID, driver_subset, pickUp_drivers):
     #
     try:
         logger.info('Handle arrange %s(%d)' % (year, reducerID))
-        tfZ_TP_fpath = '%s/%s%s-%d.csv' % (of_dpath, of_prefixs, year, reducerID)
-        with open(tfZ_TP_fpath, 'wt') as w_csvfile:
+        priorPresence_fpath = '%s/%s%s-%d.csv' % (of_dpath, of_prefixs, year, reducerID)
+        with open(priorPresence_fpath, 'wt') as w_csvfile:
             writer = csv.writer(w_csvfile, lineterminator='\n')
             header = ['month', 'day',
                       'hour', 'zi', 'zj',
@@ -84,7 +84,7 @@ def process_files(reducerID, driver_subset, pickUp_drivers):
                     prevDrivers = map(int, _prevDrivers)
                     hour = row[hid['hour']]
                     zi, zj = row[hid['zi']], row[hid['zj']]
-                    with open(tfZ_TP_fpath, 'a') as w_csvfile:
+                    with open(priorPresence_fpath, 'a') as w_csvfile:
                         writer = csv.writer(w_csvfile, lineterminator='\n')
                         new_row = [row[hid['month']], row[hid['day']],
                                    hour, zi, zj,

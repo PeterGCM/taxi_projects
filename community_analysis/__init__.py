@@ -16,7 +16,8 @@ for irName in ['roamingNinterTravel', 'prevDrivers']:
     dpaths[irName] = '%s/%s' % (taxi_data, irName)
     prefixs[irName] = '%s-' % irName
 for depVar in ['roamingTime', 'interTravelTime']:
-    for irName in ['priorPresence', 'influenceGraph', 'graphPartition',
+    for irName in ['priorPresence', 'sigRelation' 
+                   'influenceGraph', 'graphPartition',
                    'comTrips', 'comEvolution']:
         dpaths[depVar, irName] = '%s/%s/%s' % (taxi_data, depVar, irName)
         prefixs[depVar, irName] = '%s-%s-' % (depVar, irName)
@@ -36,45 +37,3 @@ SIGINIFICANCE_LEVEL = 0.05
 MIN_PICKUP_RATIO = 0.1
 MIN_RATIO_RESIDUAL = 0.2
 #
-
-
-
-
-
-
-# chart_dpath = os.path.dirname(os.path.realpath(__file__)) + '/chart'; check_dir_create(chart_dpath)
-# years = ['20%02d' % y for y in range(9, 13)]
-# ss_trips_dpath, ss_trips_prefix = '%s/%s' % (taxi_data, 'trips_ss_drivers'), 'trips-ss-drivers-'
-# shiftProDur_dpath, shiftProDur_prefix = '%s/%s' % (taxi_data, 'shiftProDur'), 'shiftProDur-'
-#
-# prevDriversDefined_dpath, prevDriversDefined_prefix =  '%s/%s' % (taxi_data, 'prevDriversDefined'), 'prevDriversDefined-'
-# tfZ_TP_dpath, tfZ_TP_prefix = '%s/%s' % (taxi_data, 'tfZ_TP'), 'tfZ_TP-'
-# driversRelations_fpaths = {year: '%s/driversRelations%s.pkl' % (prevDriversDefined_dpath, year) for year in years}
-# #
-# timeMeasures = ['spendingTime', 'roamingTime']
-# interResults = ['influenceGraph',
-#                 'groupPartition', 'groupTrips', 'groupShifts','groupZones', 'groupMarginal',
-#                 'groupDriverStats','groupDayStats',
-#                 'groupEvolution', 'groupAttributes']
-# dpaths, prefixs = {}, {}
-# for tm in timeMeasures:
-#     for year in years:
-#         for ir in interResults:
-#             dpaths[tm, year, ir] = '%s/%s/%s/%s' % (taxi_data, tm, year, ir)
-#             prefixs[tm, year, ir] = '%s-%s-%s-' % (tm, year, ir)
-#
-# groupPartitionSummaries, groupPartitionDrivers = {}, {}
-# for tm in timeMeasures:
-#     for year in years:
-#         groupPartition_dpath = dpaths[tm, year, 'groupPartition']
-#         groupPartition_prefix = prefixs[tm, year, 'groupPartition']
-#         groupPartitionSummaries[tm, year] = '%s/%s' % (groupPartition_dpath, groupPartition_prefix)
-# groupEvolution_fpath = '%s/%s/%s' % (taxi_data, 'spendingTime', 'groupEvolution.csv')
-# #
-#
-# interResults = ['countGraph',
-#                 'groupPartition', 'groupTrips', 'groupShifts','groupZones', 'groupMarginal',
-#                 'groupDriverStats','groupDayStats']
-# for ir in interResults:
-#     dpaths['baseline', '2009', ir] = '%s/%s/%s/%s' % (taxi_data, 'baseline', '2009', ir)
-#     prefixs['baseline', '2009', ir] = '%s-%s-%s-' % ('baseline', '2009', ir)
