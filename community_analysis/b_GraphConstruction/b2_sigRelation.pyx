@@ -49,7 +49,7 @@ def process_file(fpath):
         with open(sr_fpath, 'wt') as w_csvfile:
             writer = csv.writer(w_csvfile, lineterminator='\n')
             header = ['did',
-                      'numObservations', 'numPrevDrivers' 
+                      'numObservations', 'numPrevDrivers',
                       'thNumEncounter', 'numIndepVariables',
                       'numSigRelationship', 'sigRelation']
             writer.writerow(header)
