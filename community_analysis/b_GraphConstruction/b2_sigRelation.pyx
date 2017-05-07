@@ -45,7 +45,7 @@ def process_file(fpath):
     logger.info('Start handling; %s' % fpath)
     _, _, _, reducerID = get_fn_only(fpath)[:-len('.csv')].split('-')
     try:
-        sr_fpath = '%s/%s%s-%s.pkl' % (of_dpath, of_prefixs, year, reducerID)
+        sr_fpath = '%s/%s%s-%s.csv' % (of_dpath, of_prefixs, year, reducerID)
         with open(sr_fpath, 'wt') as w_csvfile:
             writer = csv.writer(w_csvfile, lineterminator='\n')
             header = ['did',
