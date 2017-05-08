@@ -7,7 +7,7 @@ import __init__
 from community_analysis import dpaths, prefixs
 from community_analysis import SIGINIFICANCE_LEVEL, MIN_PICKUP_RATIO, MIN_RATIO_RESIDUAL
 #
-from taxi_common.file_handling_functions import check_dir_create, get_all_files, get_fn_only
+from taxi_common.file_handling_functions import check_dir_create, get_all_files, get_fn_only, check_path_exist
 from taxi_common.log_handling_functions import get_logger
 #
 import pandas as pd
@@ -16,7 +16,7 @@ import statsmodels.api as sm
 from traceback import format_exc
 
 logger = get_logger()
-numWorker = 64
+numWorker = 11
 #
 year = '20%02d' % 9
 depVar = 'roamingTime'
@@ -46,6 +46,8 @@ def process_file(fpath):
     _, _, _, _did1 = get_fn_only(fpath)[:-len('.csv')].split('-')
     try:
         sr_fpath = '%s/%s%s-%s.csv' % (of_dpath, of_prefixs, year, _did1)
+        if check_path_exist(sr_fpath):
+            return None
         with open(sr_fpath, 'wt') as w_csvfile:
             writer = csv.writer(w_csvfile, lineterminator='\n')
             header = ['did',

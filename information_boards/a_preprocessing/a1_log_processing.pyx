@@ -2,6 +2,7 @@ import __init__
 #
 from information_boards import dpaths, prefixs
 from information_boards import taxi_home
+
 #
 from taxi_common.geo_functions import get_ap_polygons, get_ns_polygon
 from taxi_common.file_handling_functions import check_dir_create, check_path_exist
@@ -53,10 +54,6 @@ def run(yymm):
                            apBasePos, nsBasePos]
                 writer.writerow(new_row)
     logger.info('end the file; %s' % yymm)
-
-def filtering():
-    # consider only transition instances
-    pass
 
 
 if __name__ == '__main__':
