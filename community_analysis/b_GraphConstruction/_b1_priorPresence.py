@@ -13,9 +13,8 @@ from taxi_common.log_handling_functions import get_logger
 import csv, datetime
 
 logger = get_logger()
-# numWorker = 6
-# numReducers = numWorker * 10
-numReducers = 11
+numWorker = 6
+numReducers = numWorker * 10
 #
 year = '20%02d' % 9
 depVar = 'roamingTime'
@@ -38,19 +37,22 @@ def run(moduloIndex):
     whole_drivers = driversRelations.keys()
     driver_subsets = [[] for _ in range(numReducers)]
     for i, did in enumerate(whole_drivers):
-        driver_subsets[i % numReducers] += [did]
-    for i, did1 in enumerate(whole_drivers):
-        if i % numReducers != moduloIndex:
+        driver_subsets[i % numReducers].append(did)
+    for i, driver_subset in enumerate(driver_subsets):
+        if i % numWorker != moduloIndex:
             continue
-        process_files(did1, driversRelations[did1])
+        pickUp_drivers = set()
+        for did1 in driver_subset:
+            pickUp_drivers = pickUp_drivers.union(driversRelations[did1])
+        process_files(i, driver_subset, pickUp_drivers)
 
 
-def process_files(did1, pickUp_drivers):
+def process_files(reducerID, driver_subset, pickUp_drivers):
     from traceback import format_exc
     #
     try:
-        logger.info('Handle arrange %s(%d)' % (year, did1))
-        priorPresence_fpath = '%s/%s%s-%d.csv' % (of_dpath, of_prefixs, year, did1)
+        logger.info('Handle arrange %s(%d)' % (year, reducerID))
+        priorPresence_fpath = '%s/%s%s-%d.csv' % (of_dpath, of_prefixs, year, reducerID)
         with open(priorPresence_fpath, 'wt') as w_csvfile:
             writer = csv.writer(w_csvfile, lineterminator='\n')
             header = ['month', 'day',
@@ -62,7 +64,7 @@ def process_files(did1, pickUp_drivers):
         yy = year[2:]
         for fn in get_all_files(if_dpath, '%sFiltered-%s%s*.csv' % (depVar, if_prefixs, yy)):
             prevDriverDefined_fpath = '%s/%s' % (if_dpath, fn)
-            logger.info('Handling %s(%d); %s' % (year, did1, fn))
+            logger.info('Handling %s(%d); %s' % (year, reducerID, fn))
             with open(prevDriverDefined_fpath, 'rb') as r_csvfile:
                 reader = csv.reader(r_csvfile)
                 header = reader.next()
@@ -72,8 +74,9 @@ def process_files(did1, pickUp_drivers):
                     cur_dtT = datetime.datetime.fromtimestamp(eval(row[hid['time']]))
                     if handling_day != cur_dtT.day:
                         handling_day = cur_dtT.day
-                        logger.info('Processing %s %dth day; reducer %d' % (fn, cur_dtT.day, did1))
-                    if int(row[hid['did']]) != did1:
+                        logger.info('Processing %s %dth day; reducer %d' % (fn, cur_dtT.day, reducerID))
+                    did1 = int(row[hid['did']])
+                    if did1 not in driver_subset:
                         continue
                     _prevDrivers = row[hid['prevDrivers']].split('&')
                     if len(_prevDrivers) == 1 and _prevDrivers[0] == '':
@@ -97,4 +100,4 @@ def process_files(did1, pickUp_drivers):
 
 
 if __name__ == '__main__':
-    run(0)
+    run()
