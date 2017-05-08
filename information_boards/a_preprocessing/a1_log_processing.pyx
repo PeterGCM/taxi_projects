@@ -54,6 +54,10 @@ def run(yymm):
                 writer.writerow(new_row)
     logger.info('end the file; %s' % yymm)
 
+def filtering():
+    # consider only transition instances
+    pass
+
 
 if __name__ == '__main__':
-    run()
+    run('0901')
