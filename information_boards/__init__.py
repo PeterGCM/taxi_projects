@@ -16,7 +16,7 @@ for irName in ['log']:
     dpaths[irName] = '%s/%s' % (taxi_data, irName)
     prefixs[irName] = '%s-' % irName
 
-for irName in ['log']:
+for irName in ['log', 'trip']:
     for loc in ['ap', 'ns']:
         dpaths[irName, loc] = '%s/%s/%s' % (taxi_data, irName, loc)
         prefixs[irName, loc] = '%s-%s-' % (irName, loc)

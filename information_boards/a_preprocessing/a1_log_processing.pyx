@@ -1,8 +1,7 @@
 import __init__
 #
-from information_boards import dpaths, prefixs
 from information_boards import taxi_home
-
+from information_boards import dpaths, prefixs
 #
 from taxi_common.geo_functions import get_ap_polygons, get_ns_polygon
 from taxi_common.file_handling_functions import check_dir_create, check_path_exist

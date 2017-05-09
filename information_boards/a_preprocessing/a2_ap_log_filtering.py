@@ -24,8 +24,7 @@ def run(yymm):
     # consider only transition instances
     ifpath = '%s/%s%s.csv' % (if_dpath, if_prefixs, yymm)
     ofpath = None
-    handling_day = 0
-    vid_lastLoc = {}
+    handling_day, vid_lastLoc = 0, {}
     with open(ifpath, 'rb') as r_csvfile:
         reader = csv.reader(r_csvfile)
         headers = reader.next()
@@ -38,7 +37,7 @@ def run(yymm):
             if AM2 <= dt.hour and dt.hour <= AM5:
                 continue
             if dt.day != handling_day and dt.hour == AM5 + 1:
-                handling_day = dt.day
+                handling_day, vid_lastLoc = dt.day, {}
                 ofpath = '%s/ap-%s%s%02d.csv' % (of_dpath, of_prefixs, yymm, handling_day)
                 with open(ofpath, 'wt') as w_csvfile:
                     writer = csv.writer(w_csvfile, lineterminator='\n')
