@@ -59,7 +59,7 @@ def run(yymm):
                     did = int(row2[hid2['driver-id']])
                     if did == -1:
                         continue
-                    ts_st, ts_et = [row1[hid1[l]] for l in ['start-time', 'end-time']]
+                    ts_st, ts_et = map(eval, [row1[hid1[l]] for l in ['start-time', 'end-time']])
                     day, hour = map(int, [row1[hid1[l]] for l in ['start-time', 'end-time']])
                     #
                     need2skip = False
