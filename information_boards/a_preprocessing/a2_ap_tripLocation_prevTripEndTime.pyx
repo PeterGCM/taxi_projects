@@ -60,7 +60,8 @@ def run(yymm):
                     if did == -1:
                         continue
                     ts_st, ts_et = map(eval, [row1[hid1[l]] for l in ['start-time', 'end-time']])
-                    day, hour = map(int, [row1[hid1[l]] for l in ['start-time', 'end-time']])
+                    day, hour = map(int, [row1[hid1[l]] for l in ['start-day', 'start-hour']])
+                    dow = row1[hid1['start-dow']]
                     #
                     need2skip = False
                     for ys, ms, ds, hs in error_hours:
@@ -84,7 +85,7 @@ def run(yymm):
                                            'startTime', 'endTime', 'duration', 'fare',
                                            'pickUpTerminal',
                                            'prevEndTerminal', 'prevTripEndTime',
-                                           'year', 'month', 'day', 'hour']
+                                           'year', 'month', 'day', 'hour', 'dow']
                             writer.writerow(new_headers)
                     vid = int(row1[hid1['vehicle-id']])
                     dur, fare = [row1[hid1[l]] for l in ['duration', 'fare']]
@@ -110,7 +111,7 @@ def run(yymm):
                                    ts_st, ts_et, dur, fare,
                                    cur_start_ter,
                                    prevEndTerminal, prevTripEndTime,
-                                   year, month, day, hour]
+                                   year, month, day, hour, dow]
                         writer.writerow(new_row)
                     vid_lastLocTime[vid] = (cur_end_ter, ts_et)
     except Exception as _:
