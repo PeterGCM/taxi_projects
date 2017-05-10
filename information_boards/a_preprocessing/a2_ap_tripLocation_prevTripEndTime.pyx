@@ -121,4 +121,4 @@ def run(yymm):
 
 
 if __name__ == '__main__':
-    run()
+    run(yymm)
