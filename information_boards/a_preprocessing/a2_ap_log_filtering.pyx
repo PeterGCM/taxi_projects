@@ -53,7 +53,7 @@ def run(yymm):
             else:
                 with open(ofpath, 'a') as w_csvfile:
                     writer = csv.writer(w_csvfile, lineterminator='\n')
-                    writer.writerow(row)
+                    writer.writerow([row[hid[cn]] for cn in ['time', 'vid', 'did', 'apBasePos']])
                 vid_lastLoc[vid] = apBasedPos
 
 
