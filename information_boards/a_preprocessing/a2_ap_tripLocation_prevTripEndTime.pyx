@@ -77,7 +77,7 @@ def run(yymm):
                         continue
                     if dt_st.day != handling_day and dt_st.hour == AM5 + 1:
                         handling_day, vid_lastLocTime = dt_st.day, {}
-                        ofpath = '%s/ap-%s%s%02d.csv' % (of_dpath, of_prefixs, yymm, handling_day)
+                        ofpath = '%s/%s%s%02d.csv' % (of_dpath, of_prefixs, yymm, handling_day)
                         with open(ofpath, 'wt') as w_csvfile:
                             writer = csv.writer(w_csvfile, lineterminator='\n')
                             new_headers = ['vid', 'did',
