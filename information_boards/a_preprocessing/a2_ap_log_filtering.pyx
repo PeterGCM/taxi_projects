@@ -43,17 +43,20 @@ def run(yymm):
                     writer = csv.writer(w_csvfile, lineterminator='\n')
                     new_headers = ['time', 'vid', 'did', 'apBasePos']
                     writer.writerow(new_headers)
-            vid, apBasedPos = int(row[hid['time']]), row[hid['apBasePos']]
+            did = int(row[hid['did']])
+            if did == -1:
+                continue
+            vid, apBasedPos = int(row[hid['vid']]), row[hid['apBasePos']]
             if vid_lastLoc.has_key(vid):
                 if vid_lastLoc[vid] != apBasedPos:
                     with open(ofpath, 'a') as w_csvfile:
                         writer = csv.writer(w_csvfile, lineterminator='\n')
-                        writer.writerow(row)
+                        writer.writerow([t, vid, did, apBasedPos])
                     vid_lastLoc[vid] = apBasedPos
             else:
                 with open(ofpath, 'a') as w_csvfile:
                     writer = csv.writer(w_csvfile, lineterminator='\n')
-                    writer.writerow([row[hid[cn]] for cn in ['time', 'vid', 'did', 'apBasePos']])
+                    writer.writerow([t, vid, did, apBasedPos])
                 vid_lastLoc[vid] = apBasedPos
 
 
