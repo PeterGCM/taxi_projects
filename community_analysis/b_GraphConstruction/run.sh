@@ -4,5 +4,5 @@
 #done
 
 for i in {0..10}; do
-    python -c "from b1_priorPresence import run; run($i)" &
+    python -c "from b2_sigRelation import run; run($i)" &
 done
