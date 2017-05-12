@@ -45,10 +45,10 @@ def process_file(fpath):
     logger.info('Start handling; %s' % fpath)
     _, _, _, _did1 = get_fn_only(fpath)[:-len('.csv')].split('-')
     try:
-        sr_fpath = '%s/%s%s-%s.csv' % (of_dpath, of_prefixs, year, _did1)
-        if check_path_exist(sr_fpath):
+        ofpath = '%s/%s%s-%s.csv' % (of_dpath, of_prefixs, year, _did1)
+        if check_path_exist(ofpath):
             return None
-        with open(sr_fpath, 'wt') as w_csvfile:
+        with open(ofpath, 'wt') as w_csvfile:
             writer = csv.writer(w_csvfile, lineterminator='\n')
             header = ['did',
                       'numObservations', 'numPrevDrivers',
@@ -94,7 +94,7 @@ def process_file(fpath):
                 continue
             if pv < SIGINIFICANCE_LEVEL:
                 sigRelatioin += [_did0]
-        with open(sr_fpath, 'a') as w_csvfile:
+        with open(ofpath, 'a') as w_csvfile:
             writer = csv.writer(w_csvfile, lineterminator='\n')
             new_row = [_did1,
                        numObservations, numPrevDrivers,
@@ -106,6 +106,11 @@ def process_file(fpath):
         with open('%s_%s.txt' % (sys.argv[0], '%s-%s' % (year, _did1)), 'w') as f:
             f.write(format_exc())
         raise
+
+
+def summary():
+    pass
+
 
 if __name__ == '__main__':
     run(0)
