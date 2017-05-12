@@ -16,7 +16,7 @@ from traceback import format_exc
 import csv
 
 logger = get_logger()
-numWorker = 3
+numWorker = 11
 #
 year = '20%02d' % 9
 depVar = 'roamingTime'
@@ -97,4 +97,4 @@ def process_file(fpath):
         raise
 
 if __name__ == '__main__':
-    run()
+    run(0)
