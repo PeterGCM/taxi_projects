@@ -56,7 +56,7 @@ def process_file(fpath):
             return None
         #
         logger.info('Start loading; %s-%s' % (year, _did1))
-        sr_fpath = '%s/%s%s-%s' % (if_dpath2, if_prefix2, year, _did1)
+        sr_fpath = '%s/%s%s-%s.csv' % (if_dpath2, if_prefix2, year, _did1)
         inDepVar = []
         with open(sr_fpath, 'rb') as r_csvfile:
             reader = csv.reader(r_csvfile)
