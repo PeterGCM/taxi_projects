@@ -83,9 +83,9 @@ def process_file(fpath):
             coef = res.params[_did0]
             if pv < SIGINIFICANCE_LEVEL:
                 if coef < 0:
-                    sigRelatioin['neg'] += [_did0]
+                    sigRelatioin['neg'] += [(_did0, coef)]
                 elif coef > 0:
-                    sigRelatioin['pos'] += [_did0]
+                    sigRelatioin['pos'] += [(_did0, coef)]
         with open(ofpath, 'a') as w_csvfile:
             writer = csv.writer(w_csvfile, lineterminator='\n')
             new_row = [_did1,
