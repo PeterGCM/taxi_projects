@@ -4,5 +4,5 @@
 #done
 
 for i in {0..10}; do
-    python -c "from b3_influenceGraph import run; run($i)" &
+    python -c "from b4_individual import run; run($i)" &
 done
