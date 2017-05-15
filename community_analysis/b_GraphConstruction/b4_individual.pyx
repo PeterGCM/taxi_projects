@@ -70,7 +70,7 @@ def process_file(fpath):
         numPrevDrivers = len(prevDrivers)
         #
         sigRelatioin = {k: [] for k in ['pos', 'neg']}
-        for _did0 in numPrevDrivers:
+        for _did0 in prevDrivers:
             y = did1_df[depVar]
             X = did1_df[[_did0]]
             X = sm.add_constant(X)
