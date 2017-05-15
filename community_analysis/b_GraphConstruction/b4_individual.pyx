@@ -57,6 +57,7 @@ def process_file(fpath):
             header = ['did',
                       'numObservations', 'numPrevDrivers',
                       'numSigRelationship',
+                      'numPosCoef', 'numNegCoef',
                       'sigPosRelation', 'sigNegRelation']
             writer.writerow(header)
         #
@@ -87,6 +88,7 @@ def process_file(fpath):
             new_row = [_did1,
                        numObservations, numPrevDrivers,
                        len(sigRelatioin['pos']) + len(sigRelatioin['neg']),
+                       len(sigRelatioin['pos']), len(sigRelatioin['neg']),
                        '&'.join(sigRelatioin['pos']), '&'.join(sigRelatioin['neg'])]
             writer.writerow(new_row)
         save_pickle_file(sig_fpath, sigRelatioin)
