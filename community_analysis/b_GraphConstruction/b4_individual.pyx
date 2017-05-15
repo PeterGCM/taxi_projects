@@ -92,7 +92,7 @@ def process_file(fpath):
                        numObservations, numPrevDrivers,
                        len(sigRelatioin['pos']) + len(sigRelatioin['neg']),
                        len(sigRelatioin['pos']), len(sigRelatioin['neg']),
-                       '&'.join(sigRelatioin['pos']), '&'.join(sigRelatioin['neg'])]
+                       '&'.join([_did0 for _did0, _ in sigRelatioin['pos']]), '&'.join([_did0 for _did0, _ in sigRelatioin['neg']])]
             writer.writerow(new_row)
         save_pickle_file(sig_fpath, sigRelatioin)
     except Exception as _:
