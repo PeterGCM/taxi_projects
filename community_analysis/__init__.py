@@ -24,6 +24,7 @@ for depVar in ['roamingTime', 'interTravelTime']:
         prefixs[depVar, irName] = '%s-%s-' % (depVar, irName)
 
 
+
 #
 MON, TUE, WED, THR, FRI, SAT, SUN = range(7)
 AM10, PM8 = 10, 20

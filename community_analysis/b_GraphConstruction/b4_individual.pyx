@@ -44,6 +44,7 @@ def run(processorNum):
         process_file(fpath)
 
 
+
 def process_file(fpath):
     logger.info('Start handling; %s' % fpath)
     _, _, _, _did1 = get_fn_only(fpath)[:-len('.csv')].split('-')
