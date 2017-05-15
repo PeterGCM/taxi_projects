@@ -7,7 +7,7 @@ import __init__
 from community_analysis import dpaths, prefixs
 from community_analysis import SIGINIFICANCE_LEVEL, MIN_PICKUP_RATIO, MIN_RATIO_RESIDUAL
 #
-from taxi_common.file_handling_functions import check_dir_create, get_all_files, get_fn_only, check_path_exist, save_pickle_file
+from taxi_common.file_handling_functions import check_dir_create, get_all_files, get_fn_only, check_path_exist, save_pickle_file, load_pickle_file
 from taxi_common.log_handling_functions import get_logger
 #
 import pandas as pd
@@ -73,17 +73,15 @@ def process_file(fpath):
         df = pd.read_csv(fpath)
         influenceGraph = {}
         countRelation = {k: 0 for k in ['pos', 'neg']}
-        y = df[depVar]
-        X = df[inDepVar]
-        X = sm.add_constant(X)
-        res = sm.OLS(y, X, missing='drop').fit()
-        for _did0, pv in res.pvalues.iteritems():
-            if _did0 == 'const':
-                continue
+        for _did0 in inDepVar:
+            y = df[depVar]
+            X = df[[_did0]]
+            X = sm.add_constant(X)
+            res = sm.OLS(y, X, missing='drop').fit()
             coef = res.params[_did0]
             if coef < 0:
                 countRelation['neg'] += 1
-                influenceGraph[int(_did0), int(_did1)] = (pv, coef)
+                influenceGraph[int(_did0), int(_did1)] = (res.pvalues[_did0], coef)
             elif coef > 0:
                 countRelation['pos'] += 1
         #
@@ -96,5 +94,23 @@ def process_file(fpath):
             f.write(format_exc())
         raise
 
+
+def summary_count():
+    summary_fpath = '%s/%scount-%s.csv' % (of_dpath, of_prefix, year)
+    with open(summary_fpath, 'wt') as w_csvfile:
+        writer = csv.writer(w_csvfile, lineterminator='\n')
+        header = ['did',
+                  'pos', 'neg']
+        writer.writerow(header)
+    for fn in get_all_files(of_dpath, '%scount-%s-*.pkl' % (of_prefix, year)):
+        _, _, _, _, _did1 = fn[:-len('.csv')].split('-')
+        countRelation = load_pickle_file('%s/%s' % (of_dpath, fn))
+        with open(summary_fpath, 'a') as w_csvfile:
+            writer = csv.writer(w_csvfile, lineterminator='\n')
+            new_row = [int(_did1),
+                      countRelation['pos'], countRelation['neg']]
+            writer.writerow(new_row)
+
+
 if __name__ == '__main__':
-    run(0)
+    summary_count()
