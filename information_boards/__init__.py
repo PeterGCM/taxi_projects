@@ -23,33 +23,11 @@ for irName in ['log', 'trip',
         dpaths[irName, loc] = '%s/%s/%s' % (taxi_data, irName, loc)
         prefixs[irName, loc] = '%s-%s-' % (irName, loc)
 
-
-
-
-
-
-
-
-
-
-
-#
-# Trip mode define
-#
-ap_poly_fn = os.path.dirname(os.path.realpath(__file__)) + '/src/airport_polygon'
-ns_poly_fn = os.path.dirname(os.path.realpath(__file__)) + '/src/night_safari_polygon'
-DIn_PIn, DIn_POut, DOut_PIn, DOut_POut = range(4)
-IN, OUT = True, False
-#
 AM2, AM5 = 2, 5
-AM6 = 6
-NUM, DUR, FARE = range(3)
-# For meaningless data filtering
-error_hours = [('9', '3', '15', '1'), ('10', '3', '17', '1'), ('10', '7', '4', '6'), ('10', '7', '4', '7'), ('10', '7', '4', '8'),
-               # second filtering
-                ('10', '3', '17', '6'), ('10', '11', '21', '6'), ('10', '11', '21', '10'),  # Abnormal (long) queueing time
-                ('9', '3', '1', '1'), ('9', '11', '8', '1'), ('10', '5', '16', '1'), ('10', '1', '24', '1')  # Abnormal (short) active duration
-               ]
+
+MON, TUE, WED, THR, FRI, SAT, SUN = range(7)
+WEEKENDS = [SAT, SUN]
+
 # Singapore Public Holidays
 HOLIDAYS2009 = [
             (2009,1,1),    # New Year's Day, Thursday, 1 January 2009
@@ -75,9 +53,23 @@ HOLIDAYS2010 = [(2010, 1, 1),  # New Year's Day, Friday, 1 January 2010
             (2010,11,5),  # Deepavali, Friday, 5 November 2010
             (2010,11,17),  # Hari Raya Haji, Wednesday, 17 November 2010
             (2010,11,17),  # Christmas Day, Saturday, 25 December 2010
-                ]
-MON, TUE, WED, THR, FRI, SAT, SUN = range(7)
-WEEKENDS = [SAT, SUN]
+]
+
+
+
+IN, OUT = True, False
+#
+
+AM6 = 6
+NUM, DUR, FARE = range(3)
+# For meaningless data filtering
+error_hours = [('9', '3', '15', '1'), ('10', '3', '17', '1'), ('10', '7', '4', '6'), ('10', '7', '4', '7'), ('10', '7', '4', '8'),
+               # second filtering
+                ('10', '3', '17', '6'), ('10', '11', '21', '6'), ('10', '11', '21', '10'),  # Abnormal (long) queueing time
+                ('9', '3', '1', '1'), ('9', '11', '8', '1'), ('10', '5', '16', '1'), ('10', '1', '24', '1')  # Abnormal (short) active duration
+               ]
+
+
 #
 ALL_DUR, ALL_FARE, ALL_NUM, \
 AP_DUR, AP_FARE, AP_QUEUE, AP_NUM, \
