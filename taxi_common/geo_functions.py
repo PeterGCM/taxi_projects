@@ -1,6 +1,9 @@
 import __init__
 #
+from taxi_common import sg_maps_dpath
+import geopandas as gpd
 from taxi_common import sg_loc_polygons_fpath
+from file_handling_functions import check_path_exist, load_pickle_file, save_pickle_file
 from _classes import zone
 #
 from pykml import parser
@@ -121,10 +124,37 @@ def get_ns_polygon():
             return poly(points)
 
 
+def get_SG_polygon():
+    ifpath = '%s/%s' % (sg_maps_dpath, 'singapore_admin.geojson')
+    ofpath = '%s/%s' % (sg_maps_dpath, 'sg_border.pkl')
+    if check_path_exist(ofpath):
+        sg_border = load_pickle_file(ofpath)
+        return sg_border
+    df = gpd.read_file(ifpath)
+    sg_border = list(df.ix[0].geometry.exterior.coords)
+    save_pickle_file(ofpath, sg_border)
+    return sg_border
+
+def get_SG_roads():
+    ofpath = '%s/%s' % (sg_maps_dpath, 'sg_roads.pkl')
+    if check_path_exist(ofpath):
+        roads = load_pickle_file(ofpath)
+        return roads
+    sg_border = Polygon(get_SG_polygon())
+    ifpath = '%s/%s' % (sg_maps_dpath, 'singapore_roads.geojson')
+    df = gpd.read_file(ifpath)
+    roads = []
+    for r, n in df.loc[:, ('geometry', 'name')].values:
+        if r.within(sg_border):
+            roads += [(n, list(r.coords))]
+    save_pickle_file(ofpath, roads)
+    return roads
 
 
 if __name__ == '__main__':
-    get_ns_polygon()
+    get_SG_roads()
+    # print get_SG_polygon()
+    # get_ns_polygon()
     # ap_polygons = get_ap_polygons()
     # target_gps = (103.984857,  1.342390)
     # for ap_poly in ap_polygons:

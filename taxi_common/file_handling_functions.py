@@ -97,5 +97,6 @@ def get_fn_from_dir(dpath, filtering_prefix, filtering_postfix):
 
 
 if __name__ == '__main__':
-    print load_pickle_file('roamingTime-individual-sigRelation-2009-1.pkl')
+    # print load_pickle_file('roamingTime-individual-sigRelation-2009-1.pkl')
+    print check_path_exist()
 
