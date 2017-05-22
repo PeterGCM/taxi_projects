@@ -1,6 +1,4 @@
-import os, sys
-sys.path.append('../..')
-import community_analysis
+import __init__
 #
 from community_analysis import FRI, SAT, SUN
 from community_analysis import AM10, PM8

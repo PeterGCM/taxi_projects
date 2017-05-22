@@ -1,6 +1,6 @@
 import __init__
 #
-from c2_log_xyCoords import get_driver_trajectory
+from log_xyCoords import get_driver_trajectory
 
 import wx
 #
@@ -53,6 +53,22 @@ class driver(object):
         gc.DrawEllipse(-3, -3, 6, 6)
 
         gc.SetTransform(old_tr)
+
+    def update_dt_xy_state(self, given_dt):
+        while True:
+            dt, x, y, state = self.dt_xy_state[0]
+            if given_dt < dt:
+                break
+            else:
+                dt, x, y, state = self.dt_xy_state.pop(0)
+                self.prev_update_time = dt
+                self.prev_x, self.prev_y = self.x, self.y = x, y
+                self.state = state
+                #
+                self.next_update_time = self.dt_xy_state[0][0]
+                self.next_x, self.next_y = self.dt_xy_state[0][1:3]
+                #
+                self.time_interval = (self.next_update_time - self.prev_update_time).seconds
 
 
 if __name__ == '__main__':

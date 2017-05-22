@@ -10,7 +10,10 @@ from timeFlowView import TimeFlowView
 from time import time
 from datetime import timedelta, datetime
 #
-target_drivers = [1]
+target_drivers = [
+                    1,
+                  32768
+                  ]
 #
 
 
@@ -36,20 +39,25 @@ class MainFrame(wx.Frame):
 
     def InitTimeDrivers(self):
         self.drivers = {}
-        tk.datehours = set()
+        latest_fist_dt, earliest_last_dt = None, None
         for did in target_drivers:
             d = driver(did)
             first_dt, last_dt = d.prev_update_time, d.dt_xy_state[-1][0]
-            if tk.min_dt == None or first_dt < tk.min_dt:
-                tk.min_dt = first_dt
-            if tk.max_dt == None or last_dt > tk.max_dt:
-                tk.max_dt = last_dt
+            if latest_fist_dt == None or latest_fist_dt < first_dt:
+                latest_fist_dt = first_dt
+            if earliest_last_dt == None or earliest_last_dt > last_dt:
+                earliest_last_dt = last_dt
+            self.drivers[did] = d
+        tk.min_dt, tk.max_dt = latest_fist_dt, earliest_last_dt
+        tk.now = tk.min_dt
+        tk.datehours = set()
+        for d in self.drivers.itervalues():
+            d.update_dt_xy_state(tk.now)
             for dt, _, _, _ in d.dt_xy_state:
                 tk.datehours.add(datetime(dt.year, dt.month, dt.day, dt.hour))
-            self.drivers[did] = d
         tk.datehours = list(tk.datehours)
         tk.datehours.sort()
-        tk.now = tk.min_dt
+
 
     def InitUI(self):
         # set menu & tool bar, and bind events.

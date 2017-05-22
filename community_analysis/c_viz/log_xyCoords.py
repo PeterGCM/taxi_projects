@@ -87,4 +87,5 @@ def get_driver_trajectory(did):
 
 
 if __name__ == '__main__':
-    print get_driver_trajectory(1)
+    print get_driver_trajectory(1)[:2]
+    print get_driver_trajectory(32768)[:2]
