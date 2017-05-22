@@ -1,4 +1,6 @@
-import __init__
+import os, sys
+sys.path.append(os.path.dirname(os.path.realpath(__file__)) + '/../..')
+import community_analysis
 #
 from community_analysis import FRI, SAT, SUN
 from community_analysis import AM10, PM8
