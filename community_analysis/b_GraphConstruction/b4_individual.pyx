@@ -16,7 +16,7 @@ from traceback import format_exc
 import csv
 
 logger = get_logger()
-numWorker = 11
+numWorker = 64
 #
 year = '20%02d' % 9
 depVar = 'roamingTime'
@@ -73,8 +73,11 @@ def process_file(fpath):
         #
         sigRelatioin = {k: [] for k in ['pos', 'neg']}
         for _did0 in prevDrivers:
-            if len(did1_df) - 1 == sum(did1_df[_did0]) or sum(did1_df[_did0]) == 0:
+            num_encouters = sum(did1_df[_did0])
+            if num_encouters < numObservations * MIN_PICKUP_RATIO:
                 continue
+            # if len(did1_df) - 1 == sum(did1_df[_did0]) or sum(did1_df[_did0]) == 0:
+            #     continue
             y = did1_df[depVar]
             X = did1_df[[_did0]]
             X = sm.add_constant(X)

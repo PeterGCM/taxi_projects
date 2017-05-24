@@ -62,7 +62,6 @@ def process_files(did1, pickUp_drivers):
         yy = year[2:]
         for fn in get_all_files(if_dpath, '%sFiltered-%s%s*.csv' % (depVar, if_prefixs, yy)):
             prevDriverDefined_fpath = '%s/%s' % (if_dpath, fn)
-            logger.info('Handling %s(%d); %s' % (year, did1, fn))
             with open(prevDriverDefined_fpath, 'rb') as r_csvfile:
                 reader = csv.reader(r_csvfile)
                 header = reader.next()

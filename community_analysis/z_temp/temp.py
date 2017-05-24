@@ -1,3 +1,4 @@
+import __init__
 import community_analysis
 #
 '''
@@ -5,28 +6,15 @@ import community_analysis
 '''
 #
 from community_analysis import dpaths, prefixs
-from community_analysis import driversRelations_fpaths
 #
 from taxi_common.file_handling_functions import load_pickle_file
-#
-import igraph as ig
-#
+if_dpath = dpaths['roamingTime', 'priorPresence']
+if_prefix = prefixs['roamingTime', 'priorPresence']
+year = 2009
+did1 = 1
+did0 = 32768
+fpath = '%s/%s%d-%d.csv' % (if_dpath, if_prefix, year, did1)
+df = pd.read_csv(fpath)
 
-tm, year = 'spendingTime', '2012'
-gp_dpath = dpaths[tm, year, 'groupPartition']
-gp_prefix = prefixs[tm, year, 'groupPartition']
-
-gp_fpath = '%s/%sG(20).pkl' % (gp_dpath, gp_prefix)
-igG = ig.Graph.Read_Pickle(gp_fpath)
-
-
-driversRelations = load_pickle_file(driversRelations_fpaths[year])
-whole_drivers = driversRelations.keys()
-
-
-# igG = ig.Graph.Read_Pickle('%s/%s%s.pkl' % (gp_dpath, gp_prefix, gn))
-groupDrivers = set()
-for e in igG.es:
-    did0, did1 = [igG.vs[nIndex]['name'] for nIndex in e.tuple]
-    groupDrivers.add(did0)
-    groupDrivers.add(did1)
+_did0 = '%d' % did0
+df[(df[_did0] == 1)][['month', 'day', 'hour', _did0, 'zi', 'zj']].head(10)
