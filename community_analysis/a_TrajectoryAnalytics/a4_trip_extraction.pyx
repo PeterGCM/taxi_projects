@@ -59,7 +59,7 @@ def get_drivers_trip(yymm, drivers):
                         continue
                     if handling_day != cur_dtT.day:
                         handling_day = cur_dtT.day
-                        ofpath = '%s/%s%s%02d-%d.csv' % (of_dpath, of_prefixs, yymm, handling_day, '+'.join(map(str, drivers)))
+                        ofpath = '%s/%s%s%02d-%s.csv' % (of_dpath, of_prefixs, yymm, handling_day, '+'.join(map(str, drivers)))
                         with open(ofpath, 'wt') as w_csvfile:
                             writer = csv.writer(w_csvfile, lineterminator='\n')
                             writer.writerow(['did',
