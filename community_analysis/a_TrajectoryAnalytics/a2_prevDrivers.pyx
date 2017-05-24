@@ -192,20 +192,6 @@ def process_month(yymm):
             f.write(format_exc())
         raise
 
-class ca_zone(zone):
-    def __init__(self, boundary_relation_with_poly, zi, zj, cCoor_gps, polyPoints_gps):
-        zone.__init__(self, boundary_relation_with_poly, zi, zj, cCoor_gps, polyPoints_gps)
-        self.logQ = []
-
-    def add_driver_in_logQ(self, t, d):
-        self.logQ.append([t, d])
-
-    def update_logQ(self, t):
-        while self.logQ and self.logQ[0] < t - HISTORY_LOOKUP_LENGTH:
-            self.logQ.pop(0)
-
-    def init_logQ(self):
-        self.logQ = []
 
 class ca_driver_withPrevDrivers(driver):
     def __init__(self, did):
@@ -220,6 +206,22 @@ class ca_driver_withPrevDrivers(driver):
             prevDrivers.add(d.did)
         z.add_driver_in_logQ(t, self)
         return prevDrivers
+
+
+class ca_zone(zone):
+    def __init__(self, boundary_relation_with_poly, zi, zj, cCoor_gps, polyPoints_gps):
+        zone.__init__(self, boundary_relation_with_poly, zi, zj, cCoor_gps, polyPoints_gps)
+        self.logQ = []
+
+    def add_driver_in_logQ(self, t, d):
+        self.logQ.append([t, d])
+
+    def update_logQ(self, t):
+        while self.logQ and self.logQ[0] < t - HISTORY_LOOKUP_LENGTH:
+            self.logQ.pop(0)
+
+    def init_logQ(self):
+        self.logQ = []
 
 
 def generate_zones():

@@ -10,7 +10,7 @@ from pykml import parser
 from shapely.geometry import Polygon, Point
 from geopy.distance import vincenty, VincentyDistance
 #
-NORTH, EAST, SHOUTH, WEST = 0, 90, 180, 270
+NORTH, EAST, SOUTH, WEST = 0, 90, 180, 270
 METER1000 = 1000
 
 
@@ -35,16 +35,16 @@ def make_grid(zone_unit_km, min_long, max_long, min_lat, max_lat):
     return x_points, y_points
 
 
-def generate_zones(poly_points, xaxis_unit, yaxis_unit, x_points, y_points):
+def generate_zones(poly_points, lon_unit, lat_unit, lons, lats):
     poly = Polygon(poly_points)
     zones = {}
     geo_json = {"type": "FeatureCollection", "features": []}
-    for i, x in enumerate(x_points):
-        for j, y in enumerate(y_points):
-            leftBottom, rightBottom = (x, y), (x + xaxis_unit, y)
-            rightTop, leftTop = (x + xaxis_unit, y + yaxis_unit), (x, y + yaxis_unit)
+    for i, lon in enumerate(lons):
+        for j, lat in enumerate(lats):
+            leftBottom, rightBottom = (lon, lat), (lon + lon_unit, lat)
+            rightTop, leftTop = (lon + lon_unit, lat + lat_unit), (lon, lat + lat_unit)
             polyPoints_gps = [leftBottom, rightBottom, rightTop, leftTop, leftBottom]
-            cCoor_gps = (y + yaxis_unit / float(2), x + xaxis_unit / float(2))
+            cCoor_gps = (lon + lon_unit / 2.0, lat + lat_unit / 2.0)
             zone_poly = Polygon(polyPoints_gps)
             if poly.contains(zone_poly):
                 boundary_relation = zone.IN

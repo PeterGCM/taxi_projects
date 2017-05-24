@@ -8,8 +8,8 @@ ID_CONTROL_PLAY = wx.NewId()
 ID_CONTROL_S_UP = wx.NewId()
 ID_CONTROL_S_DOWN = wx.NewId()
 ID_CONTROL_SKIP = wx.NewId()
-ID_CONTROL_F_UP = wx.NewId()
-ID_CONTROL_F_DOWN = wx.NewId()
+# ID_CONTROL_F_UP = wx.NewId()
+# ID_CONTROL_F_DOWN = wx.NewId()
 
 
 def set_command_interface(frame):
@@ -21,9 +21,9 @@ def set_command_interface(frame):
     cmenu.AppendSeparator()
     cmenu.Append(ID_CONTROL_SKIP, 'S&kip to Next Event')
     cmenu.AppendSeparator()
-    cmenu.Append(ID_CONTROL_F_UP, 'Frame &Rate Up')
-    cmenu.Append(ID_CONTROL_F_DOWN, 'Frame Ra&te Down')
-    cmenu.AppendSeparator()
+    # cmenu.Append(ID_CONTROL_F_UP, 'Frame &Rate Up')
+    # cmenu.Append(ID_CONTROL_F_DOWN, 'Frame Ra&te Down')
+    # cmenu.AppendSeparator()
     frame.mbar.Append(cmenu, '&Control')
     frame.SetMenuBar(frame.mbar)
     # tool bar
@@ -34,17 +34,17 @@ def set_command_interface(frame):
     frame.tbar.AddSimpleTool(ID_CONTROL_S_UP, load_icon('speed_up.bmp', bd))
     frame.tbar.AddSeparator()
     frame.tbar.AddSimpleTool(ID_CONTROL_SKIP, load_icon('skip.bmp', bd))
-    frame.tbar.AddSeparator()
-    frame.tbar.AddSimpleTool(ID_CONTROL_F_DOWN, load_icon('frame_down.bmp', bd))
-    frame.tbar.AddSimpleTool(ID_CONTROL_F_UP, load_icon('frame_up.bmp', bd))
+    # frame.tbar.AddSeparator()
+    # frame.tbar.AddSimpleTool(ID_CONTROL_F_DOWN, load_icon('frame_down.bmp', bd))
+    # frame.tbar.AddSimpleTool(ID_CONTROL_F_UP, load_icon('frame_up.bmp', bd))
     frame.tbar.Realize()
     #
     frame.Bind(wx.EVT_MENU, frame.OnPlay, id=ID_CONTROL_PLAY)
     frame.Bind(wx.EVT_MENU, frame.OnSpeed, id=ID_CONTROL_S_UP)
     frame.Bind(wx.EVT_MENU, frame.OnSpeed, id=ID_CONTROL_S_DOWN)
     frame.Bind(wx.EVT_MENU, frame.OnSkip, id=ID_CONTROL_SKIP)
-    frame.Bind(wx.EVT_MENU, frame.OnFrameRate, id=ID_CONTROL_F_UP)
-    frame.Bind(wx.EVT_MENU, frame.OnFrameRate, id=ID_CONTROL_F_DOWN)
+    # frame.Bind(wx.EVT_MENU, frame.OnFrameRate, id=ID_CONTROL_F_UP)
+    # frame.Bind(wx.EVT_MENU, frame.OnFrameRate, id=ID_CONTROL_F_DOWN)
 
 
 def load_icon(path, base_dir=None):
