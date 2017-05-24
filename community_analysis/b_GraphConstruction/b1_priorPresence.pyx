@@ -89,6 +89,7 @@ def process_files(did1, pickUp_drivers):
                         for did0 in pickUp_drivers:
                             new_row.append(O_PRESENCE if did0 in prevDrivers else X_PRESENCE)
                         writer.writerow(new_row)
+        logger.info('Finish %s(%d)' % (year, did1))
     except Exception as _:
         import sys
         with open('%s_%s.txt' % (sys.argv[0], year), 'w') as f:
