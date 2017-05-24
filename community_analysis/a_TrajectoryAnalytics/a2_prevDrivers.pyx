@@ -32,8 +32,6 @@ except OSError:
 
 def run(yymm):
     process_month(yymm)
-    # filtering('2012')
-    # find_driversRelations('2012')
 
 
 def roamingTimeFiltering(year):
@@ -103,25 +101,6 @@ def interTravelTimeFiltering(year):
                 writer = csv.writer(w_csvfile, lineterminator='\n')
                 new_row = [yymm, numTrips, numLessThanZero, per95Value, numMoreThanPer95Value, numFilteredTrips]
                 writer.writerow(new_row)
-        driversRelations = {}
-        superSet_fpath = '%s/interTravelTimeFiltered-superSet-%s%s.pkl' % (of_dpath, of_prefixs, year)
-        logger.info('handle the file; %s' % superSet_fpath)
-        for fn in get_all_files(of_dpath, 'interTravelTimeFiltered-%s%s*' % (of_prefixs, yy)):
-            logger.info('handle the file; %s' % fn)
-            with open('%s/%s' % (of_dpath, fn), 'rb') as r_csvfile:
-                reader = csv.reader(r_csvfile)
-                headers = reader.next()
-                hid = {h: i for i, h in enumerate(headers)}
-                for row in reader:
-                    did1 = int(row[hid['did']])
-                    prevDrivers = row[hid['prevDrivers']].split('&')
-                    if len(prevDrivers) == 1 and prevDrivers[0] == '':
-                        continue
-                    if not driversRelations.has_key(did1):
-                        driversRelations[did1] = set()
-                    for did0 in map(int, prevDrivers):
-                        driversRelations[did1].add(did0)
-        save_pickle_file(superSet_fpath, driversRelations)
     except Exception as _:
         import sys
         with open('%s_%s.txt' % (sys.argv[0], year), 'w') as f:
