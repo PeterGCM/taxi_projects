@@ -217,7 +217,7 @@ class ca_zone(zone):
         self.logQ.append([t, d])
 
     def update_logQ(self, t):
-        while self.logQ and self.logQ[0] < t - HISTORY_LOOKUP_LENGTH:
+        while self.logQ and self.logQ[0][0] < t - HISTORY_LOOKUP_LENGTH:
             self.logQ.pop(0)
 
     def init_logQ(self):
