@@ -15,9 +15,12 @@ from datetime import timedelta, datetime
 from time import time
 import pandas as pd
 #
-followers = [1]
-leaders = [32768]
+# followers = [1]
+# leaders = [32768]
 
+
+followers = [112]
+leaders = [8204, 24643]
 
 target_drivers = followers + leaders
 #
