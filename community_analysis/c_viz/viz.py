@@ -19,10 +19,9 @@ import pandas as pd
 # leaders = [32768]
 
 
-followers = [18485]
-negLeaders = [35005]
-posLeaders = [34512]
-
+# followers = [18485]
+# negLeaders = [35005]
+# posLeaders = [34512]
 
 
 followers = [21340]
