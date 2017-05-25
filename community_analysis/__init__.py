@@ -17,7 +17,7 @@ for irName in ['roamingNinterTravel', 'prevDrivers', 'driverLog', 'driverTrip']:
     prefixs[irName] = '%s-' % irName
 for depVar in ['roamingTime', 'interTravelTime']:
     for irName in ['priorPresence', 'sigRelation',
-                   'individual',
+                   'individual', 'indPartition',
                    'influenceGraph', 'graphPartition',
                    'comTrips', 'comEvolution']:
         dpaths[depVar, irName] = '%s/%s/%s' % (taxi_data, depVar, irName)
@@ -34,9 +34,9 @@ FREE, POB = 0, 5
 MIN20 = 20 * 60.0
 X_PRESENCE, O_PRESENCE = range(2)
 #
-SIGINIFICANCE_LEVEL = 0.05
+# SIGINIFICANCE_LEVEL = 0.05
 # SIGINIFICANCE_LEVEL = 0.01
-# MIN_PICKUP_RATIO = 0.1
+SIGINIFICANCE_LEVEL = 0.01
 MIN_PICKUP_RATIO = 0.2
 MIN_RATIO_RESIDUAL = 0.2
 #

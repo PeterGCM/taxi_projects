@@ -135,6 +135,7 @@ def get_SG_polygon():
     save_pickle_file(ofpath, sg_border)
     return sg_border
 
+
 def get_SG_roads():
     ofpath = '%s/%s' % (sg_maps_dpath, 'sg_roads.pkl')
     if check_path_exist(ofpath):
