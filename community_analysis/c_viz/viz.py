@@ -20,7 +20,7 @@ import pandas as pd
 
 
 followers = [18485]
-negLeaders = []
+negLeaders = [35005]
 posLeaders = [34512]
 
 leaders = [8204, 24643]
