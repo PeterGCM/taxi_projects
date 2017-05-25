@@ -23,7 +23,14 @@ followers = [18485]
 negLeaders = [35005]
 posLeaders = [34512]
 
-leaders = [8204, 24643]
+
+
+followers = [21340]
+negLeaders = []
+posLeaders = [17742]
+
+
+leaders = negLeaders + posLeaders
 
 target_drivers = followers + leaders
 #
