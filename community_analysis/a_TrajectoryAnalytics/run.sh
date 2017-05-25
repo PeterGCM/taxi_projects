@@ -12,7 +12,7 @@
 
 
 for i in 0{1..9} {10..12}; do
-    python -c "from a3_log_extraction import get_driver_log; get_driver_log('09$i', 8204)" &
+    python -c "from a3_log_extraction import get_driver_log; get_driver_log('09$i', 24643)" &
 done
 
 
