@@ -103,24 +103,32 @@ def process_file(fpath):
         with open('%s_%s.txt' % (sys.argv[0], '%s-%s' % (year, _did1)), 'w') as f:
             f.write(format_exc())
         raise
+    logger.info('End handling; %s' % fpath)
 
 
-def summary_count():
-    summary_fpath = '%s/%scount-%s.csv' % (of_dpath, of_prefix, year)
+def summary():
+    summary_fpath = '%s/%s%s.csv' % (of_dpath, of_prefix, year)
     with open(summary_fpath, 'wt') as w_csvfile:
         writer = csv.writer(w_csvfile, lineterminator='\n')
         header = ['did',
-                  'pos', 'neg']
+                  'numObservations', 'numPrevDrivers',
+                  'numSigRelationship',
+                  'numPosCoef', 'numNegCoef',
+                  'sigPosRelation', 'sigNegRelation']
         writer.writerow(header)
-    for fn in get_all_files(of_dpath, '%scount-%s-*.pkl' % (of_prefix, year)):
-        _, _, _, _, _did1 = fn[:-len('.csv')].split('-')
-        countRelation = load_pickle_file('%s/%s' % (of_dpath, fn))
-        with open(summary_fpath, 'a') as w_csvfile:
-            writer = csv.writer(w_csvfile, lineterminator='\n')
-            new_row = [int(_did1),
-                      countRelation['pos'], countRelation['neg']]
-            writer.writerow(new_row)
+
+    for fn in get_all_files(of_dpath, '%s%s-*.csv' % (of_prefix, year)):
+        _, _, _, _did1 = fn[:-len('.csv')].split('-')
+        fpath = '%s/%s' % (of_dpath, fn)
+        with open(fpath, 'rb') as r_csvfile:
+            reader = csv.reader(r_csvfile)
+            reader.next()
+            hid = {h: i for i, h in enumerate(header)}
+            for row in reader:
+                with open(summary_fpath, 'a') as w_csvfile:
+                    writer = csv.writer(w_csvfile, lineterminator='\n')
+                    writer.writerow(row)
 
 
 if __name__ == '__main__':
-    summary_count()
+    summary()
