@@ -19,7 +19,10 @@ import pandas as pd
 # leaders = [32768]
 
 
-followers = [112]
+followers = [18485]
+negLeaders = []
+posLeaders = [34512]
+
 leaders = [8204, 24643]
 
 target_drivers = followers + leaders
