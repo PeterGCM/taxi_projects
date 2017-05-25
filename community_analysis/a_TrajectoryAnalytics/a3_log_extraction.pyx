@@ -92,7 +92,7 @@ def get_drivers_log(yymm, drivers):
                         with open(dl_fpath[did], 'wt') as w_csvfile:
                             writer = csv.writer(w_csvfile, lineterminator='\n')
                             writer.writerow(logHeader)
-                with open(dl_fpath[did], 'a') as w_csvfile:
+                with open(dl_fpath[didL], 'a') as w_csvfile:
                     writer = csv.writer(w_csvfile, lineterminator='\n')
                     writer.writerow(row)
     except Exception as _:
