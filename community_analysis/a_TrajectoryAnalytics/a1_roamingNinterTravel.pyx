@@ -15,7 +15,6 @@ from taxi_common import ss_drivers_dpath, ss_drivers_prefix
 from taxi_common.sg_grid_zone import get_sg_grid_xy_points
 from taxi_common.file_handling_functions import load_pickle_file, check_dir_create, check_path_exist
 from taxi_common.log_handling_functions import get_logger
-from taxi_common.multiprocess import init_multiprocessor, put_task, end_multiprocessor
 #
 from bisect import bisect
 import csv, datetime
@@ -29,19 +28,6 @@ try:
     check_dir_create(of_dpath)
 except OSError:
     pass
-
-
-def run():
-    init_multiprocessor(11)
-    count_num_jobs = 0
-    y = 9
-    for m in range(1, 13):
-        yymm = '%02d%02d' % (y, m)
-        if yymm in ['0912', '1010']:
-            continue
-        put_task(process_month, [yymm])
-        count_num_jobs += 1
-    end_multiprocessor(count_num_jobs)
 
 
 def process_month(yymm):

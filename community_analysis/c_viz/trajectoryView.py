@@ -42,7 +42,6 @@ class TrajectoryView(wx.Panel):
         else:
             self.bg_bmp = None
         self.sgGrid_xy = GPS_xyDrawing.get_sgGrid_xy()
-        self.sgZones = GPS_xyDrawing.get_sgZones()
         self.encountered_zones = set()
         self.marked_zone = None
 
@@ -105,6 +104,7 @@ class TrajectoryView(wx.Panel):
         #
         img = bmp.ConvertToImage()
         img.SaveFile(bg_img_fpath, wx.BITMAP_TYPE_PNG)
+        bmp = wx.BitmapFromImage(img.AdjustChannels(1.0, 1.0, 1.0, 0.4))
         return bmp, w, h
 
     def OnDrawDevice(self, gc):

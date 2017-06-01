@@ -1,19 +1,21 @@
-from __init__ import *
-#
-from community_analysis import AM10, PM8
-from community_analysis import dpaths, prefixs
-from viz_cmd import set_command_interface
-from viz_cmd import ID_CONTROL_S_UP
-from _classes import driver
-import timeKeeper as tk
-from trajectoryView import TrajectoryView
-from timeFlowView import TimeFlowView
-#
-from taxi_common.sg_grid_zone import get_sg_zones
 #
 from datetime import timedelta, datetime
 from time import time
+
 import pandas as pd
+import timeKeeper as tk
+from timeFlowView import TimeFlowView
+from trajectoryView import TrajectoryView
+
+from __init__ import *
+from _classes import driver
+#
+from community_analysis import AM10, PM8
+from community_analysis import dpaths, prefixs
+#
+from taxi_common.sg_grid_zone import get_sg_zones
+from viz_cmd import ID_CONTROL_S_UP
+from viz_cmd import set_command_interface
 #
 # followers = [1]
 # leaders = [32768]
@@ -24,12 +26,14 @@ import pandas as pd
 # posLeaders = [34512]
 
 
-followers = [21340]
-negLeaders = []
-posLeaders = [17742]
+# followers = [21340]
+# negLeaders = []
+# posLeaders = [17742]
 
-
-leaders = negLeaders + posLeaders
+followers = []
+a = set([20318, 15078, 35650, 3413, 13851, 37446, 35685, 33796])
+b = set([40970, 35716, 30309, 22412, 17695, 17637, 16606, 14969, 12887, 3413])
+leaders = list(a.union(b))
 
 target_drivers = followers + leaders
 #
@@ -82,6 +86,25 @@ class MainFrame(wx.Frame):
         if_prefix = prefixs['roamingTime', 'priorPresence']
         year = 2009
         self.ecounterMoments = []
+        ecounterMoments = set()
+        loc = {}
+        for did1 in target_drivers:
+            fpath = '%s/%s%d-%d.csv' % (if_dpath, if_prefix, year, did1)
+            df = pd.read_csv(fpath)
+            for did0 in target_drivers:
+                if did1 == did0:
+                    continue
+                _did0 = '%d' % did0
+                if _did0 not in df.columns:
+                    continue
+                for m, d, h, zi, zj in df[(df[_did0] == 1)][['month', 'day', 'hour', 'zi', 'zj']].values:
+                    dt = datetime(year, m, d, h)
+                    ecounterMoments.add(datetime(year, m, d, h))
+                    loc[dt] = (zi, zj)
+        for dt in ecounterMoments:
+            self.ecounterMoments += [(dt, loc[dt])]
+
+
         for did1 in followers:
             fpath = '%s/%s%d-%d.csv' % (if_dpath, if_prefix, year, did1)
             df = pd.read_csv(fpath)
